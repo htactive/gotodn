@@ -1,7 +1,7 @@
 import React from 'react';
 import {StackNavigator} from 'react-navigation';
-import {SplashScreen} from "./screens/SplashScreen";
-import {HomeScreen} from "./screens/HomeScreen";
+import {SplashScreen} from './screens/SplashScreen';
+import {HomeScreen} from './screens/HomeScreen';
 
 export function DNPageRoute(page) {
   let key = page.displayName || page['name'];

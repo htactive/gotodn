@@ -1,9 +1,9 @@
 import React from 'react';
 import {Button} from 'react-native';
 import { StyleSheet, Text, View } from 'react-native';
-import {DNPageRoute} from "../NavigationHelper";
-import {SplashScreen} from "./SplashScreen";
-import {style} from "../styles/style";
+import {DNPageRoute} from '../NavigationHelper';
+import {SplashScreen} from './SplashScreen';
+import {style} from '../styles/style';
 
 export class HomeScreen extends React.Component {
   render() {
