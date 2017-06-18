@@ -18,7 +18,7 @@ export const DNNavigatorConfig = {
 };
 
 export const DNNavigatorOptions = {
-  initialRouteName: DNPageRoute(SplashScreen),
+  initialRouteName: DNPageRoute(HomeScreen),
   headerMode: 'none'
 };
 

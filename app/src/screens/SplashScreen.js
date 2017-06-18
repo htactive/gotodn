@@ -3,17 +3,21 @@ import {StyleSheet, Text, View} from 'react-native';
 import {DNPageRoute} from '../NavigationHelper';
 import {HomeScreen} from './HomeScreen';
 import {style} from '../styles/style';
-import SnapCarousel from '../components/snap-carousel';
+import { Col, Row, Grid } from 'react-native-easy-grid';
 export class SplashScreen extends React.Component {
   componentWillMount() {
-
+    setTimeout(() => {
+      this.goNext();
+    }, 500);
   }
 
   render() {
     return (
-      <View style={style.container}>
-        <SnapCarousel />
-      </View>
+      <Grid style={style.container}>
+        <Col>
+          <Text>Goto DN</Text>
+        </Col>
+      </Grid>
     )
   }
 
