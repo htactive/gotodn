@@ -1,6 +1,6 @@
 import React from 'react';
-import {Icon} from 'native-base';
-import {View, PickerIOS ,Platform, Picker} from 'react-native';
+import {Icon, Picker} from 'native-base';
+import {View, PickerIOS ,Platform} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
 const platform = Platform.OS;
@@ -27,9 +27,14 @@ const CITIES = [
 export class LocationPicker extends React.Component {
   state = {cities: []};
 
+  componentWillMount() {
+    this.setState({
+      selectedCity: 1
+    });
+  }
+
   componentDidMount() {
     this.setState({
-      selectedCity: 1,
       cities: CITIES
     });
   }
