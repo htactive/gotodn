@@ -118,7 +118,6 @@ export default StyleSheet.create({
   slideTitle: {
     color: '#039be5',
     fontSize: 16,
-    fontFamily: platform === "ios" ? "San Francisco" : "Roboto"
   },
   titleEven: {
     color: 'white'

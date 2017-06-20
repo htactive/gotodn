@@ -44,7 +44,6 @@ export class LocationPicker extends React.Component {
         <Col size={80} style={{paddingTop:3}}>
           {platform.OS === 'ios' ? (
               <PickerIOS
-                style={{color:'#fff'}}
                 selectedValue={this.state.selectedCity}
                 onValueChange={(city) => this.cityChanged(city)}>
                 {this.state.cities && this.state.cities.map((city, id) =>

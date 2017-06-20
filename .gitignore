@@ -57,3 +57,4 @@ fastlane/screenshots
 
 # Typescript Output
 built
+app/node_modules.rar
