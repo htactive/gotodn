@@ -1,4 +1,8 @@
-import { StyleSheet} from 'react-native';
+import { StyleSheet, Platform, Dimensions} from 'react-native';
+
+const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
+const menuItemHeight = Math.round( viewportHeight / 6);
+const menuItemHeaderHeight = Math.round( viewportHeight / 25);
 
 export const StyleBase = {
   header_color: '#039be5',
@@ -59,9 +63,12 @@ export const style = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    minHeight: Math.round(viewportHeight*5/10),
   },
+
   image_fullscreen: {
     flex: 1,
     width: null,
@@ -104,6 +111,56 @@ export const style = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#f5f7fa'
+  },
+  containerHalf: {
+    flex: 1,
+    alignItems: 'flex-start',
+    flexDirection: 'column',
+    marginBottom:5,
+  },
+  imageContainer: {
+    flex: 1
+  },
+  imageInner: {
+    flex: 8,
+    backgroundColor: '#fff',
+
+  },
+  textInner: {
+    flex: 2,
+    backgroundColor: '#fff',
+
+  },
+  textContain: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems:'flex-end',
+    paddingHorizontal: 3,
+    backgroundColor: '#a8a8a8',
+    opacity: 0.8,
+  },
+  image: {
+    resizeMode: 'cover',
+    height:Math.round(menuItemHeight*8/10)
+  },
+  title: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  menuItemHeader: {
+    height: menuItemHeaderHeight,
+    paddingBottom: 5,
+    marginBottom: 10,
+    flexDirection:'row',
+    alignSelf:'stretch',
+    borderBottomWidth: 1,
+    borderBottomColor: '#78909c'
+  },
+  menuItem: {
+    height: menuItemHeight,
+    paddingBottom: 10,
+    alignSelf:'stretch',
   }
 });
 

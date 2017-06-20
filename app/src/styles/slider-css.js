@@ -1,5 +1,15 @@
 import {StyleSheet, Dimensions, Platform} from 'react-native';
-import {colors} from './index.style';
+
+const platform = Platform.OS;
+
+export const colors = {
+  black: '#1a1917',
+  whiteGray: '#a8a8a8',
+  white: '#fff',
+  gray: '#a8a8a8',
+  background1: '#00b140',
+  background2: 'hsl(230, 30%, 45%)'
+};
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 
@@ -8,30 +18,66 @@ function wp(percentage) {
   return Math.round(value);
 }
 
-const slideHeight = viewportHeight * 0.4;
-const slideWidth = wp(50);
+const slideHeight = viewportHeight * 0.3;
+const slideWidth = wp(40);
 const itemHorizontalMargin = wp(1);
 
 export const sliderWidth = viewportWidth;
-export const itemWidth = slideWidth + itemHorizontalMargin * 2;
+export const itemWidth = slideWidth + itemHorizontalMargin;
 
 const entryBorderRadius = 4;
 
 export default StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: 10
+  },
+  slideContainer: {
+    flex: 8
+  },
+  dotContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    flexDirection: 'row'
+  },
+  titleSlideContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row'
+  },
   slideInnerContainer: {
     width: itemWidth,
     height: slideHeight,
-    paddingHorizontal: itemHorizontalMargin,
-    paddingBottom: 18 // needed for shadow
+    //paddingHorizontal: 2,
+    paddingBottom: 5 // needed for shadow
   },
   imageContainer: {
+    flex: 1
+  },
+  imageInner: {
+    flex: 7,
+    backgroundColor: colors.white,
+
+  },
+  textInner: {
+    flex: 3,
+    backgroundColor: colors.white,
+
+  },
+  textContain: {
     flex: 1,
-    backgroundColor: 'white',
-    borderTopLeftRadius: entryBorderRadius,
-    borderTopRightRadius: entryBorderRadius
+    justifyContent: 'flex-start',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    backgroundColor: colors.gray,
+    opacity: 0.8,
+    borderBottomLeftRadius: entryBorderRadius,
+    borderBottomRightRadius: entryBorderRadius
   },
   imageContainerEven: {
-    backgroundColor: colors.black
+    backgroundColor: colors.gray
   },
   image: {
     ...StyleSheet.absoluteFillObject,
@@ -65,21 +111,29 @@ export default StyleSheet.create({
     backgroundColor: colors.black
   },
   title: {
-    color: colors.black,
-    fontSize: 13,
-    fontWeight: 'bold',
-    letterSpacing: 0.5
+    color: colors.white,
+    fontSize: 14,
+    fontWeight: 'bold'
+  },
+  slideTitle: {
+    color: '#039be5',
+    fontSize: 16,
+    fontFamily: platform === "ios" ? "San Francisco" : "Roboto"
   },
   titleEven: {
     color: 'white'
   },
   subtitle: {
-    marginTop: 6,
-    color: colors.gray,
-    fontSize: 12,
-    fontStyle: 'italic'
+    color: colors.white,
+    fontSize: 12
   },
   subtitleEven: {
     color: 'rgba(255, 255, 255, 0.7)'
+  },
+  slider: {
+    marginBottom: 5
+  },
+  sliderContainer: {
+    paddingHorizontal: 5
   }
 });

@@ -1,20 +1,23 @@
 import React from 'react';
-import {Button} from 'react-native';
-import { StyleSheet, Text, View } from 'react-native';
-import {DNPageRoute} from "../NavigationHelper";
-import {SplashScreen} from "./SplashScreen";
+import {StyleSheet, Text, View, Image, ScrollView, TouchableOpacity} from 'react-native';
 import {style} from "../styles/style";
+import {Col, Row, Grid} from 'react-native-easy-grid';
+import TopSlider from '../components/slider/TopSlider';
+import {Card, CardItem, Left, Thumbnail, Body, Button, Icon} from 'native-base';
+import {HomeMenuList} from '../components/home/HomeMenuList';
 
 export class HomeScreen extends React.Component {
   render() {
     return (
-      <View style={style.container}>
-        <Text>Home screen here</Text>
-        <Button
-          onPress={() => this.props.navigation.navigate(DNPageRoute(SplashScreen))}
-          title="Go to Splash Screen"
-        />
-      </View>
+      <Grid>
+        <Row size={45}>
+          <TopSlider title="SỰ KIỆN NỔI BẬT"/>
+        </Row>
+        <Row size={55}>
+          <HomeMenuList />
+        </Row>
+      </Grid>
+
     )
   }
 }
