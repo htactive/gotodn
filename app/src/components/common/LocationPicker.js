@@ -45,6 +45,7 @@ export class LocationPicker extends React.Component {
           <Picker
             style={{color:'#fff'}}
             mode="dropdown"
+            selectedValue={this.state.selectedCity}
             onValueChange={(city) => this.cityChanged(city)}>
             {this.state.cities && this.state.cities.map((city, id) =>
               <Picker.Item key={id} label={city.Name} value={city.Id}/>)}
