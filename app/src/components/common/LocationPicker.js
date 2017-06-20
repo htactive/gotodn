@@ -42,23 +42,13 @@ export class LocationPicker extends React.Component {
                 style={{color:'#ffffff', fontSize:25, paddingHorizontal: 5}}/>
         </Col>
         <Col size={80} style={{paddingTop:3}}>
-          {platform.OS === 'ios' ? (
-              <PickerIOS
-                selectedValue={this.state.selectedCity}
-                onValueChange={(city) => this.cityChanged(city)}>
-                {this.state.cities && this.state.cities.map((city, id) =>
-                  <PickerIOS.Item key={id} label={city.Name} value={city.Id}/>)}
-              </PickerIOS>
-            ) : (
-              <Picker
-                style={{color:'#fff'}}
-                mode="dropdown"
-                selectedValue={this.state.selectedCity}
-                onValueChange={(city) => this.cityChanged(city)}>
-                {this.state.cities && this.state.cities.map((city, id) =>
-                  <Picker.Item key={id} label={city.Name} value={city.Id}/>)}
-              </Picker>
-            )}
+          <Picker
+            style={{color:'#fff'}}
+            mode="dropdown"
+            onValueChange={(city) => this.cityChanged(city)}>
+            {this.state.cities && this.state.cities.map((city, id) =>
+              <Picker.Item key={id} label={city.Name} value={city.Id}/>)}
+          </Picker>
 
         </Col>
       </Row>
