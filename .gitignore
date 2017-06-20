@@ -58,3 +58,4 @@ fastlane/screenshots
 # Typescript Output
 built
 app/node_modules.rar
+app/ios/gotoDN.xcodeproj/project.pbxproj
