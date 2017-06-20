@@ -1,7 +1,9 @@
 import React from 'react';
-import {Picker, Icon} from 'native-base';
-import {View} from 'react-native';
+import {Icon} from 'native-base';
+import {View, PickerIOS ,Platform, Picker} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
+
+const platform = Platform.OS;
 
 const CITIES = [
   {
@@ -40,16 +42,25 @@ export class LocationPicker extends React.Component {
                 style={{color:'#ffffff', fontSize:25, paddingHorizontal: 5}}/>
         </Col>
         <Col size={80} style={{paddingTop:3}}>
-          <Picker
-            style={{color:'#fff'}}
-            supportedOrientations={['portrait','landscape']}
-            iosHeader="Chọn thành phố"
-            mode="dropdown"
-            selectedValue={this.state.selectedCity}
-            onValueChange={(city) => this.cityChanged(city)}>
-            {this.state.cities && this.state.cities.map((city, id) =>
-              <Picker.Item key={id} label={city.Name} value={city.Id}/>)}
-          </Picker>
+          {platform.OS === 'ios' ? (
+              <PickerIOS
+                style={{color:'#fff'}}
+                selectedValue={this.state.selectedCity}
+                onValueChange={(city) => this.cityChanged(city)}>
+                {this.state.cities && this.state.cities.map((city, id) =>
+                  <PickerIOS.Item key={id} label={city.Name} value={city.Id}/>)}
+              </PickerIOS>
+            ) : (
+              <Picker
+                style={{color:'#fff'}}
+                mode="dropdown"
+                selectedValue={this.state.selectedCity}
+                onValueChange={(city) => this.cityChanged(city)}>
+                {this.state.cities && this.state.cities.map((city, id) =>
+                  <Picker.Item key={id} label={city.Name} value={city.Id}/>)}
+              </Picker>
+            )}
+
         </Col>
       </Row>
     )

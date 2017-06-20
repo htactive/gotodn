@@ -72,7 +72,7 @@ export class HomeMenuList extends React.Component {
                     >
                       <Icon active name={data.categoryIcon}
                             style={{alignSelf: 'flex-end', color:'#12a1e7', fontSize:20, paddingRight: 5}}/>
-                      <Text style={{alignSelf: 'flex-end', color: '#455a64'}}>{data.categoryName}</Text>
+                      <Text style={{alignSelf: 'flex-end', color: '#455a64', fontWeight: 'bold' }}>{data.categoryName}</Text>
                     </TouchableOpacity>
                     {data.services && data.services.map((service, sIndex) =>
                       <TouchableOpacity
@@ -109,7 +109,7 @@ export class HomeMenuList extends React.Component {
                       >
                         <Icon active name={data.categoryIcon}
                               style={{alignSelf: 'flex-end', color:'#12a1e7', fontSize:20, paddingRight: 5}}/>
-                        <Text style={{alignSelf: 'flex-end', color: '#455a64'}}>{data.categoryName}</Text>
+                        <Text style={{alignSelf: 'flex-end', color: '#455a64', fontWeight: 'bold'}}>{data.categoryName}</Text>
                       </TouchableOpacity>
                       {data.services && data.services.map((service, sIndex) =>
                         <TouchableOpacity
