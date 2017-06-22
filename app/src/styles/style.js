@@ -198,6 +198,7 @@ export const style = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingBottom: 5,
     paddingRight: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0)'
   }
 });
 
