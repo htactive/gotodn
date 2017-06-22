@@ -2,6 +2,7 @@ import React from 'react';
 import {StackNavigator} from 'react-navigation';
 import {SplashScreen} from './screens/SplashScreen';
 import {HomeScreen} from './screens/HomeScreen';
+import {ListScreen} from './screens/ListScreen';
 
 export function DNPageRoute(page) {
   let key = page.displayName || page['name'];
@@ -15,10 +16,13 @@ export const DNNavigatorConfig = {
   HomeScreen: {
     screen: HomeScreen
   },
+  ListScreen: {
+    screen: ListScreen
+  },
 };
 
 export const DNNavigatorOptions = {
-  initialRouteName: DNPageRoute(HomeScreen),
+  initialRouteName: DNPageRoute(SplashScreen),
   headerMode: 'none'
 };
 

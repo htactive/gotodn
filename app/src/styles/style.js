@@ -1,8 +1,8 @@
-import { StyleSheet, Platform, Dimensions} from 'react-native';
+import {StyleSheet, Platform, Dimensions} from 'react-native';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
-const menuItemHeight = Math.round( viewportHeight / 6);
-const menuItemHeaderHeight = Math.round( viewportHeight / 25);
+const menuItemHeight = Math.round(viewportHeight / 6);
+const menuItemHeaderHeight = Math.round(viewportHeight / 25);
 
 export const StyleBase = {
   header_color: '#039be5',
@@ -47,7 +47,7 @@ export const style = StyleSheet.create({
   color_black: {
     color: 'black'
   },
-  color_red:{
+  color_red: {
     color: 'red'
   },
   color_note: {
@@ -66,7 +66,7 @@ export const style = StyleSheet.create({
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     flexDirection: 'row',
-    minHeight: Math.round(viewportHeight*5/10),
+    minHeight: Math.round(viewportHeight * 5 / 10),
   },
 
   image_fullscreen: {
@@ -110,13 +110,13 @@ export const style = StyleSheet.create({
     height: 50,
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#f5f7fa'
+    borderBottomColor: '#679ac3'
   },
   containerHalf: {
     flex: 1,
     alignItems: 'flex-start',
     flexDirection: 'column',
-    marginBottom:5,
+    marginBottom: 5,
   },
   imageContainer: {
     flex: 1
@@ -134,14 +134,14 @@ export const style = StyleSheet.create({
   textContain: {
     flex: 1,
     justifyContent: 'center',
-    alignItems:'flex-end',
+    alignItems: 'flex-end',
     paddingHorizontal: 3,
     backgroundColor: '#a8a8a8',
     opacity: 0.8,
   },
   image: {
     resizeMode: 'cover',
-    height:Math.round(menuItemHeight*8/10)
+    height: Math.round(menuItemHeight * 8 / 10)
   },
   title: {
     color: '#ffffff',
@@ -152,15 +152,52 @@ export const style = StyleSheet.create({
     height: menuItemHeaderHeight,
     paddingBottom: 5,
     marginBottom: 10,
-    flexDirection:'row',
-    alignSelf:'stretch',
+    flexDirection: 'row',
+    alignSelf: 'stretch',
     borderBottomWidth: 1,
     borderBottomColor: '#78909c'
   },
   menuItem: {
     height: menuItemHeight,
     paddingBottom: 10,
-    alignSelf:'stretch',
+    alignSelf: 'stretch',
+  },
+  menuItemDetail: {
+    paddingBottom: 10,
+    alignSelf: 'stretch',
+  },
+  menuItemImage: {
+    resizeMode: 'cover',
+  },
+  menuItemTitle: {
+    color: '#455a64',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  menuItemSubTitle: {
+    color: '#263238',
+    fontSize: 12,
+  },
+  menuItemTextContain: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    paddingHorizontal: 3,
+    opacity: 0.8,
+  },
+  menuItemImageInner: {
+    flex: 7,
+  },
+  menuItemTextInner: {
+    flex: 3,
+  },
+  menuItemStar: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    paddingBottom: 5,
+    paddingRight: 5,
   }
 });
 

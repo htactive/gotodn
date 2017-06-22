@@ -13,7 +13,7 @@ export const colors = {
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 
-function wp(percentage) {
+export function wp(percentage) {
   const value = (percentage * viewportWidth) / 100;
   return Math.round(value);
 }
@@ -34,24 +34,24 @@ export default StyleSheet.create({
     paddingTop: 10
   },
   slideContainer: {
-    flex: 8
+    flex: 84,
   },
   dotContainer: {
-    flex: 1,
+    flex: 8,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   titleSlideContainer: {
-    flex: 1,
+    flex: 8,
     justifyContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   slideInnerContainer: {
     width: itemWidth,
     height: slideHeight,
     //paddingHorizontal: 2,
-    paddingBottom: 5 // needed for shadow
+    paddingBottom: 2 // needed for shadow
   },
   imageContainer: {
     flex: 1
@@ -69,12 +69,12 @@ export default StyleSheet.create({
   textContain: {
     flex: 1,
     justifyContent: 'flex-start',
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingHorizontal: 5,
+    paddingVertical: 5,
     backgroundColor: colors.gray,
-    opacity: 0.8,
+    opacity: 0.7,
     borderBottomLeftRadius: entryBorderRadius,
-    borderBottomRightRadius: entryBorderRadius
+    borderBottomRightRadius: entryBorderRadius,
   },
   imageContainerEven: {
     backgroundColor: colors.gray
@@ -130,7 +130,7 @@ export default StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.7)'
   },
   slider: {
-    marginBottom: 5
+    marginBottom: 0
   },
   sliderContainer: {
     paddingHorizontal: 5

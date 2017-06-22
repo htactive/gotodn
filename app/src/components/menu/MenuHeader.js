@@ -43,13 +43,12 @@ export class MenuHeader extends React.Component {
                 <Row>
                   <Col size={70}>
                     <Row>
-                      <Col size={15} style={{justifyContent:'center',alignItems:'center'}}>
+                      <Col size={20} style={{justifyContent:'center',alignItems:'center'}}>
                         <Icon name='ios-hand-outline' style={{color:'#ffffff', fontSize:30, paddingHorizontal: 15}}/>
                       </Col>
-                      <Col size={45}>
+                      <Col size={80}>
                         <LocationPicker onCityChanged={(value) => this.cityChanged(value)}/>
                       </Col>
-                      <Col size={10}/>
                     </Row>
                   </Col>
                   <Col size={30}>

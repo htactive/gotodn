@@ -3,19 +3,50 @@ import {ScrollView, View, TouchableHighlight, Switch, Text}  from 'react-native'
 import {MenuListItem} from './MenuListItem';
 import {style} from '../../styles/style';
 import {Icon}  from 'native-base';
+import {MenuListData} from '../../common/constain';
 
-export class MenuList extends React.Component{
+export class MenuList extends React.Component {
+  state = {menuData: [], activeIndex: -1, isHelpActived: false, isAboutActived: false};
+
+  componentDidMount() {
+    this.setState({
+      menuData: MenuListData
+    });
+  }
+
   render() {
     return (
-      <ScrollView style={style.size1}>
-        <MenuListItem itemText='Sự kiện nổi bật' onItemClicked={() => this.props.onEventClicked()}/>
-        <MenuListItem itemText='Địa điểm nổi bật' onItemClicked={() => this.props.onPlaceClicked()}/>
-        <MenuListItem itemText='Danh sách hoạt động' onItemClicked={() => this.props.onCategoryClicked()}/>
-        <MenuListItem itemText='Danh sách dịch vụ' onItemClicked={() => this.props.onServiceClicked()}/>
-        <View style={{height:15, backgroundColor:'#f5f7fa'}}>
-        </View>
-        <MenuListItem itemText='Trợ giúp' onItemClicked={() => this.props.onHelpClicked()}/>
-        <MenuListItem itemText='Về chúng tôi' onItemClicked={() => this.props.onAboutUsClicked()}/>
+      <ScrollView style={[style.size1, {backgroundColor: '#01589d'}]}>
+        {this.state.menuData.map((menuD, index) =>
+          <MenuListItem key={index} actived={index==this.state.activeIndex} itemText={menuD.categoryName}
+                        itemIcon={menuD.categoryIcon} onItemClicked={() => {
+
+                          this.setState({
+                            activeIndex: index,
+                            isHelpActived: false,
+                            isAboutActived: false
+                          });
+                          if(this.props.onListItemClicked)
+                            this.props.onListItemClicked(menuD.id);
+                        }}/>
+        )}
+        <MenuListItem itemText='Trợ giúp' actived={this.state.isHelpActived} itemIcon="ios-help" onItemClicked={() => {
+          this.setState({
+            activeIndex: -1,
+            isHelpActived: true,
+            isAboutActived: false
+          });
+          this.props.onHelpClicked();
+        }}/>
+        <MenuListItem itemText='Về chúng tôi' actived={this.state.isAboutActived} itemIcon="ios-people-outline"
+                      onItemClicked={() => {
+                        this.setState({
+                          activeIndex: -1,
+                          isHelpActived: false,
+                          isAboutActived: true
+                        });
+                        this.props.onAboutUsClicked();
+                      }}/>
       </ScrollView>
     );
   }

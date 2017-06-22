@@ -1,7 +1,8 @@
 import React from 'react';
 import {Icon, Picker} from 'native-base';
-import {View, PickerIOS ,Platform} from 'react-native';
+import {View, PickerIOS ,Platform, Text} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
+import {StyleBase} from '../../styles/style';
 
 const platform = Platform.OS;
 
@@ -42,20 +43,19 @@ export class LocationPicker extends React.Component {
   render() {
     return (
       <Row>
-        <Col size={20} style={{justifyContent:'center',alignItems:'center'}}>
-          <Icon name={this.props.iconName || 'ios-locate-outline'}
-                style={{color:'#ffffff', fontSize:25, paddingHorizontal: 5}}/>
+        <Col size={30} style={{justifyContent:'center',alignItems:'center'}}>
+          <Text style={{color:'#fff', fontStyle: 'italic'}} >ĐI ĐẾN</Text>
         </Col>
-        <Col size={80} style={{paddingTop:3}}>
+        <Col size={70} style={{paddingTop:3}}>
           <Picker
-            style={{color:'#fff'}}
+            style={this.getPickerStyle()}
+            textStyle={this.getPickerTextStyle()}
             mode="dropdown"
             selectedValue={this.state.selectedCity}
             onValueChange={(city) => this.cityChanged(city)}>
             {this.state.cities && this.state.cities.map((city, id) =>
               <Picker.Item key={id} label={city.Name} value={city.Id}/>)}
           </Picker>
-
         </Col>
       </Row>
     )
@@ -67,6 +67,14 @@ export class LocationPicker extends React.Component {
     });
     if (this.props.onCityChanged)
       this.props.onCityChanged(city);
+  }
+
+  getPickerStyle() {
+    return platform === 'ios' ? null : {color:'#fff', backgroundColor: StyleBase.header_color}
+  }
+
+  getPickerTextStyle() {
+    return platform === 'ios' ? {color:'#fff'} : null
   }
 }
 

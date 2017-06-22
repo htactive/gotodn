@@ -19,7 +19,13 @@ export class Menu extends React.Component {
 
   drawer;
 
+  navigation;
+
   static instance: Menu;
+
+  setNavigation(navigation: any) {
+    this.navigation = navigation;
+  }
 
   enableMenu() {
     if (!this.state.enableMenu) {
@@ -63,7 +69,8 @@ export class Menu extends React.Component {
   }
 
   render() {
-    let menuContent = <MenuContent onCloseMenu={() => this.closeMenu()}/>;
+
+    let menuContent = <MenuContent navigation={this.navigation} onCloseMenu={() => this.closeMenu()}/>;
 
     return (
       <Drawer
@@ -92,7 +99,7 @@ export class Menu extends React.Component {
               <MenuHeader onCityChanged={(value) => this.cityChanged(value)} onOpenDraw={() => this.openDrawer()}/>
             </View>
           ) }
-          <View style={{flex:90, flexDirection: 'column'}}>
+          <View style={{flex:90, flexDirection: 'column', backgroundColor: '#fff'}}>
             {this.props.children}
           </View>
         </View>
@@ -107,7 +114,7 @@ export class Menu extends React.Component {
   }
 
   closeMenu() {
-    this.drawer.close();
+    this.drawer._root.close();
   }
 
   openDrawer() {

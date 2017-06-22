@@ -14,7 +14,7 @@ export default class TopSliderItem extends React.Component {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
-        style={styles.slideInnerContainer}
+        style={[styles.slideInnerContainer,this.props.slideItem]}
         onPress={() => {
 
         }}
@@ -27,9 +27,9 @@ export default class TopSliderItem extends React.Component {
             />
           </View>
           <View style={styles.textInner}>
-            <View style={styles.textContain}>
-              <Text style={styles.title} numberOfLines={1}>{ title }</Text>
-              <Text style={styles.subtitle} numberOfLines={1}>{ subtitle }</Text>
+            <View style={this.props.textOuterStyle || styles.textContain}>
+              <Text style={[styles.title, this.props.titleOuter]} numberOfLines={1}>{ title }</Text>
+              <Text style={[styles.subtitle, this.props.subTitleOuter]} numberOfLines={2}>{ subtitle }</Text>
             </View>
           </View>
         </View>

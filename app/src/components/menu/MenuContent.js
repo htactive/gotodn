@@ -3,21 +3,20 @@ import { View} from 'react-native';
 import {style} from '../../styles/style';
 import {MenuTop} from './MenuTop';
 import {MenuList} from './MenuList';
+import {DNPageRoute} from '../../NavigationHelper';
+import {ListScreen} from '../../screens/ListScreen'
 
 export class MenuContent extends React.Component {
   render() {
     let props = {
-      onEventClicked: () => this.eventClicked(),
-      onPlaceClicked: () => this.placeClicked(),
-      onCategoryClicked: () => this.categoryClicked(),
-      onServiceClicked: () => this.serviceClicked(),
+      onListItemClicked: (id) => this.listItemClicked(id),
       onHelpClicked: () => this.helpClicked(),
       onAboutUsClicked: () => this.aboutUsClicked(),
     };
     return (
       <View style={style.size1}>
         <View style={{flex: 10}}>
-          <MenuTop onTakeCoverPhoto={()=> this.takeCoverPhoto()} onTakeAvatarPhoto={() => this.takeAvatarPhoto()}/>
+          <MenuTop onCloseMenu={() => this.props.onCloseMenu && this.props.onCloseMenu()} onTakeCoverPhoto={()=> this.takeCoverPhoto()} onTakeAvatarPhoto={() => this.takeAvatarPhoto()}/>
         </View>
         <View style={{flex: 90}}>
           <MenuList {...props}/>
@@ -33,27 +32,16 @@ export class MenuContent extends React.Component {
   takeAvatarPhoto() {
   }
 
-  eventClicked() {
-
-  }
-
-  placeClicked() {
-
-  }
-
-  categoryClicked() {
-
-  }
-
-  serviceClicked() {
-
-  }
-
   helpClicked() {
 
   }
 
   aboutUsClicked() {
 
+  }
+
+  listItemClicked(id) {
+    this.props.navigation.navigate(DNPageRoute(ListScreen), {listId: id, initIndex: 0 });
+    this.props.onCloseMenu && this.props.onCloseMenu();
   }
 }

@@ -4,11 +4,15 @@ import {DNPageRoute} from '../NavigationHelper';
 import {HomeScreen} from './HomeScreen';
 import {style} from '../styles/style';
 import { Col, Row, Grid } from 'react-native-easy-grid';
+import {Menu} from '../components/menu/Menu'
+
 export class SplashScreen extends React.Component {
   componentWillMount() {
     setTimeout(() => {
       this.goNext();
-    }, 500);
+    }, 1000);
+    Menu.instance.setNavigation(this.props.navigation);
+    Menu.instance.disableMenu();
   }
 
   render() {

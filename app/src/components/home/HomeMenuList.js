@@ -3,6 +3,9 @@ import {Text, View, Image, ScrollView, TouchableOpacity, Dimensions, RefreshCont
 import {Icon, Spinner} from 'native-base';
 import {StyleBase} from '../../styles/style';
 import {style} from "../../styles/style";
+import {MenuListData} from '../../common/constain';
+import {DNPageRoute} from '../../NavigationHelper';
+import {ListScreen} from '../../screens/ListScreen'
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 const menuItemHeight = Math.round(viewportHeight / 6);
@@ -47,7 +50,8 @@ export class HomeMenuList extends React.Component {
   render() {
     return (
       !this.state.isLoaded ?
-        (<View style={{flex:1, alignItems: 'center', justifyContent: 'center',backgroundColor: '#ffffff',minHeight: Math.round(viewportHeight*5/10)}}>
+        (<View style={{flex:1, alignItems: 'center', justifyContent: 'center',
+                backgroundColor: '#ffffff',minHeight: Math.round(viewportHeight*5/10), paddingTop: 10}}>
           <View style={{alignSelf:'center'}}>
             <Spinner color={StyleBase.header_color}/>
           </View>
@@ -61,13 +65,13 @@ export class HomeMenuList extends React.Component {
             onRefresh={() => this.onFresh()} />
             }
           >
-            <View style={style.container}>
+            <View style={[style.container, {paddingTop: 10}]}>
               <View style={[style.containerHalf, {marginLeft:10, marginRight:5}]}>
                 {this.state.dataLeft.map((data, index) =>
                   <View key={index} style={{alignSelf: 'stretch'}}>
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      onPress={() => {}}
+                      onPress={() => {this.goToList(data.id, 0)}}
                       style={style.menuItemHeader}
                     >
                       <Icon active name={data.categoryIcon}
@@ -78,7 +82,7 @@ export class HomeMenuList extends React.Component {
                       <TouchableOpacity
                         activeOpacity={0.7}
                         style={style.menuItem}
-                        onPress={() => {}}
+                        onPress={() => {this.goToList(data.id, sIndex)}}
                         key={sIndex}
                       >
                         <View style={style.imageContainer}>
@@ -104,7 +108,7 @@ export class HomeMenuList extends React.Component {
                     <View key={index} style={{alignSelf: 'stretch'}}>
                       <TouchableOpacity
                         activeOpacity={0.7}
-                        onPress={() => {}}
+                        onPress={() => {this.goToList(data.id, 0)}}
                         style={style.menuItemHeader}
                       >
                         <Icon active name={data.categoryIcon}
@@ -115,7 +119,7 @@ export class HomeMenuList extends React.Component {
                         <TouchableOpacity
                           activeOpacity={0.7}
                           style={style.menuItem}
-                          onPress={() => {}}
+                          onPress={() => {this.goToList(data.id, sIndex)}}
                           key={sIndex}
                         >
                           <View style={style.imageContainer}>
@@ -145,67 +149,9 @@ export class HomeMenuList extends React.Component {
     this.setState({refreshing: true});
     this.loadData();
   }
+
+  goToList(id, index) {
+    this.props.navigation.navigate(DNPageRoute(ListScreen), {listId: id, initIndex: index });
+  }
 }
 
-const MenuListData = [
-  {
-    categoryName: 'Đồ Ăn Thức Uống',
-    categoryIcon: 'ios-beer-outline',
-    services: [
-      {
-        heroImage: 'http://vanvat.net/hinhanh/anhto/14714hinh-anh-nhung-ly-nuoc-giai-khat.jpg',
-        title: 'Giải khát'
-      },
-      {
-        heroImage: 'http://www.chupdep.com/wp-content/uploads/2015/12/a4.jpg',
-        title: 'Món ăn ngon'
-      },
-      {
-        heroImage: 'http://noithatart.com/wp-content/uploads/2016/01/thiet-ke-nha-hang-dep-va-lang-mang-prado-06.jpg',
-        title: 'Nhà hàng'
-      }
-    ]
-  },
-  {
-    categoryName: 'Mua sắm',
-    categoryIcon: 'ios-cart-outline',
-    services: [
-      {
-        heroImage: 'https://tourism.danang.vn/wp-content/uploads/2017/06/lotte-mart-da-nang1-560x420.jpg',
-        title: 'Chợ & khu mua sắm'
-      }
-    ]
-  },
-  {
-    categoryName: 'Cộng đồng',
-    categoryIcon: 'ios-body-outline',
-    services: [
-      {
-        heroImage: 'http://houstonlibrary.org/sites/default/files/anchor_service_passport.png',
-        title: 'Nhập cảnh, hải quan'
-      },
-      {
-        heroImage: 'http://userscontent2.emaze.com/images/16c6a1c5-ad96-4355-84fd-6515aa6b37e3/3e50fe67-935e-40e7-8a57-4a920827fee3.jpg',
-        title: 'Truyền thông'
-      },
-      {
-        heroImage: 'http://blog-xtraffic.pep.vn/wp-content/uploads/2013/12/customer-support-online.jpg',
-        title: 'Hỗ trợ du khách'
-      },
-    ]
-  },
-  {
-    categoryName: 'Vui chơi',
-    categoryIcon: 'ios-game-controller-b-outline',
-    services: [
-      {
-        heroImage: 'http://helio.vn/uploads/5_Cover/Play_Van%20dong.JPG',
-        title: 'Khu vui chơi trong nhà'
-      },
-      {
-        heroImage: 'http://phongnet.com/wp-content/uploads/2016/01/tieu-chuan-phong-net-cyber-game.jpg',
-        title: 'Cyber Gaming Center'
-      },
-    ]
-  }
-];
