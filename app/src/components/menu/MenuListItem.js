@@ -15,7 +15,7 @@ export class MenuListItem extends React.Component{
             <Icon name={this.props.itemIcon} style={this.props.actived ? {color: '#fff'} : {color: '#fff'}}/>
           </View>
           <View style={{flex:8, alignItems: 'flex-start', justifyContent: 'center'}}>
-            <Text style={this.props.actived ? {color: '#fff'} : {color: '#fff'}}>{this.props.itemText}</Text>
+            <Text style={[this.props.actived ? {color: '#fff'} : {color: '#fff'}, {fontFamily: 'Source Sans Pro', fontSize: 16}]}>{this.props.itemText}</Text>
           </View>
         </View>
       </TouchableOpacity>

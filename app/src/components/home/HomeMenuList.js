@@ -90,12 +90,13 @@ export class HomeMenuList extends React.Component {
                             <Image
                               source={{uri: service.heroImage}}
                               style={style.image}
-                            />
-                          </View>
-                          <View style={style.textInner}>
-                            <View style={style.textContain}>
-                              <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
-                            </View>
+                            >
+                              <View style={style.textInner}>
+                                <View style={style.textContain}>
+                                  <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
+                                </View>
+                              </View>
+                            </Image>
                           </View>
                         </View>
                       </TouchableOpacity>
@@ -127,12 +128,13 @@ export class HomeMenuList extends React.Component {
                               <Image
                                 source={{uri: service.heroImage}}
                                 style={style.image}
-                              />
-                            </View>
-                            <View style={style.textInner}>
-                              <View style={style.textContain}>
-                                <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
-                              </View>
+                              >
+                                <View style={style.textInner}>
+                                  <View style={style.textContain}>
+                                    <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
+                                  </View>
+                                </View>
+                              </Image>
                             </View>
                           </View>
                         </TouchableOpacity>

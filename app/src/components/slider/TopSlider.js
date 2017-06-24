@@ -94,33 +94,37 @@ export default class TopSlider extends React.Component {
 
 const SlideData = [
   {
-    title: 'Beautiful and dramatic Antelope Canyon',
-    subtitle: 'Mô tả tiếng Việt cho Antelop Canyon',
-    image: 'http://i.imgur.com/UYiroysl.jpg'
+    title: 'Cuộc thi Marathon',
+    subtitle: 'Cuộc thi là giải chạy Marathon chuyên nghiệp đầu tiên tại Việt Nam',
+    image: 'https://goo.gl/rREKZ2',
+    id: 8,
   },
   {
-    title: 'Earlier this morning, NYC',
-    subtitle: 'Bình minh ở NYC',
-    image: 'http://i.imgur.com/UPrs1EWl.jpg'
+    title: 'Làng nghề bánh tráng Túy Loan',
+    subtitle: 'Làng nghề bánh trang Túy Loan, xã Hòa Phong, huyện Hòa Vang nổi tiếng với nghề làm bánh tráng và mì Quảng.',
+    image: 'https://goo.gl/5xQRBG',
+    id: 8,
   },
   {
-    title: 'White Pocket Sunset',
-    subtitle: 'Mặt trời lặn ở White Pocket',
-    image: 'http://i.imgur.com/MABUbpDl.jpg'
+    title: 'Chùa Linh Ứng',
+    subtitle: 'Chùa Linh Ứng Sơn Trà nằm tựa lưng vào đỉnh Sơn Trà vững chãi, được xem là ngôi chùa lớn nhất ở thành phố Đà Nẵng',
+    image: 'https://goo.gl/5WveJi',
+    id: 8,
   },
   {
-    title: 'Acrocorinth, Greece',
-    subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-    image: 'http://i.imgur.com/KZsmUi2l.jpg'
+    title: 'Biển Đà Nẵng',
+    subtitle: 'Trải dài trên 60 km từ chân đèo Hải Vân đến Non Nước với nhiều bãi biển cát trắng mịn',
+    image: 'https://goo.gl/oXyWaU',
+    id: 8,
   },
   {
-    title: 'The lone tree, majestic landscape of New Zealand',
-    subtitle: 'Lorem ipsum dolor sit amet',
-    image: 'http://i.imgur.com/2nCt3Sbl.jpg'
+    title: 'Công viên Châu Á',
+    subtitle: 'Trải rộng trên diện tích 868.694 m2 bên bờ Tây sông Hàn',
+    image: 'https://goo.gl/dhzAiC'
   },
   {
-    title: 'Middle Earth, Germany',
-    subtitle: 'Lorem ipsum dolor sit amet',
+    title: 'Khu tắm bùn Galina Đà Nẵng',
+    subtitle: 'Galina Đà Nẵng Mud Bath & Spa là khu tắm bùn khoáng và spa đầu tiên bên bờ biển Đà Nẵng',
     image: 'http://i.imgur.com/lceHsT6l.jpg'
   }
 ];

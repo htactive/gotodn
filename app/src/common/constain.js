@@ -86,35 +86,210 @@ export const MenuListItemData = [
   'còn được trải nghiệm cảnh vật dọc đường bờ biển của thành phố với cảnh vật của buổi sớm mai, ' +
   'nghe những âm thanh và tận hưởng làn không khí trong lành qua mỗi bước chạy. ' +
   'Hãy tham gia cuộc thi Marathon Quốc Tế Đà Nẵng để có trải nghiệm một trong những đường chạy marathon đẹp nhất của Đông Nam Á.',
-    star: 4.5
+    star: 4.5,
+    address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
+    addressIcon: 'ios-pin-outline',
+    phone: '(84-125) 333 222',
+    phoeneIcon: 'ios-phone-portrait',
+    fax: '(84-125) 3334 555',
+    website: 'https://vi.wikipedia.org/wiki/%C4%90%C3%A0_N%E1%BA%B5ng',
+    websiteIcon: 'ios-globe-outline',
+    openHour: '07h00 - 24h00',
+    openHourIcon: 'ios-clock-outline',
+    images: [
+      {
+        id: 1,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-08-560x420.jpg'
+      },
+      {
+        id: 2,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-07-630x420.jpg'
+      },
+      {
+        id: 3,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-05-558x420.jpg'
+      },
+      {
+        id: 4,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-04-460x420.jpg'
+      },
+      {
+        id: 5,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-03-633x420.jpg'
+      },
+      {
+        id: 6,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-02-633x420.jpg'
+      }
+    ]
   },
   {
     id: 2,
     heroImage: 'https://goo.gl/y84Rnm',
     title: 'Đường chạy sắc màu',
     description: 'Sự kiện La Vie Color Me Run – Đường Chạy Sắc Màu được tổ chức lần thứ 3 năm 2016 tại thành phố biển Đà Nẵng tại Công Viên Châu Á, với nhiều hoạt động mới chào đón tất cả người dân cũng như khách du lịch đến Đà Nẵng thời gian này.',
-    star: 4
+    star: 4,
+    address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
+    addressIcon: 'ios-pin-outline',
+    phone: '(84-125) 333 222',
+    phoeneIcon: 'ios-phone-portrait',
+    fax: '(84-125) 3334 555',
+    website: 'https://vi.wikipedia.org/wiki/%C4%90%C3%A0_N%E1%BA%B5ng',
+    websiteIcon: 'ios-globe-outline',
+    openHour: '07h00 - 24h00',
+    openHourIcon: 'ios-clock-outline',
+    images: [
+      {
+        id: 1,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-08-560x420.jpg'
+      },
+      {
+        id: 2,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-07-630x420.jpg'
+      },
+      {
+        id: 3,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-05-558x420.jpg'
+      },
+      {
+        id: 4,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-04-460x420.jpg'
+      },
+      {
+        id: 5,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-03-633x420.jpg'
+      },
+      {
+        id: 6,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-02-633x420.jpg'
+      }
+    ]
   },
   {
     id: 3,
     heroImage: 'https://goo.gl/5xQRBG',
     title: 'Làng nghề bánh tráng Túy Loan',
     description: 'Làng nghề bánh trang Túy Loan, xã Hòa Phong, huyện Hòa Vang nổi tiếng với nghề làm bánh tráng và mì Quảng. Theo các cụ cao niên trong làng, bánh tráng người dân làm ra được trân trọng đến mức luôn là món không thể thiếu trên bàn thờ gia tiên dịp nhà có cúng giỗ. Phong tục cứ thế truyền đời, người dân làng Túy Loan đặt cúng bánh tráng để tưởng nhớ, trân trọng một nghề truyền thống của làng.',
-    star: 5
+    star: 5,
+    address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
+    addressIcon: 'ios-pin-outline',
+    phone: '(84-125) 333 222',
+    phoeneIcon: 'ios-phone-portrait',
+    fax: '(84-125) 3334 555',
+    website: 'https://vi.wikipedia.org/wiki/%C4%90%C3%A0_N%E1%BA%B5ng',
+    websiteIcon: 'ios-globe-outline',
+    openHour: '07h00 - 24h00',
+    openHourIcon: 'ios-clock-outline',
+    images: [
+      {
+        id: 1,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-08-560x420.jpg'
+      },
+      {
+        id: 2,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-07-630x420.jpg'
+      },
+      {
+        id: 3,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-05-558x420.jpg'
+      },
+      {
+        id: 4,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-04-460x420.jpg'
+      },
+      {
+        id: 5,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-03-633x420.jpg'
+      },
+      {
+        id: 6,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-02-633x420.jpg'
+      }
+    ]
   },
   {
     id: 4,
     heroImage: 'https://goo.gl/dhzAiC',
     title: 'Công viên Châu Á – Asia Park',
     description: 'Trải rộng trên diện tích 868.694 m2 bên bờ Tây sông Hàn, công viên Châu Á – Asia Park Đà Nẵng là sự kết hợp những nét độc đáo, mới lạ của các mô hình giải trí trên thế giới với những nét văn hóa đặc sắc đậm chất Á Đông. Asia Park bao gồm ba khu vực chính: công viên giải trí ngoài trời hiện đại, công viên văn hóa với các công trình kiến trúc và nghệ thuật thu nhỏ mang tính biểu trưng của 10 quốc gia châu Á, và khu Sun Wheel – nơi giao thoa giữa nét hiện đại và truyền thống.',
-    star: 3
+    star: 3,
+    address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
+    addressIcon: 'ios-pin-outline',
+    phone: '(84-125) 333 222',
+    phoeneIcon: 'ios-phone-portrait',
+    fax: '(84-125) 3334 555',
+    website: 'https://vi.wikipedia.org/wiki/%C4%90%C3%A0_N%E1%BA%B5ng',
+    websiteIcon: 'ios-globe-outline',
+    openHour: '07h00 - 24h00',
+    openHourIcon: 'ios-clock-outline',
+    images: [
+      {
+        id: 1,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-08-560x420.jpg'
+      },
+      {
+        id: 2,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-07-630x420.jpg'
+      },
+      {
+        id: 3,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-05-558x420.jpg'
+      },
+      {
+        id: 4,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-04-460x420.jpg'
+      },
+      {
+        id: 5,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-03-633x420.jpg'
+      },
+      {
+        id: 6,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-02-633x420.jpg'
+      }
+    ]
   },
   {
     id: 5,
     heroImage: 'https://goo.gl/hcT9YD',
     title: 'Khu tắm bùn Galina Đà Nẵng',
     description: 'Galina Đà Nẵng Mud Bath & Spa là khu tắm bùn khoáng và spa đầu tiên bên bờ biển Đà Nẵng, cung cấp các gói dịch vụ tắm bùn khoáng, massage và spa chuyên nghiệp theo tiêu chuẩn 4 sao.',
-    star: 2
+    star: 2,
+    address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
+    addressIcon: 'ios-pin-outline',
+    phone: '(84-125) 333 222',
+    phoeneIcon: 'ios-phone-portrait',
+    fax: '(84-125) 3334 555',
+    website: 'https://vi.wikipedia.org/wiki/%C4%90%C3%A0_N%E1%BA%B5ng',
+    websiteIcon: 'ios-globe-outline',
+    openHour: '07h00 - 24h00',
+    openHourIcon: 'ios-clock-outline',
+    images: [
+      {
+        id: 1,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-08-560x420.jpg'
+      },
+      {
+        id: 2,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-07-630x420.jpg'
+      },
+      {
+        id: 3,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-05-558x420.jpg'
+      },
+      {
+        id: 4,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-04-460x420.jpg'
+      },
+      {
+        id: 5,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-03-633x420.jpg'
+      },
+      {
+        id: 6,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-02-633x420.jpg'
+      }
+    ]
   },
   {
     id: 6,
@@ -133,19 +308,23 @@ export const MenuListItemData = [
   {
     id: 8,
     heroImage: 'https://goo.gl/oXyWaU',
-    title: 'Biển Đà Nẵng',
+    title: 'Biển Đà Nẵng - bãi biển quyến rũ nhất hành tinh',
     description: 'Trải dài trên 60 km từ chân đèo Hải Vân đến Non Nước với nhiều bãi biển cát trắng mịn, đẹp, thơ mộng và đã được bầu chọn là 01 trong 06 bãi biển quyến rũ nhất hành tinh (tạp chí Forbes, Mỹ bình chọn)' +
-    '\nBiển Đà Nẵng có độ sóng nhỏ, nước êm, nước trong xanh bốn mùa, không bị ô nhiễm. Độ mặn vào khoảng 60%, độ an toàn cao. Một số nơi có nhiều san hô, nguồn động thực vật ven bờ và dưới bờ biển phong phú. Điều đặc biệt là hầu hết các bãi tắm đều gần trung tâm thành phố, đường sá thuận lợi; có thể đi đến bằng nhiều loại phương tiện khác nhau.' +
-    '\nNước biển ấm, ít sóng nên khách có thể tắm gần quanh năm, nhưng thích hợp nhất là mùa hè, khoảng từ tháng 5 đến tháng 8 dương lịch.' +
-    '\nCác bãi tắm đều có khách sạn, nhà nghỉ, nhà hàng, và nhiều dịch vụ phong phú, tạo điều kiện thuận lợi cho du khách tắm biển vui chơi giải trí và thư giãn trên bãi biển. Hầu hết các bãi biển đều có các loại hình dịch vụ phục vụ du khách như: câu cá, lướt ván, lặn biển, du thuyền.' +
-    '\nĐội cứu hộ các bãi tắm Đà Nẵng làm việc từ 5h00 đến 20h00 hàng ngày để đảm bảo sự an toàn cho khách tắm và nghỉ ngơi trên biển.'
+    '\n\nBiển Đà Nẵng có độ sóng nhỏ, nước êm, nước trong xanh bốn mùa, không bị ô nhiễm. Độ mặn vào khoảng 60%, độ an toàn cao. Một số nơi có nhiều san hô, nguồn động thực vật ven bờ và dưới bờ biển phong phú. Điều đặc biệt là hầu hết các bãi tắm đều gần trung tâm thành phố, đường sá thuận lợi; có thể đi đến bằng nhiều loại phương tiện khác nhau.' +
+    '\n\nNước biển ấm, ít sóng nên khách có thể tắm gần quanh năm, nhưng thích hợp nhất là mùa hè, khoảng từ tháng 5 đến tháng 8 dương lịch.' +
+    '\n\nCác bãi tắm đều có khách sạn, nhà nghỉ, nhà hàng, và nhiều dịch vụ phong phú, tạo điều kiện thuận lợi cho du khách tắm biển vui chơi giải trí và thư giãn trên bãi biển. Hầu hết các bãi biển đều có các loại hình dịch vụ phục vụ du khách như: câu cá, lướt ván, lặn biển, du thuyền.' +
+    '\n\nĐội cứu hộ các bãi tắm Đà Nẵng làm việc từ 5h00 đến 20h00 hàng ngày để đảm bảo sự an toàn cho khách tắm và nghỉ ngơi trên biển.'
     ,
     star: 5,
     address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
+    addressIcon: 'ios-pin-outline',
     phone: '(84-125) 333 222',
+    phoeneIcon: 'ios-phone-portrait',
     fax: '(84-125) 3334 555',
     website: 'https://vi.wikipedia.org/wiki/%C4%90%C3%A0_N%E1%BA%B5ng',
+    websiteIcon: 'ios-globe-outline',
     openHour: '07h00 - 24h00',
+    openHourIcon: 'ios-clock-outline',
     images: [
       {
         id: 1,

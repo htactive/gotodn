@@ -41,7 +41,7 @@ export class ListScreen extends React.Component {
                activeTabStyle={{backgroundColor: '#29b6f6',borderBottomWidth: 3, borderBottomColor:'#576d7a'}}
                activeTextStyle={{color:'#fff', fontWeight: 'normal'}}
                heading={data.title}>
-            <ListDetail />
+            <ListDetail navigation={this.props.navigation} />
           </Tab>
         )}
       </Tabs>

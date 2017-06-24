@@ -122,31 +122,29 @@ export const style = StyleSheet.create({
     flex: 1
   },
   imageInner: {
-    flex: 8,
+    flex: 1,
     backgroundColor: '#fff',
 
   },
   textInner: {
-    flex: 2,
-    backgroundColor: '#fff',
-
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
   },
   textContain: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'flex-end',
-    paddingHorizontal: 3,
-    backgroundColor: '#a8a8a8',
-    opacity: 0.8,
+    paddingBottom: 3,
+    paddingRight: 5,
+    backgroundColor: 'rgba(168, 168, 168, .5)',
   },
   image: {
     resizeMode: 'cover',
-    height: Math.round(menuItemHeight * 8 / 10)
+    height: menuItemHeight
   },
   title: {
     color: '#ffffff',
     fontSize: 14,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    alignSelf: 'flex-end'
   },
   menuItemHeader: {
     height: menuItemHeaderHeight,
@@ -159,7 +157,7 @@ export const style = StyleSheet.create({
   },
   menuItem: {
     height: menuItemHeight,
-    paddingBottom: 10,
+    marginBottom: 10,
     alignSelf: 'stretch',
   },
   menuItemDetail: {
@@ -199,6 +197,85 @@ export const style = StyleSheet.create({
     paddingBottom: 5,
     paddingRight: 5,
     backgroundColor: 'rgba(0, 0, 0, 0)'
+  },
+  detailImage: {
+    resizeMode: 'cover',
+    height: Math.round(viewportHeight / 3.3),
+  },
+  detailImageActionInner: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+  },
+  detailImageActionContain: {
+    flexDirection: 'row',
+    paddingBottom: 15,
+    paddingRight: 15,
+    backgroundColor: 'rgba(0, 0, 0, 0)',
+  },
+  detailImageActionIcon: {
+    width: viewportWidth / 10,
+    height: viewportWidth / 10,
+    borderRadius: viewportWidth / 20,
+    backgroundColor: 'rgba(255, 255, 255, .8)',
+    marginHorizontal: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  detailContent: {
+    padding: 15,
+    backgroundColor: '#fff',
+  },
+  detailContentTitle: {
+    color: '#263238',
+    fontSize: 16,
+    fontWeight: 'bold',
+    lineHeight: 25,
+    paddingBottom: 20,
+    textAlign: 'justify',
+    fontFamily: 'Source Sans Pro'
+  },
+  detailContentText: {
+    color: '#263238',
+    lineHeight: 20,
+    textAlign: 'justify',
+    fontFamily: 'Source Sans Pro'
+  },
+  detailInfoContainer: {
+    flexDirection: 'column',
+    backgroundColor: '#fff',
+  },
+
+  detailInfoItem: {
+    flexDirection: 'row',
+    paddingVertical: 15,
+    paddingLeft: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#a6a6a6',
+  },
+
+  detailInfoText: {
+    color: '#263238',
+    textAlign: 'justify',
+    fontWeight: '600',
+    fontSize: 15,
+    fontFamily: 'Source Sans Pro'
+  },
+  detailImageContainer: {
+    flexDirection: 'row',
+    paddingVertical: 20,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    borderBottomWidth: 1,
+    borderBottomColor: '#a6a6a6',
+  },
+  detailImageItem: {
+    resizeMode: 'cover',
+    width: (viewportWidth - 50) / 3,
+    height: (viewportWidth - 50) / 3,
+    borderRadius: 5,
   }
+
 });
 
