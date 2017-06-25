@@ -3,12 +3,12 @@ import {} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import TopSlider from '../components/slider/TopSlider';
 import {HomeMenuList} from '../components/home/HomeMenuList';
-import {SlideType} from '../common/constain';
+import {SlideType, MenuType} from '../common/constain';
 import {Menu} from '../components/menu/Menu'
 
 export class HomeScreen extends React.Component {
   componentWillMount() {
-    Menu.instance.enableMenu();
+
   }
 
   render() {

@@ -15,6 +15,10 @@ export default class App extends React.Component {
       'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
       'Ionicons': require('native-base/Fonts/Ionicons.ttf'),
       'Source Sans Pro': require('./assets/fonts/SourceSansPro-Regular.ttf'),
+      'Source Sans Pro SemiBold': require('./assets/fonts/SourceSansPro-SemiBold.ttf'),
+      'Source Sans Pro Bold': require('./assets/fonts/SourceSansPro-Bold.ttf'),
+      'Source Sans Pro Light': require('./assets/fonts/SourceSansPro-Light.ttf'),
+      'Source Sans Pro Italic': require('./assets/fonts/SourceSansPro-Italic.ttf'),
     });
     this.setState({
       fontsAreLoaded: true,

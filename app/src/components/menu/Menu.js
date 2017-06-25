@@ -5,6 +5,7 @@ import {StyleBase} from '../../styles/style';
 import {MenuContent} from './MenuContent';
 
 import {MenuHeader} from './MenuHeader';
+import {MenuType} from '../../common/constain';
 
 const drawerStyles = {
   drawer: {
@@ -39,6 +40,19 @@ export class Menu extends React.Component {
     }
   }
 
+  setTitle(title) {
+    this.setState({
+      title: title
+    });
+  }
+
+  setType(type) {
+    if (this.state.menuType != type)
+      this.setState({
+        menuType: type
+      });
+  }
+
   state = {
     drawerType: 'overlay',
     openDrawerOffset: 130,
@@ -54,7 +68,9 @@ export class Menu extends React.Component {
     tapToClose: true,
     side: 'right',
     enableMenu: true,
-    showSearchBar: false
+    showSearchBar: false,
+    menuType: MenuType.HomeScreen,
+    title: '',
   };
 
   componentWillMount() {
@@ -96,7 +112,14 @@ export class Menu extends React.Component {
         <View style={{flex:1}}>
           {!this.state.enableMenu || (
             <View style={{flex:10,  backgroundColor: StyleBase.header_color}}>
-              <MenuHeader onCityChanged={(value) => this.cityChanged(value)} onOpenDraw={() => this.openDrawer()}/>
+              <MenuHeader
+                onCityChanged={(value) => this.cityChanged(value)}
+                onOpenDraw={() => this.openDrawer()}
+                onLogoClicked={() => this.logoClicked()}
+                onBackClicked={() => this.goBack()}
+                type={this.state.menuType}
+                menuTitle={this.state.title}
+              />
             </View>
           ) }
           <View style={{flex:90, flexDirection: 'column', backgroundColor: '#fff'}}>
@@ -131,5 +154,13 @@ export class Menu extends React.Component {
         opacity: (2 - ratio) / 2,
       },
     }
+  }
+
+  logoClicked() {
+
+  }
+
+  goBack() {
+    this.navigation.goBack(null);
   }
 }

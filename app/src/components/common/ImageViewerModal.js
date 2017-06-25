@@ -32,7 +32,7 @@ export class ImageViewerModal extends React.Component {
           saveToLocalByLongPress={false}
         />
         <Button iconLeft transparent onPress={() => this.setState({visible: false}) } title={""}
-                style={{position: 'absolute',left: 20,top: 25 }}>
+                style={{position: 'absolute',left: 20,top: 30 }}>
           <Icon name={'ios-close'} style={{color: '#fff', fontSize: 35}}/>
         </Button>
       </Modal>

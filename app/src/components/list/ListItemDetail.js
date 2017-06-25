@@ -98,7 +98,7 @@ export class ListItemDetail extends React.Component {
                     <TouchableOpacity
                       activeOpacity={0.7}
                       style={[style.menuItemDetail, {height: (index % 2 === 0) ? largeItemHeight : smallItemHeight}]}
-                      onPress={() => {this.goToDetail()}}
+                      onPress={() => {this.goToDetail(data.id)}}
                       key={index}
                     >
                       <View style={style.imageContainer}>
@@ -129,7 +129,7 @@ export class ListItemDetail extends React.Component {
                       <TouchableOpacity
                         activeOpacity={0.7}
                         style={[style.menuItemDetail, {height: (index % 2 !== 0) ? largeItemHeight : smallItemHeight}]}
-                        onPress={() => {this.goToDetail()}}
+                        onPress={() => {this.goToDetail(data.id)}}
                         key={index}
                       >
                         <View style={style.imageContainer}>
@@ -165,6 +165,6 @@ export class ListItemDetail extends React.Component {
   }
 
   goToDetail(id) {
-    this.props.navigation.navigate(DNPageRoute(DetailScreen), {itemId: 8});
+    this.props.navigation.navigate(DNPageRoute(DetailScreen), {itemId: id});
   }
 }

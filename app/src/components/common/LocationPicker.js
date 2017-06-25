@@ -43,10 +43,10 @@ export class LocationPicker extends React.Component {
   render() {
     return (
       <Row>
-        <Col size={30} style={{justifyContent:'center',alignItems:'center'}}>
-          <Text style={{color:'#fff', fontStyle: 'italic'}} >ĐI ĐẾN</Text>
+        <Col size={25} style={{justifyContent:'center',alignItems:'center'}}>
+          <Text numberOfLines={1} style={{color:'#fff', fontFamily: StyleBase.sp_italic, fontSize: 15}} >ĐI ĐẾN</Text>
         </Col>
-        <Col size={70} style={{paddingTop:3}}>
+        <Col size={75} >
           <Picker
             style={this.getPickerStyle()}
             textStyle={this.getPickerTextStyle()}

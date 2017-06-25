@@ -8,6 +8,12 @@ export const SlideType = {
   ListScreen: 2,
 };
 
+export const MenuType = {
+  HomeScreen: 1,
+  ListScreen: 2,
+  DetailScreen: 3,
+};
+
 export const MenuListData = [
   {
     id:1,

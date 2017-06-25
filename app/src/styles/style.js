@@ -7,6 +7,11 @@ const menuItemHeaderHeight = Math.round(viewportHeight / 25);
 export const StyleBase = {
   header_color: '#039be5',
   header_height: 70,
+  sp_regular: 'Source Sans Pro',
+  sp_semibold: 'Source Sans Pro SemiBold',
+  sp_bold: 'Source Sans Pro Bold',
+  sp_light: 'Source Sans Pro Light',
+  sp_italic: 'Source Sans Pro Italic',
 };
 
 export const style = StyleSheet.create({
@@ -230,17 +235,17 @@ export const style = StyleSheet.create({
   detailContentTitle: {
     color: '#263238',
     fontSize: 16,
-    fontWeight: 'bold',
     lineHeight: 25,
     paddingBottom: 20,
     textAlign: 'justify',
-    fontFamily: 'Source Sans Pro'
+    fontFamily: StyleBase.sp_bold,
   },
   detailContentText: {
+    fontSize: 14,
     color: '#263238',
     lineHeight: 20,
     textAlign: 'justify',
-    fontFamily: 'Source Sans Pro'
+    fontFamily: StyleBase.sp_regular
   },
   detailInfoContainer: {
     flexDirection: 'column',
@@ -258,9 +263,8 @@ export const style = StyleSheet.create({
   detailInfoText: {
     color: '#263238',
     textAlign: 'justify',
-    fontWeight: '600',
     fontSize: 15,
-    fontFamily: 'Source Sans Pro'
+    fontFamily: StyleBase.sp_semibold
   },
   detailImageContainer: {
     flexDirection: 'row',
@@ -275,6 +279,65 @@ export const style = StyleSheet.create({
     width: (viewportWidth - 50) / 3,
     height: (viewportWidth - 50) / 3,
     borderRadius: 5,
+  },
+
+  detailNearByTitle: {
+    color: '#263238',
+    textAlign: 'justify',
+    fontSize: 15,
+    fontFamily: StyleBase.sp_semibold
+  },
+  detailNearByInfo: {
+    color: '#263238',
+    textAlign: 'justify',
+    fontSize: 13,
+    fontFamily: StyleBase.sp_semibold
+  },
+  nearPlaceTitle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15,
+  },
+  nearPlaceTitleText: {
+    color: '#263238',
+    fontSize: 18,
+    lineHeight: 25,
+    textAlign: 'justify',
+    fontFamily: StyleBase.sp_semibold,
+
+  },
+  menuLeft: {
+    position: 'absolute',
+    left: 5,
+    top: (viewportWidth/10)/2 - 7,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  menuRight: {
+    position: 'absolute',
+    right: 5,
+    top: (viewportWidth/10)/2 - 7,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
+  },
+  pickerLeft: {
+    position: 'absolute',
+    left: 60,
+    top: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: viewportWidth / 2,
+  },
+  centralizedContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  menuTitleText: {
+    fontFamily: StyleBase.sp_regular,
+    fontSize: 18,
+    color: '#fff'
   }
 
 });

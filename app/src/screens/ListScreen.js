@@ -2,14 +2,18 @@ import React from 'react';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import TopSlider from '../components/slider/TopSlider';
 import {Tabs, Tab, Left, Thumbnail, Body, Button, Icon, TabHeading, Text, ScrollableTab} from 'native-base';
-import {viewportWidth, MenuListData} from '../common/constain';
+import {viewportWidth, MenuListData, MenuType} from '../common/constain';
 import {ListDetail} from '../components/list/ListDetail';
+import {Menu} from '../components/menu/Menu'
 
 export class ListScreen extends React.Component {
   state = {
     currentTab: 0,
     listData: [],
   };
+
+  componentWillMount(){
+  }
 
   componentDidMount() {
     this.setState({

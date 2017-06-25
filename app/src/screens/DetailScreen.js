@@ -2,13 +2,16 @@ import React from 'react';
 import {View, Image, TouchableOpacity, ScrollView} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
-import {MenuListItemData} from '../common/constain';
+import {MenuListItemData, MenuType} from '../common/constain';
 import {Icon} from 'native-base';
 import {DetailBanner} from '../components/detail/DetailBanner';
 import {style} from '../styles/style';
 import {DetailText} from '../components/detail/DetailText';
 import {DetailInfo} from '../components/detail/DetailInfo';
 import {DetailImage} from '../components/detail/DetailImage';
+import {DetailNearPlace} from '../components/detail/DetailNearPlace';
+import {DNPageRoute} from '../NavigationHelper';
+import {Menu} from '../components/menu/Menu';
 
 export class DetailScreen extends React.Component {
   state = {
@@ -28,14 +31,13 @@ export class DetailScreen extends React.Component {
   }
 
   render() {
-
     let data = this.state.dataDetail;
     let detailInfo = [];
     detailInfo.push({infoIcon: data.addressIcon || 'ios-sad-outline', infoText: data.address});
     detailInfo.push({infoIcon: data.phoeneIcon || 'ios-sad-outline', infoText: data.phone});
-    detailInfo.push({infoIcon: data.websiteIcon || 'ios-sad-outline', infoText: data.website,isUrl: true});
+    detailInfo.push({infoIcon: data.websiteIcon || 'ios-sad-outline', infoText: data.website, isUrl: true});
     detailInfo.push({infoIcon: data.openHourIcon || 'ios-sad-outline', infoText: data.openHour});
-
+    let detailNearBy = MenuListItemData.filter(t => t.id != data.id);
     return (
       data ? (
           <Grid>
@@ -50,10 +52,10 @@ export class DetailScreen extends React.Component {
                 <Row size={2}>
                   <View style={style.detailContent}>
                     <DetailText title={data.title} description={data.description}/>
-                    <DetailInfo detailInfo={detailInfo} />
-                    <DetailImage images={data.images} />
+                    <DetailInfo detailInfo={detailInfo}/>
+                    <DetailImage images={data.images}/>
+                    <DetailNearPlace nearByPlaces={detailNearBy} onNearByClicked={(id) => this.goToPlace(id)}/>
                   </View>
-                  {/*<HomeMenuList navigation={this.props.navigation}/>*/}
                 </Row>
               </ScrollView>
             </Col>
@@ -67,5 +69,9 @@ export class DetailScreen extends React.Component {
 
   likeDetail(id) {
 
+  }
+
+  goToPlace(id) {
+    this.props.navigation.navigate(DNPageRoute(DetailScreen), {itemId: id});
   }
 }
