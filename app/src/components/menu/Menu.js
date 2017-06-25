@@ -5,7 +5,10 @@ import {StyleBase} from '../../styles/style';
 import {MenuContent} from './MenuContent';
 
 import {MenuHeader} from './MenuHeader';
-import {MenuType} from '../../common/constain';
+import {MenuType, viewportHeight, MenuListItemData} from '../../common/constain';
+import {MenuSearch} from './MenuSearch';
+import {DNPageRoute} from '../../NavigationHelper';
+import {DetailScreen} from '../../screens/DetailScreen';
 
 const drawerStyles = {
   drawer: {
@@ -69,6 +72,7 @@ export class Menu extends React.Component {
     side: 'right',
     enableMenu: true,
     showSearchBar: false,
+    searchValue: '',
     menuType: MenuType.HomeScreen,
     title: '',
   };
@@ -117,13 +121,36 @@ export class Menu extends React.Component {
                 onOpenDraw={() => this.openDrawer()}
                 onLogoClicked={() => this.logoClicked()}
                 onBackClicked={() => this.goBack()}
+                onToggleSearchBar={(toggle) => this.toggleSearchBar(toggle)}
+                onSearchChanged={(text) => this.setState({
+                  searchValue: text,
+                })}
+                showSearchBar={this.state.showSearchBar}
                 type={this.state.menuType}
                 menuTitle={this.state.title}
               />
             </View>
           ) }
-          <View style={{flex:90, flexDirection: 'column', backgroundColor: '#fff'}}>
+          <View style={{flex:90, flexDirection: 'column', backgroundColor: '#fff', position:'relative'}}>
             {this.props.children}
+            {this.state.showSearchBar && (
+              <View style={{
+                top:0,
+                left:0,
+                right:0,
+                bottom:0,
+                flex: 1,
+                flexDirection: 'column',
+                justifyContent:'flex-start',
+                position: 'absolute',
+                backgroundColor: 'rgba(245, 245, 245, .9)',
+                minHeight: viewportHeight * .9
+              }}>
+                <MenuSearch search={this.state.searchValue}
+                            onSearchSelected={(data) => this.searchSelect(data)}
+                />
+              </View>
+            )}
           </View>
         </View>
       </Drawer>
@@ -162,5 +189,16 @@ export class Menu extends React.Component {
 
   goBack() {
     this.navigation.goBack(null);
+  }
+
+  toggleSearchBar(toggle) {
+    this.setState({
+      showSearchBar: toggle
+    });
+  }
+
+  searchSelect(data) {
+    this.navigation.navigate(DNPageRoute(DetailScreen), {itemId: data && data.id});
+    this.toggleSearchBar(false);
   }
 }

@@ -30,7 +30,7 @@ export class MenuList extends React.Component {
                             this.props.onListItemClicked(menuD.id);
                         }}/>
         )}
-        <MenuListItem itemText='Trợ giúp' actived={this.state.isHelpActived} itemIcon="ios-help" onItemClicked={() => {
+        <MenuListItem itemText='Trợ giúp' actived={this.state.isHelpActived} itemIcon="ios-help-circle-outline" onItemClicked={() => {
           this.setState({
             activeIndex: -1,
             isHelpActived: true,
@@ -38,7 +38,7 @@ export class MenuList extends React.Component {
           });
           this.props.onHelpClicked();
         }}/>
-        <MenuListItem itemText='Về chúng tôi' actived={this.state.isAboutActived} itemIcon="ios-people-outline"
+        <MenuListItem itemText='Về chúng tôi' actived={this.state.isAboutActived} itemIcon="ios-hand-outline"
                       onItemClicked={() => {
                         this.setState({
                           activeIndex: -1,
@@ -47,6 +47,9 @@ export class MenuList extends React.Component {
                         });
                         this.props.onAboutUsClicked();
                       }}/>
+        <MenuListItem itemText='Ngôn ngữ' itemIcon="logo-yen" onItemClicked={() => {
+          this.props.onLanguageClicked();
+        }}/>
       </ScrollView>
     );
   }

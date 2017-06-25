@@ -1,4 +1,5 @@
 import {Platform, Dimensions} from 'react-native';
+import map from './characterMap';
 
 export const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 export const platform = Platform.OS;
@@ -359,3 +360,71 @@ export const MenuListItemData = [
     ]
   }
 ];
+
+export const IndustryData = [
+  {
+    id: 1,
+    heroImage: 'http://giaoducthoidai.vn/Uploaded/ngocnd/2017_04_05/1_YKIQ.jpg',
+    title: 'Khu công nghiệp Hòa Khánh',
+    description: 'Khu công nghiệp Hòa Khánh được thành lập năm 1997 và đặt tại vị thế lí tưởng gần trung tâm thành phố Đà Nẵng và cách sân bay quốc tế Đà Nẵng và nhà ga 10 km. Khu công nghiệp có các hệ thống hạ tầng hiện đại bao gồm hệ thống điện, xử lí nước thải, giao thông, nhà xưởng, nhà kho cho thuê và nguồn lao động dồi dào. Đây cũng là một trong 6 khu công nghiệp lớn nhất tại Đà Nẵng. Vì thế, cùng với những chính sách hỗ trợ, khu công nghiệp Hòa Khánh là một nơi thích hợp cho các công ty nội địa lẫn nước ngoài, hầu hết là Nhật Bản đến thành lập dự án đầu tư. ',
+    star: 4.5,
+    address: 'P.Hòa Khánh – Q.Liên Chiểu – TP.Đà Nẵng',
+    addressIcon: 'ios-pin-outline',
+    phone: '(84-125) 333 222',
+    phoeneIcon: 'ios-phone-portrait',
+    fax: '(84-125) 3334 555',
+    faxIcon: 'ios-print-outline',
+    website: 'https://thongtindoanhnghiep.co/da-nang/quan-lien-chieu/khu-cong-nghiep-hoa-khanh',
+    websiteIcon: 'ios-globe-outline',
+    totalArea:' 1000 ha',
+    vacantLand:' 100 ha',
+    openHour: '07h00 - 24h00',
+    openHourIcon: 'ios-clock-outline',
+    images: [
+      {
+        id: 1,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-08-560x420.jpg'
+      },
+      {
+        id: 2,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-07-630x420.jpg'
+      },
+      {
+        id: 3,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-05-558x420.jpg'
+      },
+      {
+        id: 4,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-04-460x420.jpg'
+      },
+      {
+        id: 5,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-03-633x420.jpg'
+      },
+      {
+        id: 6,
+        url: 'https://tourism.danang.vn/wp-content/uploads/2017/04/bien-da-nang-02-633x420.jpg'
+      }
+    ]
+  },
+];
+
+export const Language = [
+  {Id: 1, Name: 'English', Code: ''},
+  {Id: 2, Name: 'Japan', Code: ''},
+  {Id: 3, Name: 'Korea', Code: ''},
+  {Id: 4, Name: 'Vietnamese', Code: ''},
+];
+
+export class Helper {
+  static CloneObject(obj) {
+    return JSON.parse(JSON.stringify(obj))
+  }
+
+  static stripDiacritics(str) {
+    for (let i = 0; i < map.length; i++) {
+      str = str.replace(map[i].letters, map[i].base);
+    }
+    return str;
+  };
+}

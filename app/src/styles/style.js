@@ -325,7 +325,7 @@ export const style = StyleSheet.create({
   pickerLeft: {
     position: 'absolute',
     left: 60,
-    top: 5,
+    top: (viewportWidth/10)/2,
     justifyContent: 'center',
     alignItems: 'center',
     width: viewportWidth / 2,
@@ -338,7 +338,18 @@ export const style = StyleSheet.create({
     fontFamily: StyleBase.sp_regular,
     fontSize: 18,
     color: '#fff'
-  }
-
+  },
+  menuSearchTitle: {
+    color: '#263238',
+    textAlign: 'justify',
+    fontSize: 16,
+    fontFamily: StyleBase.sp_semibold
+  },
+  menuSearchInfo: {
+    color: '#263238',
+    textAlign: 'justify',
+    fontSize: 13,
+    fontFamily: StyleBase.sp_light
+  },
 });
 
