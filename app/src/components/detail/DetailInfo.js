@@ -10,20 +10,42 @@ export class DetailInfo extends React.Component {
     return (
       <View style={style.detailInfoContainer}>
         {this.props.detailInfo && this.props.detailInfo.map((d, index) =>
-          <View key={index} style={style.detailInfoItem}>
-            <View style={{flex:15, justifyContent: 'center', alignItems: 'flex-start'}}>
-              <Icon name={d.infoIcon} style={{color:'#263238', fontSize:35}}/>
-            </View>
-            <View style={{flex:85, justifyContent: 'center', alignItems: 'flex-start'}}>
-              {d.isUrl ? (
-                  <TouchableOpacity activeOpacity={.8} onPress={() => this.handleClick(d.infoText)}>
-                    <Text numberOfLines={2} style={[style.detailInfoText, {textDecorationLine: 'underline'}]}>{d.infoText}</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <Text numberOfLines={2} style={style.detailInfoText}>{d.infoText}</Text>
-                )}
-            </View>
-          </View>
+          d.isMulti ? (
+              <View key={index} style={style.detailInfoItem}>
+                <View style={{flex:15, justifyContent: 'center', alignItems: 'flex-start'}}>
+                  {/*<Icon name={d.infoIcon} style={{color:'#263238', fontSize:35}}/>*/}
+                  <Image style={style.iconImgXs} source={{uri: d.dataInfo[0].infoIcon}}/>
+                </View>
+                <View style={{flex:35, justifyContent: 'center', alignItems: 'flex-start'}}>
+                  <Text numberOfLines={2} style={style.detailInfoText}>{ d.dataInfo[0].infoText}</Text>
+                </View>
+                <View style={{flex:15, justifyContent: 'center', alignItems: 'flex-start'}}>
+                  {/*<Icon name={d.infoIcon} style={{color:'#263238', fontSize:35}}/>*/}
+                  <Image style={style.iconImgXs} source={{uri: d.dataInfo[1].infoIcon}}/>
+                </View>
+                <View style={{flex:35, justifyContent: 'center', alignItems: 'flex-start'}}>
+                  <Text numberOfLines={2} style={style.detailInfoText}>{ d.dataInfo[1].infoText}</Text>
+                </View>
+              </View>
+            ) :
+            (
+              <View key={index} style={style.detailInfoItem}>
+                <View style={{flex:15, justifyContent: 'center', alignItems: 'flex-start'}}>
+                  {/*<Icon name={d.infoIcon} style={{color:'#263238', fontSize:35}}/>*/}
+                  <Image style={style.iconImgXs} source={{uri: d.infoIcon}}/>
+                </View>
+                <View style={{flex:85, justifyContent: 'center', alignItems: 'flex-start'}}>
+                  {d.isUrl ? (
+                      <TouchableOpacity activeOpacity={.8} onPress={() => this.handleClick(d.infoText)}>
+                        <Text numberOfLines={2}
+                              style={[style.detailInfoText, {textDecorationLine: 'underline'}]}>{d.infoText}</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <Text numberOfLines={2} style={style.detailInfoText}>{d.infoText}</Text>
+                    )}
+                </View>
+              </View>
+            )
         )}
       </View>
     )

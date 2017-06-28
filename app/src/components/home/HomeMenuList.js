@@ -6,6 +6,7 @@ import {style} from "../../styles/style";
 import {MenuListData} from '../../common/constain';
 import {DNPageRoute} from '../../NavigationHelper';
 import {ListScreen} from '../../screens/ListScreen'
+import {IndustryListScreen} from '../../screens/IndustryListScreen';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 const menuItemHeight = Math.round(viewportHeight / 6);
@@ -59,7 +60,7 @@ export class HomeMenuList extends React.Component {
         :
         (
           <ScrollView
-            refreshControl = {
+            refreshControl={
               <RefreshControl
             refreshing={this.state.refreshing}
             onRefresh={() => this.onFresh()} />
@@ -71,18 +72,18 @@ export class HomeMenuList extends React.Component {
                   <View key={index} style={{alignSelf: 'stretch'}}>
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      onPress={() => {this.goToList(data.id, 0)}}
+                      onPress={() => {this.goToList(data.id, 0, data.isIndustry)}}
                       style={style.menuItemHeader}
                     >
-                      <Icon active name={data.categoryIcon}
-                            style={{alignSelf: 'flex-end', color:'#12a1e7', fontSize:20, paddingRight: 5}}/>
-                      <Text style={{alignSelf: 'flex-end', color: '#455a64', fontWeight: 'bold' }}>{data.categoryName}</Text>
+                      <Image style={[style.iconImgXs, {tintColor: '#12a1e7', marginBottom: 10}]} source={{uri: data.categoryIcon || '?'}}/>
+                      <Text
+                        style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 18, paddingLeft: 10 }}>{data.categoryName}</Text>
                     </TouchableOpacity>
                     {data.services && data.services.map((service, sIndex) =>
                       <TouchableOpacity
                         activeOpacity={0.7}
                         style={style.menuItem}
-                        onPress={() => {this.goToList(data.id, sIndex)}}
+                        onPress={() => {this.goToList(data.id, sIndex, data.isIndustry)}}
                         key={sIndex}
                       >
                         <View style={style.imageContainer}>
@@ -91,11 +92,13 @@ export class HomeMenuList extends React.Component {
                               source={{uri: service.heroImage}}
                               style={style.image}
                             >
-                              <View style={style.textInner}>
-                                <View style={style.textContain}>
-                                  <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
+                              {data.isIndustry || (
+                                <View style={style.textInner}>
+                                  <View style={style.textContain}>
+                                    <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
+                                  </View>
                                 </View>
-                              </View>
+                              )}
                             </Image>
                           </View>
                         </View>
@@ -109,18 +112,18 @@ export class HomeMenuList extends React.Component {
                     <View key={index} style={{alignSelf: 'stretch'}}>
                       <TouchableOpacity
                         activeOpacity={0.7}
-                        onPress={() => {this.goToList(data.id, 0)}}
+                        onPress={() => {this.goToList(data.id, 0, data.isIndustry)}}
                         style={style.menuItemHeader}
                       >
-                        <Icon active name={data.categoryIcon}
-                              style={{alignSelf: 'flex-end', color:'#12a1e7', fontSize:20, paddingRight: 5}}/>
-                        <Text style={{alignSelf: 'flex-end', color: '#455a64', fontWeight: 'bold'}}>{data.categoryName}</Text>
+                        <Image style={[style.iconImgXs, {tintColor: '#12a1e7'}]} source={{uri: data.categoryIcon || '?'}}/>
+                        <Text
+                          style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 18,paddingLeft: 10 }}>{data.categoryName}</Text>
                       </TouchableOpacity>
                       {data.services && data.services.map((service, sIndex) =>
                         <TouchableOpacity
                           activeOpacity={0.7}
                           style={style.menuItem}
-                          onPress={() => {this.goToList(data.id, sIndex)}}
+                          onPress={() => {this.goToList(data.id, sIndex, data.isIndustry)}}
                           key={sIndex}
                         >
                           <View style={style.imageContainer}>
@@ -129,11 +132,13 @@ export class HomeMenuList extends React.Component {
                                 source={{uri: service.heroImage}}
                                 style={style.image}
                               >
-                                <View style={style.textInner}>
-                                  <View style={style.textContain}>
-                                    <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
+                                {data.isIndustry || (
+                                  <View style={style.textInner}>
+                                    <View style={style.textContain}>
+                                      <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
+                                    </View>
                                   </View>
-                                </View>
+                                )}
                               </Image>
                             </View>
                           </View>
@@ -152,8 +157,11 @@ export class HomeMenuList extends React.Component {
     this.loadData();
   }
 
-  goToList(id, index) {
-    this.props.navigation.navigate(DNPageRoute(ListScreen), {listId: id, initIndex: index });
+  goToList(id, index, isIndustry) {
+    if (isIndustry)
+      this.props.navigation.navigate(DNPageRoute(IndustryListScreen), {listId: id});
+    else
+      this.props.navigation.navigate(DNPageRoute(ListScreen), {listId: id, initIndex: index});
   }
 }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Image, TouchableOpacity, Text, Linking} from 'react-native';
 import {Icon} from 'native-base';
 import {style} from '../../styles/style';
-import {viewportWidth} from '../../common/constain';
+import {viewportWidth, IconName} from '../../common/constain';
 
 export class DetailNearPlace extends React.Component {
 
@@ -30,7 +30,7 @@ export class DetailNearPlace extends React.Component {
               <View style={{flex: 7, justifyContent:'space-between'}}>
                 <View style={{flexDirection:'row'}}>
                   <View style={{flex:1, justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Icon name={d.addressIcon || 'ios-sad-outline'} style={{color:'#263238', fontSize:25}}/>
+                    <Image style={style.iconImgXxs} source={{uri: IconName.Location}}/>
                   </View>
                   <View style={{flex:9,justifyContent: 'center', alignItems: 'flex-start'}}>
                     <Text numberOfLines={1} style={style.detailNearByInfo}>{d.address}</Text>
@@ -39,7 +39,7 @@ export class DetailNearPlace extends React.Component {
                 <View style={{flexDirection:'row'}}>
                   <View style={{flexDirection:'row',flex: 1}}>
                     <View style={{flex:2, justifyContent: 'center', alignItems: 'flex-start'}}>
-                      <Icon name={d.phoeneIcon || 'ios-sad-outline'} style={{color:'#263238', fontSize:25}}/>
+                      <Image style={style.iconImgXxs} source={{uri: IconName.Telephone}}/>
                     </View>
                     <View style={{flex:8, justifyContent: 'center', alignItems: 'flex-start'}}>
                       <Text numberOfLines={1} style={style.detailNearByInfo}>{d.phone}</Text>
@@ -47,7 +47,7 @@ export class DetailNearPlace extends React.Component {
                   </View>
                   <View style={{flexDirection:'row',flex: 1}}>
                     <View style={{flex:2, justifyContent: 'center', alignItems: 'flex-start'}}>
-                      <Icon name={d.openHourIcon || 'ios-sad-outline'} style={{color:'#263238', fontSize:25}}/>
+                      <Image style={style.iconImgXxs} source={{uri: IconName.Clock}}/>
                     </View>
                     <View style={{flex:8, justifyContent: 'center', alignItems: 'flex-start'}}>
                       <Text numberOfLines={1} style={style.detailNearByInfo}>{d.openHour}</Text>

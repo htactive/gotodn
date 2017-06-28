@@ -34,10 +34,10 @@ export class DetailScreen extends React.Component {
   render() {
     let data = this.state.dataDetail;
     let detailInfo = [];
-    detailInfo.push({infoIcon: data.addressIcon || 'ios-sad-outline', infoText: data.address});
-    detailInfo.push({infoIcon: data.phoeneIcon || 'ios-sad-outline', infoText: data.phone});
-    detailInfo.push({infoIcon: data.websiteIcon || 'ios-sad-outline', infoText: data.website, isUrl: true});
-    detailInfo.push({infoIcon: data.openHourIcon || 'ios-sad-outline', infoText: data.openHour});
+    detailInfo.push({infoIcon: data.addressIcon || '?', infoText: data.address});
+    detailInfo.push({infoIcon: data.phoeneIcon || '?', infoText: data.phone});
+    detailInfo.push({infoIcon: data.websiteIcon || '?', infoText: data.website, isUrl: true});
+    detailInfo.push({infoIcon: data.openHourIcon || '?', infoText: data.openHour});
     let detailNearBy = MenuListItemData.filter(t => t.id != data.id);
     return (
       data ? (

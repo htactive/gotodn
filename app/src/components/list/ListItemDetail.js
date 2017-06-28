@@ -41,7 +41,7 @@ export class ListItemDetail extends React.Component {
         isLoaded: true,
         refreshing: false,
       });
-    }, 1000)
+    }, 500);
   }
 
   renderStart(starScore) {
@@ -54,7 +54,7 @@ export class ListItemDetail extends React.Component {
       else {
         if (modStar > 0) {
           if (modStar <= 0.5) {
-            stars.push(0.5);
+            stars.push(0);
           } else {
             stars.push(1);
           }
@@ -66,8 +66,8 @@ export class ListItemDetail extends React.Component {
     return (
       <View style={style.menuItemStar}>
         {stars.map((t, key) => <Icon key={key}
-                                     style={{alignSelf: 'flex-end', color:'#feeb08', fontSize:20, paddingHorizontal: 1}}
-                                     name={`${t == 1 ? 'ios-star' : (t == 0.5 ? 'ios-star-half' : 'ios-star-outline')}`}/>)}
+                                     style={{alignSelf: 'flex-end',color:  t == 1 ?  '#000' : '#fff', fontSize:20, paddingHorizontal: 1}}
+                                     name='ios-star'/>)}
       </View>
     );
   }

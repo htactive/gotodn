@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity} from 'react-native';
+import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity, Image} from 'react-native';
 import {Title, Icon, Picker, Drawer, Input, Item} from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {LocationPicker} from '../common/LocationPicker';
-import {MenuType} from '../../common/constain';
+import {MenuType, AppIcon} from '../../common/constain';
 import {style, StyleBase} from '../../styles/style';
 
 export class MenuHeader extends React.Component {
@@ -109,7 +109,8 @@ export class MenuHeader extends React.Component {
                         if(this.props.onLogoClicked)
                           this.props.onLogoClicked();
                       }}>
-                <Icon name='ios-hand-outline' style={{color:'#ffffff', fontSize:30, paddingHorizontal: 15}}/>
+                <Image style={[style.iconImg ,{tintColor:'#ffffff', marginRight: 15}]} source={AppIcon.AppLogo}/>
+
               </TouchableOpacity>
             </View>
           )}
@@ -132,10 +133,11 @@ export class MenuHeader extends React.Component {
           )}
           <View style={style.menuRight}>
             <TouchableOpacity onPress={() => this.toggleSearchBar(true)}>
-              <Icon name='ios-search-outline' style={{color:'#ffffff', fontSize:30}}/>
+              <Image style={[style.iconImg ,{tintColor:'#fff'}]} source={AppIcon.Search}/>
+
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.openDraw()}>
-              <Icon name='ios-menu' style={{color:'#ffffff', fontSize:30,paddingHorizontal: 15}}/>
+              <Image style={[style.iconImg ,{tintColor:'#fff', marginLeft: 15}]} source={AppIcon.Menu}/>
             </TouchableOpacity>
           </View>
           <View style={[style.centralizedContent, {paddingTop:3}]}>

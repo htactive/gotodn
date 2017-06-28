@@ -1,6 +1,5 @@
 import React from 'react';
-import {Col, Row, Grid} from 'react-native-easy-grid';
-import TopSlider from '../components/slider/TopSlider';
+import {PanResponder} from 'react-native';
 import {Tabs, Tab, Left, Thumbnail, Body, Button, Icon, TabHeading, Text, ScrollableTab} from 'native-base';
 import {viewportWidth, MenuListData, MenuType} from '../common/constain';
 import {ListDetail} from '../components/list/ListDetail';
@@ -10,9 +9,14 @@ export class ListScreen extends React.Component {
   state = {
     currentTab: 0,
     listData: [],
+    scroll: false,
   };
 
+  _panResponderSlider;
+  _panResponder;
+
   componentWillMount(){
+
   }
 
   componentDidMount() {
@@ -30,12 +34,10 @@ export class ListScreen extends React.Component {
     const { params } = this.props.navigation.state;
     let listId = (params && params.listId) || 0;
     let curTab = params && params.initIndex;
-    debugger;
     return (
       <Tabs initialPage={curTab || 0}
             locked
             onChangeTab={(page) => this.tabChanged(page)}
-            renderTabBar={()=> <ScrollableTab />}
             style={{backgroundColor: '#29b6f6'}}
       >
         {this.state.listData.length > 0 && this.state.listData.filter(t => t.id == listId)[0].services.map((data, index) =>
@@ -45,7 +47,9 @@ export class ListScreen extends React.Component {
                activeTabStyle={{backgroundColor: '#29b6f6',borderBottomWidth: 3, borderBottomColor:'#576d7a'}}
                activeTextStyle={{color:'#fff', fontWeight: 'normal'}}
                heading={data.title}>
-            <ListDetail navigation={this.props.navigation} />
+            <ListDetail panResponderSlider={this._panResponderSlider}
+                        panResponder={this._panResponder}
+                        navigation={this.props.navigation} />
           </Tab>
         )}
       </Tabs>
