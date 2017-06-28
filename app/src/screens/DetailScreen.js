@@ -12,6 +12,7 @@ import {DetailImage} from '../components/detail/DetailImage';
 import {DetailNearPlace} from '../components/detail/DetailNearPlace';
 import {DNPageRoute} from '../NavigationHelper';
 import {Menu} from '../components/menu/Menu';
+import {ReactMap} from "../components/map/ReactMap";
 
 export class DetailScreen extends React.Component {
   state = {
@@ -52,6 +53,9 @@ export class DetailScreen extends React.Component {
                 <Row size={2}>
                   <View style={style.detailContent}>
                     <DetailText title={data.title} description={data.description}/>
+                    <View style={style.detailMap}>
+                      <ReactMap />
+                    </View>
                     <DetailInfo detailInfo={detailInfo}/>
                     <DetailImage images={data.images}/>
                     <DetailNearPlace nearByPlaces={detailNearBy} onNearByClicked={(id) => this.goToPlace(id)}/>

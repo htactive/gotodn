@@ -28,7 +28,7 @@ export const DNNavigatorConfig = {
 };
 
 export const DNNavigatorOptions = {
-  initialRouteName: DNPageRoute(SplashScreen),
+  initialRouteName: DNPageRoute(HomeScreen),
   headerMode: 'none',
   onTransitionStart: (transProps) => {
     if(transProps && transProps.scene && transProps.scene.route)

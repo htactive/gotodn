@@ -232,6 +232,10 @@ export const style = StyleSheet.create({
     padding: 15,
     backgroundColor: '#fff',
   },
+  detailMap: {
+    height: viewportHeight / 2,
+    width: viewportWidth - 30,
+  },
   detailContentTitle: {
     color: '#263238',
     fontSize: 16,
