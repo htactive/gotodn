@@ -10,14 +10,21 @@ interface thisState {
 }
 
 export class ReactMap extends React.Component<thisProps, thisState> {
-
   componentWillMount() {
+  }
+
+  animateRegion(region: {latitude?: number, longitude?: number, latitudeDelta?: number, longitudeDelta?: number}) {
+    this.refs.mapRef.animateToRegion(region);
   }
 
   render() {
     return (
       <MapView
+        {...this.props}
         style={MapStyle.map}
+        ref={(ref: any) => {
+          this.mapRef = ref;
+        }}
         provider={PROVIDER_GOOGLE}
         loadingEnabled
         loadingIndicatorColor='#666666'
@@ -28,7 +35,11 @@ export class ReactMap extends React.Component<thisProps, thisState> {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
-      />
+      >
+        <MapView.Marker
+          coordinate={this.props.region}
+        />
+      </MapView>
     );
   }
 }
