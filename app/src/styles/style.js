@@ -2,7 +2,8 @@ import {StyleSheet, Platform, Dimensions} from 'react-native';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 const menuItemHeight = Math.round(viewportHeight / 6);
-const menuItemHeaderHeight = Math.round(viewportHeight / 25);
+const menuItemHeaderHeight = Math.round(viewportHeight / 20);
+const slideHeight = viewportHeight * 0.3;
 
 export const StyleBase = {
   header_color: '#039be5',
@@ -137,19 +138,45 @@ export const style = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   textContain: {
-    paddingBottom: 3,
-    paddingRight: 5,
+    paddingBottom: 1,
+    paddingRight: 1,
     backgroundColor: 'rgba(168, 168, 168, .5)',
   },
   image: {
     resizeMode: 'cover',
     height: menuItemHeight
   },
+  imageListSlider: {
+    resizeMode: 'cover',
+    justifyContent:'flex-end',
+    width: (viewportWidth -30 ) / 3,
+    height: slideHeight - 2,
+  },
+  textInnerListSlider: {
+    height: slideHeight/3,
+  },
+  textListSlider: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    backgroundColor: '#fff',
+  },
+  titleListSlider: {
+    color: '#263238',
+    fontSize: 14,
+    fontFamily: StyleBase.sp_semibold,
+  },
+  subtitleListSlider: {
+    color: '#263238',
+    fontSize: 12,
+    fontFamily: StyleBase.sp_light,
+  },
   title: {
     color: '#ffffff',
-    fontSize: 14,
-    fontWeight: 'bold',
-    alignSelf: 'flex-end'
+    fontSize: 16,
+    alignSelf: 'flex-end',
+    fontFamily: StyleBase.sp_bold
   },
   menuItemHeader: {
     height: menuItemHeaderHeight,
@@ -173,13 +200,14 @@ export const style = StyleSheet.create({
     resizeMode: 'cover',
   },
   menuItemTitle: {
-    color: '#455a64',
+    color: '#263238',
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: StyleBase.sp_semibold,
   },
   menuItemSubTitle: {
     color: '#263238',
     fontSize: 12,
+    fontFamily: StyleBase.sp_regular,
   },
   menuItemTextContain: {
     flex: 1,
@@ -220,9 +248,9 @@ export const style = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0)',
   },
   detailImageActionIcon: {
-    width: viewportWidth / 10,
-    height: viewportWidth / 10,
-    borderRadius: viewportWidth / 20,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: 'rgba(255, 255, 255, .8)',
     marginHorizontal: 5,
     justifyContent: 'center',
@@ -278,6 +306,24 @@ export const style = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#a6a6a6',
   },
+  listSliderContainer: {
+    flexDirection: 'row',
+    paddingVertical: 5,
+    marginHorizontal: 5,
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  },
+  listSlider: {
+    width: (viewportWidth -35 ) / 3
+  },
+  listSliderTitle: {
+    color: '#039be5',
+    fontSize: 16,
+    fontFamily: StyleBase.sp_light,
+  },
+  slideContainer: {
+    flex: 84,
+  },
   detailImageItem: {
     resizeMode: 'cover',
     width: (viewportWidth - 50) / 3,
@@ -291,11 +337,18 @@ export const style = StyleSheet.create({
     fontSize: 15,
     fontFamily: StyleBase.sp_semibold
   },
+  detailNearBySubTitle: {
+    color: '#263238',
+    textAlign: 'justify',
+    fontSize: 12,
+    fontFamily: StyleBase.sp_regular
+  },
   detailNearByInfo: {
     color: '#263238',
     textAlign: 'justify',
     fontSize: 13,
-    fontFamily: StyleBase.sp_semibold
+    fontFamily: StyleBase.sp_semibold,
+    paddingHorizontal: 5
   },
   nearPlaceTitle: {
     flex: 1,
@@ -355,5 +408,55 @@ export const style = StyleSheet.create({
     fontSize: 13,
     fontFamily: StyleBase.sp_light
   },
+  industryItemTitle: {
+    color: '#263238',
+    fontSize: 18,
+    fontFamily: StyleBase.sp_semibold,
+  },
+  industryItemSubTitle: {
+    color: '#263238',
+    fontSize: 14,
+    fontFamily: StyleBase.sp_regular,
+  },
+  iconImgXl: {
+    resizeMode: 'cover',
+    width: 45,
+    height: 45,
+  },
+  iconImgLg: {
+    resizeMode: 'cover',
+    width: 40,
+    height: 40,
+  },
+  iconImg: {
+    resizeMode: 'cover',
+    width: 35,
+    height: 35,
+  },
+  iconImgSm: {
+    resizeMode: 'cover',
+    width: 30,
+    height: 30,
+  },
+  iconImgXs: {
+    resizeMode: 'cover',
+    width: 25,
+    height: 25,
+  },
+  iconImgXxs: {
+    resizeMode: 'cover',
+    width: 20,
+    height: 20,
+  },
+  iconImgSmall: {
+    resizeMode: 'cover',
+    width: 15,
+    height: 15,
+  },
+  iconImgTini: {
+    resizeMode: 'cover',
+    width: 10,
+    height: 10,
+  }
 });
 

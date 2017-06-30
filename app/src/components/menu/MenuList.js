@@ -3,7 +3,7 @@ import {ScrollView, View, TouchableHighlight, Switch, Text}  from 'react-native'
 import {MenuListItem} from './MenuListItem';
 import {style} from '../../styles/style';
 import {Icon}  from 'native-base';
-import {MenuListData} from '../../common/constain';
+import {MenuListData, AppIcon} from '../../common/constain';
 
 export class MenuList extends React.Component {
   state = {menuData: [], activeIndex: -1, isHelpActived: false, isAboutActived: false};
@@ -27,10 +27,10 @@ export class MenuList extends React.Component {
                             isAboutActived: false
                           });
                           if(this.props.onListItemClicked)
-                            this.props.onListItemClicked(menuD.id);
+                            this.props.onListItemClicked(menuD.id, menuD.isIndustry);
                         }}/>
         )}
-        <MenuListItem itemText='Trợ giúp' actived={this.state.isHelpActived} itemIcon="ios-help-circle-outline" onItemClicked={() => {
+        <MenuListItem itemText='Trợ giúp' actived={this.state.isHelpActived} system itemIcon={AppIcon.Help} onItemClicked={() => {
           this.setState({
             activeIndex: -1,
             isHelpActived: true,
@@ -38,7 +38,7 @@ export class MenuList extends React.Component {
           });
           this.props.onHelpClicked();
         }}/>
-        <MenuListItem itemText='Về chúng tôi' actived={this.state.isAboutActived} itemIcon="ios-hand-outline"
+        <MenuListItem itemText='Về chúng tôi' system actived={this.state.isAboutActived} itemIcon={AppIcon.AppLogo}
                       onItemClicked={() => {
                         this.setState({
                           activeIndex: -1,
@@ -47,7 +47,7 @@ export class MenuList extends React.Component {
                         });
                         this.props.onAboutUsClicked();
                       }}/>
-        <MenuListItem itemText='Ngôn ngữ' itemIcon="logo-yen" onItemClicked={() => {
+        <MenuListItem itemText='Ngôn ngữ' system itemIcon={AppIcon.Language} onItemClicked={() => {
           this.props.onLanguageClicked();
         }}/>
       </ScrollView>

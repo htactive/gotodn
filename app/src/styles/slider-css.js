@@ -1,4 +1,5 @@
 import {StyleSheet, Dimensions, Platform} from 'react-native';
+import {StyleBase} from './style';
 
 const platform = Platform.OS;
 
@@ -19,7 +20,7 @@ export function wp(percentage) {
 }
 
 const slideHeight = viewportHeight * 0.3;
-const slideWidth = wp(40);
+const slideWidth = wp(75);
 const itemHorizontalMargin = wp(1);
 
 export const sliderWidth = viewportWidth;
@@ -34,12 +35,12 @@ export default StyleSheet.create({
     paddingTop: 10
   },
   slideContainer: {
-    flex: 84,
+    flex: 86,
   },
   dotContainer: {
-    flex: 8,
+    flex: 6,
     justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     flexDirection: 'row',
   },
   titleSlideContainer: {
@@ -53,28 +54,39 @@ export default StyleSheet.create({
     //paddingHorizontal: 2,
     paddingBottom: 2 // needed for shadow
   },
+  slideInnerContainerList: {
+    width: wp(38),
+    height: slideHeight,
+    //paddingHorizontal: 2,
+    paddingBottom: 2, // needed for shadow
+  },
   imageContainer: {
     flex: 1
   },
   imageInner: {
-    flex: 7,
+    flex: 1,
     backgroundColor: colors.white,
 
   },
   textInner: {
-    flex: 3,
-    backgroundColor: colors.white,
-
+    height: slideHeight/4.5,
+  },
+  textInnerList: {
+    height: slideHeight/3.5,
   },
   textContain: {
     flex: 1,
     justifyContent: 'flex-start',
     paddingHorizontal: 5,
     paddingVertical: 5,
-    backgroundColor: colors.gray,
-    opacity: 0.7,
-    borderBottomLeftRadius: entryBorderRadius,
-    borderBottomRightRadius: entryBorderRadius,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+  },
+  textListContain: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    paddingHorizontal: 5,
+    paddingVertical: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   imageContainerEven: {
     backgroundColor: colors.gray
@@ -83,8 +95,8 @@ export default StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     resizeMode: 'cover',
     borderRadius: Platform.OS === 'ios' ? entryBorderRadius : 0,
-    borderTopLeftRadius: entryBorderRadius,
-    borderTopRightRadius: entryBorderRadius
+    borderTopLeftRadius: 3,
+    borderTopRightRadius: 3
   },
   // image's border radius is buggy on ios; let's hack it!
   radiusMask: {
@@ -113,18 +125,30 @@ export default StyleSheet.create({
   title: {
     color: colors.white,
     fontSize: 14,
-    fontWeight: 'bold'
+    fontFamily: StyleBase.sp_semibold,
+  },
+  titleList: {
+    color: '#263238',
+    fontSize: 14,
+    fontFamily: StyleBase.sp_semibold,
   },
   slideTitle: {
     color: '#039be5',
     fontSize: 16,
+    fontFamily: StyleBase.sp_light,
   },
   titleEven: {
     color: 'white'
   },
   subtitle: {
     color: colors.white,
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: StyleBase.sp_light,
+  },
+  subtitleList: {
+    color: '#263238',
+    fontSize: 12,
+    fontFamily: StyleBase.sp_light,
   },
   subtitleEven: {
     color: 'rgba(255, 255, 255, 0.7)'
@@ -133,6 +157,6 @@ export default StyleSheet.create({
     marginBottom: 0
   },
   sliderContainer: {
-    paddingHorizontal: 5
+    paddingHorizontal: 0
   }
 });

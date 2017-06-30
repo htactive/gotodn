@@ -5,6 +5,7 @@ import TopSlider from '../components/slider/TopSlider';
 import {HomeMenuList} from '../components/home/HomeMenuList';
 import {SlideType, MenuType} from '../common/constain';
 import {Menu} from '../components/menu/Menu'
+import HomeSlider from '../components/home/HomeSlider';
 
 export class HomeScreen extends React.Component {
   componentWillMount() {
@@ -12,10 +13,11 @@ export class HomeScreen extends React.Component {
   }
 
   render() {
+
     return (
       <Grid>
         <Row size={42}>
-          <TopSlider sliderType={SlideType.HomeScreen} title="SỰ KIỆN NỔI BẬT"/>
+          <HomeSlider navigation={this.props.navigation} sliderType={SlideType.HomeScreen} title="Nổi Bật"/>
         </Row>
         <Row size={58}>
           <HomeMenuList navigation={this.props.navigation} />

@@ -3,6 +3,7 @@ import {Image, View, Text, TouchableOpacity} from 'react-native';
 import {Icon, Button, H3, Thumbnail} from 'native-base';
 import {ImagesConstant} from '../../common/images';
 import {style} from '../../styles/style';
+import {AppIcon} from '../../common/constain';
 
 export class MenuTop extends React.Component {
   render() {
@@ -12,12 +13,12 @@ export class MenuTop extends React.Component {
         <View style={{flex:2}}>
           <Text style={{marginLeft: 50, color:'#fff', fontSize: 16}}> </Text>
         </View>
-        <View style={{flex:6, justifyContent:'center', alignItems: 'flex-start', paddingTop: 5}}>
+        <View style={{flex:6, justifyContent:'center', alignItems: 'flex-start', paddingTop: 10, paddingLeft: 5}}>
           <Text style={{color:'#fff', fontSize: 16, fontFamily: 'Source Sans Pro'}}>ĐI ĐẾN</Text>
         </View>
-        <View style={{flex:2, justifyContent:'center', alignItems: 'flex-end'}}>
+        <View style={{flex:2, justifyContent:'center',paddingTop: 10, alignItems: 'flex-end'}}>
           <TouchableOpacity onPress={() => this.closeMenu()} style={{alignSelf:'flex-end',paddingRight: 10}}>
-            <Icon name='ios-menu' style={{color:'#ffffff', fontSize:30}}/>
+            <Image style={[style.iconImg, {tintColor: '#fff'}]} source={AppIcon.Menu}/>
           </TouchableOpacity>
         </View>
 

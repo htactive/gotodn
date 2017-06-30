@@ -61,18 +61,18 @@ export class MenuSearch extends React.Component {
               <View style={{flex: 7, justifyContent:'space-between'}}>
                 <View style={{flexDirection:'row'}}>
                   <View style={{flex:1, justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Icon name={d.addressIcon || 'ios-sad-outline'} style={{color:'#263238', fontSize:25}}/>
+                    <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={{uri: d.addressIcon || '?'}}/>
                   </View>
                   <View style={{flex:9,justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Text numberOfLines={1} style={style.menuSearchInfo}>{d.address}</Text>
+                    <Text numberOfLines={1} style={[style.menuSearchInfo, {paddingLeft: 5}]}>{d.address}</Text>
                   </View>
                 </View>
                 <View style={{flexDirection:'row'}}>
                   <View style={{flex:1, justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Icon name={d.phoeneIcon || 'ios-sad-outline'} style={{color:'#263238', fontSize:25}}/>
+                    <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={{uri: d.phoeneIcon || '?'}}/>
                   </View>
                   <View style={{flex:9, justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Text numberOfLines={1} style={style.menuSearchInfo}>{d.phone}</Text>
+                    <Text numberOfLines={1} style={[style.menuSearchInfo, {paddingLeft: 5}]}>{d.phone}</Text>
                   </View>
                 </View>
               </View>

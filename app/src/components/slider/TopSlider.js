@@ -29,26 +29,18 @@ export default class TopSlider extends React.Component {
     let titleOuter = {};
     let subTitleOuter = {};
     let sliders = this.state.sliders;
-    let sliderType = this.props.sliderType;
-    switch (sliderType) {
-      case SlideType.HomeScreen:
-        break;
-      case SlideType.ListScreen:
-        iW = wp(40);
-        sScale = .99;
-        sOpacity = .99;
-        textOuter.push({
-          borderWidth: 1,
-          borderColor: colors.gray,
-          backgroundColor: colors.white,
-        });
-        titleOuter = {color: '#455a64'};
-        subTitleOuter={color: '#263238'};
-        slideItem = {paddingHorizontal: 5};
-        break;
-    }
+
+    iW = wp(40);
+    sScale = .99;
+    sOpacity = .99;
+    slideItem = {marginHorizontal: 5};
+    textOuter.push({
+      backgroundColor: colors.white,
+    });
+    titleOuter = {color: '#455a64'};
+    subTitleOuter={color: '#263238'};
     return (
-      <View style={styles.container}>
+      <View style={[styles.container,{paddingTop: 5}]}>
         <View style={styles.slideContainer}>
           <Carousel
             ref={(carousel) => { this.carousel = carousel; }}
@@ -57,13 +49,14 @@ export default class TopSlider extends React.Component {
             firstItem={this.state.slideIndex}
             inactiveSlideScale={sScale}
             inactiveSlideOpacity={sOpacity}
-            enableMomentum={true}
+            enableMomentum={false}
+            scrollEndDragDebounceValue={1}
             containerCustomStyle={styles.slider}
             contentContainerCustomStyle={styles.sliderContainer}
             showsHorizontalScrollIndicator={false}
             removeClippedSubviews={false}
             onSnapToItem={(index) => this.setState({slideIndex: index})}
-            activeSlideOffset={50}
+            swipeThreshold={50}
           >
             {sliders.map((slider, index) =>
               <TopSliderItem
