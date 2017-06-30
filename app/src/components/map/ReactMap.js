@@ -10,7 +10,33 @@ interface thisState {
 }
 
 export class ReactMap extends React.Component<thisProps, thisState> {
+  state = {
+    currentPos: {
+      latitude: 16.0476619,
+      longitude:108.2379323,
+      latitudeDelta: 0.0322,
+      longitudeDelta: 0.0121,
+    },
+
+  };
+
   componentWillMount() {
+  }
+
+  componentDidMount() {
+  
+    this.getCurrentPos();
+  }
+
+  getCurrentPos() {
+    navigator.geolocation.getCurrentPosition((position) => {
+      console.log('Detail ' + position);
+        let currentPos = this.state.currentPos;
+        currentPos.latitude = 1;
+        currentPos.longitude = 1;
+        this.setState({currentPos: currentPos});
+      }, (error) => this.setState({initError: error.message}),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000});
   }
 
   animateRegion(region: {latitude?: number, longitude?: number, latitudeDelta?: number, longitudeDelta?: number}) {
@@ -18,6 +44,7 @@ export class ReactMap extends React.Component<thisProps, thisState> {
   }
 
   render() {
+
     return (
       <MapView
         {...this.props}
@@ -29,12 +56,8 @@ export class ReactMap extends React.Component<thisProps, thisState> {
         loadingEnabled
         loadingIndicatorColor='#666666'
         loadingBackgroundColor='#eeeeee'
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
+        region={this.state.currentPos}
+        showsUserLocation
       >
         <MapView.Marker
           coordinate={this.props.region}

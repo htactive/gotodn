@@ -47,6 +47,7 @@ export const AppIcon = {
   Menu: require('../../assets/icons/menu.png'),
   Search: require('../../assets/icons/search.png'),
   Help: require('../../assets/icons/c_help.png'),
+  LocationMarker: require('../../assets/icons/location_marker.gif'),
 };
 
 export const SlideData = [
