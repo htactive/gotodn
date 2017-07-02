@@ -1,4 +1,5 @@
 import React from 'react';
+import {BackHandler, ToastAndroid, Platform} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import {SplashScreen} from './screens/SplashScreen';
 import {HomeScreen} from './screens/HomeScreen';
@@ -39,11 +40,35 @@ export const DNNavigatorOptions = {
   initialRouteName: DNPageRoute(SplashScreen),
   headerMode: 'none',
   onTransitionStart: (transProps) => {
-    if(transProps && transProps.scene && transProps.scene.route)
-    {
-      let params ;
+
+    if (transProps && transProps.scene && transProps.scene.route) {
+      let params;
       let listId = 0;
       let currentList = {};
+      if (Platform.OS === 'android') {
+        let existConfirmTime = 0;
+        let confirmTimeout;
+        BackHandler.removeEventListener('hardwareBackPress');
+        BackHandler.addEventListener('hardwareBackPress', () => {
+          if (transProps.navigation.state.routes.length > 1) {
+            transProps.navigation.goBack();
+            existConfirmTime = 0;
+            return true;
+          }
+          existConfirmTime += 1;
+          if (confirmTimeout) clearTimeout(confirmTimeout);
+          confirmTimeout = setTimeout(() => {
+            existConfirmTime -= 1;
+          }, 2000);
+          if (existConfirmTime >= 2) {
+            existConfirmTime = 0;
+            BackHandler.exitApp();
+            return false;
+          }
+          ToastAndroid.showWithGravity('Nhấn BACK lần nữa để thoát', 2000, ToastAndroid.BOTTOM);
+          return true;
+        });
+      }
       switch (transProps.scene.route.routeName) {
         case propName(DNNavigatorConfig, DNNavigatorConfig.HomeScreen):
           Menu.instance.enableMenu();
@@ -92,13 +117,13 @@ export const DNNavigatorOptions = {
   },
 };
 
-function propName(prop, value){
-  for(let i in prop) {
-    if (prop[i] == value){
+function propName(prop, value) {
+  for (let i in prop) {
+    if (prop[i] == value) {
       return i;
     }
   }
   return false;
 }
 
-export const DNNavigator = StackNavigator(DNNavigatorConfig,DNNavigatorOptions);
+export const DNNavigator = StackNavigator(DNNavigatorConfig, DNNavigatorOptions);

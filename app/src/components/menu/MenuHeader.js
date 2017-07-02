@@ -109,7 +109,7 @@ export class MenuHeader extends React.Component {
                         if(this.props.onLogoClicked)
                           this.props.onLogoClicked();
                       }}>
-                <Image style={[style.iconImg ,{tintColor:'#ffffff', marginRight: 15}]} source={AppIcon.AppLogo}/>
+                <Image style={[style.iconImg ,{tintColor:'#ffffff', marginRight: 10}]} source={AppIcon.AppLogo}/>
 
               </TouchableOpacity>
             </View>

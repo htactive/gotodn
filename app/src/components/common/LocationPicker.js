@@ -3,7 +3,8 @@ import {Icon, Picker} from 'native-base';
 import {View, PickerIOS, Platform, Text, TouchableOpacity} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {StyleBase} from '../../styles/style';
-import {PickerModal} from './PickerModal';
+import {CityDropdown} from '../common/CityDropdown';
+import {viewportWidth, viewportHeight} from '../../common/constain';
 
 const platform = Platform.OS;
 
@@ -46,16 +47,16 @@ export class LocationPicker extends React.Component {
     return (
       <Row>
         <Col size={3} style={{justifyContent:'center',alignItems:'flex-start'}}>
-          <Text numberOfLines={1} style={{color:'#fff', fontFamily: StyleBase.sp_italic, fontSize: 15}}>ĐI ĐẾN</Text>
+          <Text numberOfLines={1} style={{color:'#fff', fontFamily: StyleBase.sp_italic, fontSize: 15, paddingRight:5}}>ĐI ĐẾN</Text>
         </Col>
         <Col size={7} style={{justifyContent:'center',alignItems:'flex-start'}}>
-          <TouchableOpacity style={{flexDirection: 'row',justifyContent:'center',alignItems:'center'}} onPress={() => { this.setState({showPicker: true}) }}>
+          <TouchableOpacity style={{flexDirection: 'row',justifyContent:'center',alignItems:'center'}}
+                            onPress={() => { this.setState({showPicker: true}) }}>
             <Text numberOfLines={1} style={{  fontSize: 15, fontFamily: StyleBase.sp_regular, color: '#fff'}}>
               {city && city.Name.toUpperCase()}</Text>
             <Icon name={'ios-arrow-down-outline'} style={{color: '#fff', fontSize: 20, paddingHorizontal: 15}}/>
           </TouchableOpacity>
-          <PickerModal tilte="Chọn thành phố"
-                       visible={this.state.showPicker}
+          <CityDropdown visible={this.state.showPicker}
                        onCloseModal={() => { this.setState({showPicker: false}) }}
                        selectedItem={city}
                        dataSource={this.state.cities}

@@ -40,6 +40,7 @@ export class ListSlider extends React.Component {
             <View style={{flex: 87}}>
               <ScrollView horizontal
                           showsHorizontalScrollIndicator={false}
+                          scrollEventThrottle={50}
                           onScroll={(event) => this.handleScroll(event)}
               >
                 <View style={style.listSliderContainer}>

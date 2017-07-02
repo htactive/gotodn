@@ -2,9 +2,9 @@ import React from 'react';
 import {Modal, View, TouchableOpacity, Text, ScrollView} from 'react-native';
 import {Icon, Button}  from 'native-base';
 import {style, StyleBase} from '../../styles/style'
-import {viewportWidth, viewportHeight} from '../../common/constain';
+import {viewportWidth, viewportHeight,platform} from '../../common/constain';
 
-export class PickerModal extends React.Component {
+export class CityDropdown extends React.Component {
 
   state = {
     visible: false,
@@ -32,60 +32,52 @@ export class PickerModal extends React.Component {
              transparent={true}
              visible={this.state.visible}
              onRequestClose={() => {if(this.props.onCloseModal) this.props.onCloseModal();}}>
-        <View style={[{flex:1,backgroundColor: 'rgba(0, 0, 0, .5)',}, style.centralizedContent]}>
+        <View style={[{flex:1,backgroundColor: 'rgba(0, 0, 0, 0)',}, style.centralizedContent]}>
           <View style={{
-            backgroundColor: 'rgba(255, 255, 255, .9)',
-            width: viewportWidth/1.5,
+            position:'absolute',
+            top: platform  === 'ios' ? 15 : 0, left: 55, bottom: 0, right:0,
+            backgroundColor: 'rgba(255, 255, 255, 1)',
+            width: viewportWidth/2,
             flexDirection: 'column',
             justifyContent: 'flex-start',
             alignItems: 'flex-start',
             borderRadius: 15,
             borderBottomWidth: 1,
             borderBottomColor: '#696d70',
-            maxHeight: viewportHeight/1.5,
+            maxHeight: 201,
           }}>
-            <View style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: 50,
-                position: 'relative',
-                alignSelf: 'stretch'
-              }}>
-              <Button iconLeft transparent onPress={() => this.closeModal() } title={""}
-                      style={{position: 'absolute',right: 0,top: 5 }}>
-                <Icon name={'ios-close'} style={{color: '#6b6f72', fontSize: 40}}/>
-              </Button>
-              <Text numberOfLines={1} style={{
-                  fontSize: 15,
-                  fontFamily: StyleBase.sp_bold,
-                  color: '#039be5'
-                }}>
-                {this.props.tilte && this.props.tilte.toUpperCase()}
-              </Text>
-            </View>
             <ScrollView style={{alignSelf: 'stretch',}}>
               {this.props.dataSource && this.props.dataSource.map((d, index) =>
                 <TouchableOpacity style={{
-                  alignSelf: 'stretch',
                 }} key={index} onPress={() => { this.changeData(d)}}>
                   <View style={[{
                     flexDirection: 'row',
-                    justifyContent: 'space-between',
+                    justifyContent: 'center',
                     alignItems: 'center',
-                    height: 50,
-                    alignSelf: 'stretch',
+                    height: 40,
                     padding: 10,
                     borderBottomWidth: 1,
-                    borderBottomColor: '#696d70',
+                    borderBottomColor: '#b2b2b2',
                   },
-                this.state.selectedItem.Id == d.Id ? {backgroundColor: 'rgba(187, 222, 251, .5)'} : {}]}>
+                  index == 0 && {borderTopLeftRadius: 15, borderTopRightRadius: 15},
+                this.state.selectedItem.Id == d.Id ? {backgroundColor: '#eeeeee'} : {}]}>
                     <Text numberOfLines={1}
-                          style={{  fontSize: 15, fontFamily: StyleBase.sp_regular, color: '#039be5'}}>
+                          style={{  fontSize: 15, fontFamily: StyleBase.sp_regular, color: '#546e7a',}}>
                       {d && d.Name && d.Name.toUpperCase()}
                     </Text>
-                    <Icon name={ this.state.selectedItem.Id == d.Id ? 'ios-radio-button-on' : 'ios-radio-button-off'}
-                          style={{color: '#039be5', fontSize: 35}}/>
+                    {index == 0 && (
+                      <TouchableOpacity style={{ position: 'absolute', right: 5, top: 10,
+                                        justifyContent:'center',alignItems:'center', zIndex:99}}
+                                        onPress={() => { this.setState({visible: false}) }}>
+                        <Icon name={'ios-arrow-up-outline'} style={{color: '#2a363c', fontSize: 20, paddingHorizontal: 15}}/>
+                      </TouchableOpacity>
+                    )}
+                    {index == 0 && (
+                      <Text numberOfLines={1} style={{
+                        color:'#546e7a', fontFamily: StyleBase.sp_italic,
+                        position: 'absolute', left: 5, top: 10,
+                        fontSize: 15, paddingRight:5}}>ĐI ĐẾN</Text>
+                    )}
                   </View>
                 </TouchableOpacity>
               )}
@@ -94,7 +86,7 @@ export class PickerModal extends React.Component {
                 flexDirection: 'row',
                 justifyContent: 'center',
                 alignItems: 'center',
-                height: 50,
+                height: 40,
                 alignSelf: 'stretch',
               }}>
             </View>
@@ -105,10 +97,7 @@ export class PickerModal extends React.Component {
     )
   }
 
-  closeModal() {
-    this.setState({visible: false});
-    if(this.props.onCloseModal) this.props.onCloseModal();
-  }
+
 
   changeData(d) {
     this.setState({

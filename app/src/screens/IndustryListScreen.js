@@ -8,7 +8,7 @@ import {DetailScreen} from '../screens/DetailScreen';
 import {IndustryDetailScreen} from './IndustryDetailScreen';
 
 const imgHeight = Math.round((viewportWidth - 30) / 2);
-const textHeight = Math.round(viewportHeight / 3.5);
+const textHeight = Math.round(viewportHeight / 3.3);
 const itemHeight = imgHeight + textHeight;
 
 export class IndustryListScreen extends React.Component {
@@ -121,7 +121,7 @@ export class IndustryListScreen extends React.Component {
                               />
                             </View>
                             <View
-                              style={{flex: textHeight/itemHeight}}>
+                              style={{flex: textHeight/itemHeight, backgroundColor: 'rgba(0,0,0,0)'}}>
                               <View style={style.menuItemTextContain}>
                                 <Text style={style.industryItemTitle} numberOfLines={2}>{ data.title }</Text>
                                 <Text style={style.industryItemSubTitle} numberOfLines={6}>{ data.description }</Text>
@@ -150,7 +150,7 @@ export class IndustryListScreen extends React.Component {
                                 />
                               </View>
                               <View
-                                style={{flex: textHeight/itemHeight}}>
+                                style={{flex: textHeight/itemHeight, backgroundColor: 'rgba(0,0,0,0)'}}>
                                 <View style={style.menuItemTextContain}>
                                   <Text style={style.industryItemTitle} numberOfLines={2}>{ data.title }</Text>
                                   <Text style={style.industryItemSubTitle} numberOfLines={6}>{ data.description }</Text>

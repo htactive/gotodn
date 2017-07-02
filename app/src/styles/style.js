@@ -153,7 +153,7 @@ export const style = StyleSheet.create({
     height: slideHeight - 2,
   },
   textInnerListSlider: {
-    height: slideHeight/3,
+    height: slideHeight/ (Platform.OS === 'ios' ? 3 : 3.5),
   },
   textListSlider: {
     flex: 1,
@@ -308,7 +308,6 @@ export const style = StyleSheet.create({
   },
   listSliderContainer: {
     flexDirection: 'row',
-    paddingVertical: 5,
     marginHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'flex-start',

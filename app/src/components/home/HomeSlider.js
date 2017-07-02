@@ -5,7 +5,7 @@ import { wp, colors} from '../../styles/slider-css';
 import HomeSliderItem from './HomeSliderItem'
 import styles from '../../styles/slider-css';
 import {Icon}  from 'native-base';
-import {viewportWidth, SlideType, viewportHeight, AppIcon} from '../../common/constain';
+import {viewportWidth, SlideType, viewportHeight, AppIcon, platform} from '../../common/constain';
 import {style} from '../../styles/style';
 
 const slideHeight = viewportHeight * 0.3;
@@ -40,7 +40,7 @@ export default class HomeSlider extends React.Component {
             firstItem={this.state.slideIndex}
             inactiveSlideScale={sScale}
             inactiveSlideOpacity={sOpacity}
-            enableMomentum={false}
+            enableMomentum={platform === 'ios'}
             scrollEndDragDebounceValue={1}
             carouselHorizontalPadding={0}
             containerCustomStyle={styles.slider}
@@ -48,7 +48,6 @@ export default class HomeSlider extends React.Component {
             showsHorizontalScrollIndicator={false}
             removeClippedSubviews={false}
             onSnapToItem={(index) => this.setState({slideIndex: index})}
-            swipeThreshold={50}
           >
             {sliders.map((slider, index) =>
               <HomeSliderItem

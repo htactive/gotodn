@@ -10,7 +10,7 @@ import {DetailScreen} from '../../screens/DetailScreen';
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 const largeImgHeight = Math.round(viewportHeight / 3);
 const smallImgHeight = Math.round(viewportHeight / 5);
-const textHeight = Math.round(viewportHeight / 6.5);
+const textHeight = Math.round(viewportHeight / 6);
 const largeItemHeight = largeImgHeight + textHeight;
 const smallItemHeight = smallImgHeight + textHeight;
 

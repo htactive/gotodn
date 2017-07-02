@@ -75,9 +75,9 @@ export class HomeMenuList extends React.Component {
                       onPress={() => {this.goToList(data.id, 0, data.isIndustry)}}
                       style={style.menuItemHeader}
                     >
-                      <Image style={[style.iconImgXs, {tintColor: '#12a1e7', marginBottom: 10}]} source={{uri: data.categoryIcon || '?'}}/>
-                      <Text
-                        style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 18, paddingLeft: 10 }}>{data.categoryName}</Text>
+                      <Image style={[style.iconImgXs, {tintColor: '#12a1e7', marginBottom: 10, flex:2}]} source={{uri: data.categoryIcon || '?'}}/>
+                      <Text numberOfLines={1}
+                        style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17, flex:8 }}>{data.categoryName}</Text>
                     </TouchableOpacity>
                     {data.services && data.services.map((service, sIndex) =>
                       <TouchableOpacity
@@ -115,9 +115,9 @@ export class HomeMenuList extends React.Component {
                         onPress={() => {this.goToList(data.id, 0, data.isIndustry)}}
                         style={style.menuItemHeader}
                       >
-                        <Image style={[style.iconImgXs, {tintColor: '#12a1e7'}]} source={{uri: data.categoryIcon || '?'}}/>
-                        <Text
-                          style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 18,paddingLeft: 10 }}>{data.categoryName}</Text>
+                        <Image style={[style.iconImgXs, {tintColor: '#12a1e7', flex:2}]} source={{uri: data.categoryIcon || '?'}}/>
+                        <Text numberOfLines={1}
+                          style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17,flex: 8 }}>{data.categoryName}</Text>
                       </TouchableOpacity>
                       {data.services && data.services.map((service, sIndex) =>
                         <TouchableOpacity

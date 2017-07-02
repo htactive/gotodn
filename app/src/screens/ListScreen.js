@@ -4,6 +4,7 @@ import {Tabs, Tab, Left, Thumbnail, Body, Button, Icon, TabHeading, Text, Scroll
 import {viewportWidth, MenuListData, MenuType} from '../common/constain';
 import {ListDetail} from '../components/list/ListDetail';
 import {Menu} from '../components/menu/Menu'
+import {StyleBase} from '../styles/style';
 
 export class ListScreen extends React.Component {
   state = {
@@ -42,9 +43,9 @@ export class ListScreen extends React.Component {
       >
         {this.state.listData.length > 0 && this.state.listData.filter(t => t.id == listId)[0].services.map((data, index) =>
           <Tab key={index}
-               tabStyle={{backgroundColor:'#29b6f6',borderBottomWidth: 3, borderBottomColor:'#576d7a'}}
+               tabStyle={{backgroundColor:'#29b6f6',borderBottomWidth: 3, borderBottomColor:'#eeeeee'}}
                textStyle={{color:'#556c7a', fontWeight: 'normal'}}
-               activeTabStyle={{backgroundColor: '#29b6f6',borderBottomWidth: 3, borderBottomColor:'#576d7a'}}
+               activeTabStyle={{backgroundColor: '#29b6f6',borderBottomWidth: 3, borderBottomColor:StyleBase.header_color}}
                activeTextStyle={{color:'#fff', fontWeight: 'normal'}}
                heading={data.title}>
             <ListDetail panResponderSlider={this._panResponderSlider}
