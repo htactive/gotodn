@@ -647,6 +647,36 @@ export const Language = [
   {Id: 6, Name: 'Korea', Code: ''},
 ];
 
+export function getRegionForCoordinates(points) {
+  let minX, maxX, minY, maxY;
+
+  ((point) => {
+    minX = point.latitude;
+    maxX = point.latitude;
+    minY = point.longitude;
+    maxY = point.longitude;
+  })(points[0]);
+
+  points.map((point) => {
+    minX = Math.min(minX, point.latitude);
+    maxX = Math.max(maxX, point.latitude);
+    minY = Math.min(minY, point.longitude);
+    maxY = Math.max(maxY, point.longitude);
+  });
+
+  const midX = (minX + maxX) / 2;
+  const midY = (minY + maxY) / 2;
+  const deltaX = (maxX - minX) + (maxX - minX)*.4;
+  const deltaY = (maxY - minY) + (maxY - minY)*.4;
+
+  return {
+    latitude: midX,
+    longitude: midY,
+    latitudeDelta: deltaX,
+    longitudeDelta: deltaY
+  };
+}
+
 export class Helper {
   static CloneObject(obj) {
     return JSON.parse(JSON.stringify(obj))

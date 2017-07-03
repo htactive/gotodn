@@ -148,12 +148,12 @@ export const style = StyleSheet.create({
   },
   imageListSlider: {
     resizeMode: 'cover',
-    justifyContent:'flex-end',
-    width: (viewportWidth -30 ) / 3,
+    justifyContent: 'flex-end',
+    width: (viewportWidth - 30 ) / 3,
     height: slideHeight - 2,
   },
   textInnerListSlider: {
-    height: slideHeight/ (Platform.OS === 'ios' ? 3 : 3.5),
+    height: slideHeight / (Platform.OS === 'ios' ? 3 : 3.5),
   },
   textListSlider: {
     flex: 1,
@@ -260,9 +260,27 @@ export const style = StyleSheet.create({
     padding: 15,
     backgroundColor: '#fff',
   },
+  detailOverlay: {
+    height: (viewportHeight * 0.7) / 2,
+    position: 'absolute',
+    flex: 1,
+    alignItems: 'flex-end',
+    backgroundColor: 'rgba(255,255,255,.8)',
+    bottom: 0,
+    left: 0,
+    right: 0
+  },
+  detailItem: {
+    height: ((viewportHeight * 0.7) / 2)/4,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+  },
   detailMap: {
-    height: viewportHeight / 2,
+    height: viewportHeight / 1.8,
     width: viewportWidth - 30,
+    marginTop: 30,
   },
   detailContentTitle: {
     color: '#263238',
@@ -295,8 +313,15 @@ export const style = StyleSheet.create({
   detailInfoText: {
     color: '#263238',
     textAlign: 'justify',
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: StyleBase.sp_semibold
+  },
+
+  detailInfoAction: {
+    color: '#039be5',
+    textAlign: 'justify',
+    fontSize: 15,
+    fontFamily: StyleBase.regular
   },
   detailImageContainer: {
     flexDirection: 'row',
@@ -313,7 +338,7 @@ export const style = StyleSheet.create({
     alignItems: 'flex-start',
   },
   listSlider: {
-    width: (viewportWidth -35 ) / 3
+    width: (viewportWidth - 35 ) / 3
   },
   listSliderTitle: {
     color: '#039be5',
@@ -366,14 +391,14 @@ export const style = StyleSheet.create({
   menuLeft: {
     position: 'absolute',
     left: 5,
-    top: (viewportWidth/10)/2 - 7,
+    top: (viewportWidth / 10) / 2 - 7,
     justifyContent: 'center',
     alignItems: 'center',
   },
   menuRight: {
     position: 'absolute',
     right: 5,
-    top: (viewportWidth/10)/2 - 7,
+    top: (viewportWidth / 10) / 2 - 7,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row'
@@ -381,7 +406,7 @@ export const style = StyleSheet.create({
   pickerLeft: {
     position: 'absolute',
     left: 60,
-    top: (viewportWidth/10)/2,
+    top: (viewportWidth / 10) / 2,
     justifyContent: 'center',
     alignItems: 'center',
     width: viewportWidth / 2,
