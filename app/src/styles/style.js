@@ -248,9 +248,9 @@ export const style = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0)',
   },
   detailImageActionIcon: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     backgroundColor: 'rgba(255, 255, 255, .8)',
     marginHorizontal: 5,
     justifyContent: 'center',
@@ -391,14 +391,14 @@ export const style = StyleSheet.create({
   menuLeft: {
     position: 'absolute',
     left: 5,
-    top: (viewportWidth / 10) / 2 - 7,
+    top: 5,
     justifyContent: 'center',
     alignItems: 'center',
   },
   menuRight: {
     position: 'absolute',
     right: 5,
-    top: (viewportWidth / 10) / 2 - 7,
+    top: 5,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row'
@@ -406,7 +406,7 @@ export const style = StyleSheet.create({
   pickerLeft: {
     position: 'absolute',
     left: 60,
-    top: (viewportWidth / 10) / 2,
+    top: 13,
     justifyContent: 'center',
     alignItems: 'center',
     width: viewportWidth / 2,

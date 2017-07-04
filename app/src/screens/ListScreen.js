@@ -5,6 +5,8 @@ import {viewportWidth, MenuListData, MenuType} from '../common/constain';
 import {ListDetail} from '../components/list/ListDetail';
 import {Menu} from '../components/menu/Menu'
 import {StyleBase} from '../styles/style';
+import { NavigationActions } from 'react-navigation';
+import {navigationStore, navigateAction} from '../stores/NavigationStore';
 
 export class ListScreen extends React.Component {
   state = {
@@ -16,8 +18,17 @@ export class ListScreen extends React.Component {
   _panResponderSlider;
   _panResponder;
 
-  componentWillMount(){
-
+  componentWillMount() {
+    navigationStore.subscribe(() => {
+      let navigationState = navigationStore.getState();
+      if(navigationState.routeName) {
+        const navigateAction = NavigationActions.navigate({
+          routeName: navigationState.routeName,
+          params: navigationState.params
+        });
+        this.props.navigation.dispatch(navigateAction);
+      }
+    });
   }
 
   componentDidMount() {
@@ -39,6 +50,7 @@ export class ListScreen extends React.Component {
       <Tabs initialPage={curTab || 0}
             locked
             onChangeTab={(page) => this.tabChanged(page)}
+            renderTabBar={()=> <ScrollableTab />}
             style={{backgroundColor: '#29b6f6'}}
       >
         {this.state.listData.length > 0 && this.state.listData.filter(t => t.id == listId)[0].services.map((data, index) =>

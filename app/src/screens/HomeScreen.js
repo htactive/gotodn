@@ -4,13 +4,26 @@ import {Col, Row, Grid} from 'react-native-easy-grid';
 import {HomeMenuList} from '../components/home/HomeMenuList';
 import {SlideType, MenuType} from '../common/constain';
 import HomeSlider from '../components/home/HomeSlider';
+import { NavigationActions } from 'react-navigation';
+import {navigationStore, navigateAction} from '../stores/NavigationStore';
 
 export class HomeScreen extends React.Component {
 
   componentWillMount() {
+    navigationStore.subscribe(() => {
+      let navigationState = navigationStore.getState();
+      if(navigationState.routeName) {
+        const navigateAction = NavigationActions.navigate({
+          routeName: navigationState.routeName,
+          params: navigationState.params
+        });
+        this.props.navigation.dispatch(navigateAction);
+      }
+    });
   }
 
   componentDidMount() {
+
   }
 
   render() {

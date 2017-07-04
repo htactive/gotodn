@@ -647,34 +647,126 @@ export const Language = [
   {Id: 6, Name: 'Korea', Code: ''},
 ];
 
-export function getRegionForCoordinates(points) {
-  let minX, maxX, minY, maxY;
+export class MapHelper {
+  static decodePolyline(encoded) {
+    if (!encoded) {
+      return [];
+    }
+    let poly = [];
+    let index = 0, len = encoded.length;
+    let lat = 0, lng = 0;
 
-  ((point) => {
-    minX = point.latitude;
-    maxX = point.latitude;
-    minY = point.longitude;
-    maxY = point.longitude;
-  })(points[0]);
+    while (index < len) {
+      let b, shift = 0, result = 0;
 
-  points.map((point) => {
-    minX = Math.min(minX, point.latitude);
-    maxX = Math.max(maxX, point.latitude);
-    minY = Math.min(minY, point.longitude);
-    maxY = Math.max(maxY, point.longitude);
-  });
+      do {
+        b = encoded.charCodeAt(index++) - 63;
+        result = result | ((b & 0x1f) << shift);
+        shift += 5;
+      } while (b >= 0x20);
 
-  const midX = (minX + maxX) / 2;
-  const midY = (minY + maxY) / 2;
-  const deltaX = (maxX - minX) + (maxX - minX)*.4;
-  const deltaY = (maxY - minY) + (maxY - minY)*.4;
+      let dlat = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+      lat += dlat;
 
-  return {
-    latitude: midX,
-    longitude: midY,
-    latitudeDelta: deltaX,
-    longitudeDelta: deltaY
-  };
+      shift = 0;
+      result = 0;
+
+      do {
+        b = encoded.charCodeAt(index++) - 63;
+        result = result | ((b & 0x1f) << shift);
+        shift += 5;
+      } while (b >= 0x20);
+
+      let dlng = (result & 1) != 0 ? ~(result >> 1) : (result >> 1);
+      lng += dlng;
+
+      let p = {
+        latitude: lat / 1e5,
+        longitude: lng / 1e5,
+      };
+      poly.push(p);
+    }
+    return poly;
+  }
+
+  static getRegionForCoordinates(points) {
+    let minX, maxX, minY, maxY;
+
+    ((point) => {
+      minX = point.latitude;
+      maxX = point.latitude;
+      minY = point.longitude;
+      maxY = point.longitude;
+    })(points[0]);
+
+    points.map((point) => {
+      minX = Math.min(minX, point.latitude);
+      maxX = Math.max(maxX, point.latitude);
+      minY = Math.min(minY, point.longitude);
+      maxY = Math.max(maxY, point.longitude);
+    });
+
+    const midX = (minX + maxX) / 2;
+    const midY = (minY + maxY) / 2;
+    const deltaX = (maxX - minX) + (maxX - minX)*.5;
+    const deltaY = (maxY - minY) + (maxY - minY)*.5;
+
+    return {
+      latitude: midX,
+      longitude: midY,
+      latitudeDelta: deltaX,
+      longitudeDelta: deltaY
+    };
+  }
+
+  static getRandomDestination() {
+    let id = Math.floor((Math.random() * this.destinations.length));
+    return this.destinations[id];
+  }
+
+  static destinations = [
+    {
+      latitude: 16.0699448,
+      longitude: 108.2241556,
+    },
+    {
+      latitude: 16.0715812,
+      longitude: 108.2005879,
+    },
+    {
+      latitude: 16.0755271,
+      longitude: 108.1448972,
+    },
+    {
+      latitude: 16.05036,
+      longitude: 108.150634,
+    },
+
+    {
+      latitude: 16.056302,
+      longitude: 108.1860076,
+    },
+    {
+      latitude: 16.0387819,
+      longitude: 108.2073699,
+    },
+    {
+      latitude: 16.0069699,
+      longitude: 108.2192207,
+    },
+    {
+      latitude: 16.0022288,
+      longitude: 108.2534457,
+    },
+    {
+      latitude: 16.0394033,
+      longitude: 108.2441354,
+    },
+    {
+      latitude: 16.020549,
+      longitude: 108.1989321,
+    }
+  ];
 }
 
 export class Helper {

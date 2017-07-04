@@ -6,6 +6,8 @@ import {IndustryData, viewportWidth, viewportHeight, MenuListData, Helper} from 
 import {DNPageRoute} from '../NavigationHelper';
 import {DetailScreen} from '../screens/DetailScreen';
 import {IndustryDetailScreen} from './IndustryDetailScreen';
+import { NavigationActions } from 'react-navigation';
+import {navigationStore, navigateToRouteAction} from '../stores/NavigationStore';
 
 const imgHeight = Math.round((viewportWidth - 30) / 2);
 const textHeight = Math.round(viewportHeight / 3.3);
@@ -19,6 +21,19 @@ export class IndustryListScreen extends React.Component {
     refreshing: false,
     searchValue: '',
   };
+
+  componentWillMount() {
+    navigationStore.subscribe(() => {
+      let navigationState = navigationStore.getState();
+      if(navigationState.routeName) {
+        const navigateAction = NavigationActions.navigate({
+          routeName: navigationState.routeName,
+          params: navigationState.params
+        });
+        this.props.navigation.dispatch(navigateAction);
+      }
+    });
+  }
 
   componentDidMount() {
     this.loadData();
@@ -75,14 +90,15 @@ export class IndustryListScreen extends React.Component {
             <View style={[{flex:1, backgroundColor: '#29b6f6',paddingHorizontal: 10}, style.centralizedContent]}>
               <Item regular style={{backgroundColor: '#fff',
                              borderRadius: 3,
-                             borderColor: '#fff',}}>
+                             borderColor: '#fff',justifyContent: 'center',
+    alignItems: 'center',}}>
                 <Icon active name='ios-search-outline' style={{color:'#8e8e93', fontSize:25}}/>
                 <Input value={this.state.searchValue}
                        placeholder={'Tìm kiếm ' }
                        placeholderTextColor='#8e8e93'
-                       style={{color: '#263238', height: 35,
+                       style={{color: '#263238', height: 40,
                              fontFamily: StyleBase.sp_regular,
-                             fontSize: 16,
+                             fontSize: 14,
                              }}
                        onChangeText={(text) => this.handleChanged(text)}
                 />
@@ -175,8 +191,7 @@ export class IndustryListScreen extends React.Component {
   }
 
   goToDetailIndustry(id) {
-    console.log('abc');
-    this.props.navigation.navigate(DNPageRoute(IndustryDetailScreen), {itemId: 1});
+    navigationStore.dispatch(navigateToRouteAction('IndustryDetailScreen',{itemId: 1}));
   }
 
   handleChanged(text) {

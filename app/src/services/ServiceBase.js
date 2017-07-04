@@ -2,7 +2,7 @@ import * as React from 'react';
 
 export class ServiceBase {
 
-  async  executeFetch(url: string): Promise<any> {
+  async  executeFetch(url) {
     try {
       let result = await fetch(url, {
         method: 'GET',
@@ -21,7 +21,7 @@ export class ServiceBase {
     }
   }
 
-  async executeFetchPost(url: string, data: Object): Promise<any> {
+  async executeFetchPost(url, data) {
     try {
 
       let result = await await fetch(url,

@@ -6,6 +6,7 @@ import {style} from "../../styles/style";
 import {MenuListItemData} from '../../common/constain';
 import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
+import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 const largeImgHeight = Math.round(viewportHeight / 3);
@@ -165,6 +166,6 @@ export class ListItemDetail extends React.Component {
   }
 
   goToDetail(id) {
-    this.props.navigation.navigate(DNPageRoute(DetailScreen), {itemId: id});
+    navigationStore.dispatch(navigateToRouteAction('DetailScreen',{itemId: id}));
   }
 }

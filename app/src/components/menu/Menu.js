@@ -9,6 +9,7 @@ import {MenuType, viewportHeight, MenuListItemData} from '../../common/constain'
 import {MenuSearch} from './MenuSearch';
 import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
+import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 
 const drawerStyles = {
   drawer: {
@@ -115,7 +116,7 @@ export class Menu extends React.Component {
       >
         <View style={{flex:1}}>
           {!this.state.enableMenu || (
-            <View style={{flex:10,  backgroundColor: StyleBase.header_color}}>
+            <View style={{height:viewportHeight*.08,  backgroundColor: StyleBase.header_color}}>
               <MenuHeader
                 onCityChanged={(value) => this.cityChanged(value)}
                 onOpenDraw={() => this.openDrawer()}
@@ -131,7 +132,7 @@ export class Menu extends React.Component {
               />
             </View>
           ) }
-          <View style={{flex:90, flexDirection: 'column', backgroundColor: '#fff', position:'relative'}}>
+          <View style={{flex:1, flexDirection: 'column', backgroundColor: '#fff', position:'relative'}}>
             {this.props.children}
             {this.state.showSearchBar && (
               <View style={{
@@ -198,7 +199,8 @@ export class Menu extends React.Component {
   }
 
   searchSelect(data) {
-    this.navigation.navigate(DNPageRoute(DetailScreen), {itemId: data && data.id});
+    navigationStore.dispatch(navigateToRouteAction('DetailScreen',{itemId: data && data.id}));
+
     this.toggleSearchBar(false);
   }
 }

@@ -9,7 +9,13 @@ import {DetailImage} from '../components/detail/DetailImage';
 import {DetailNearPlace} from '../components/detail/DetailNearPlace';
 import {DNPageRoute} from '../NavigationHelper';
 import {DetailFactory} from '../components/detail/DetailFactory';
-import {IndustryData} from '../common/constain';
+import {IndustryData, AppIcon, MapHelper} from '../common/constain';
+import { NavigationActions } from 'react-navigation';
+import {navigationStore, navigateAction, navigateToRouteAction} from '../stores/NavigationStore';
+import Communications from 'react-native-communications';
+import {ReactMap} from "../components/map/ReactMap";
+import {DetailMapTextItem} from '../components/detail/DetailMapTextItem';
+import {ReactMapDirection} from '../components/map/ReactMapDirection';
 
 export class IndustryDetailScreen extends React.Component {
   state = {
@@ -17,6 +23,16 @@ export class IndustryDetailScreen extends React.Component {
   };
 
   componentWillMount() {
+    navigationStore.subscribe(() => {
+      let navigationState = navigationStore.getState();
+      if(navigationState.routeName) {
+        const navigateAction = NavigationActions.navigate({
+          routeName: navigationState.routeName,
+          params: navigationState.params
+        });
+        this.props.navigation.dispatch(navigateAction);
+      }
+    });
   }
 
   componentDidMount() {
@@ -32,10 +48,7 @@ export class IndustryDetailScreen extends React.Component {
 
     let data = this.state.dataDetail;
     let detailInfo = [];
-    detailInfo.push({infoIcon: data.addressIcon || '?', infoText: data.address});
-    detailInfo.push({infoIcon: data.phoeneIcon || '?', infoText: data.phone});
-    detailInfo.push({infoIcon: data.faxIcon || '?', infoText: data.fax});
-    detailInfo.push({infoIcon: data.websiteIcon || '?', infoText: data.website, isUrl: true});
+
     detailInfo.push({isMulti: true, dataInfo: [
       {infoIcon: data.totalAreaIcon || '?', infoText: 'Tổng : ' + data.totalArea },
       {infoIcon: data.vacantLandIcon || '?', infoText: 'Trống: ' +  data.vacantLand }
@@ -45,6 +58,10 @@ export class IndustryDetailScreen extends React.Component {
       factoryInfo += 'Nhà máy: ' + data.factoryList.length ;
     detailInfo.push({infoIcon: data.factoryIcon || '?', infoText: factoryInfo});
     let factories =data.factoryList;
+    let destCoord = {
+      latitude: 16.020549,
+      longitude: 108.1989321,
+    };
     return (data ? (
         <Grid>
           <Col>
@@ -58,6 +75,31 @@ export class IndustryDetailScreen extends React.Component {
               <Row size={2}>
                 <View style={style.detailContent}>
                   <DetailText title={data.title} description={data.description}/>
+                  <View style={style.detailMap}>
+                    <ReactMap />
+
+                    <View style={style.detailOverlay}>
+
+                      <DetailMapTextItem leftText={data.address} leftIcon={data.addressIcon}
+                                         rightText={"CHỈ ĐƯỜNG"} rightIcon={AppIcon.Direction}
+                                         onMapItemClicked={()=> this.handleDirection(data.address, MapHelper.getRandomDestination())}
+                      />
+                      <DetailMapTextItem leftText={data.phone} leftIcon={data.phoeneIcon}
+                                         rightText={"GỌI"} rightIcon={AppIcon.Calling}
+                                         onMapItemClicked={()=> this.handleCalling(data.phone)}
+                      />
+                      <DetailMapTextItem  leftText={data.fax} leftIcon={data.faxIcon}
+                                         rightText={""}
+                                         onMapItemClicked={()=> {}}
+                      />
+                      <DetailMapTextItem  leftText={data.website} leftIcon={data.websiteIcon}
+                                         rightText={"LIÊN KẾT"} rightIcon={AppIcon.Link}
+                                         onMapItemClicked={()=> this.handleLink(data.website)}
+                      />
+
+                    </View>
+                  </View>
+
                   <DetailInfo detailInfo={detailInfo}/>
                   <DetailFactory factories={factories} />
                 </View>
@@ -65,5 +107,17 @@ export class IndustryDetailScreen extends React.Component {
             </ScrollView>
           </Col>
         </Grid>) : null);
+  }
+
+  handleDirection(address, coord) {
+    navigationStore.dispatch(navigateToRouteAction('ReactMapDirection',{ coordinate:coord}));
+  }
+
+  handleCalling(tel) {
+    Communications.phonecall(tel, true);
+  }
+
+  handleLink(website) {
+    Communications.web(website);
   }
 }

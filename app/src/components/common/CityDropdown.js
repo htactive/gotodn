@@ -35,7 +35,7 @@ export class CityDropdown extends React.Component {
         <View style={[{flex:1,backgroundColor: 'rgba(0, 0, 0, 0)',}, style.centralizedContent]}>
           <View style={{
             position:'absolute',
-            top: platform  === 'ios' ? 15 : 0, left: 55, bottom: 0, right:0,
+            top: platform  === 'ios' ? 15 : 5, left: 55, bottom: 0, right:0,
             backgroundColor: 'rgba(255, 255, 255, 1)',
             width: viewportWidth/2,
             flexDirection: 'column',

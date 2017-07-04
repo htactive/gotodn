@@ -4,6 +4,7 @@ import styles, {itemWidth} from '../../styles/slider-css';
 import {viewportHeight} from '../../common/constain';
 import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
+import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 
 export default class HomeSliderItem extends React.Component {
 
@@ -20,7 +21,7 @@ export default class HomeSliderItem extends React.Component {
               activeOpacity={0.7}
               style={{flex:1}}
               onPress={() => {
-this.props.navigation.navigate(DNPageRoute(DetailScreen), {itemId: d.id});
+                navigationStore.dispatch(navigateToRouteAction('DetailScreen',{itemId: d.id}));
             }}
             >
               <View style={styles.imageInner}>

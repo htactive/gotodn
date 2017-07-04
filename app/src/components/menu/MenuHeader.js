@@ -68,12 +68,12 @@ export class MenuHeader extends React.Component {
                              borderRadius: 3,
                              borderColor: '#fff',}}>
             <Icon active name='ios-search-outline' style={{color:'#8e8e93', fontSize:25}}/>
-            <Input autoFocus value={this.state.searchBarValue}
+            <Input value={this.state.searchBarValue}
                    placeholder='Tìm kiếm'
                    placeholderTextColor='#8e8e93'
                    style={{color: '#263238', height: 35,
                              fontFamily: StyleBase.sp_regular,
-                             fontSize: 16,
+                             fontSize: 13,
                              }}
                    onChangeText={(text) => this.handleChanged(text)}
             />
@@ -90,7 +90,7 @@ export class MenuHeader extends React.Component {
             <Text numberOfLines={1} style={{
                               color: '#fff',
                              fontFamily: StyleBase.sp_regular,
-                             fontSize: 20,
+                             fontSize: 18,
                       }}>
               Cancel
             </Text>
@@ -120,7 +120,7 @@ export class MenuHeader extends React.Component {
                         if(this.props.onBackClicked)
                           this.props.onBackClicked();
                       }}>
-                <Icon name='ios-arrow-back' style={{color:'#ffffff', fontSize:30, paddingHorizontal: 15}}/>
+                <Icon name='ios-arrow-back-outline' style={{color:'#ffffff', fontSize:40, paddingHorizontal: 15}}/>
               </TouchableOpacity>
             </View>
           )}
@@ -140,7 +140,7 @@ export class MenuHeader extends React.Component {
               <Image style={[style.iconImg ,{tintColor:'#fff', marginLeft: 15}]} source={AppIcon.Menu}/>
             </TouchableOpacity>
           </View>
-          <View style={[style.centralizedContent, {paddingTop:3}]}>
+          <View style={[style.centralizedContent, ]}>
             <Text numberOfLines={1} style={style.menuTitleText}>
               {this.props.menuTitle ? this.props.menuTitle.toUpperCase() : ''}
             </Text>
@@ -153,7 +153,6 @@ export class MenuHeader extends React.Component {
   render() {
     return (
       <Grid>
-        <Row style={{height: 10}}/>
         <Row>
           <Col>
             {this.state.showSearchBar ? (

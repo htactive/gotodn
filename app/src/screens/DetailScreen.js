@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Image, TouchableOpacity, ScrollView, Text} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
-import {MenuListItemData, MenuType, AppIcon} from '../common/constain';
+import {MenuListItemData, MenuType, AppIcon, MapHelper} from '../common/constain';
 import {Icon} from 'native-base';
 import {DetailBanner} from '../components/detail/DetailBanner';
 import {style} from '../styles/style';
@@ -15,6 +15,9 @@ import {Menu} from '../components/menu/Menu';
 import {ReactMap} from "../components/map/ReactMap";
 import {DetailMapTextItem} from '../components/detail/DetailMapTextItem';
 import {ReactMapDirection} from '../components/map/ReactMapDirection';
+import { NavigationActions } from 'react-navigation';
+import {navigationStore, navigateToRouteAction} from '../stores/NavigationStore';
+import Communications from 'react-native-communications';
 
 export class DetailScreen extends React.Component {
   state = {
@@ -22,6 +25,16 @@ export class DetailScreen extends React.Component {
   };
 
   componentWillMount() {
+    navigationStore.subscribe(() => {
+      let navigationState = navigationStore.getState();
+      if(navigationState.routeName) {
+        const navigateAction = NavigationActions.navigate({
+          routeName: navigationState.routeName,
+          params: navigationState.params
+        });
+        this.props.navigation.dispatch(navigateAction);
+      }
+    });
   }
 
   componentDidMount() {
@@ -67,11 +80,11 @@ export class DetailScreen extends React.Component {
 
                         <DetailMapTextItem leftText={data.address} leftIcon={data.addressIcon}
                                             rightText={"CHỈ ĐƯỜNG"} rightIcon={AppIcon.Direction}
-                                           onMapItemClicked={()=> this.handleDirection(data.address, destCoord)}
+                                           onMapItemClicked={()=> this.handleDirection(data.address, MapHelper.getRandomDestination())}
                         />
                         <DetailMapTextItem leftText={data.phone} leftIcon={data.phoeneIcon}
                                            rightText={"GỌI"} rightIcon={AppIcon.Calling}
-                                           onMapItemClicked={()=> this.handleCalling()}
+                                           onMapItemClicked={()=> this.handleCalling(data.phone)}
                         />
                         <DetailMapTextItem leftText={data.website} leftIcon={data.websiteIcon}
                                            rightText={"LIÊN KẾT"} rightIcon={AppIcon.Link}
@@ -102,19 +115,18 @@ export class DetailScreen extends React.Component {
   }
 
   goToPlace(id) {
-    this.props.navigation.navigate(DNPageRoute(DetailScreen), {itemId: id});
+    navigationStore.dispatch(navigateToRouteAction('DetailScreen',{itemId: id}));
   }
 
   handleDirection(address, coord) {
-
-    this.props.navigation.navigate(DNPageRoute(ReactMapDirection), { coordinate:coord});
+    navigationStore.dispatch(navigateToRouteAction('ReactMapDirection',{ coordinate:coord}));
   }
 
-  handleCalling() {
-
+  handleCalling(tel) {
+    Communications.phonecall(tel, true);
   }
 
   handleLink(website) {
-    
+    Communications.web(website);
   }
 }

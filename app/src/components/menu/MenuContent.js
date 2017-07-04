@@ -3,11 +3,13 @@ import {View} from 'react-native';
 import {style} from '../../styles/style';
 import {MenuTop} from './MenuTop';
 import {MenuList} from './MenuList';
-import {DNPageRoute} from '../../NavigationHelper';
+import {DNPageRoute, DNNavigationAction} from '../../NavigationHelper';
 import {ListScreen} from '../../screens/ListScreen'
 import {Language} from '../../common/constain';
 import {PickerModal} from '../common/PickerModal';
 import {IndustryListScreen} from '../../screens/IndustryListScreen';
+import { NavigationActions } from 'react-navigation';
+import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 
 export class MenuContent extends React.Component {
   state = {selectedLang: 1, showPicker: false};
@@ -57,10 +59,16 @@ export class MenuContent extends React.Component {
   }
 
   listItemClicked(id, isIndustry) {
-    if (isIndustry)
-      this.props.navigation.navigate(DNPageRoute(IndustryListScreen), {listId: id});
-    else
-      this.props.navigation.navigate(DNPageRoute(ListScreen), {listId: id, initIndex: 0});
+    if (isIndustry) {
+      let r = {listId: id};
+      navigationStore.dispatch(navigateToRouteAction('IndustryListScreen',r));
+
+    }
+    else {
+      let r = {listId: id, initIndex: 0};
+      navigationStore.dispatch(navigateToRouteAction('ListScreen', r));
+
+    }
     this.props.onCloseMenu && this.props.onCloseMenu();
   }
 

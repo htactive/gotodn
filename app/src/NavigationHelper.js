@@ -10,10 +10,18 @@ import {MenuType, MenuListData} from './common/constain';
 import {IndustryListScreen} from './screens/IndustryListScreen';
 import {IndustryDetailScreen} from './screens/IndustryDetailScreen';
 import {ReactMapDirection} from './components/map/ReactMapDirection';
+import {NavigationActions} from 'react-navigation'
 
 export function DNPageRoute(page) {
   let key = page.displayName || page['name'];
   return Object.keys(DNNavigatorConfig).filter(t => t == key)[0] || '';
+}
+
+export function DNNavigationAction(routeName, params) {
+  return NavigationActions.navigate({
+    routeName: routeName,
+    params: params || {}
+  });
 }
 
 export const DNNavigatorConfig = {
@@ -39,7 +47,7 @@ export const DNNavigatorConfig = {
     screen: ReactMapDirection
   },
 };
-
+let confirmTimeout;
 export const DNNavigatorOptions = {
   initialRouteName: DNPageRoute(SplashScreen),
   headerMode: 'none',
@@ -49,7 +57,7 @@ export const DNNavigatorOptions = {
 
       if (Platform.OS === 'android') {
         let existConfirmTime = 0;
-        let confirmTimeout;
+
         BackHandler.removeEventListener('hardwareBackPress');
         BackHandler.addEventListener('hardwareBackPress', () => {
           if (transProps.navigation.state.routes.length > 1) {
@@ -57,10 +65,12 @@ export const DNNavigatorOptions = {
             existConfirmTime = 0;
             return true;
           }
-          existConfirmTime += 1;
+          if (existConfirmTime < 2)
+            existConfirmTime += 1;
           if (confirmTimeout) clearTimeout(confirmTimeout);
           confirmTimeout = setTimeout(() => {
-            existConfirmTime -= 1;
+            if (existConfirmTime > 0)
+              existConfirmTime -= 1;
           }, 2000);
           if (existConfirmTime >= 2) {
             existConfirmTime = 0;

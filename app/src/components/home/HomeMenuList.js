@@ -7,6 +7,7 @@ import {MenuListData} from '../../common/constain';
 import {DNPageRoute} from '../../NavigationHelper';
 import {ListScreen} from '../../screens/ListScreen'
 import {IndustryListScreen} from '../../screens/IndustryListScreen';
+import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 const menuItemHeight = Math.round(viewportHeight / 6);
@@ -159,9 +160,10 @@ export class HomeMenuList extends React.Component {
 
   goToList(id, index, isIndustry) {
     if (isIndustry)
-      this.props.navigation.navigate(DNPageRoute(IndustryListScreen), {listId: id});
+      navigationStore.dispatch(navigateToRouteAction('IndustryListScreen',{listId: id}));
+
     else
-      this.props.navigation.navigate(DNPageRoute(ListScreen), {listId: id, initIndex: index});
+      navigationStore.dispatch(navigateToRouteAction('ListScreen',{listId: id, initIndex: index}));
   }
 }
 
