@@ -8,11 +8,11 @@ const slideHeight = viewportHeight * 0.3;
 export const StyleBase = {
   header_color: '#039be5',
   header_height: 70,
-  sp_regular: 'Source Sans Pro',
-  sp_semibold: 'Source Sans Pro SemiBold',
-  sp_bold: 'Source Sans Pro Bold',
-  sp_light: 'Source Sans Pro Light',
-  sp_italic: 'Source Sans Pro Italic',
+  sp_regular: 'SourceSansPro-Regular',
+  sp_semibold: 'SourceSansPro-SemiBold',
+  sp_bold: 'SourceSansPro-Bold',
+  sp_light: 'SourceSansPro-Light',
+  sp_italic: 'SourceSansPro-Italic',
 };
 
 export const style = StyleSheet.create({

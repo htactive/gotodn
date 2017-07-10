@@ -25,15 +25,15 @@ export class SplashScreen extends React.Component {
 
   componentDidMount() {
     this.handleNetInfo();
-    this.handleNetInterval = setInterval(() => {
-      this.handleNetInfo()
-    }, 1000)
+    // this.handleNetInterval = setInterval(() => {
+    //   this.handleNetInfo()
+    // }, 1000)
   }
 
   handleNetInfo() {
     NetInfo.isConnected.fetch().then(
       isConnected => {
-        if(isConnected) {
+        if(true) {
           clearInterval(this.handleNetInterval);
           this.goNextDelay = setTimeout(() => {
             this.goNext();
