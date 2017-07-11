@@ -2,20 +2,15 @@ import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import styles, {itemWidth} from '../../styles/slider-css';
 import {viewportHeight} from '../../common/constain';
-import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 
 export default class HomeSliderItem extends React.Component {
 
   render() {
-    const {title, subtitle, image, even} = this.props;
-
     return (
-
       <View style={{width: itemWidth, height: viewportHeight * 0.3 ,flexDirection: 'row'}}>
         {this.props.data && this.props.data.map((d, index) =>
-
           <View style={[styles.imageContainer,{marginHorizontal:5}]} key={index}>
             <TouchableOpacity
               activeOpacity={0.7}

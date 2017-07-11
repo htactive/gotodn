@@ -1,18 +1,27 @@
 import React from 'react';
-import {BackHandler, ToastAndroid} from 'react-native';
+import {ToastAndroid, ScrollView, RefreshControl} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {HomeMenuList} from '../components/home/HomeMenuList';
-import {SlideType, MenuType} from '../common/constain';
+import {viewportHeight} from '../common/constain';
 import HomeSlider from '../components/home/HomeSlider';
-import { NavigationActions } from 'react-navigation';
+import {NavigationActions} from 'react-navigation';
 import {navigationStore, navigateAction} from '../stores/NavigationStore';
+import {GDNService} from '../services/GDNService';
 
 export class HomeScreen extends React.Component {
+
+  state = {
+    sliderData: null,
+    menuListData: null,
+    sliderLoaded: false,
+    menuListLoad: false,
+    refreshing: false,
+  };
 
   componentWillMount() {
     navigationStore.subscribe(() => {
       let navigationState = navigationStore.getState();
-      if(navigationState.routeName) {
+      if (navigationState.routeName) {
         const navigateAction = NavigationActions.navigate({
           routeName: navigationState.routeName,
           params: navigationState.params
@@ -23,21 +32,54 @@ export class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
+    this.loadHomeData();
+  }
 
+  loadHomeData() {
+    (async () => {
+      let menuListData = await GDNService.getHomeMenuList();
+      this.setState({menuListData, menuListLoad: true});
+      if(this.state.sliderLoaded) {
+        this.setState({
+          refreshing: false
+        });
+      }
+    })();
+    (async () => {
+      let sliderData = await GDNService.getHomeSlider();
+      this.setState({sliderData, sliderLoaded: true});
+      if(this.state.menuListLoad) {
+        this.setState({
+          refreshing: false
+        });
+      }
+    })();
   }
 
   render() {
 
     return (
-      <Grid>
-        <Row size={42}>
-          <HomeSlider navigation={this.props.navigation} sliderType={SlideType.HomeScreen} title="Nổi Bật"/>
-        </Row>
-        <Row size={58}>
-          <HomeMenuList navigation={this.props.navigation}/>
-        </Row>
-      </Grid>
-
+      <ScrollView
+        refreshControl={
+              <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={() => this.onFresh()} />
+            }
+      >
+        <Grid>
+          <Row style={{ height: viewportHeight*.38 }}>
+            <HomeSlider dataSource={this.state.sliderData} title="Nổi Bật"/>
+          </Row>
+          <Row >
+            <HomeMenuList dataSource={this.state.menuListData}  />
+          </Row>
+        </Grid>
+      </ScrollView>
     )
+  }
+
+  onFresh() {
+    this.setState({sliderLoaded: false, menuListLoad: false, refreshing: true});
+    this.loadHomeData();
   }
 }
