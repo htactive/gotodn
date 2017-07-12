@@ -1,0 +1,17 @@
+﻿{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "GotoDN.Common": "1.0.0-*",
+    "Microsoft.EntityFrameworkCore.Design": "1.1.2",
+    "NETStandard.Library": "1.6.0",
+    "Pomelo.EntityFrameworkCore.MySql": "1.1.2"
+  },
+
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}
