@@ -20,55 +20,40 @@ class Login extends React.Component<{}, thisState> {
 
   render() {
     return (
-      <div className="app flex-row align-items-center">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-md-8">
-              <div className="card-group mb-0">
-                <div className="card p-4">
-                  <div className="form-horizontal card-block">
-                    <h1>Đăng nhập</h1>
-                    <p className="text-muted">Đăng nhập bằng tài khoản của bạn</p>
-                    <div className={`form-group${this.state.UserName_IsInvalid ? ' has-error' : ''}`}>
-                      <div className={`input-group mb-3`}>
-                        <span className="input-group-addon"><i className="icon-user"></i></span>
-                        <input type="text" className="form-control" placeholder="Tên đăng nhập"
-                               value={this.state.UserName || ''}
-                               onChange={(v) => this.UserNameChanged(v.target['value'])}
-                        />
-                      </div>
-                      {this.state.UserName_IsInvalid ?
-                        <span className="help-block">{this.state.UserName_InvalidMessage}</span>
-                        : null}
-                    </div>
-                    <div className={`input-group mb-4${this.state.Password_IsInvalid ? ' has-error' : ''}`}>
-                      <span className="input-group-addon"><i className="icon-lock"></i></span>
-                      <input type="password" className="form-control" placeholder="Mật khẩu"/>
-                      {this.state.Password_IsInvalid ?
-                        <span className="help-block">{this.state.Password_InvalidMessage}</span>
-                        : null}
-                    </div>
-                    <div className="row">
-                      <div className="col-12 text-center">
-                        <button type="button" className="btn btn-primary px-4" onClick={() => this.login()}>Đăng nhập
-                        </button>
-                      </div>
+      <div className="login-page">
+        <div className="container login-container">
+          <div className="login-panel panel panel-default plain animated bounceIn">
+            <div className="panel-heading">
+              <h4 className="panel-title text-center">
+                <img id="logo" src="/images/logo-dark.png" alt="Dynamic logo"/>
+              </h4>
+            </div>
+            <div className="panel-body">
+              <form className="form-horizontal mt0" action="index.html" id="login-form" role="form">
+                <div className="form-group">
+                  <div className="col-lg-12">
+                    <div className="input-group input-icon">
+                      <span className="input-group-addon"><i className="fa fa-envelope"></i></span>
+                      <input type="text" name="email" id="email" className="form-control"
+                             value="admin@dynamic.com" placeholder="Your email ..."/>
                     </div>
                   </div>
                 </div>
-                <div className="card card-inverse card-primary py-5 d-md-down-none" style={{width: 44 + '%'}}>
-                  <div className="card-block text-center">
-                    <div>
-                      <h2>Chưa có tài khoản</h2>
-                      <p>Hiện tại Goto DN chưa hỗ trợ việc đăng ký tài khoản, xin vui lòng liên hệ Quản Trị Viên để được
-                        hỗ trợ.</p>
-                      <button type="button" className="btn btn-primary active mt-3"><i className="fa fa-envelope-o"/>
-                        Gởi email!
-                      </button>
+                <div className="form-group">
+                  <div className="col-lg-12">
+                    <div className="input-group input-icon">
+                      <span className="input-group-addon"><i className="fa fa-key"></i></span>
+                      <input type="password" name="password" id="password"
+                             className="form-control" value="somepass" placeholder="Your password"/>
                     </div>
                   </div>
                 </div>
-              </div>
+                <div className="form-group mb0">
+                  <div className="col-lg-12 col-md-12 col-sm-12 col-xs-4 mb25 text-center">
+                    <button className="btn btn-primary" type="submit">Đăng nhập</button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>

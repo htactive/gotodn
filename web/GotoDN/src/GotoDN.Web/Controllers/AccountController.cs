@@ -178,7 +178,6 @@ namespace GotoDN.Web.Controllers
             {
                 model.UserProfiles = entity.UserProfiles.Select(x =>
                 {
-
                     var profile = Mappers.Mapper.ToModel(x);
                     if (profile != null)
                     {

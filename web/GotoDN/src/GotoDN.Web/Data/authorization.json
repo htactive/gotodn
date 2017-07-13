@@ -1,0 +1,11 @@
+﻿[
+  {
+    "controller": "Account",
+    "actions": [
+      {
+        "name": "GetMyProfile",
+        "claim": "MyProfile_R"
+      }
+    ]
+  }
+]

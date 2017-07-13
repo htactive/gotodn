@@ -3,69 +3,78 @@
 }
 <!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
-    <meta name="author" content="Łukasz Holeczek">
-    <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,AngularJS,Angular,Angular2,Angular 2,Angular4,Angular 4,jQuery,CSS,HTML,RWD,Dashboard,React,React.js,Vue,Vue.js">
-    <link rel="shortcut icon" href="/assets/favicon.ico">
-    <!--
-      Notice the use of /assets in the tag above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
-
-      Unlike "/favicon.ico" or "favicon.ico", "/assets/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://demos.getbootstrapkit.com/dynamic/css/main.css" rel="stylesheet">
-    <title>CoreUI - Open Source Bootstrap Admin Template</title>
+    <link rel="shortcut icon" href="assets_admin/ico/favicon.png">
+    <title>DFW New Homes Admin</title>
+    <!-- Mobile specific metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1 user-scalable=no">
+    <!-- Force IE9 to render in normal mode -->
+    <!--[if IE]>
+    <meta http-equiv="x-ua-compatible" content="IE=9"/><![endif]-->
+    <meta name="author" content="" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="application-name" content="" />
+    <!-- Import google fonts - Heading first/ text second -->
+    <link href='http://fonts.googleapis.com/css?family=Quattrocento+Sans:400,700' rel='stylesheet' type='text/css'>
+    <!-- Css files -->
     <!-- Icons -->
-    <link href="/assets/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/assets/css/simple-line-icons.css" rel="stylesheet">
-    <!-- Main styles for this application -->
-    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="/assets_admin/css/icons.css" asp-append-version="true" rel="stylesheet" />
+    <!-- Bootstrap stylesheets (included template modifications) -->
+    <link href="/assets_admin/css/bootstrap.css" asp-append-version="true" rel="stylesheet" />
+    <!-- Plugins stylesheets (all plugin custom css) -->
+    <link href="/assets_admin/css/plugins.css" asp-append-version="true" rel="stylesheet" />
+    <!-- Main stylesheets (template main css file) -->
+    <link href="/assets_admin/css/main.css" asp-append-version="true" rel="stylesheet" />
+    <!-- Custom stylesheets ( Put your own changes here ) -->
+    <link href="/assets_admin/css/custom.css" asp-append-version="true" rel="stylesheet" />
+    <link href="/assets_admin/css/_custom.css" asp-append-version="true" rel="stylesheet" />
+    <link href="/assets_admin/css/_object-features.css" asp-append-version="true" rel="stylesheet" />
+    <link href="/assets_admin/css/_page-layout-preview.css" asp-append-version="true" rel="stylesheet" />
+    <link href="/assets_admin/css/_spinner.css" asp-append-version="true" rel="stylesheet" />
+    <link href="/assets_admin/css/react-draft-wysiwyg.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://npmcdn.com/react-bootstrap-table/dist/react-bootstrap-table-all.min.css" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="img/ico/apple-touch-icon-57-precomposed.png">
+    <link rel="icon" href="img/ico/favicon.ico" type="image/png">
+    <meta name="msapplication-TileColor" content="#3399cc" />
 </head>
-<!-- BODY options, add following classes to body to change options
 
-  // Header options
-  1. '.header-fixed'					- Fixed Header
-
-  // Sidebar options
-  1. '.sidebar-fixed'					- Fixed Sidebar
-  2. '.sidebar-hidden'				- Hidden Sidebar
-  3. '.sidebar-off-canvas'		- Off Canvas Sidebar
-  4. '.sidebar-minimized'			- Minimized Sidebar (Only icons)
-  5. '.sidebar-compact'			  - Compact Sidebar
-
-  // Aside options
-  1. '.aside-menu-fixed'			- Fixed Aside Menu
-  2. '.aside-menu-hidden'			- Hidden Aside Menu
-  3. '.aside-menu-off-canvas'	- Off Canvas Aside Menu
-
-  // Footer options
-  1. 'footer-fixed'						- Fixed footer
-
--->
-<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+<body>
     <div id="root"></div>
-
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>    
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    <script src="http://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+    <!-- Core plugins ( not remove ) -->
+    <script src="/assets_admin/js/libs/modernizr.custom.js"></script>
+    <script src="/assets_admin/js/jRespond.min.js"></script>
+    <!-- Custom scroll for sidebars,tables and etc. -->
+    <script src="/assets_admin/plugins/core/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/assets_admin/plugins/core/slimscroll/jquery.slimscroll.horizontal.min.js"></script>
+    <script src="/assets_admin/plugins/core/pace/pace.min.js"></script>
+    <!-- Remove click delay in touch -->
+    <script src="/assets_admin/plugins/core/fastclick/fastclick.js"></script>
+    <!-- Increase jquery animation speed -->
+    <script src="/assets_admin/plugins/core/velocity/jquery.velocity.min.js"></script>
+    <!-- Bootbox fast bootstrap modals -->
+    <script src="/assets_admin/plugins/ui/bootbox/bootbox.js"></script>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+    <!-- Bootstrap plugins -->
+    <script src="/assets_admin/js/bootstrap/bootstrap.js"></script>
+    <!-- Other plugins ( load only nessesary plugins for every page) -->
+    <script src="/assets_admin/js/libs/date.js"></script>
+    <script src="/assets_admin/plugins/ui/waypoint/waypoints.js"></script>
+    <script src="/assets_admin/plugins/ui/notify/jquery.gritter.js"></script>
+    <script src="/assets_admin/plugins/ui/bootstrap-sweetalert/sweet-alert.js"></script>
 
-      To begin the development, run `npm start`.
-      To create a production bundle, use `npm run build`.
-    -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-with-addons.js"></script>
+    <script src="/assets_admin/plugins/misc/countTo/jquery.countTo.js"></script>
+    <script src="/assets_admin/js/jquery.dynamic.js"></script>
+    <script src="/assets_admin/js/main.js" asp-append-version="true"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-with-addons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.2/react-dom.min.js"></script>
     <!--react bootstrap table-->
     <script src="https://npmcdn.com/react-bootstrap-table/dist/react-bootstrap-table.min.js"></script>
@@ -74,5 +83,7 @@
 
     <script src="/dist/application/admin_lib.js" asp-append-version="true"></script>
     <script src="/dist/application/admin.js" asp-append-version="true"></script>
+
 </body>
+
 </html>

@@ -7,22 +7,22 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Breadcrumb from './components/Breadcrumb/Breadcrumb';
 import Aside from "./components/Aside/Aside";
 export class Index extends React.Component<any, any> {
+  componentDidMount(){
+    window['initDynamicTemplate']();
+  }
   render() {
-    return (<div className="app">
-      <Header />
-      <div className="app-body">
-        <Sidebar {...this.props}/>
-        <main className="main">
-          {/*<Breadcrumb />*/}
-          <div className="container-fluid">
+    return (
+      <div>
+        <Header/>
+        <div id="wrapper">
+          <Sidebar/>
+          <div className="page-content sidebar-page right-sidebar-page clearfix">
             {this.props.children}
           </div>
-        </main>
-        <Aside />
-      </div>
-      <Footer />
-      <UIBlocker/>
-      <MessageBox/>
-    </div>);
+        </div>
+        <Footer/>
+        <UIBlocker/>
+        <MessageBox/>
+      </div>);
   }
 }
