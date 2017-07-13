@@ -19,4 +19,13 @@ namespace GotoDN.Common
         Active = 1,
         Deactive = 2,
     }
+    public enum LoginResponseEnums
+    {
+        UnknowError = 0,
+        WrongPassword = 1,
+        ErrorCaptcha = 2,
+        WasBanned = 3,
+        DuplicateUserName = 4,
+    }
+
 }

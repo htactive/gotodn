@@ -60,7 +60,7 @@ namespace GotoDN.Web
             });
             services.AddScoped<GTDBEntities>();
             services.AddScoped<GTDBUnitOfWork>();
-            services.AddScoped<GTDBRepository>();
+            services.AddScoped<HTRepository>();
             services.AddScoped<IBaseUnitOfWork<GTDBEntities>, GTDBUnitOfWork>();
             RegisterServiceHelper.RegisterRepository(services);
         }

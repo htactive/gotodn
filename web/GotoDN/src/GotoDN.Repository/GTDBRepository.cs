@@ -13,11 +13,11 @@ namespace GotoDN.Repository
         {
         }
     }
-    public class GTDBRepository
+    public class HTRepository
     {
 	    public IServiceProvider ServiceProvider{get;private set;}
 		public IBaseUnitOfWork<GTDBEntities> GTDBUnitOfWork{get;private set;}
-        public GTDBRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork, IServiceProvider _serviceProvider)
+        public HTRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork, IServiceProvider _serviceProvider)
         {
 			this.GTDBUnitOfWork = unitOfWork;
 			this.ServiceProvider = _serviceProvider;

@@ -9,7 +9,7 @@ namespace GotoDN.Web.Controllers
 {
     public class StaticController : BaseController
     {
-        public StaticController(GTDBRepository repository) : base(repository)
+        public StaticController(HTRepository repository) : base(repository)
         {
         }
         [Route("{*url}")]

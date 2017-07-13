@@ -24,10 +24,10 @@ namespace GotoDN.Web.Authentication
 
     public class HTAuthorizationHandler : IAuthorizationHandler
     {
-        private GTDBRepository GTDBRepository;
-        public HTAuthorizationHandler(GTDBRepository _GTDBRepository)
+        private HTRepository HTRepository;
+        public HTAuthorizationHandler(HTRepository _HTRepository)
         {
-            this.GTDBRepository = _GTDBRepository;
+            this.HTRepository = _HTRepository;
         }
         public Task HandleAsync(AuthorizationHandlerContext context)
         {
@@ -46,7 +46,7 @@ namespace GotoDN.Web.Authentication
             var token = payLoad["token"];
             if (string.IsNullOrEmpty(token)) return Task.CompletedTask;
 
-            var loginSession = GTDBRepository.UserLoginTokenRepository.GetAll()
+            var loginSession = HTRepository.UserLoginTokenRepository.GetAll()
                 .Include(x => x.User)
                 .FirstOrDefault(x => x.Token == token);
 
@@ -64,8 +64,8 @@ namespace GotoDN.Web.Authentication
             loginSession.LastLoginDated = DateTimeHelper.GetDateTimeNow();
             loginSession.ExpiredDated = DateTimeHelper.GetDateTimeNow().AddDays(loginSession.IsRememberMe.GetValueOrDefault() ? 14 : 1);
 
-            GTDBRepository.UserLoginTokenRepository.Save(loginSession);
-            GTDBRepository.Commit();
+            HTRepository.UserLoginTokenRepository.Save(loginSession);
+            HTRepository.Commit();
             var requireClaim = GetRequireClaimFromControllerAndActionName(mvcContext.RouteData.Values["controller"] + "", mvcContext.RouteData.Values["action"] + "");
             if (!CheckClaimExistsInDatabase(requireClaim))
             {
@@ -74,7 +74,7 @@ namespace GotoDN.Web.Authentication
             if (!CheckClaims(requireClaim, loginSession.UserId))
             {
 #if DEBUG
-                var userRole = GTDBRepository.UserRoleRepository.GetAll().Where(x => x.UserId.HasValue && x.UserId.Value == loginSession.UserId).Select(x => x.Role).OrderByDescending(x => x.RoleType).FirstOrDefault();
+                var userRole = HTRepository.UserRoleRepository.GetAll().Where(x => x.UserId.HasValue && x.UserId.Value == loginSession.UserId).Select(x => x.Role).OrderByDescending(x => x.RoleType).FirstOrDefault();
                 var link = "http://localhost:4230/api/role/grant-access?c=" + requireClaim + "&r=" + (int)userRole.RoleType;
                 Debugger.Break();
 #endif
@@ -116,7 +116,7 @@ namespace GotoDN.Web.Authentication
 
         private bool CheckClaimExistsInDatabase(string claim)
         {
-            return GTDBRepository.ClaimRepository.GetAll().Any(x => x.ClaimName == claim);
+            return HTRepository.ClaimRepository.GetAll().Any(x => x.ClaimName == claim);
         }
         private void CreateNewClaim(string claim)
         {
@@ -125,13 +125,13 @@ namespace GotoDN.Web.Authentication
                 Id = 0,
                 ClaimName = claim
             };
-            GTDBRepository.ClaimRepository.Save(entity);
-            GTDBRepository.Commit();
+            HTRepository.ClaimRepository.Save(entity);
+            HTRepository.Commit();
         }
 
         private bool CheckClaims(string requireClaim, int userId)
         {
-            return GTDBRepository.UserRoleRepository.GetAll()
+            return HTRepository.UserRoleRepository.GetAll()
                 .Include("Role.RoleClaims.Claim")
                 .Where(x => x.UserId.HasValue && x.UserId.Value == userId).Select(x => x.Role).SelectMany(x => x.RoleClaims).Select(x => x.Claim).Any(x => x.ClaimName == requireClaim);
 

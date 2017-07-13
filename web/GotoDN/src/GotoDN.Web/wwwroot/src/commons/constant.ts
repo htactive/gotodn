@@ -4,6 +4,7 @@ export const virtualPath = "";
 
 export const AdminRoutePath = {
   Index: `${virtualPath}/`,
+  Login: `${virtualPath}/login`,
   Error403Page: `${virtualPath}/access-denied`,
   Dashboard:`${virtualPath}/dashboard`,
 
@@ -162,4 +163,13 @@ export enum UserStatusEnums
 {
   Active = 1,
   Deactive = 2,
+}
+
+export enum LoginResponseEnums
+{
+  UnknowError = 0,
+  WrongPassword = 1,
+  ErrorCaptcha = 2,
+  WasBanned = 3,
+  DuplicateUserName = 4,
 }

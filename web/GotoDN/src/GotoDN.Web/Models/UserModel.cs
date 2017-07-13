@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace GotoDN.Web.Models
 {
+    public class LoginResponseModel
+    {
+        public bool IsSuccess { get; set; }
+        public LoginResponseEnums ErrorMessage { get; set; }
+        public string AccessToken { get; set; }
+    }
     public class LoginRequestModel
     {
         public string UserName { get; set; }

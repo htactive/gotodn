@@ -21,11 +21,11 @@ namespace GotoDN.Web.Controllers
 
     public class BaseController : Controller
     {
-        protected GTDBRepository GTDBRepository { get; private set; }
+        protected HTRepository HTRepository { get; private set; }
 
-        public BaseController(GTDBRepository repository)
+        public BaseController(HTRepository repository)
         {
-            this.GTDBRepository = repository;
+            this.HTRepository = repository;
             Configuration = repository.ServiceProvider.GetService<IOptions<ConfigurationHelper>>()?.Value;
         }
 
@@ -63,7 +63,7 @@ namespace GotoDN.Web.Controllers
                     var token = payLoad["token"];
                     if (string.IsNullOrEmpty(token)) return null;
 
-                    var loginSession = GTDBRepository.UserLoginTokenRepository.GetAll()
+                    var loginSession = HTRepository.UserLoginTokenRepository.GetAll()
                         .Include("User.UserProfiles.Image")
                         .Include("User.UserRoles.Role")
                         .FirstOrDefault(x => x.Token == token);
@@ -137,8 +137,8 @@ namespace GotoDN.Web.Controllers
         {
             await this.UploadImageStreamToAWSS3(fileKey, stream);
             var image = new Image() { Id = 0, S3FileKey = fileKey };
-            this.GTDBRepository.ImageRepository.Save(image);
-            this.GTDBRepository.Commit();
+            this.HTRepository.ImageRepository.Save(image);
+            this.HTRepository.Commit();
             return image;
         }
 
