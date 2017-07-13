@@ -29,31 +29,37 @@ class Login extends React.Component<{}, thisState> {
               </h4>
             </div>
             <div className="panel-body">
-              <form className="form-horizontal mt0" action="index.html" id="login-form" role="form">
-                <div className="form-group">
+              <div className="form-horizontal mt0" id="login-form" role="form">
+                <div className={`form-group${this.state.UserName_IsInvalid ? ' has-error' : ''}`}>
                   <div className="col-lg-12">
                     <div className="input-group input-icon">
                       <span className="input-group-addon"><i className="fa fa-envelope"></i></span>
-                      <input type="text" name="email" id="email" className="form-control"
-                             value="admin@dynamic.com" placeholder="Your email ..."/>
+                      <input type="text" className="form-control"
+                             value={this.state.UserName} placeholder="Tên đăng nhập"/>
                     </div>
+                    {this.state.UserName_IsInvalid ?
+                      <span className="help-block">{this.state.UserName_InvalidMessage}</span>
+                      : null}
                   </div>
                 </div>
-                <div className="form-group">
+                <div className={`form-group${this.state.Password_IsInvalid ? ' has-error' : ''}`}>
                   <div className="col-lg-12">
                     <div className="input-group input-icon">
                       <span className="input-group-addon"><i className="fa fa-key"></i></span>
-                      <input type="password" name="password" id="password"
-                             className="form-control" value="somepass" placeholder="Your password"/>
+                      <input type="password"
+                             className="form-control" value={this.state.Password} placeholder="Mật khẩu"/>
                     </div>
+                    {this.state.Password_IsInvalid ?
+                      <span className="help-block">{this.state.Password_InvalidMessage}</span>
+                      : null}
                   </div>
                 </div>
                 <div className="form-group mb0">
                   <div className="col-lg-12 col-md-12 col-sm-12 col-xs-4 mb25 text-center">
-                    <button className="btn btn-primary" type="submit">Đăng nhập</button>
+                    <button className="btn btn-primary" type="button" onClick={() => this.login()}>Đăng nhập</button>
                   </div>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
