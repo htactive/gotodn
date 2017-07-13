@@ -7,5 +7,26 @@
         "claim": "MyProfile_R"
       }
     ]
+  },
+  {
+    "controller": "User",
+    "actions": [
+      {
+        "name": "Update",
+        "claim": "User_W"
+      },
+      {
+        "name": "Create",
+        "claim": "User_W"
+      },
+      {
+        "name": "Delete",
+        "claim": "User_W"
+      },
+      {
+        "name": "ChangeUserStatus",
+        "claim": "User_W"
+      }
+    ]
   }
 ]

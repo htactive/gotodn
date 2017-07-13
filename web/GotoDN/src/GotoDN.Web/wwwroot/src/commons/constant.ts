@@ -7,6 +7,7 @@ export const AdminRoutePath = {
   Login: `${virtualPath}/login`,
   Error403Page: `${virtualPath}/access-denied`,
   Dashboard:`${virtualPath}/dashboard`,
+  UserManagement:`${virtualPath}/users`,
 
 };
 

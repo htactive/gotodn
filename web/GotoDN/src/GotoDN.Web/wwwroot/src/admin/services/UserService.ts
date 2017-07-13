@@ -3,8 +3,14 @@ import {AdminServiceBase} from "./admin-service-base";
 import {UserModel} from "../../models/UserModel";
 import {LoginRequestModel} from "../../models/LoginRequestModel";
 import {LoginResponseModel} from "../../models/LoginResponseModel";
+import {GetGridRequestModel, GetGridResponseModel} from "../../commons/react-table";
 
 class UserService extends AdminServiceBase {
+  async Filter(request:GetGridRequestModel):Promise<GetGridResponseModel>{
+    let url = `${virtualPath}/user/filter`;
+    return await super.executeFetchPost(url, request);
+  }
+
   async Login(request: LoginRequestModel): Promise<LoginResponseModel> {
     let url = `${virtualPath}/account/login`;
     return await super.executeFetchPost(url, request);

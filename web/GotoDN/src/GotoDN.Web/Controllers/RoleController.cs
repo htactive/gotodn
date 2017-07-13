@@ -72,6 +72,9 @@ namespace GotoDN.Web.Controllers
                 RoleTypeEnums.SuperAdmin,
                 RoleTypeEnums.Admin,
             });
+            this.AddClaimToRoles("User_W", new List<RoleTypeEnums>() {
+                RoleTypeEnums.SuperAdmin,
+            });
             this.HTRepository.Commit();
             return true;
         }

@@ -5,6 +5,7 @@ import {AdminRoutePath, RoleTypeEnums} from './commons/constant';
 import {Index} from './admin/index'
 import Login from "./admin/views/Pages/Login/Login";
 import {UserServiceInstance} from "./admin/services/UserService";
+import UserManagement from "./admin/modules/UserManagement/UserManagement";
 async function requireAuth(nextState, replace, next) {
   let currentUser = await UserServiceInstance.getMyProfile(()=>{});
   if (!currentUser || !currentUser.UserRoles ||
@@ -20,6 +21,8 @@ ReactDOM.render(
     <Route path={AdminRoutePath.Index} component={Index}
            onEnter={(nextState, replace, next) => requireAuth(nextState, replace, next)}
     >
+      <Route path={AdminRoutePath.UserManagement} component={UserManagement}/>
+
     </Route>
     <Route path={AdminRoutePath.Login} component={Login}/>
   </Router>,

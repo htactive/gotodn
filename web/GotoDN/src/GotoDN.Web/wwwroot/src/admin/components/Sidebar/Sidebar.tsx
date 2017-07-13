@@ -9,7 +9,7 @@ const menus: LeftSideBarMenuItemModel[] = [
   {
     Icon: 'fa fa-user',
     Text: 'User management',
-    LinkTo: AdminRoutePath.Dashboard
+    LinkTo: AdminRoutePath.UserManagement
   }
 ];
 interface thisState{
