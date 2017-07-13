@@ -85,6 +85,7 @@ class Header extends React.Component<any, thisState> {
 
     });
     if (result == SweetAlertResultEnums.Confirm) {
+
       let logOutResult = await UserServiceInstance.LogOut();
       if (logOutResult) {
         SweetAlerts.show({

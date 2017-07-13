@@ -15,7 +15,6 @@ class UserService extends AdminServiceBase {
     return await super.executeFetchPost(url, null);
   }
 
-
   public async getGGPlusAvatar(ggKey: string): Promise<string> {
     let apiKey = 'AIzaSyAMtzHXiRa8wCDukvRvhNup7Ww0X7nSTEQ';
     let url = `https://www.googleapis.com/plus/v1/people/${ggKey}?fields=image&key=${apiKey}`;
@@ -31,7 +30,7 @@ class UserService extends AdminServiceBase {
   }
 
   public async getMyProfile(_401Callback?: () => void): Promise<UserModel> {
-    let url = `${virtualPath}/api/account/get-my-profile`;
+    let url = `${virtualPath}/account/get-my-profile`;
     return await super.executeFetch(url, false, _401Callback);
   }
 

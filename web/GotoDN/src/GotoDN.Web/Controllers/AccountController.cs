@@ -99,6 +99,53 @@ namespace GotoDN.Web.Controllers
             return tokenString;
         }
 
+        [HttpGet, Route("init-user")]
+        [AllowAnonymous]
+        public string DummyUser()
+        {
+
+            if (this.HTRepository.UserRepository.GetAll().Any(x => x.UserName != null && x.UserName.ToLower() == "admin"))
+            {
+                return "existing";
+            }
+            var standardRole = this.HTRepository.RoleRepository.GetAll().Where(x => x.RoleType == Common.RoleTypeEnums.SuperAdmin).FirstOrDefault();
+            if (standardRole == null)
+            {
+                throw new System.Exception("SuperAdmin is not found in database. Please run init roles");
+            }
+            var profile = new UserProfile()
+            {
+                Address = "",
+                City = "",
+                Email = "admin@htactive.com",
+                FirstName = "",
+                LastName = ""
+            };
+            var user = new User()
+            {
+                Id = 0,
+                UserStatusId = UserStatusEnums.Active,
+                Password = MD5Helper.Encode("123456"),
+                UserName = "admin",
+                CreateDate = DateTimeHelper.GetDateTimeNow(),
+                UserRoles = new List<UserRole>() {
+                    new UserRole()
+                    {
+                        RoleId = standardRole.Id
+                    }
+                },
+                UserProfiles = new List<UserProfile>()
+                {
+                    profile
+                }
+            };
+            this.HTRepository.UserRepository.Save(user);
+            var token = this.UserLogin(user, true);
+
+            this.HTRepository.Commit();
+            return "OK (admin/123456)";
+        }
+
         [HttpGet, Route("register")]
         [AllowAnonymous]
         private IActionResult Register()
@@ -302,32 +349,32 @@ namespace GotoDN.Web.Controllers
             return Redirect(string.IsNullOrEmpty(returnUrl) ? "/" : returnUrl);
         }
 
-        [HttpGet, Route("log-out")]
+        [HttpPost, Route("log-out")]
         [AllowAnonymous]
-        public IActionResult LogOut()
+        public bool LogOut()
         {
             string jwt = this.HttpContext.Request.Cookies["auth"];
 
-            if (string.IsNullOrEmpty(jwt)) return Redirect("/");
+            if (string.IsNullOrEmpty(jwt)) return true;
 
             var payloadString = JwtHelper.Decode(jwt);
 
-            if (string.IsNullOrEmpty(payloadString)) return Redirect("/");
+            if (string.IsNullOrEmpty(payloadString)) return true;
 
             var payLoad = JsonConvert.DeserializeObject<Dictionary<string, string>>(payloadString);
             var token = payLoad["token"];
-            if (string.IsNullOrEmpty(token)) return Redirect("/");
+            if (string.IsNullOrEmpty(token)) return true;
 
             var loginSession = HTRepository.UserLoginTokenRepository.GetAll()
                 .Include(x => x.User)
                 .FirstOrDefault(x => x.Token == token);
 
-            if (loginSession == null) return Redirect("/");
+            if (loginSession == null) return true;
 
             this.HTRepository.UserLoginTokenRepository.Delete(loginSession);
             this.HTRepository.Commit();
             this.Response.Cookies.Delete("auth");
-            return Redirect("/");
+            return true;
         }
     }
 }

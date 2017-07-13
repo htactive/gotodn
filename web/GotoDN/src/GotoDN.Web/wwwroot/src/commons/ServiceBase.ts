@@ -2,6 +2,9 @@ import {UIBlocker} from '../commons/ui-blocker';
 export class ServiceBase {
   protected async executeFetch(url, shouldBlockUI = false): Promise<any> {
     try {
+      if(!UIBlocker || !UIBlocker.instance){
+        shouldBlockUI=false;
+      }
       if (shouldBlockUI) {
         UIBlocker.instance.block();
       }
@@ -35,6 +38,9 @@ export class ServiceBase {
 
   protected async executeFetchPost(url, data, shouldBlockUI = true): Promise<any> {
     try {
+      if(!UIBlocker || !UIBlocker.instance){
+        shouldBlockUI=false;
+      }
       if (shouldBlockUI) {
         UIBlocker.instance.block();
       }
@@ -70,6 +76,9 @@ export class ServiceBase {
 
   protected async executeFetchPostImage(url, image, shouldBlockUI = true): Promise<any> {
     try {
+      if(!UIBlocker || !UIBlocker.instance){
+        shouldBlockUI=false;
+      }
 
       if (shouldBlockUI) {
         UIBlocker.instance.block();

@@ -67,67 +67,8 @@ namespace GotoDN.Web.Controllers
             var roleClaims = this.HTRepository.RoleClaimRepository.GetAll().ToList();
             this.HTRepository.RoleClaimRepository.Delete(roleClaims);
             this.HTRepository.Commit();
-
-            this.AddClaimToRoles("Area_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.Admin,
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("Builder_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.Admin,
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("Community_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.Admin,
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("ContentPage_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.Admin,
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("Property_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.Admin,
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("Menu_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.Admin,
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("HomepageContent_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.Admin,
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("FooterContent_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.Admin,
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("User_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("SMTPConfiguration_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("SMTPConfiguration_R", new List<RoleTypeEnums>() {
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("NotificationEmail_R", new List<RoleTypeEnums>() {
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("NotificationEmail_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.SuperAdmin,
-            });
-            this.AddClaimToRoles("UserFeedback_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.SuperAdmin,
-                RoleTypeEnums.Admin,
-            });
-            this.AddClaimToRoles("CMARequest_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.SuperAdmin,
-                RoleTypeEnums.Admin,
-            });
-            this.AddClaimToRoles("LYHRequest_W", new List<RoleTypeEnums>() {
-                RoleTypeEnums.SuperAdmin,
-                RoleTypeEnums.Admin,
-            });
-            this.AddClaimToRoles("NSRRequest_W", new List<RoleTypeEnums>() {
+            
+            this.AddClaimToRoles("MyProfile_R", new List<RoleTypeEnums>() {
                 RoleTypeEnums.SuperAdmin,
                 RoleTypeEnums.Admin,
             });

@@ -6,7 +6,7 @@ import {Index} from './admin/index'
 import Login from "./admin/views/Pages/Login/Login";
 import {UserServiceInstance} from "./admin/services/UserService";
 async function requireAuth(nextState, replace, next) {
-  let currentUser = await UserServiceInstance.getMyProfile();
+  let currentUser = await UserServiceInstance.getMyProfile(()=>{});
   if (!currentUser || !currentUser.UserRoles ||
     !currentUser.UserRoles.some(x => x.Role && (x.Role.RoleType == RoleTypeEnums.Admin
     || x.Role.RoleType == RoleTypeEnums.SuperAdmin))) {

@@ -35,7 +35,9 @@ class Login extends React.Component<{}, thisState> {
                     <div className="input-group input-icon">
                       <span className="input-group-addon"><i className="fa fa-envelope"></i></span>
                       <input type="text" className="form-control"
-                             value={this.state.UserName} placeholder="Tên đăng nhập"/>
+                             value={this.state.UserName} placeholder="Tên đăng nhập"
+                             onChange={(v) => this.UserNameChanged(v.target['value'])}
+                      />
                     </div>
                     {this.state.UserName_IsInvalid ?
                       <span className="help-block">{this.state.UserName_InvalidMessage}</span>
@@ -47,7 +49,9 @@ class Login extends React.Component<{}, thisState> {
                     <div className="input-group input-icon">
                       <span className="input-group-addon"><i className="fa fa-key"></i></span>
                       <input type="password"
-                             className="form-control" value={this.state.Password} placeholder="Mật khẩu"/>
+                             className="form-control" value={this.state.Password} placeholder="Mật khẩu"
+                             onChange={(v) => this.PasswordChanged(v.target['value'])}
+                      />
                     </div>
                     {this.state.Password_IsInvalid ?
                       <span className="help-block">{this.state.Password_InvalidMessage}</span>
@@ -78,7 +82,7 @@ class Login extends React.Component<{}, thisState> {
       });
       if (loginResult) {
         if (loginResult.IsSuccess) {
-          browserHistory.push(AdminRoutePath.Dashboard);
+          browserHistory.push(AdminRoutePath.Index);
           return;
         } else {
           if (loginResult.ErrorMessage == LoginResponseEnums.WrongPassword) {
