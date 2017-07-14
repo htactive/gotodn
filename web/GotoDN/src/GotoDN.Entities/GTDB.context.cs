@@ -19,6 +19,8 @@ namespace GotoDN.Entities
         public DbSet<UserLoginToken> UserLoginToken { get; set; }
         public DbSet<UserProfile> UserProfile { get; set; }
         public DbSet<UserRole> UserRole { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<CategoryLanguage> CategoryLanguage { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +46,10 @@ namespace GotoDN.Entities
                 .WithOne(x => x.Role)
                 .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Category>()
+                .HasMany(x => x.CategoryLanguages)
+                .WithOne(x => x.Category)
+                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
         }
     }
 }

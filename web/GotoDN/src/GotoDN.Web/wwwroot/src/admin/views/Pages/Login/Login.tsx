@@ -92,6 +92,13 @@ class Login extends React.Component<{}, thisState> {
             });
             return;
           }
+          if(loginResult.ErrorMessage == LoginResponseEnums.WasBanned){
+            this.setState({
+              UserName_IsInvalid: true,
+              UserName_InvalidMessage: 'Tài khoản của bạn đã bị chặn bởi Quản Trị Viên'
+            });
+            return;
+          }
         }
 
       }

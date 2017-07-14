@@ -27,5 +27,10 @@ namespace GotoDN.Common
         WasBanned = 3,
         DuplicateUserName = 4,
     }
+    public enum LanguageEnums
+    {
+        Vietnamese =1,
+        English = 2,
 
+    }
 }

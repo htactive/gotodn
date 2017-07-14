@@ -27,7 +27,8 @@ namespace GotoDN.Web.Controllers
         {
             var query = this.HTRepository.UserRepository.GetAll();
             query = query.Include("UserRoles.Role").Include("UserProfiles.Image");
-
+            query = query.Where(x => !x.UserRoles.Any(r => r.Role != null
+            && r.Role.RoleType == RoleTypeEnums.SuperAdmin));
             // search
             if (!string.IsNullOrEmpty(request.Search))
             {
@@ -159,12 +160,20 @@ namespace GotoDN.Web.Controllers
         [HTAuthorize]
         public ObjectSavedResponseModel<UserModel> ChangePassword([FromBody]UserModel model)
         {
-            var entity = HTRepository.UserRepository.GetAll().FirstOrDefault(x => x.Id == model.Id);
+            var entity = HTRepository.UserRepository.GetAll().Include("UserRoles.Role").FirstOrDefault(x => x.Id == model.Id);
             if (entity == null) return new ObjectSavedResponseModel<UserModel>()
             {
                 IsSuccess = false,
                 ErrorCode = "UpdateNotFoundEntity"
             };
+            if (entity.UserRoles.Any(x => x.Role != null && x.Role.RoleType == RoleTypeEnums.SuperAdmin))
+            {
+                return new ObjectSavedResponseModel<UserModel>()
+                {
+                    IsSuccess = false,
+                    ErrorCode = "CannotUpdateSuperAdmin"
+                };
+            }
             entity.Password = MD5Helper.Encode(model.Password);
             HTRepository.UserRepository.Save(entity);
             HTRepository.Commit();
@@ -174,8 +183,17 @@ namespace GotoDN.Web.Controllers
         [HTAuthorize]
         public ObjectSavedResponseModel<UserModel> ChangeUserStatus([FromBody]UserModel model)
         {
-            var entity = HTRepository.UserRepository.GetAll().FirstOrDefault(x => x.Id == model.Id);
+            var entity = HTRepository.UserRepository.GetAll().Include("UserRoles.Role").FirstOrDefault(x => x.Id == model.Id);
             if (entity == null) return new ObjectSavedResponseModel<UserModel>() { IsSuccess = false, ErrorCode = "UpdateNotFoundEntity" };
+
+            if (entity.UserRoles.Any(x => x.Role != null && x.Role.RoleType == RoleTypeEnums.SuperAdmin))
+            {
+                return new ObjectSavedResponseModel<UserModel>()
+                {
+                    IsSuccess = false,
+                    ErrorCode = "CannotUpdateSuperAdmin"
+                };
+            }
             entity.UserStatusId = model.UserStatusId;
             HTRepository.UserRepository.Save(entity);
             HTRepository.Commit();

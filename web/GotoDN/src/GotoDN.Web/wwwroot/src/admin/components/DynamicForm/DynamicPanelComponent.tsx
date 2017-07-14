@@ -34,7 +34,6 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
 
   render() {
     return (
-
       <div>
         {this.props.FormStructure ?
           this.props.FormStructure.map((form, index) =>
@@ -79,7 +78,9 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
           } else {
             fv.Value = object[f.FieldStructure.FieldName];
           }
-          isValid = this.validateFieldValue(fv, f.FieldStructure) && isValid;
+          if (object['__#validated#__']) {
+            isValid = this.validateFieldValue(fv, f.FieldStructure) && isValid;
+          }
           fieldValues.push(fv);
         }
       });
@@ -89,6 +90,7 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
   }
 
   private onFieldValueChange(fv: FieldValueModel) {
+    // this.props.Object['__#validated#__'] = true;
     let cfv: FieldValueModel = this.state.FieldValues.filter(x => x.FieldStructure.FieldName == fv.FieldStructure.FieldName)[0];
     cfv.Value = fv.Value;
     cfv.ValueNumber = fv.ValueNumber;
@@ -184,6 +186,7 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
   }
 
   public isFormValid(): boolean {
+    this.props.Object['__#validated#__'] = true;
     let isValid = true;
     this.state.FieldValues.forEach(cfv => {
       let fieldStructure: FieldStructureModel = (this.props.FormStructure.map(x => x.DynamicFields)

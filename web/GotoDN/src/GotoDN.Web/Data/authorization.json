@@ -26,6 +26,10 @@
       {
         "name": "ChangeUserStatus",
         "claim": "User_W"
+      },
+      {
+        "name": "ChangePassword",
+        "claim": "User_W"
       }
     ]
   }

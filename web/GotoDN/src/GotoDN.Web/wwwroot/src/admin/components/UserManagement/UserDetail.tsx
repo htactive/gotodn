@@ -29,7 +29,7 @@ class UserDetail extends React.Component<{}, thisState> {
       let st = store.getState();
       this.setState({
         Object: st.Detail,
-      }, () => this.editingForm && this.editingForm.isFormValid());
+      });
       if (st.Detail) {
         let editingObject = {...st.Detail};
         if (!this.state.EditingObject || this.state.EditingObject.Id != editingObject.Id) {
@@ -43,18 +43,6 @@ class UserDetail extends React.Component<{}, thisState> {
         });
       }
     });
-  }
-
-  protected renderHeader(): JSX.Element {
-    return (<div id="page-header" className="clearfix">
-      <button type="button" className="btn btn-sm btn-danger btn-round btn-alt mr15 mt25 pull-left"
-              onClick={() => this.cancel()}>
-        <i className="fa fa-arrow-left"/>
-      </button>
-      <div className="page-header">
-        <h2>{this.state.Object.UserName}</h2>
-      </div>
-    </div>);
   }
 
   render() {

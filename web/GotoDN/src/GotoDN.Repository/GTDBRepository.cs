@@ -99,6 +99,24 @@ namespace GotoDN.Repository
 				(_UserRoleRepository = ServiceProvider.GetService<IUserRoleRepository>());
 			}
 		}
+		private ICategoryRepository _CategoryRepository;
+        public ICategoryRepository CategoryRepository 
+		{ 
+			get
+			{
+				return _CategoryRepository ?? 
+				(_CategoryRepository = ServiceProvider.GetService<ICategoryRepository>());
+			}
+		}
+		private ICategoryLanguageRepository _CategoryLanguageRepository;
+        public ICategoryLanguageRepository CategoryLanguageRepository 
+		{ 
+			get
+			{
+				return _CategoryLanguageRepository ?? 
+				(_CategoryLanguageRepository = ServiceProvider.GetService<ICategoryLanguageRepository>());
+			}
+		}
 		#endregion
     }
 	
@@ -114,6 +132,8 @@ namespace GotoDN.Repository
 			services.AddScoped<IUserLoginTokenRepository, UserLoginTokenRepository>();
 			services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 			services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+			services.AddScoped<ICategoryRepository, CategoryRepository>();
+			services.AddScoped<ICategoryLanguageRepository, CategoryLanguageRepository>();
 		}
     }
 }

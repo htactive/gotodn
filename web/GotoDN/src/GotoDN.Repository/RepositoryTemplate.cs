@@ -106,4 +106,30 @@ namespace GotoDN.Repository
             return model.Id;
         }
 	}
+
+    public partial class CategoryRepository : BaseRepository<Category, GTDBEntities>, ICategoryRepository
+    {
+        public CategoryRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		protected override int GetKeyId(Category model)
+        {
+            return model.Id;
+        }
+	}
+
+    public partial class CategoryLanguageRepository : BaseRepository<CategoryLanguage, GTDBEntities>, ICategoryLanguageRepository
+    {
+        public CategoryLanguageRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		protected override int GetKeyId(CategoryLanguage model)
+        {
+            return model.Id;
+        }
+	}
 }

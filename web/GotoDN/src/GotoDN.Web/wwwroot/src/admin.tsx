@@ -6,13 +6,17 @@ import {Index} from './admin/index'
 import Login from "./admin/views/Pages/Login/Login";
 import {UserServiceInstance} from "./admin/services/UserService";
 import UserManagement from "./admin/modules/UserManagement/UserManagement";
+import store from "./admin/modules/CurrentUser/_store";
+import {action_SetCurrentUser} from "./admin/modules/CurrentUser/_actions";
 async function requireAuth(nextState, replace, next) {
-  let currentUser = await UserServiceInstance.getMyProfile(()=>{});
+  let currentUser = await UserServiceInstance.getMyProfile(() => {
+  });
   if (!currentUser || !currentUser.UserRoles ||
     !currentUser.UserRoles.some(x => x.Role && (x.Role.RoleType == RoleTypeEnums.Admin
     || x.Role.RoleType == RoleTypeEnums.SuperAdmin))) {
     replace(AdminRoutePath.Login);
   }
+  store.dispatch(action_SetCurrentUser(currentUser));
   next();
 }
 

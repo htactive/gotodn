@@ -10,11 +10,13 @@ import {action_ChangeUserStatus, action_Filter, action_ViewDetail} from "../../m
 import {SweetAlertResultEnums, SweetAlerts, SweetAlertTypeEnums} from "../../../commons/sweet-alerts";
 import {action_ShowNoticeError, action_ShowNoticeSuccess} from "../Notice/_actions";
 import {AdminRoutePath, RoleTypeEnums, UserStatusEnums} from "../../../commons/constant";
+import UserPassword from "./UserPassword";
 
 interface thisState {
   isViewDetail?: boolean,
   GridFilter?: GetGridRequestModel,
-  GridData?: GetGridResponseModel
+  GridData?: GetGridResponseModel,
+  UserForChangePassword?: UserModel
 }
 
 class UserList extends React.Component<{}, thisState> {
@@ -69,7 +71,8 @@ class UserList extends React.Component<{}, thisState> {
           <div className="panel panel-default plain toggle panelMove">
             <div className="panel-body">
               <div className="table-toolbar">
-                <button className="btn btn-success" onClick={() => this.create()}><i className="fa fa-plus"/> Create
+                <button className="btn btn-success" onClick={() => this.create()}><i className="fa fa-plus"/> Thêm người
+                  dùng
                 </button>
               </div>
               <ReactTable request={this.state.GridFilter}
@@ -84,24 +87,28 @@ class UserList extends React.Component<{}, thisState> {
                           }}
               >
 
-                <TableHeaderColumn width="80" dataField="Name"
+                <TableHeaderColumn width="60" dataField="Name"
                                    dataFormat={(r, data: UserModel) => {
                                      return data.UserName;
                                    }} dataSort={ true }>
-
-                  <TableHeaderColumn width="20" dataField="UserStatusId" dataAlign="center"
-                                     dataFormat={(r, data) => this.bindToggleUserStatusData(data)} dataSort={ true }>
-                    Is Active</TableHeaderColumn>
-
-                  Name</TableHeaderColumn>
-                <TableHeaderColumn width="20" dataField="Action" dataAlign="center"
+                  Tên đăng nhập</TableHeaderColumn>
+                <TableHeaderColumn width="20" dataField="UserStatusId" dataAlign="center"
+                                   dataFormat={(r, data) => this.bindToggleUserStatusData(data)} dataSort={ true }>
+                  Đang hoạt động?</TableHeaderColumn>
+                <TableHeaderColumn width="40" dataField="Action" dataAlign="center"
                                    dataFormat={(r, data) => this.bindActionData(data)} dataSort={ false }>
-                  Action</TableHeaderColumn>
+                  Thao tác</TableHeaderColumn>
               </ReactTable>
             </div>
           </div>
         </div>
       </div>
+      <UserPassword onUpdate={(pass) => this.doChangePassword(pass)}
+                    onCancel={() => this.setState({
+                      UserForChangePassword: null
+                    })}
+                    User={this.state.UserForChangePassword}
+      />
     </div>);
   }
 
@@ -182,10 +189,38 @@ class UserList extends React.Component<{}, thisState> {
 
   private bindActionData(data: UserModel) {
     return (<div className="table--actions-container">
+      <button className="btn btn-primary" onClick={() => this.changePassword(data)}>
+        <i className="fa fa-trash" aria-hidden="true">Đổi mật khẩu</i>
+      </button>
       <button className="btn btn-danger" onClick={() => this.delete(data.Id)}>
-        <i className="fa fa-trash" aria-hidden="true">Delete</i>
+        <i className="fa fa-trash" aria-hidden="true">Xóa</i>
       </button>
     </div>);
+  }
+
+  private changePassword(model: UserModel) {
+    this.setState({
+      UserForChangePassword: model
+    });
+  }
+
+  private async doChangePassword(pass: string) {
+    let model: UserModel = {Id: this.state.UserForChangePassword.Id, Password: pass};
+    let saveResult = await UserServiceInstance.ChangeUserPassword(model);
+    if (saveResult) {
+      if (saveResult.IsSuccess) {
+        noticeStore.dispatch(action_ShowNoticeSuccess());
+        this.setState({
+          UserForChangePassword: null
+        });
+      }
+      else {
+        noticeStore.dispatch(action_ShowNoticeError());
+
+      }
+    } else {
+      noticeStore.dispatch(action_ShowNoticeError());
+    }
   }
 }
 

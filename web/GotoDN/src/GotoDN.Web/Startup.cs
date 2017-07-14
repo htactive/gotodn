@@ -17,6 +17,7 @@ using System.Net;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication;
 using HTActive.Core;
+using GotoDN.Web.Models;
 
 namespace GotoDN.Web
 {
@@ -68,6 +69,17 @@ namespace GotoDN.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            AutoMapper.Mapper.Initialize(cf =>
+            {
+                cf.ForAllPropertyMaps(s => true, (s, c) => c.Condition((source,dest,sMember,dMember) =>
+                {
+                    return sMember == null || sMember.GetType().Namespace == "System";
+                }));
+
+                cf.CreateMap<Category, CategoryModel>();
+                cf.CreateMap<CategoryLanguage, CategoryLanguageModel>();
+                cf.CreateMap<Image, ImageModel>();
+            });
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 

@@ -1,29 +1,61 @@
 import * as React from 'react';
-import { Link } from 'react-router'
-import {AdminRoutePath} from "../../../commons/constant";
+import {Link} from 'react-router'
+import {AdminRoutePath, RoleTypeEnums} from "../../../commons/constant";
 import {UserModel} from "../../../models/UserModel";
 import {LeftSideBarMenuItemModel} from "../../../models/LeftSideBarMenuItemModel";
 import {UserServiceInstance} from "../../services/UserService";
+import store from "../../modules/CurrentUser/_store";
 
 const menus: LeftSideBarMenuItemModel[] = [
   {
     Icon: 'fa fa-user',
-    Text: 'User management',
+    Text: 'Quản lý người dùng',
     LinkTo: AdminRoutePath.UserManagement
+  },
+  {
+    Icon: 'fa fa-list-ul',
+    Text: 'Quản lý danh mục',
+    LinkTo: AdminRoutePath.CategoryManagement
   }
 ];
-interface thisState{
+interface thisState {
   MenuItems?: LeftSideBarMenuItemModel[],
   CurrentUser?: UserModel,
   GGPlusAvatarLink?: string
 }
 
-class Sidebar extends React.Component<any,thisState> {
+class Sidebar extends React.Component<any, thisState> {
 
-  componentWillMount(){
+  componentWillMount() {
     this.setState({
       MenuItems: menus
     });
+
+    store.subscribe(() => {
+      let state = store.getState();
+      this.setState({
+        CurrentUser: state.CurrentUser
+      });
+      if (!state.CurrentUser.UserRoles.some(x => x.Role && x.Role.RoleType == RoleTypeEnums.SuperAdmin)) {
+        this.setState({
+          MenuItems: menus.filter(x => x.LinkTo !== AdminRoutePath.UserManagement && x.Code !== "Configuration")
+        });
+      }
+      this.getGGPlusAvatar(state.CurrentUser);
+    });
+  }
+
+  componentDidMount() {
+    let state = store.getState();
+    this.setState({
+      CurrentUser: state.CurrentUser
+    });
+    if (!state.CurrentUser.UserRoles.some(x => x.Role && x.Role.RoleType == RoleTypeEnums.SuperAdmin)) {
+      this.setState({
+        MenuItems: menus.filter(x => x.LinkTo !== AdminRoutePath.UserManagement && x.Code !== "Configuration")
+      });
+    }
+    this.getGGPlusAvatar(state.CurrentUser);
   }
 
   async getGGPlusAvatar(user: UserModel) {
@@ -81,16 +113,15 @@ class Sidebar extends React.Component<any,thisState> {
         <div className="sidebar-inner">
           <div className="sidebar-scrollarea">
             <div className="sidebar-panel">
-              <h5 className="sidebar-panel-title">Profile</h5>
+              <h5 className="sidebar-panel-title">Thông tin người dùng</h5>
             </div>
             <div className="user-info clearfix">
               {this.renderAvatar()}
-              <a className="name">{(this.state.CurrentUser &&
-              this.state.CurrentUser.UserProfiles &&
-              this.state.CurrentUser.UserProfiles[0]) ? this.state.CurrentUser.UserProfiles[0].Email : ''}</a>
+              <a className="name">{this.state.CurrentUser ?
+                this.state.CurrentUser.UserName : ''}</a>
             </div>
             <div className="sidebar-panel">
-              <h5 className="sidebar-panel-title">Navigator</h5>
+              <h5 className="sidebar-panel-title">Điều hướng</h5>
             </div>
             <div className="side-nav">
               <ul className="nav">

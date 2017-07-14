@@ -59,6 +59,11 @@ class UserService extends AdminServiceBase {
     let url = `${virtualPath}/user/change-user-status`;
     return await super.executeFetchPost(url, model);
   }
+
+  async ChangeUserPassword(model:UserModel):Promise<ObjectSavedResponseModel<UserModel>>{
+    let url = `${virtualPath}/user/change-password`;
+    return await super.executeFetchPost(url, model);
+  }
 }
 
 const UserServiceInstance = new UserService();

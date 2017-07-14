@@ -1,4 +1,4 @@
-﻿{
+{
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.0.1",
@@ -32,7 +32,8 @@
     "Microsoft.EntityFrameworkCore.Tools": "1.1.0-preview4-final",
     "Microsoft.EntityFrameworkCore": "1.1.2",
     "AWSSDK.S3": "3.3.5.15",
-    "MailKit": "1.16.1"
+    "MailKit": "1.16.1",
+    "AutoMapper": "6.1.1"
   },
 
   "tools": {

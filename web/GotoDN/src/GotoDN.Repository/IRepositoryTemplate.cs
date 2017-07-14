@@ -34,4 +34,12 @@ namespace GotoDN.Repository
     public partial interface IUserRoleRepository : IBaseRepository<UserRole>
     {
     }
+
+    public partial interface ICategoryRepository : IBaseRepository<Category>
+    {
+    }
+
+    public partial interface ICategoryLanguageRepository : IBaseRepository<CategoryLanguage>
+    {
+    }
 }
