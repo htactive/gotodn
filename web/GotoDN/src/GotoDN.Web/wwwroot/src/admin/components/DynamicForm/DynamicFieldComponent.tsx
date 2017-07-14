@@ -19,13 +19,13 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
 
   renderTextBoxField(): JSX.Element {
     let isInvalid = this.props.FieldValue.ValidateResult && this.props.FieldValue.ValidateResult.IsInvalid;
-    let size = this.props.Field.FieldStructure.Size || 12;
-    let lableLg = 12 * 2 / size;
-    let controlLg = 12 - lableLg;
     return (
-      <div className={`form-group col-lg-${size}${isInvalid ? ' has-error' : ''} p0`}>
-        <label className={`col-lg-${lableLg} col-md-3 control-label`}>{this.props.Field.FieldStructure.Name}</label>
-        <div className={`col-lg-${controlLg} col-md-9`}>
+      <div className={`form-group col-lg-12${isInvalid ? ' has-error' : ''} p0`}>
+        <label
+          className={`${this.props.Field.LabelClass ? this.props.Field.LabelClass : 'col-lg-2 col-md-3'} control-label`}>
+          {this.props.Field.FieldStructure.Name}
+        </label>
+        <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
           <input className="form-control" type="text"
                  placeholder={this.props.Field.FieldStructure.PlaceHolder}
                  value={this.props.FieldValue.Value}
@@ -43,13 +43,12 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
   }
 
   renderStaticLabel(): JSX.Element {
-    let size = this.props.Field.FieldStructure.Size || 12;
-    let lableLg = 12 * 2 / size;
-    let controlLg = 12 - lableLg;
     return (
-      <div className={`form-group col-lg-${size} p0`}>
-        <label className={`col-lg-${lableLg} col-md-3 control-label`}>{this.props.Field.FieldStructure.Name}</label>
-        <div className={`col-lg-${controlLg} col-md-9`}>
+      <div className={`form-group col-lg-12 p0`}>
+        <label
+          className={`${this.props.Field.LabelClass ? this.props.Field.LabelClass : 'col-lg-2 col-md-3'} control-label`}>
+          {this.props.Field.FieldStructure.Name}</label>
+        <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
           <label className="form-control-static">{this.props.FieldValue.Value}</label>
         </div>
       </div>
@@ -57,13 +56,12 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
   }
 
   renderStaticControl(): JSX.Element {
-    let size = this.props.Field.FieldStructure.Size || 12;
-    let lableLg = 12 * 2 / size;
-    let controlLg = 12 - lableLg;
     return (
-      <div className={`form-group col-lg-${size} p0`}>
-        <label className={`col-lg-${lableLg} col-md-3 control-label`}>{this.props.Field.FieldStructure.Name}</label>
-        <div className={`col-lg-${controlLg} col-md-9`}>
+      <div className={`form-group col-lg-12 p0`}>
+        <label
+          className={`${this.props.Field.LabelClass ? this.props.Field.LabelClass : 'col-lg-2 col-md-3'} control-label`}>
+          {this.props.Field.FieldStructure.Name}</label>
+        <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
           {this.props.FieldValue.Value}
         </div>
       </div>
@@ -74,8 +72,10 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
     let isInvalid = this.props.FieldValue.ValidateResult && this.props.FieldValue.ValidateResult.IsInvalid;
     return (
       <div className={`form-group col-lg-12 p0${isInvalid ? ' has-error' : ''}`}>
-        <label className="col-lg-2 col-md-3 control-label">{this.props.Field.FieldStructure.Name}</label>
-        <div className="col-lg-10 col-md-9">
+        <label
+          className={`${this.props.Field.LabelClass ? this.props.Field.LabelClass : 'col-lg-2 col-md-3'} control-label`}>
+          {this.props.Field.FieldStructure.Name}</label>
+        <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
           <input className="form-control" type="text"
                  placeholder={this.props.Field.FieldStructure.PlaceHolder}
                  value={this.props.FieldValue.Value}
@@ -102,8 +102,10 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
     let isInvalid = this.props.FieldValue.ValidateResult && this.props.FieldValue.ValidateResult.IsInvalid;
     return (
       <div className={`form-group col-lg-12 p0${isInvalid ? ' has-error' : ''}`}>
-        <label className="col-lg-2 col-md-3 control-label">{this.props.Field.FieldStructure.Name}</label>
-        <div className="col-lg-10 col-md-9">
+        <label
+          className={`${this.props.Field.LabelClass ? this.props.Field.LabelClass : 'col-lg-2 col-md-3'} control-label`}>
+          {this.props.Field.FieldStructure.Name}</label>
+        <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
             <textarea className="form-control" rows={7}
                       placeholder={this.props.Field.FieldStructure.PlaceHolder}
                       value={this.props.FieldValue.Value}
@@ -129,8 +131,10 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
     }
     return (
       <div className={`form-group col-lg-12 p0 form-inline${isInvalid ? ' has-error' : ''}`}>
-        <label className="col-lg-2 col-md-3 control-label">{this.props.Field.FieldStructure.Name}</label>
-        <div className="col-lg-10 col-md-9">
+        <label
+          className={`${this.props.Field.LabelClass ? this.props.Field.LabelClass : 'col-lg-2 col-md-3'} control-label`}>
+          {this.props.Field.FieldStructure.Name}</label>
+        <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
           {selectInitValues.map((v, vindex) => (
             <label className="radio-inline" key={vindex}>
               <input type="radio" name={`rd_${this.props.Field.FieldStructure.FieldName}`} onChange={(e) => {
@@ -154,8 +158,10 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
     }
     return (
       <div className={`form-group col-lg-12 p0 form-inline${isInvalid ? ' has-error' : ''}`}>
-        <label className="col-lg-2 col-md-3 control-label">{this.props.Field.FieldStructure.Name}</label>
-        <div className="col-lg-10 col-md-9">
+        <label
+          className={`${this.props.Field.LabelClass ? this.props.Field.LabelClass : 'col-lg-2 col-md-3'} control-label`}>
+          {this.props.Field.FieldStructure.Name}</label>
+        <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
           {selectInitValues.map((v, vindex) => (
             <label className="checkbox-inline" key={vindex}>
               <input type="checkbox" onChange={(e) => {
@@ -192,8 +198,10 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
     }
     return (
       <div className={`form-group col-lg-12 p0${isInvalid ? ' has-error' : ''}`}>
-        <label className="col-lg-2 col-md-3 control-label">{this.props.Field.FieldStructure.Name}</label>
-        <div className="col-lg-10 col-md-9">
+        <label
+          className={`${this.props.Field.LabelClass ? this.props.Field.LabelClass : 'col-lg-2 col-md-3'} control-label`}>
+          {this.props.Field.FieldStructure.Name}</label>
+        <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
           <select className="form-control"
                   defaultValue={this.props.FieldValue.Value}
                   onChange={(e) => {

@@ -21,7 +21,7 @@ ReactDOM.render(
     <Route path={AdminRoutePath.Index} component={Index}
            onEnter={(nextState, replace, next) => requireAuth(nextState, replace, next)}
     >
-      <Route path={AdminRoutePath.UserManagement} component={UserManagement}/>
+      <Route path={`${AdminRoutePath.UserManagement}(/:id)`} component={UserManagement}/>
 
     </Route>
     <Route path={AdminRoutePath.Login} component={Login}/>

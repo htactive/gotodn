@@ -4,5 +4,7 @@ export interface DynamicFieldModel {
   DynamicFormId?: number,
   FieldStructure?: FieldStructureModel,
   DynamicForm?: DynamicFormModel,
-  Priority?:number
+  Priority?: number,
+  LabelClass?: string,
+  InputClass?: string,
 }

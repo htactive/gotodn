@@ -107,7 +107,7 @@ namespace GotoDN.Web.Controllers
         [HTAuthorize]
         public ObjectSavedResponseModel<UserModel> Create([FromBody]UserModel model)
         {
-            if (this.HTRepository.UserRepository.GetAll().Any(x => x.UserName != null && x.UserName.ToLower() == "admin"))
+            if (this.HTRepository.UserRepository.GetAll().Any(x => x.Id != model.Id && x.UserName != null && x.UserName.ToLower() == model.UserName.ToLower()))
             {
                 return new ObjectSavedResponseModel<UserModel>()
                 {
@@ -133,7 +133,7 @@ namespace GotoDN.Web.Controllers
                 Id = 0,
                 UserStatusId = UserStatusEnums.Active,
                 Password = MD5Helper.Encode(model.Password),
-                UserName = model.UserName,
+                UserName = model.UserName.ToLower(),
                 CreateDate = DateTimeHelper.GetDateTimeNow(),
                 UserRoles = new List<UserRole>() {
                     new UserRole()
@@ -157,25 +157,47 @@ namespace GotoDN.Web.Controllers
 
         [HttpPost, Route("change-password")]
         [HTAuthorize]
-        public bool ChangePassword([FromBody]UserModel model)
+        public ObjectSavedResponseModel<UserModel> ChangePassword([FromBody]UserModel model)
         {
             var entity = HTRepository.UserRepository.GetAll().FirstOrDefault(x => x.Id == model.Id);
-            if (entity == null) return false;
+            if (entity == null) return new ObjectSavedResponseModel<UserModel>()
+            {
+                IsSuccess = false,
+                ErrorCode = "UpdateNotFoundEntity"
+            };
             entity.Password = MD5Helper.Encode(model.Password);
             HTRepository.UserRepository.Save(entity);
             HTRepository.Commit();
-            return true;
+            return new ObjectSavedResponseModel<UserModel>() { IsSuccess = true };
         }
         [HttpPost, Route("change-user-status")]
         [HTAuthorize]
-        public bool ChangeUserStatus([FromBody]UserModel model)
+        public ObjectSavedResponseModel<UserModel> ChangeUserStatus([FromBody]UserModel model)
         {
             var entity = HTRepository.UserRepository.GetAll().FirstOrDefault(x => x.Id == model.Id);
-            if (entity == null) return false;
+            if (entity == null) return new ObjectSavedResponseModel<UserModel>() { IsSuccess = false, ErrorCode = "UpdateNotFoundEntity" };
             entity.UserStatusId = model.UserStatusId;
             HTRepository.UserRepository.Save(entity);
             HTRepository.Commit();
-            return true;
+            return new ObjectSavedResponseModel<UserModel>() { IsSuccess = true };
+        }
+        [HttpPost, Route("delete")]
+        [HTAuthorize]
+        public ObjectSavedResponseModel<UserModel> Delete([FromBody]UserModel model)
+        {
+            var entity = HTRepository.UserRepository.GetAll().Include("UserRoles.Role").FirstOrDefault(x => x.Id == model.Id);
+            if (entity == null) return new ObjectSavedResponseModel<UserModel>() { IsSuccess = false, ErrorCode = "DeleteNotFoundEntity" };
+            if (entity.UserRoles.Any(x => x.Role != null && x.Role.RoleType == RoleTypeEnums.SuperAdmin))
+            {
+                return new ObjectSavedResponseModel<UserModel>()
+                {
+                    IsSuccess = false,
+                    ErrorCode = "CannotDeleteSuperAdmin"
+                };
+            }
+            HTRepository.UserRepository.Delete(entity);
+            HTRepository.Commit();
+            return new ObjectSavedResponseModel<UserModel>() { IsSuccess = true };
         }
     }
 }

@@ -14,6 +14,22 @@ interface thisProps {
 
 export class DynamicFormComponent extends React.Component<thisProps, {}> {
   render() {
+    let inner = (<div className="form-horizontal">
+        <fieldset>
+          {this.props.FormSet.DynamicFields && this.props.FormSet.DynamicFields.length > 0 ?
+            this.props.FormSet.DynamicFields.map((field, fieldIndex) => (
+              <DynamicFieldComponent
+                Field={field}
+                FieldValue={this.props.FieldValues.filter(x => x.FieldStructure.FieldName == field.FieldStructure.FieldName)[0] || {Id: 0}}
+                onFieldValueChange={(fv: FieldValueModel) => this.onFieldValueChange(fv)}
+                key={fieldIndex}/>))
+            : null
+          }
+        </fieldset>
+      </div>);
+    if(this.props.FormSet.BlankPanel){
+      return inner;
+    }
     return (<div className="panel panel-default plain toggle">
       <div className="panel-heading">
 
@@ -22,19 +38,7 @@ export class DynamicFormComponent extends React.Component<thisProps, {}> {
           </strong></h4>
       </div>
       <div className="panel-body">
-        <div className="form-horizontal">
-          <fieldset>
-            {this.props.FormSet.DynamicFields && this.props.FormSet.DynamicFields.length > 0 ?
-              this.props.FormSet.DynamicFields.map((field, fieldIndex) => (
-                <DynamicFieldComponent
-                  Field={field}
-                  FieldValue={this.props.FieldValues.filter(x => x.FieldStructure.FieldName == field.FieldStructure.FieldName)[0] || {Id: 0}}
-                  onFieldValueChange={(fv: FieldValueModel) => this.onFieldValueChange(fv)}
-                  key={fieldIndex}/>))
-              : null
-            }
-          </fieldset>
-        </div>
+        {inner}
       </div>
     </div>);
   }

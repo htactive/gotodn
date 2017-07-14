@@ -4,8 +4,12 @@ import {BootstrapTable, TableHeaderColumn} from 'react-bootstrap-table';
 import {Link} from "react-router";
 import {UserModel} from "../../../models/UserModel";
 import store from "../../modules/UserManagement/_store";
+import noticeStore from '../../components/Notice/_store';
 import {UserServiceInstance} from "../../services/UserService";
-import {action_Filter} from "../../modules/UserManagement/_actions";
+import {action_ChangeUserStatus, action_Filter, action_ViewDetail} from "../../modules/UserManagement/_actions";
+import {SweetAlertResultEnums, SweetAlerts, SweetAlertTypeEnums} from "../../../commons/sweet-alerts";
+import {action_ShowNoticeError, action_ShowNoticeSuccess} from "../Notice/_actions";
+import {AdminRoutePath, RoleTypeEnums, UserStatusEnums} from "../../../commons/constant";
 
 interface thisState {
   isViewDetail?: boolean,
@@ -42,7 +46,7 @@ class UserList extends React.Component<{}, thisState> {
         PageSize: 10
       };
       let result = await UserServiceInstance.Filter(request);
-      store.dispatch(action_Filter(request,result));
+      store.dispatch(action_Filter(request, result));
     })();
   }
 
@@ -58,7 +62,7 @@ class UserList extends React.Component<{}, thisState> {
   }
 
   render() {
-    return (<div className={`page-content-inner${this.state.isViewDetail ? ' hidden' : ''}`}>
+    return (<div className={`page-content-inner`}>
       {this.renderHeader()}
       <div className="row">
         <div className="col-lg-12 col-md-12 col-sm-12">
@@ -81,9 +85,14 @@ class UserList extends React.Component<{}, thisState> {
               >
 
                 <TableHeaderColumn width="80" dataField="Name"
-                                   dataFormat={(r, data) => {
-                                     return <Link to={`users/${data.Id}`}> {data.Name}</Link>
+                                   dataFormat={(r, data: UserModel) => {
+                                     return data.UserName;
                                    }} dataSort={ true }>
+
+                  <TableHeaderColumn width="20" dataField="UserStatusId" dataAlign="center"
+                                     dataFormat={(r, data) => this.bindToggleUserStatusData(data)} dataSort={ true }>
+                    Is Active</TableHeaderColumn>
+
                   Name</TableHeaderColumn>
                 <TableHeaderColumn width="20" dataField="Action" dataAlign="center"
                                    dataFormat={(r, data) => this.bindActionData(data)} dataSort={ false }>
@@ -96,16 +105,79 @@ class UserList extends React.Component<{}, thisState> {
     </div>);
   }
 
-  private filterRequest(request: GetGridRequestModel) {
-
+  private bindToggleUserStatusData(data: UserModel) {
+    let isSA = (data.UserRoles && data.UserRoles.some(x => x.Role && x.Role.RoleType == RoleTypeEnums.SuperAdmin));
+    return (
+      <div className={`toggle-custom${
+        isSA ? ' disabled' : ''}`}>
+        <label className="toggle" data-on="ON" data-off="OFF">
+          <input type="checkbox"
+                 checked={data.UserStatusId == UserStatusEnums.Active}
+                 onChange={(v) => isSA ? null : this.toggleUserStatus(data, v.target.checked)}/>
+          <span className="button-checkbox"/>
+        </label>
+      </div>
+    );
   }
 
-  private delete(id: number) {
+  private async toggleUserStatus(data: UserModel, checked: boolean) {
+    data.UserStatusId = checked ? UserStatusEnums.Active : UserStatusEnums.Deactive;
+    let saveResult = await UserServiceInstance.ChangeUserStatus(data);
+    if (saveResult) {
+      if (saveResult.IsSuccess) {
+        noticeStore.dispatch(action_ShowNoticeSuccess());
+        store.dispatch(action_ChangeUserStatus(data));
+      }
+      else {
+        if (saveResult.ErrorCode == "DuplicateUserName") {
+        }
+        else {
+          noticeStore.dispatch(action_ShowNoticeError());
+        }
+      }
+    } else {
+      noticeStore.dispatch(action_ShowNoticeError());
+    }
+  }
 
+
+  private async filterRequest(request: GetGridRequestModel) {
+    let result = await UserServiceInstance.Filter(request);
+    store.dispatch(action_Filter(request, result));
+  }
+
+  private async delete(id: number) {
+    if (await SweetAlerts.show({
+        type: SweetAlertTypeEnums.Error,
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc muốn xóa người dùng này?',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        closeOnConfirm: true
+      }) == SweetAlertResultEnums.Confirm) {
+
+      let deleteResult = await UserServiceInstance.Delete({Id: id});
+      if (deleteResult) {
+        if (deleteResult.IsSuccess) {
+          noticeStore.dispatch(action_ShowNoticeSuccess());
+          let request = store.getState().GetGridRequest;
+          let result = await UserServiceInstance.Filter(request);
+          store.dispatch(action_Filter(request, result));
+        }
+        else {
+          noticeStore.dispatch(action_ShowNoticeError());
+        }
+      } else {
+        noticeStore.dispatch(action_ShowNoticeError());
+      }
+    }
   }
 
   private create() {
-
+    let model: UserModel = {
+      Id: 0
+    };
+    store.dispatch(action_ViewDetail(model));
   }
 
   private bindActionData(data: UserModel) {

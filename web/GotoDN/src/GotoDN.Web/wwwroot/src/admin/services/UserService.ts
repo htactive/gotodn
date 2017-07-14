@@ -4,6 +4,7 @@ import {UserModel} from "../../models/UserModel";
 import {LoginRequestModel} from "../../models/LoginRequestModel";
 import {LoginResponseModel} from "../../models/LoginResponseModel";
 import {GetGridRequestModel, GetGridResponseModel} from "../../commons/react-table";
+import {ObjectSavedResponseModel} from "../../models/ObjectSavedResponseModel";
 
 class UserService extends AdminServiceBase {
   async Filter(request:GetGridRequestModel):Promise<GetGridResponseModel>{
@@ -40,6 +41,24 @@ class UserService extends AdminServiceBase {
     return await super.executeFetch(url, false, _401Callback);
   }
 
+  public async Delete(request:UserModel):Promise<ObjectSavedResponseModel<UserModel>>{
+    let url = `${virtualPath}/user/delete`;
+    return await super.executeFetchPost(url, request);
+  }
+
+  public  async Get(id:number):Promise<UserModel>{
+    let url = `${virtualPath}/user/get?id=${id}`;
+    return await super.executeFetch(url);
+  }
+  async Create(model: UserModel): Promise<ObjectSavedResponseModel<UserModel>> {
+    let url = `${virtualPath}/user/create`;
+    return await super.executeFetchPost(url, model);
+  }
+
+  async ChangeUserStatus(model:UserModel):Promise<ObjectSavedResponseModel<UserModel>>{
+    let url = `${virtualPath}/user/change-user-status`;
+    return await super.executeFetchPost(url, model);
+  }
 }
 
 const UserServiceInstance = new UserService();

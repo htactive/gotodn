@@ -7,7 +7,6 @@ export interface  FieldStructureModel {
   Type: FieldStructureTypeEnums,
   PlaceHolder: string,
   FieldData?: any,
-  Size?: 12 | 6,
   ValidateRules?: ValidateRuleModel[]
 }
 
