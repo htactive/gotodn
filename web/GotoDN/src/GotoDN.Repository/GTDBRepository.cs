@@ -117,6 +117,42 @@ namespace GotoDN.Repository
 				(_CategoryLanguageRepository = ServiceProvider.GetService<ICategoryLanguageRepository>());
 			}
 		}
+		private IHTServiceRepository _HTServiceRepository;
+        public IHTServiceRepository HTServiceRepository 
+		{ 
+			get
+			{
+				return _HTServiceRepository ?? 
+				(_HTServiceRepository = ServiceProvider.GetService<IHTServiceRepository>());
+			}
+		}
+		private IHTServiceLanguageRepository _HTServiceLanguageRepository;
+        public IHTServiceLanguageRepository HTServiceLanguageRepository 
+		{ 
+			get
+			{
+				return _HTServiceLanguageRepository ?? 
+				(_HTServiceLanguageRepository = ServiceProvider.GetService<IHTServiceLanguageRepository>());
+			}
+		}
+		private IPlaceRepository _PlaceRepository;
+        public IPlaceRepository PlaceRepository 
+		{ 
+			get
+			{
+				return _PlaceRepository ?? 
+				(_PlaceRepository = ServiceProvider.GetService<IPlaceRepository>());
+			}
+		}
+		private IPlaceLanguageRepository _PlaceLanguageRepository;
+        public IPlaceLanguageRepository PlaceLanguageRepository 
+		{ 
+			get
+			{
+				return _PlaceLanguageRepository ?? 
+				(_PlaceLanguageRepository = ServiceProvider.GetService<IPlaceLanguageRepository>());
+			}
+		}
 		#endregion
     }
 	
@@ -134,6 +170,10 @@ namespace GotoDN.Repository
 			services.AddScoped<IUserRoleRepository, UserRoleRepository>();
 			services.AddScoped<ICategoryRepository, CategoryRepository>();
 			services.AddScoped<ICategoryLanguageRepository, CategoryLanguageRepository>();
+			services.AddScoped<IHTServiceRepository, HTServiceRepository>();
+			services.AddScoped<IHTServiceLanguageRepository, HTServiceLanguageRepository>();
+			services.AddScoped<IPlaceRepository, PlaceRepository>();
+			services.AddScoped<IPlaceLanguageRepository, PlaceLanguageRepository>();
 		}
     }
 }

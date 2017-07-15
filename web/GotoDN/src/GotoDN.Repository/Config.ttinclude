@@ -12,6 +12,10 @@ new EntityMetadataRender(){Name = "UserProfile"},
 new EntityMetadataRender(){Name = "UserRole"},
 new EntityMetadataRender(){Name = "Category"},
 new EntityMetadataRender(){Name = "CategoryLanguage"},
+new EntityMetadataRender(){Name = "HTService"},
+new EntityMetadataRender(){Name = "HTServiceLanguage"},
+new EntityMetadataRender(){Name = "Place"},
+new EntityMetadataRender(){Name = "PlaceLanguage"},
 };
 #>
 

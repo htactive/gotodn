@@ -132,4 +132,56 @@ namespace GotoDN.Repository
             return model.Id;
         }
 	}
+
+    public partial class HTServiceRepository : BaseRepository<HTService, GTDBEntities>, IHTServiceRepository
+    {
+        public HTServiceRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		protected override int GetKeyId(HTService model)
+        {
+            return model.Id;
+        }
+	}
+
+    public partial class HTServiceLanguageRepository : BaseRepository<HTServiceLanguage, GTDBEntities>, IHTServiceLanguageRepository
+    {
+        public HTServiceLanguageRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		protected override int GetKeyId(HTServiceLanguage model)
+        {
+            return model.Id;
+        }
+	}
+
+    public partial class PlaceRepository : BaseRepository<Place, GTDBEntities>, IPlaceRepository
+    {
+        public PlaceRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		protected override int GetKeyId(Place model)
+        {
+            return model.Id;
+        }
+	}
+
+    public partial class PlaceLanguageRepository : BaseRepository<PlaceLanguage, GTDBEntities>, IPlaceLanguageRepository
+    {
+        public PlaceLanguageRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		protected override int GetKeyId(PlaceLanguage model)
+        {
+            return model.Id;
+        }
+	}
 }

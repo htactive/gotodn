@@ -1740,7 +1740,7 @@ body.fixed-right-sidebar:not(.fixed-header) #right-sidebar.rstop {
   margin-left: 210px;
 }
 .page-content.right-sidebar-page {
-  margin-right: 210px;
+  /*margin-right: 210px;*/
 }
 .page-content.collapsed-sidebar {
   margin-left: 60px;

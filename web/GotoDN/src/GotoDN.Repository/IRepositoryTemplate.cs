@@ -42,4 +42,20 @@ namespace GotoDN.Repository
     public partial interface ICategoryLanguageRepository : IBaseRepository<CategoryLanguage>
     {
     }
+
+    public partial interface IHTServiceRepository : IBaseRepository<HTService>
+    {
+    }
+
+    public partial interface IHTServiceLanguageRepository : IBaseRepository<HTServiceLanguage>
+    {
+    }
+
+    public partial interface IPlaceRepository : IBaseRepository<Place>
+    {
+    }
+
+    public partial interface IPlaceLanguageRepository : IBaseRepository<PlaceLanguage>
+    {
+    }
 }

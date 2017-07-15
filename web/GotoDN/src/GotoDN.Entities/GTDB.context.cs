@@ -21,6 +21,10 @@ namespace GotoDN.Entities
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<CategoryLanguage> CategoryLanguage { get; set; }
+        public DbSet<HTService> HTService { get; set; }
+        public DbSet<HTServiceLanguage> HTServiceLanguage { get; set; }
+        public DbSet<Place> Place { get; set; }
+        public DbSet<PlaceLanguage> PlaceLanguage { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
