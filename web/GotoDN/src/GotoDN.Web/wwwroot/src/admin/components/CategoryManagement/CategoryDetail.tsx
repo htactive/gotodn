@@ -7,7 +7,8 @@ interface thisProps {
   SelectedCategory: CategoryModel,
   SelectedLanguage: LanguageEnums,
   ChangeSelectedLanguage: (l: LanguageEnums) => void,
-  OnCategoryLanguageChange: (destination: CategoryLanguageModel) => void
+  OnCategoryLanguageChange: (destination: CategoryLanguageModel) => void,
+  SaveCategory: (model: CategoryModel) => void,
 }
 
 class CategoryDetail extends React.Component<thisProps, {}> {
@@ -52,6 +53,28 @@ class CategoryDetail extends React.Component<thisProps, {}> {
                 className="fa fa-trash-o"/> Xóa
               </button>
 
+              <div className="btn-group dropup mr10 ml10">
+                <button type="button" className="btn btn-primary dropdown-toggle"
+                        data-toggle="dropdown" aria-expanded="false">
+                  Thêm ngôn ngữ
+                  <span className="caret"></span>
+                </button>
+                <ul className="dropdown-menu left animated fadeIn" role="menu">
+                  <li>
+                    <a href="#">Tiếng Anh</a>
+                  </li>
+                  <li>
+                    <a href="#">Tiếng Hàn</a>
+                  </li>
+                  <li>
+                    <a href="#">Tiếng Trung</a>
+                  </li>
+                  <li>
+                    <a href="#">Tiếng Pháp</a>
+                  </li>
+                </ul>
+              </div>
+
               <button className="btn btn-default pull-right"
                       onClick={() => this.discardChangesEditing()}>Làm lại
               </button>
@@ -93,7 +116,8 @@ class CategoryDetail extends React.Component<thisProps, {}> {
       return;
     }
     // if is valid, do submit here
-    console.log('congratulation! your form is valid, do submit now');
+    console.log('congratulation! your form is valid, do submit now ' + this.props.SelectedCategory);
+    this.props.SaveCategory && this.props.SaveCategory(this.props.SelectedCategory);
   }
 }
 

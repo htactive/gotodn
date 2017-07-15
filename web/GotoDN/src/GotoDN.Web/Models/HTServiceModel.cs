@@ -10,7 +10,9 @@ namespace GotoDN.Web.Models
         public int Id { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public int? CategoryId { get; set; }
 
+        public CategoryModel Category { get; set; }
         public List<HTServiceLanguageModel> HTServiceLanguages { get; set; }
     }
 
@@ -24,7 +26,7 @@ namespace GotoDN.Web.Models
 
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
-        public LanguageEnums Language { get; set; }
+        public LanguageEnums? Language { get; set; }
     
         public HTServiceModel HTService { get; set; }
         public ImageModel Image { get; set; }

@@ -5,7 +5,8 @@ import CategoryItem from "./CategoryItem";
 interface thisProps {
   Categories: CategoryModel[],
   SelectedCategory: CategoryModel,
-  ChangeSelectedCateogry: (model: CategoryModel) => void
+  ChangeSelectedCateogry: (model: CategoryModel) => void,
+  CreateCategory: () => void,
 }
 interface thisState {
 
@@ -15,6 +16,10 @@ class CategoryList extends React.Component<thisProps, thisState> {
   state: thisState = {};
 
   componentWillMount() {
+  }
+
+  private createCategory() {
+    this.props.CreateCategory && this.props.CreateCategory();
   }
 
   render() {
@@ -29,6 +34,13 @@ class CategoryList extends React.Component<thisProps, thisState> {
                           changeSelectedCategory={() => this.props.ChangeSelectedCateogry(x)}
             />) : null}
         </ul>
+        <hr/>
+        <div className="form-group">
+          <button className="btn btn-primary"
+                  onClick={() => this.createCategory()}><i
+            className="fa fa-plus"/> Thêm danh mục
+          </button>
+        </div>
       </div>
     );
   }

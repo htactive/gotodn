@@ -12,7 +12,8 @@ interface thisState {
 }
 class CategoryManagement extends React.Component<{}, thisState> {
   state: thisState = {
-    SelectedLanguage: LanguageEnums.Vietnamese
+    SelectedLanguage: LanguageEnums.Vietnamese,
+    Categories: [],
   };
 
   setState(state: thisState) {
@@ -25,6 +26,23 @@ class CategoryManagement extends React.Component<{}, thisState> {
         Categories: await CategoryServiceInstance.GetAll()
       });
     })();
+  }
+
+  private async createCategory() {
+    let result = await CategoryServiceInstance.CreateCategory();
+    if(result) {
+      if(this.state.Categories) {
+        this.state.Categories.push(result);
+        this.forceUpdate();
+      }
+    }
+  }
+
+  private async updateCategory(model: CategoryModel) {
+    let result = await CategoryServiceInstance.UpdateCategory(model);
+    if(result) {
+
+    }
   }
 
   render() {
@@ -46,6 +64,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
                   <CategoryList Categories={this.state.Categories}
                                 SelectedCategory={this.state.SelectedCategory}
                                 ChangeSelectedCateogry={(model) => this.setState({SelectedCategory: model})}
+                                CreateCategory={() => this.createCategory()}
                   />
                   <CategoryDetail SelectedCategory={this.state.SelectedCategory}
                                   SelectedLanguage={this.state.SelectedLanguage}
@@ -61,6 +80,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                     }
                                     this.forceUpdate();
                                   }}
+                                  SaveCategory={(model) => this.updateCategory(model)}
                   />
                 </div>
               </div>
@@ -70,6 +90,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
       </div>
     );
   }
+
 }
 
 

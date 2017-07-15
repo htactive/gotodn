@@ -74,20 +74,11 @@ namespace GotoDN.Web
             {
                 cf.CreateMap<Category, CategoryModel>();
                 cf.CreateMap<CategoryLanguage, CategoryLanguageModel>().ForMember(x => x.Category, opt => opt.Ignore());
+                cf.CreateMap<HTService, HTServiceModel>().ForMember(x => x.Category, opt => opt.Ignore());
+                cf.CreateMap<HTServiceLanguage, HTServiceLanguageModel>().ForMember(x => x.HTService, opt => opt.Ignore());
+                cf.CreateMap<Place, PlaceModel>().ForMember(x => x.HTService, opt => opt.Ignore());
+                cf.CreateMap<PlaceLanguage, PlaceLanguageModel>().ForMember(x => x.Place, opt => opt.Ignore());
 
-                cf.CreateMap<HTService, HTServiceModel>();
-                cf.CreateMap<HTServiceModel, HTService>();
-
-                cf.CreateMap<HTServiceLanguage, HTServiceLanguageModel>();
-                cf.CreateMap<HTServiceLanguageModel, HTServiceLanguage>();
-
-                cf.CreateMap<Place, PlaceModel>();
-                cf.CreateMap<PlaceModel, Place>();
-
-                cf.CreateMap<PlaceLanguage, PlaceLanguageModel>();
-                cf.CreateMap<PlaceLanguageModel, PlaceLanguage>();
-
-  
                 cf.CreateMap<Image, ImageModel>();
             });
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));

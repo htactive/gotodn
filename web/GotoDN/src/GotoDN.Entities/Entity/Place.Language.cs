@@ -19,7 +19,7 @@ namespace GotoDN.Entities
 
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
-        public LanguageEnums Language { get; set; }
+        public LanguageEnums? Language { get; set; }
 
         [ForeignKey("PlaceId")]
         public Place Place { get; set; }
