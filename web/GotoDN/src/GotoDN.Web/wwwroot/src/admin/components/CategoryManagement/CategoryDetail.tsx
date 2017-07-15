@@ -2,19 +2,15 @@ import * as React from 'react';
 import {CategoryModel} from "../../../models/CategoryModel";
 import {LanguageEnums} from "../../../commons/constant";
 import CategoryLanguageDetail from "./CategoryLanguageDetail";
-interface thisState {
-}
+import {CategoryLanguageModel} from "../../../models/CategoryLanguageModel";
 interface thisProps {
   SelectedCategory: CategoryModel,
-  SelectedLanguage: LanguageEnums
+  SelectedLanguage: LanguageEnums,
+  ChangeSelectedLanguage: (l: LanguageEnums) => void,
+  OnCategoryLanguageChange: (destination: CategoryLanguageModel) => void
 }
 
-class CategoryDetail extends React.Component<thisProps, thisState> {
-  state: thisState = {};
-
-  setState(state: thisState) {
-    super.setState(state);
-  }
+class CategoryDetail extends React.Component<thisProps, {}> {
 
   render() {
     let languages: { Language: LanguageEnums, Title: string }[] = [
@@ -30,25 +26,20 @@ class CategoryDetail extends React.Component<thisProps, thisState> {
             <div className="tabs mb20">
               <ul className="nav nav-tabs">
                 {
-                  languages.map(x =>
-                    <li
-                      className={(this.props.SelectedLanguage || LanguageEnums.Vietnamese) == x.Language ? 'active' : ''}>
-                      <a onClick={() => this.setState({
-                        SelectedLanguage: x.Language
-                      })}>{x.Title}</a>
-                    </li>)
+                  this.props.SelectedCategory.CategoryLanguages.map(x => <li
+                    className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
+                    <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
+                      {languages.filter(r => r.Language == x.Language)[0].Title}</a>
+                  </li>)
                 }
               </ul>
               <div className="tab-content">
                 {
-                  languages.map(lang => {
-                    let language = this.props.SelectedCategory.CategoryLanguages.filter(x => x.Language == lang.Language)[0];
-                    language = language || {
-                        Id: 0,
-                        Language: lang.Language
-                      };
-                    return <CategoryLanguageDetail IsSelected={lang.Language == this.props.SelectedLanguage}
-                                                   CategoryLanguage={language}
+                  this.props.SelectedCategory.CategoryLanguages.map(x => {
+                    return <CategoryLanguageDetail IsSelected={x.Language == this.props.SelectedLanguage}
+                                                   CategoryLanguage={x}
+                                                   OnObjectChange={(obj: CategoryLanguageModel) =>
+                                                     this.props.OnCategoryLanguageChange(obj)}
                     />
                   })
                 }
@@ -59,6 +50,13 @@ class CategoryDetail extends React.Component<thisProps, thisState> {
               <button className="btn btn-danger"
                       onClick={() => this.deleteCategory()}><i
                 className="fa fa-trash-o"/> Xóa
+              </button>
+
+              <button className="btn btn-default pull-right"
+                      onClick={() => this.discardChangesEditing()}>Làm lại
+              </button>
+              <button className="btn btn-primary pull-right"
+                      onClick={() => this.saveCategory()}>Lưu
               </button>
             </div>
           </div> :
@@ -81,7 +79,21 @@ class CategoryDetail extends React.Component<thisProps, thisState> {
   }
 
   private saveCategory() {
-
+    let isInvalid = false;
+    let firstInvalid: CategoryLanguageModel = null;
+    this.props.SelectedCategory.CategoryLanguages.forEach(x => {
+      x['__#validated#__'] = true;
+      if (x['__#isInvalid#__']) {
+        firstInvalid = firstInvalid || x;
+      }
+      isInvalid = isInvalid || x['__#isInvalid#__'];
+    });
+    if (isInvalid) {
+      this.props.ChangeSelectedLanguage(firstInvalid.Language);
+      return;
+    }
+    // if is valid, do submit here
+    console.log('congratulation! your form is valid, do submit now');
   }
 }
 

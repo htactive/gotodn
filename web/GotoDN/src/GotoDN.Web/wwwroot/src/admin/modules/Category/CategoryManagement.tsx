@@ -4,6 +4,7 @@ import {CategoryServiceInstance} from "../../services/CategoryService";
 import CategoryDetail from "../../components/CategoryManagement/CategoryDetail";
 import {CategoryModel} from "../../../models/CategoryModel";
 import {LanguageEnums} from "../../../commons/constant";
+import {CategoryLanguageModel} from "../../../models/CategoryLanguageModel";
 interface thisState {
   Categories?: CategoryModel[],
   SelectedCategory?: CategoryModel,
@@ -48,6 +49,18 @@ class CategoryManagement extends React.Component<{}, thisState> {
                   />
                   <CategoryDetail SelectedCategory={this.state.SelectedCategory}
                                   SelectedLanguage={this.state.SelectedLanguage}
+                                  ChangeSelectedLanguage={(language) => this.setState({
+                                    SelectedLanguage: language
+                                  })}
+                                  OnCategoryLanguageChange={(obj: CategoryLanguageModel) => {
+                                    for (let i = 0; i < this.state.SelectedCategory.CategoryLanguages.length; i++) {
+                                      if(this.state.SelectedCategory.CategoryLanguages[i].Language == obj.Language){
+                                        this.state.SelectedCategory.CategoryLanguages[i] = obj;
+                                        break;
+                                      }
+                                    }
+                                    this.forceUpdate();
+                                  }}
                   />
                 </div>
               </div>

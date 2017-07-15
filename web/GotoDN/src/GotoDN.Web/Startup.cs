@@ -73,10 +73,7 @@ namespace GotoDN.Web
             AutoMapper.Mapper.Initialize(cf =>
             {
                 cf.CreateMap<Category, CategoryModel>();
-                cf.CreateMap<CategoryModel, Category>();
-
-                cf.CreateMap<CategoryLanguage, CategoryLanguageModel>();
-                cf.CreateMap<CategoryLanguageModel, CategoryLanguage>();
+                cf.CreateMap<CategoryLanguage, CategoryLanguageModel>().ForMember(x => x.Category, opt => opt.Ignore());
 
                 cf.CreateMap<HTService, HTServiceModel>();
                 cf.CreateMap<HTServiceModel, HTService>();

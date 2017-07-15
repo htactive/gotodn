@@ -7,11 +7,12 @@ import {FieldStructureTypeEnums} from "../../../models/field-structure-model";
 import {ValidateRuleTypeEnums} from "../../../commons/constant";
 interface thisProps {
   CategoryLanguage: CategoryLanguageModel,
-  IsSelected?: boolean
+  IsSelected: boolean,
+  OnObjectChange: (obj: CategoryLanguageModel) => void
 }
 
 interface thisState {
-  EditingObject?: CategoryLanguageModel
+  EditingObjec1t?: CategoryLanguageModel
 }
 
 class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
@@ -22,25 +23,6 @@ class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
     super.setState(state);
   }
 
-  componentWillMount() {
-    this.componentWillReceiveProps(this.props);
-  }
-
-  componentWillReceiveProps(props: thisProps) {
-    if (props.CategoryLanguage) {
-      let editingObject = {...props.CategoryLanguage};
-      if (!this.state.EditingObject || this.state.EditingObject.Id != editingObject.Id) {
-        this.setState({
-          EditingObject: editingObject,
-        });
-      }
-    } else {
-      this.setState({
-        EditingObject: null
-      });
-    }
-  }
-
   render() {
     return (
       <div className={`tab-pane fade${this.props.IsSelected ? ' active in' : ''}`}>
@@ -48,21 +30,14 @@ class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
           <DynamicPanelComponent
             ref={(r) => this.editingForm = r}
             FormStructure={this.getFormStructure()}
-            onFieldValueChange={(obj) => this.onFieldValueChange(obj)}
-            Object={this.state.EditingObject}
+            onFieldValueChange={(obj) => {
+              this.props.OnObjectChange(obj)
+            }}
+            Object={this.props.CategoryLanguage}
+            onValidationChange={(isInvalid) => {
+              this.props.CategoryLanguage['__#isInvalid#__'] = isInvalid
+            }}
           /> : null}
-        <div className="form-horizontal">
-          <fieldset>
-            <div className="form-group col-lg-12 p0">
-              <button className="btn btn-default pull-right"
-                      onClick={() => this.discardChangesEditing()}>Làm lại
-              </button>
-              <button className="btn btn-primary pull-right"
-                      onClick={() => this.saveCategory()}>Lưu
-              </button>
-            </div>
-          </fieldset>
-        </div>
       </div>);
   }
 
@@ -106,18 +81,6 @@ class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
       allForms.push(inforForm);
     }
     return allForms;
-  }
-
-  private onFieldValueChange(obj: any) {
-    this.setState({
-      EditingObject: obj
-    });
-  }
-
-  private discardChangesEditing() {
-    this.setState({
-      EditingObject: {...this.props.CategoryLanguage}
-    });
   }
 
   private saveCategory() {

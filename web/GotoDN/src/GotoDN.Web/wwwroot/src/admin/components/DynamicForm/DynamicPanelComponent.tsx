@@ -78,9 +78,7 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
           } else {
             fv.Value = object[f.FieldStructure.FieldName];
           }
-          if (object['__#validated#__']) {
-            isValid = this.validateFieldValue(fv, f.FieldStructure) && isValid;
-          }
+          isValid = this.validateFieldValue(fv, f.FieldStructure, !object['__#validated#__']) && isValid;
           fieldValues.push(fv);
         }
       });
@@ -90,7 +88,6 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
   }
 
   private onFieldValueChange(fv: FieldValueModel) {
-    // this.props.Object['__#validated#__'] = true;
     let cfv: FieldValueModel = this.state.FieldValues.filter(x => x.FieldStructure.FieldName == fv.FieldStructure.FieldName)[0];
     cfv.Value = fv.Value;
     cfv.ValueNumber = fv.ValueNumber;
@@ -106,16 +103,21 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
         object[fieldStructure.FieldName] = cfv.Value;
       }
     }
+    let isInvalid = this.isFormValid();
+    this.props.onValidationChange && this.props.onValidationChange(isInvalid);
     this.props.onFieldValueChange(object);
   }
 
-  private validateFieldValue(fv: FieldValueModel, fieldStructure: FieldStructureModel): boolean {
+  private validateFieldValue(fv: FieldValueModel, fieldStructure: FieldStructureModel, forDummy?: boolean): boolean {
     let validateRules = fieldStructure.ValidateRules;
     for (let i = 0; i < validateRules.length; i++) {
       let rule = validateRules[i];
       switch (rule.Type) {
         case ValidateRuleTypeEnums.Required:
           if (!Validation.validateNull(fv.Value)) {
+            if (forDummy) {
+              return false;
+            }
             fv.ValidateResult.IsInvalid = true;
             fv.ValidateResult.InvalidMessage = rule.InValidMessage;
             return false;
@@ -124,6 +126,9 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
         case ValidateRuleTypeEnums.MinLength:
           let min = parseInt(rule.RuleData);
           if (!Validation.validateLength(fv.Value, min)) {
+            if (forDummy) {
+              return false;
+            }
             fv.ValidateResult.IsInvalid = true;
             fv.ValidateResult.InvalidMessage = rule.InValidMessage;
             return false;
@@ -132,6 +137,9 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
         case ValidateRuleTypeEnums.MaxLength:
           let max = parseInt(rule.RuleData);
           if (!Validation.validateLength(fv.Value, max, true)) {
+            if (forDummy) {
+              return false;
+            }
             fv.ValidateResult.IsInvalid = true;
             fv.ValidateResult.InvalidMessage = rule.InValidMessage;
             return false;
@@ -139,6 +147,9 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
           break;
         case ValidateRuleTypeEnums.IsAnEmail:
           if (!Validation.validateEmail(fv.Value)) {
+            if (forDummy) {
+              return false;
+            }
             fv.ValidateResult.IsInvalid = true;
             fv.ValidateResult.InvalidMessage = rule.InValidMessage;
             return false;
@@ -146,6 +157,9 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
           break;
         case ValidateRuleTypeEnums.CustomExpression:
           if (!Validation.validateRegex(fv.Value, rule.RuleData)) {
+            if (forDummy) {
+              return false;
+            }
             fv.ValidateResult.IsInvalid = true;
             fv.ValidateResult.InvalidMessage = rule.InValidMessage;
             return false;
@@ -154,6 +168,9 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
         case ValidateRuleTypeEnums.MinValue:
           let minValue = parseInt(rule.RuleData);
           if (fv.Value < minValue) {
+            if (forDummy) {
+              return false;
+            }
             fv.ValidateResult.IsInvalid = true;
             fv.ValidateResult.InvalidMessage = rule.InValidMessage;
             return false;
@@ -162,6 +179,9 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
         case ValidateRuleTypeEnums.MaxValue:
           let maxValue = parseInt(rule.RuleData);
           if (fv.Value > maxValue) {
+            if (forDummy) {
+              return false;
+            }
             fv.ValidateResult.IsInvalid = true;
             fv.ValidateResult.InvalidMessage = rule.InValidMessage;
             return false;
@@ -169,6 +189,9 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
           break;
         case ValidateRuleTypeEnums.NotEquals:
           if (fv.Value === rule.RuleData) {
+            if (forDummy) {
+              return false;
+            }
             fv.ValidateResult.IsInvalid = true;
             fv.ValidateResult.InvalidMessage = rule.InValidMessage;
             return false;
