@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication;
 using HTActive.Core;
 using GotoDN.Web.Models;
+using System.Reflection;
 
 namespace GotoDN.Web
 {
@@ -71,13 +72,12 @@ namespace GotoDN.Web
         {
             AutoMapper.Mapper.Initialize(cf =>
             {
-                cf.ForAllPropertyMaps(s => true, (s, c) => c.Condition((source,dest,sMember,dMember) =>
-                {
-                    return sMember == null || sMember.GetType().Namespace == "System";
-                }));
-
                 cf.CreateMap<Category, CategoryModel>();
+                cf.CreateMap<CategoryModel, Category>();
+
                 cf.CreateMap<CategoryLanguage, CategoryLanguageModel>();
+                cf.CreateMap<CategoryLanguageModel, CategoryLanguage>();
+
                 cf.CreateMap<Image, ImageModel>();
             });
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));

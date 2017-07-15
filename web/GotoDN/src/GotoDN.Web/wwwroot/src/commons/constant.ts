@@ -6,9 +6,9 @@ export const AdminRoutePath = {
   Index: `${virtualPath}/`,
   Login: `${virtualPath}/login`,
   Error403Page: `${virtualPath}/access-denied`,
-  Dashboard:`${virtualPath}/dashboard`,
-  UserManagement:`${virtualPath}/users`,
-  CategoryManagement:`${virtualPath}/categories`,
+  Dashboard: `${virtualPath}/dashboard`,
+  UserManagement: `${virtualPath}/users`,
+  CategoryManagement: `${virtualPath}/categories`,
 
 };
 
@@ -174,4 +174,9 @@ export enum LoginResponseEnums
   ErrorCaptcha = 2,
   WasBanned = 3,
   DuplicateUserName = 4,
+}
+
+export enum LanguageEnums{
+  Vietnamese = 1,
+  English = 2
 }

@@ -2,6 +2,10 @@
   position: inherit;
 }
 
+a {
+  cursor: pointer;
+}
+
 .page-sidebar .side-nav .nav > li a i.icon {
   margin-right: 0px;
   width: 35px;
@@ -416,10 +420,11 @@ div.toggle-custom.disabled label.toggle {
 div.toggle-custom.disabled label.toggle input[type="checkbox"]:checked + .button-checkbox {
   border-color: #e3e3e3;
 }
+
 div.toggle-custom.disabled label.toggle input[type="checkbox"]:checked + .button-checkbox:after,
 div.toggle-custom.disabled label.toggle input[type="radio"]:checked + .button-checkbox:after,
 div.toggle-custom.disabled label.toggle input[type="checkbox"]:checked + .button-radio:after,
-div.toggle-custom.disabled label.toggle input[type="radio"]:checked + .button-radio:after{
+div.toggle-custom.disabled label.toggle input[type="radio"]:checked + .button-radio:after {
 
   background: #e3e3e3;
 }

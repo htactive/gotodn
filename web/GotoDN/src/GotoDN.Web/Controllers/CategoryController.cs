@@ -20,25 +20,15 @@ namespace GotoDN.Web.Controllers
 
         [HttpGet, Route("get-all")]
         [AllowAnonymous]
-        public List<CategoryModel> GetAll()
+        public List<Category> GetAll()
         {
             var entities = this.HTRepository.CategoryRepository.GetAll()
                 .Include("CategoryLanguages.Image")
                 .Take(1000).ToList();
+            return entities;
+            //var models = entities.Select(AutoMapper.Mapper.Map<Category, CategoryModel>).ToList();
 
-            var models = entities.Select(x =>
-            AutoMapper.Mapper.Map<Category, CategoryModel>(x, option =>
-            {
-                option.AfterMap((entity, model) =>
-                {
-                    model.CategoryLanguages = entity.CategoryLanguages.Select(m => AutoMapper.Mapper.Map<CategoryLanguage, CategoryLanguageModel>(m, opt =>
-                    {
-                        opt.AfterMap((en, mo) => mo.Image = AutoMapper.Mapper.Map<Image, ImageModel>(en.Image));
-                    })).ToList();
-                });
-            })).ToList();
-
-            return models;
+            //return models;
         }
     }
 }
