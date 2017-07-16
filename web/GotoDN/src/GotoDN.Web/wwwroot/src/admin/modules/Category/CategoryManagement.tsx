@@ -30,8 +30,8 @@ class CategoryManagement extends React.Component<{}, thisState> {
 
   private async createCategory() {
     let result = await CategoryServiceInstance.CreateCategory();
-    if(result) {
-      if(this.state.Categories) {
+    if (result) {
+      if (this.state.Categories) {
         this.state.Categories.push(result);
         this.forceUpdate();
       }
@@ -40,8 +40,19 @@ class CategoryManagement extends React.Component<{}, thisState> {
 
   private async updateCategory(model: CategoryModel) {
     let result = await CategoryServiceInstance.UpdateCategory(model);
-    if(result) {
+    if (result) {
 
+    }
+  }
+
+  private async deleteCategory(Id: number) {
+    let result = await CategoryServiceInstance.DeleteCategory(Id);
+    if (result) {
+      this.setState({
+        Categories: this.state.Categories.filter(x => x.Id != Id),
+        SelectedCategory: null,
+        SelectedLanguage: null
+      });
     }
   }
 
@@ -73,7 +84,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                   })}
                                   OnCategoryLanguageChange={(obj: CategoryLanguageModel) => {
                                     for (let i = 0; i < this.state.SelectedCategory.CategoryLanguages.length; i++) {
-                                      if(this.state.SelectedCategory.CategoryLanguages[i].Language == obj.Language){
+                                      if (this.state.SelectedCategory.CategoryLanguages[i].Language == obj.Language) {
                                         this.state.SelectedCategory.CategoryLanguages[i] = obj;
                                         break;
                                       }
@@ -81,6 +92,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                     this.forceUpdate();
                                   }}
                                   SaveCategory={(model) => this.updateCategory(model)}
+                                  DeleteCategory={(Id: number) => this.deleteCategory(Id)}
                   />
                 </div>
               </div>
@@ -90,7 +102,6 @@ class CategoryManagement extends React.Component<{}, thisState> {
       </div>
     );
   }
-
 }
 
 

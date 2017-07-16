@@ -48,7 +48,7 @@ namespace GotoDN.Web.Controllers
 
         [HttpPost, Route("delete-category")]
         [AllowAnonymous]
-        public bool DeleteCategory(int Id)
+        public bool DeleteCategory([FromBody]int Id)
         {
             var entity = this.HTRepository.CategoryRepository.GetAll()
                 .FirstOrDefault(x => x.Id == Id);

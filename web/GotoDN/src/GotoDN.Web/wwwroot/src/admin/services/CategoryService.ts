@@ -17,6 +17,11 @@ class CategoryService extends AdminServiceBase {
     let url = `${virtualPath}/category/update-category`;
     return await super.executeFetchPost(url, model);
   }
+
+  async DeleteCategory(Id: number): Promise<boolean> {
+    let url = `${virtualPath}/category/delete-category`;
+    return await super.executeFetchPost(url, Id);
+  }
 }
 
 const CategoryServiceInstance = new CategoryService();

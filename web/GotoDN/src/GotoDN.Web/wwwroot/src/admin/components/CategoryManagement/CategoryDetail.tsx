@@ -9,9 +9,13 @@ interface thisProps {
   ChangeSelectedLanguage: (l: LanguageEnums) => void,
   OnCategoryLanguageChange: (destination: CategoryLanguageModel) => void,
   SaveCategory: (model: CategoryModel) => void,
+  DeleteCategory: (Id: number) => void,
 }
 
 class CategoryDetail extends React.Component<thisProps, {}> {
+
+  componentWillReceiveProps(props: thisProps) {
+  }
 
   render() {
     let languages: { Language: LanguageEnums, Title: string }[] = [
@@ -48,13 +52,17 @@ class CategoryDetail extends React.Component<thisProps, {}> {
             </div>
             <hr/>
             <div className="form-group">
-              <button className="btn btn-danger"
+              <button className="btn btn-danger pull-right"
                       onClick={() => this.deleteCategory()}><i
                 className="fa fa-trash-o"/> Xóa
               </button>
 
+              <button className="btn btn-primary"
+                      onClick={() => this.saveCategory()}>Lưu
+              </button>
+
               <div className="btn-group dropup mr10 ml10">
-                <button type="button" className="btn btn-primary dropdown-toggle"
+                <button type="button" className="btn btn-success dropdown-toggle"
                         data-toggle="dropdown" aria-expanded="false">
                   Thêm ngôn ngữ
                   <span className="caret"></span>
@@ -75,12 +83,10 @@ class CategoryDetail extends React.Component<thisProps, {}> {
                 </ul>
               </div>
 
-              <button className="btn btn-default pull-right"
+              <button className="btn btn-default pull-right hidden"
                       onClick={() => this.discardChangesEditing()}>Làm lại
               </button>
-              <button className="btn btn-primary pull-right"
-                      onClick={() => this.saveCategory()}>Lưu
-              </button>
+
             </div>
           </div> :
           <div className="col-lg-12 col-sm-12 form-horizontal">
@@ -94,7 +100,7 @@ class CategoryDetail extends React.Component<thisProps, {}> {
   }
 
   private deleteCategory() {
-
+    this.props.DeleteCategory && this.props.DeleteCategory(this.props.SelectedCategory.Id);
   }
 
   private discardChangesEditing() {
