@@ -35,30 +35,32 @@ class CategoryDetail extends React.Component<thisProps, {}> {
             <div className="tabs mb20">
               <ul className="nav nav-tabs">
                 {
-                  this.props.SelectedCategory.CategoryLanguages.map(x => <li
-                    className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
-                    <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
-                      {languages.filter(r => r.Language == x.Language)[0].Title}
-                      &nbsp;
-                      &nbsp;
-                      {x.Language == LanguageEnums.Vietnamese ?
-                        null : <a onClick={() => this.props.DeleteCategoryLanguage
-                        && this.props.DeleteCategoryLanguage(x.Id)}
-                        style={{background:'transparent', border:'transparent', boxShadow:'none'}}
-                        >
-                          <i className="fa fa-remove"/>
-                        </a>}
-                    </a>
-                  </li>)
+                  this.props.SelectedCategory.CategoryLanguages.map(x =>
+                    <li key={x.Id}
+                        className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
+                      <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
+                        {languages.filter(r => r.Language == x.Language)[0].Title}
+                        &nbsp;
+                        &nbsp;
+                        {x.Language == LanguageEnums.Vietnamese ?
+                          null : <span onClick={() => this.props.DeleteCategoryLanguage
+                          && this.props.DeleteCategoryLanguage(x.Id)}
+                          >
+                            <i className="fa fa-remove"/>
+                          </span>}
+                      </a>
+                    </li>)
                 }
               </ul>
               <div className="tab-content">
                 {
                   this.props.SelectedCategory.CategoryLanguages.map(x => {
-                    return <CategoryLanguageDetail IsSelected={x.Language == this.props.SelectedLanguage}
-                                                   CategoryLanguage={x}
-                                                   OnObjectChange={(obj: CategoryLanguageModel) =>
-                                                     this.props.OnCategoryLanguageChange(obj)}
+                    return <CategoryLanguageDetail
+                      key={x.Id}
+                      IsSelected={x.Language == this.props.SelectedLanguage}
+                      CategoryLanguage={x}
+                      OnObjectChange={(obj: CategoryLanguageModel) =>
+                        this.props.OnCategoryLanguageChange(obj)}
                     />
                   })
                 }

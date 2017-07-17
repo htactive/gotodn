@@ -5,7 +5,10 @@ import HTServiceDetail from "../../components/ServiceManagement/ServiceDetail";
 import {HTServiceModel} from "../../../models/HTServiceModel";
 import {LanguageEnums} from "../../../commons/constant";
 import {HTServiceLanguageModel} from "../../../models/HTServiceLanguageModel";
+import {CategoryModel} from "../../../models/CategoryModel";
+import {CategoryServiceInstance} from "../../services/CategoryService";
 interface thisState {
+  Categories?: CategoryModel[],
   HTServices?: HTServiceModel[],
   SelectedHTService?: HTServiceModel,
   SelectedLanguage?: LanguageEnums
@@ -26,6 +29,11 @@ class HTServiceManagement extends React.Component<{}, thisState> {
         HTServices: await HTServiceInstance.GetAll()
       });
     })();
+    (async () => {
+      this.setState({
+        Categories: await CategoryServiceInstance.GetAll()
+      });
+    })();
   }
 
   private async createHTService() {
@@ -42,8 +50,8 @@ class HTServiceManagement extends React.Component<{}, thisState> {
     }
   }
 
-  private async updateHTService(model: HTServiceModel) {
-    let result = await HTServiceInstance.UpdateHTService(model);
+  private async updateHTService() {
+    let result = await HTServiceInstance.UpdateHTService(this.state.SelectedHTService);
     if (result) {
 
     }
@@ -87,6 +95,11 @@ class HTServiceManagement extends React.Component<{}, thisState> {
     }
   }
 
+  private ClickSlectCategory(Id: number) {
+    this.state.SelectedHTService.CategoryId = Id;
+    this.forceUpdate();
+  }
+
   render() {
     return (
       <div className="page-content-wrapper">
@@ -104,31 +117,33 @@ class HTServiceManagement extends React.Component<{}, thisState> {
               <div className="panel panel-default plain toggle panelMove">
                 <div className="panel-body">
                   <HTServiceList HTServices={this.state.HTServices}
-                                SelectedHTService={this.state.SelectedHTService}
-                                ChangeSelectedCateogry={(model) => this.setState({
-                                  SelectedHTService: model,
-                                  SelectedLanguage: LanguageEnums.Vietnamese,
-                                })}
-                                CreateHTService={() => this.createHTService()}
+                                 SelectedHTService={this.state.SelectedHTService}
+                                 ChangeSelectedService={(model) => this.setState({
+                                   SelectedHTService: model,
+                                   SelectedLanguage: LanguageEnums.Vietnamese,
+                                 })}
+                                 CreateHTService={() => this.createHTService()}
                   />
                   <HTServiceDetail SelectedHTService={this.state.SelectedHTService}
-                                  SelectedLanguage={this.state.SelectedLanguage}
-                                  ChangeSelectedLanguage={(language) => this.setState({
-                                    SelectedLanguage: language,
-                                  })}
-                                  OnHTServiceLanguageChange={(obj: HTServiceLanguageModel) => {
-                                    for (let i = 0; i < this.state.SelectedHTService.HTServiceLanguages.length; i++) {
-                                      if (this.state.SelectedHTService.HTServiceLanguages[i].Language == obj.Language) {
-                                        this.state.SelectedHTService.HTServiceLanguages[i] = obj;
-                                        break;
-                                      }
-                                    }
-                                    this.forceUpdate();
-                                  }}
-                                  SaveHTService={(model) => this.updateHTService(model)}
-                                  DeleteHTService={(Id: number) => this.deleteHTService(Id)}
-                                  AddHTServiceLanguage={(lang: LanguageEnums) => this.addHTServiceLanguage(lang)}
-                                  DeleteHTServiceLanguage={(Id: number) => this.deleteHTServiceLanguage(Id)}
+                                   SelectedLanguage={this.state.SelectedLanguage}
+                                   ChangeSelectedLanguage={(language) => this.setState({
+                                     SelectedLanguage: language,
+                                   })}
+                                   OnHTServiceLanguageChange={(obj: HTServiceLanguageModel) => {
+                                     for (let i = 0; i < this.state.SelectedHTService.HTServiceLanguages.length; i++) {
+                                       if (this.state.SelectedHTService.HTServiceLanguages[i].Language == obj.Language) {
+                                         this.state.SelectedHTService.HTServiceLanguages[i] = obj;
+                                         break;
+                                       }
+                                     }
+                                     this.forceUpdate();
+                                   }}
+                                   SaveHTService={() => this.updateHTService()}
+                                   DeleteHTService={(Id: number) => this.deleteHTService(Id)}
+                                   AddHTServiceLanguage={(lang: LanguageEnums) => this.addHTServiceLanguage(lang)}
+                                   DeleteHTServiceLanguage={(Id: number) => this.deleteHTServiceLanguage(Id)}
+                                   Categories={this.state.Categories || []}
+                                   ClickSlectCategory={(Id) => this.ClickSlectCategory(Id)}
                   />
                 </div>
               </div>

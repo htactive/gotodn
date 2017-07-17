@@ -40,7 +40,7 @@ class Header extends React.Component<any, thisState> {
                 <li>
                   <div className="toggle-custom">
                     <label className="toggle" data-on="ON" data-off="OFF">
-                      <input type="checkbox" id="fixed-header-toggle" name="fixed-header-toggle" checked/>
+                      <input type="checkbox" id="fixed-header-toggle" name="fixed-header-toggle" defaultChecked={true}/>
                       <span className="button-checkbox"></span>
                     </label>
                     <label htmlFor="fixed-header-toggle">Fixed header</label>
@@ -49,7 +49,7 @@ class Header extends React.Component<any, thisState> {
                 <li>
                   <div className="toggle-custom">
                     <label className="toggle" data-on="ON" data-off="OFF">
-                      <input type="checkbox" id="fixed-left-sidebar" name="fixed-left-sidebar" checked/>
+                      <input type="checkbox" id="fixed-left-sidebar" name="fixed-left-sidebar" defaultChecked={true}/>
                       <span className="button-checkbox"></span>
                     </label>
                     <label htmlFor="fixed-left-sidebar">Fixed Left Sidebar</label>

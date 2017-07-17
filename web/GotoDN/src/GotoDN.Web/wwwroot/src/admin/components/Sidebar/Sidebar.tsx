@@ -143,7 +143,7 @@ class Sidebar extends React.Component<any, thisState> {
 
   private renderMenuItem(menuItem: LeftSideBarMenuItemModel) {
     return (
-      <li>
+      <li key={menuItem.Text}>
         <Link to={menuItem.LinkTo} activeClassName="active">
           {menuItem.Icon ?
             <i className={`icon ${menuItem.Icon}`}/> : null}
