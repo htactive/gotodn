@@ -40,6 +40,16 @@ namespace GotoDN.Web.Controllers
             var entity = new Category();
             entity.CreatedDate = Common.DateTimeHelper.GetDateTimeNow();
             entity.UpdatedDate = Common.DateTimeHelper.GetDateTimeNow();
+            entity.CategoryLanguages = new List<CategoryLanguage>()
+            {
+                new CategoryLanguage()
+                {
+                    Title = "Chưa đặt tên",
+                    Language = LanguageEnums.Vietnamese,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                }
+            };
 
             this.HTRepository.CategoryRepository.Save(entity);
             this.HTRepository.Commit();
@@ -74,6 +84,7 @@ namespace GotoDN.Web.Controllers
                 if (en != null)
                 {
                     item.Title = en.Title;
+                    item.ImageId = en.Image != null ? en.Image.Id : (int?)null;
                 }
             }
 
@@ -82,5 +93,42 @@ namespace GotoDN.Web.Controllers
             return true;
         }
 
+
+        [HttpPost, Route("add-language")]
+        [AllowAnonymous]
+        public CategoryLanguageModel AddLanguage([FromBody]CategoryLanguageModel model)
+        {
+            if (model == null) return null;
+            var CatEntity = this.HTRepository.CategoryRepository.GetAll()
+                .FirstOrDefault(x => x.Id == model.CategoryId.GetValueOrDefault());
+            if (CatEntity == null) return null;
+            if (CatEntity.CategoryLanguages == null) CatEntity.CategoryLanguages = new List<CategoryLanguage>();
+
+            var LangEntity = new CategoryLanguage();
+            LangEntity.CategoryId = model.CategoryId;
+            LangEntity.Language = model.Language;
+            LangEntity.Title = model.Title;
+            LangEntity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+            LangEntity.CreatedDate = DateTimeHelper.GetDateTimeNow();
+
+            CatEntity.CategoryLanguages.Add(LangEntity);
+            this.HTRepository.CategoryRepository.Save(CatEntity);
+            this.HTRepository.Commit();
+
+            return AutoMapper.Mapper.Map<CategoryLanguage, CategoryLanguageModel>(LangEntity); ;
+        }
+
+        [HttpPost, Route("delete-language")]
+        [AllowAnonymous]
+        public bool DeleteLanguage([FromBody]int Id)
+        {
+            var entity = this.HTRepository.CategoryLanguageRepository.GetAll()
+                .FirstOrDefault(x => x.Id == Id);
+            if (entity == null) return false;
+
+            this.HTRepository.CategoryLanguageRepository.Delete(entity);
+            this.HTRepository.Commit();
+            return true;
+        }
     }
 }

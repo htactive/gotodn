@@ -41,7 +41,7 @@ namespace GotoDN.Web.Controllers
             return Mappers.Mapper.ToModel(image);
         }
 
-        [Route("upload-new-image-for-common"), HttpPost]
+        [Route("upload-new-image"), HttpPost]
         [AllowAnonymous]
         public async Task<ImageModel> UploadNewImageForCommon(IFormFile file)
         {

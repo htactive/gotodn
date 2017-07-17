@@ -77,7 +77,22 @@ class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
           ]
         }
       };
+
+      let f_Image: DynamicFieldModel = {
+        Priority: 2,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Icon',
+          FieldName: 'Image',
+          PlaceHolder: '',
+          FieldData: {},
+          Type: FieldStructureTypeEnums.SingleImage,
+          ValidateRules: []
+        }
+      };
       inforForm.DynamicFields.push(f_Title);
+      inforForm.DynamicFields.push(f_Image);
       allForms.push(inforForm);
     }
     return allForms;

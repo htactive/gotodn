@@ -1,6 +1,7 @@
 import {virtualPath} from "../../commons/constant";
 import {AdminServiceBase} from "./admin-service-base";
 import {CategoryModel} from "../../models/CategoryModel";
+import {CategoryLanguageModel} from "../../models/CategoryLanguageModel";
 
 class CategoryService extends AdminServiceBase {
   async GetAll(): Promise<CategoryModel[]> {
@@ -20,6 +21,16 @@ class CategoryService extends AdminServiceBase {
 
   async DeleteCategory(Id: number): Promise<boolean> {
     let url = `${virtualPath}/category/delete-category`;
+    return await super.executeFetchPost(url, Id);
+  }
+
+  async AddLanguage(model: CategoryLanguageModel): Promise<CategoryLanguageModel> {
+    let url = `${virtualPath}/category/add-language`;
+    return await super.executeFetchPost(url, model);
+  }
+
+  async DeleteLanguage(Id: number): Promise<boolean> {
+    let url = `${virtualPath}/category/delete-language`;
     return await super.executeFetchPost(url, Id);
   }
 }

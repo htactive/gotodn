@@ -31,7 +31,9 @@ namespace GotoDN.Common
     {
         Vietnamese =1,
         English = 2,
-
+        Chinese = 3,
+        Japanese = 4,
+        Korean = 5,
+        France = 6,
     }
-
 }

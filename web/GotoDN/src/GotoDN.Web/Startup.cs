@@ -79,7 +79,13 @@ namespace GotoDN.Web
                 cf.CreateMap<Place, PlaceModel>().ForMember(x => x.HTService, opt => opt.Ignore());
                 cf.CreateMap<PlaceLanguage, PlaceLanguageModel>().ForMember(x => x.Place, opt => opt.Ignore());
 
-                cf.CreateMap<Image, ImageModel>();
+                cf.CreateMap<Image, ImageModel>().AfterMap((entity, model) =>
+                {
+                    if (!string.IsNullOrEmpty(entity.S3FileKey))
+                    {
+                        model.Url = string.Format("https://s3-ap-southeast-1.amazonaws.com/dfwresource/{0}", entity.S3FileKey);
+                    }
+                });
             });
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();

@@ -33,6 +33,10 @@ class CategoryManagement extends React.Component<{}, thisState> {
     if (result) {
       if (this.state.Categories) {
         this.state.Categories.push(result);
+        this.setState({
+          SelectedCategory: result,
+          SelectedLanguage: result.CategoryLanguages ? result.CategoryLanguages[0].Language : LanguageEnums.Vietnamese,
+        })
         this.forceUpdate();
       }
     }
@@ -53,6 +57,33 @@ class CategoryManagement extends React.Component<{}, thisState> {
         SelectedCategory: null,
         SelectedLanguage: null
       });
+    }
+  }
+
+  private async addCategoryLanguage(lang: LanguageEnums) {
+    let categoryLanguage: CategoryLanguageModel = {
+      Id: 0,
+      Title: "",
+      CategoryId: this.state.SelectedCategory.Id,
+      Language: lang,
+    };
+
+    let result = await CategoryServiceInstance.AddLanguage(categoryLanguage);
+    if (result) {
+      this.state.SelectedCategory.CategoryLanguages.push(result);
+      this.setState({
+        SelectedLanguage: lang,
+      });
+    }
+  }
+
+  private async deleteCategoryLanguage(Id: number) {
+    let result = await CategoryServiceInstance.DeleteLanguage(Id);
+    if (result) {
+      this.state.SelectedCategory.CategoryLanguages = this.state.SelectedCategory.CategoryLanguages
+        .filter(x => x.Id != Id);
+      this.setState({SelectedLanguage: LanguageEnums.Vietnamese})
+      this.forceUpdate();
     }
   }
 
@@ -93,6 +124,8 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                   }}
                                   SaveCategory={(model) => this.updateCategory(model)}
                                   DeleteCategory={(Id: number) => this.deleteCategory(Id)}
+                                  AddCategoryLanguage={(lang: LanguageEnums) => this.addCategoryLanguage(lang)}
+                                  DeleteCategoryLanguage={(Id: number) => this.deleteCategoryLanguage(Id)}
                   />
                 </div>
               </div>

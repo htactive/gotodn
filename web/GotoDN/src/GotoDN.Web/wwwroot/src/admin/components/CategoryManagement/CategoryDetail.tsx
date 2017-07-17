@@ -10,18 +10,22 @@ interface thisProps {
   OnCategoryLanguageChange: (destination: CategoryLanguageModel) => void,
   SaveCategory: (model: CategoryModel) => void,
   DeleteCategory: (Id: number) => void,
+  AddCategoryLanguage: (lang: LanguageEnums) => void,
+  DeleteCategoryLanguage: (Id: number) => void,
 }
 
 class CategoryDetail extends React.Component<thisProps, {}> {
 
-  componentWillReceiveProps(props: thisProps) {
-  }
-
   render() {
     let languages: { Language: LanguageEnums, Title: string }[] = [
       {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
-      {Language: LanguageEnums.English, Title: 'Tiếng Anh'}
+      {Language: LanguageEnums.English, Title: 'Tiếng Anh'},
+      {Language: LanguageEnums.France, Title: 'Tiếng Pháp'},
+      {Language: LanguageEnums.Chinese, Title: 'Tiếng Trung'},
+      {Language: LanguageEnums.Japanese, Title: 'Tiếng Nhật'},
+      {Language: LanguageEnums.Korean, Title: 'Tiếng Hàn'},
     ];
+
     return (
       <div className="col-lg-8 cate-right-form">
         <h3>Xem thông tin chi tiết danh mục</h3>
@@ -34,7 +38,17 @@ class CategoryDetail extends React.Component<thisProps, {}> {
                   this.props.SelectedCategory.CategoryLanguages.map(x => <li
                     className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
                     <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
-                      {languages.filter(r => r.Language == x.Language)[0].Title}</a>
+                      {languages.filter(r => r.Language == x.Language)[0].Title}
+                      &nbsp;
+                      &nbsp;
+                      {x.Language == LanguageEnums.Vietnamese ?
+                        null : <a onClick={() => this.props.DeleteCategoryLanguage
+                        && this.props.DeleteCategoryLanguage(x.Id)}
+                        style={{background:'transparent', border:'transparent', boxShadow:'none'}}
+                        >
+                          <i className="fa fa-remove"/>
+                        </a>}
+                    </a>
                   </li>)
                 }
               </ul>
@@ -68,18 +82,15 @@ class CategoryDetail extends React.Component<thisProps, {}> {
                   <span className="caret"></span>
                 </button>
                 <ul className="dropdown-menu left animated fadeIn" role="menu">
-                  <li>
-                    <a href="#">Tiếng Anh</a>
-                  </li>
-                  <li>
-                    <a href="#">Tiếng Hàn</a>
-                  </li>
-                  <li>
-                    <a href="#">Tiếng Trung</a>
-                  </li>
-                  <li>
-                    <a href="#">Tiếng Pháp</a>
-                  </li>
+                  {languages.filter(x =>
+                    this.props.SelectedCategory && this.props.SelectedCategory.CategoryLanguages &&
+                    !this.props.SelectedCategory.CategoryLanguages.some(r => r.Language == x.Language)
+                  ).map((item, index) =>
+                    <li key={index}>
+                      <a onClick={() => this.props.AddCategoryLanguage
+                      && this.props.AddCategoryLanguage(item.Language)}>{item.Title}</a>
+                    </li>
+                  )}
                 </ul>
               </div>
 
