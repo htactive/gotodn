@@ -21,7 +21,7 @@ namespace GotoDN.Web.Models
         public int Id { get; set; }
         public int? HTServiceId { get; set; }
         public string Title { get; set; }
-        public string Icon { get; set; }
+        public int? IconId { get; set; }
         public int? ImageId { get; set; }
 
         public DateTime? CreatedDate { get; set; }
@@ -30,5 +30,6 @@ namespace GotoDN.Web.Models
     
         public HTServiceModel HTService { get; set; }
         public ImageModel Image { get; set; }
+        public ImageModel Icon { get; set; }
     }
 }

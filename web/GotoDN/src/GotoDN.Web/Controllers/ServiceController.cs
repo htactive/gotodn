@@ -13,37 +13,37 @@ using GotoDN.Common;
 
 namespace GotoDN.Web.Controllers
 {
-    [Route("category")]
-    public class CategoryController : BaseController
+    [Route("service")]
+    public class ServiceController : BaseController
     {
-        public CategoryController(HTRepository repository) : base(repository)
+        public ServiceController(HTRepository repository) : base(repository)
         {
         }
 
         [HttpGet, Route("get-all")]
         [AllowAnonymous]
-        public List<CategoryModel> GetAll()
+        public List<HTServiceModel> GetAll()
         {
-            var entities = this.HTRepository.CategoryRepository.GetAll()
-                .Include("CategoryLanguages.Image")
-                .Include("CategoryLanguages.Icon")
+            var entities = this.HTRepository.HTServiceRepository.GetAll()
+                .Include("HTServiceLanguages.Image")
+                .Include("HTServiceLanguages.Icon")
                 .Take(1000).ToList();
 
-            var models = entities.Select(x => AutoMapper.Mapper.Map<Category, CategoryModel>(x)).ToList();
+            var models = entities.Select(x => AutoMapper.Mapper.Map<HTService, HTServiceModel>(x)).ToList();
 
             return models;
         }
 
-        [HttpPost, Route("create-category")]
+        [HttpPost, Route("create-service")]
         [AllowAnonymous]
-        public CategoryModel CreateCategory()
+        public HTServiceModel CreateService()
         {
-            var entity = new Category();
+            var entity = new HTService();
             entity.CreatedDate = Common.DateTimeHelper.GetDateTimeNow();
             entity.UpdatedDate = Common.DateTimeHelper.GetDateTimeNow();
-            entity.CategoryLanguages = new List<CategoryLanguage>()
+            entity.HTServiceLanguages = new List<HTServiceLanguage>()
             {
-                new CategoryLanguage()
+                new HTServiceLanguage()
                 {
                     Title = "Chưa đặt tên",
                     Language = LanguageEnums.Vietnamese,
@@ -52,37 +52,37 @@ namespace GotoDN.Web.Controllers
                 }
             };
 
-            this.HTRepository.CategoryRepository.Save(entity);
+            this.HTRepository.HTServiceRepository.Save(entity);
             this.HTRepository.Commit();
-            return AutoMapper.Mapper.Map<Category, CategoryModel>(entity);
+            return AutoMapper.Mapper.Map<HTService, HTServiceModel>(entity);
         }
 
-        [HttpPost, Route("delete-category")]
+        [HttpPost, Route("delete-service")]
         [AllowAnonymous]
-        public bool DeleteCategory([FromBody]int Id)
+        public bool DeleteService([FromBody]int Id)
         {
-            var entity = this.HTRepository.CategoryRepository.GetAll()
+            var entity = this.HTRepository.HTServiceRepository.GetAll()
                 .FirstOrDefault(x => x.Id == Id);
             if (entity == null) return false;
-            this.HTRepository.CategoryRepository.Delete(entity);
+            this.HTRepository.HTServiceRepository.Delete(entity);
             this.HTRepository.Commit();
             return true;
         }
 
-        [HttpPost, Route("update-category")]
+        [HttpPost, Route("update-service")]
         [AllowAnonymous]
-        public bool UpdateCategory([FromBody]CategoryModel model)
+        public bool UpdateService([FromBody]HTServiceModel model)
         {
             if (model == null) return false;
-            var entity = this.HTRepository.CategoryRepository.GetAll()
-                .Include("CategoryLanguages.Image")
-                .Include("CategoryLanguages.Icon")
+            var entity = this.HTRepository.HTServiceRepository.GetAll()
+                .Include("HTServiceLanguages.Image")
+                .Include("HTServiceLanguages.Image")
                 .FirstOrDefault(x => x.Id == model.Id);
             if (entity == null) return false;
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
-            foreach (var item in entity.CategoryLanguages)
+            foreach (var item in entity.HTServiceLanguages)
             {
-                var en = model.CategoryLanguages.FirstOrDefault(x => x.Id == item.Id);
+                var en = model.HTServiceLanguages.FirstOrDefault(x => x.Id == item.Id);
                 if (en != null)
                 {
                     item.Title = en.Title;
@@ -91,7 +91,7 @@ namespace GotoDN.Web.Controllers
                 }
             }
 
-            this.HTRepository.CategoryRepository.Save(entity);
+            this.HTRepository.HTServiceRepository.Save(entity);
             this.HTRepository.Commit();
             return true;
         }
@@ -99,37 +99,37 @@ namespace GotoDN.Web.Controllers
 
         [HttpPost, Route("add-language")]
         [AllowAnonymous]
-        public CategoryLanguageModel AddLanguage([FromBody]CategoryLanguageModel model)
+        public HTServiceLanguageModel AddLanguage([FromBody]HTServiceLanguageModel model)
         {
             if (model == null) return null;
-            var CatEntity = this.HTRepository.CategoryRepository.GetAll()
-                .FirstOrDefault(x => x.Id == model.CategoryId.GetValueOrDefault());
+            var CatEntity = this.HTRepository.HTServiceRepository.GetAll()
+                .FirstOrDefault(x => x.Id == model.HTServiceId.GetValueOrDefault());
             if (CatEntity == null) return null;
-            if (CatEntity.CategoryLanguages == null) CatEntity.CategoryLanguages = new List<CategoryLanguage>();
+            if (CatEntity.HTServiceLanguages == null) CatEntity.HTServiceLanguages = new List<HTServiceLanguage>();
 
-            var LangEntity = new CategoryLanguage();
-            LangEntity.CategoryId = model.CategoryId;
+            var LangEntity = new HTServiceLanguage();
+            LangEntity.HTServiceId = model.HTServiceId;
             LangEntity.Language = model.Language;
             LangEntity.Title = model.Title;
             LangEntity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             LangEntity.CreatedDate = DateTimeHelper.GetDateTimeNow();
 
-            CatEntity.CategoryLanguages.Add(LangEntity);
-            this.HTRepository.CategoryRepository.Save(CatEntity);
+            CatEntity.HTServiceLanguages.Add(LangEntity);
+            this.HTRepository.HTServiceRepository.Save(CatEntity);
             this.HTRepository.Commit();
 
-            return AutoMapper.Mapper.Map<CategoryLanguage, CategoryLanguageModel>(LangEntity); ;
+            return AutoMapper.Mapper.Map<HTServiceLanguage, HTServiceLanguageModel>(LangEntity); ;
         }
 
         [HttpPost, Route("delete-language")]
         [AllowAnonymous]
         public bool DeleteLanguage([FromBody]int Id)
         {
-            var entity = this.HTRepository.CategoryLanguageRepository.GetAll()
+            var entity = this.HTRepository.HTServiceLanguageRepository.GetAll()
                 .FirstOrDefault(x => x.Id == Id);
             if (entity == null) return false;
 
-            this.HTRepository.CategoryLanguageRepository.Delete(entity);
+            this.HTRepository.HTServiceLanguageRepository.Delete(entity);
             this.HTRepository.Commit();
             return true;
         }

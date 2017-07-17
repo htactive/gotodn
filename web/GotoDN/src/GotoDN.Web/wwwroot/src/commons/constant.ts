@@ -9,6 +9,7 @@ export const AdminRoutePath = {
   Dashboard: `${virtualPath}/dashboard`,
   UserManagement: `${virtualPath}/users`,
   CategoryManagement: `${virtualPath}/categories`,
+  ServiceManagement: `${virtualPath}/services`,
 
 };
 

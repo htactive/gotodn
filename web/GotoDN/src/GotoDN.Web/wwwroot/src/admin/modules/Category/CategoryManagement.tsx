@@ -105,7 +105,10 @@ class CategoryManagement extends React.Component<{}, thisState> {
                 <div className="panel-body">
                   <CategoryList Categories={this.state.Categories}
                                 SelectedCategory={this.state.SelectedCategory}
-                                ChangeSelectedCateogry={(model) => this.setState({SelectedCategory: model})}
+                                ChangeSelectedCateogry={(model) => this.setState({
+                                  SelectedCategory: model,
+                                  SelectedLanguage: LanguageEnums.Vietnamese,
+                                })}
                                 CreateCategory={() => this.createCategory()}
                   />
                   <CategoryDetail SelectedCategory={this.state.SelectedCategory}

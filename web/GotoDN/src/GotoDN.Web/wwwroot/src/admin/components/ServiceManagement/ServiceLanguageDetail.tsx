@@ -1,21 +1,21 @@
 import * as React from 'react';
-import {CategoryLanguageModel} from "../../../models/CategoryLanguageModel";
+import {HTServiceLanguageModel} from "../../../models/HTServiceLanguageModel";
 import {DynamicPanelComponent} from "../DynamicForm/DynamicPanelComponent";
 import {DynamicFormModel} from "../../../models/dynamic-form-model";
 import {DynamicFieldModel} from "../../../models/dynamic-field-model";
 import {FieldStructureTypeEnums} from "../../../models/field-structure-model";
 import {ValidateRuleTypeEnums} from "../../../commons/constant";
 interface thisProps {
-  CategoryLanguage: CategoryLanguageModel,
+  HTServiceLanguage: HTServiceLanguageModel,
   IsSelected: boolean,
-  OnObjectChange: (obj: CategoryLanguageModel) => void
+  OnObjectChange: (obj: HTServiceLanguageModel) => void
 }
 
 interface thisState {
-  EditingObjec1t?: CategoryLanguageModel
+  EditingObjec1t?: HTServiceLanguageModel
 }
 
-class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
+class ServiceLanguageDetail extends React.Component<thisProps, thisState> {
   editingForm: DynamicPanelComponent;
   state: thisState = {};
 
@@ -26,16 +26,16 @@ class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
   render() {
     return (
       <div className={`tab-pane fade${this.props.IsSelected ? ' active in' : ''}`}>
-        {this.props.CategoryLanguage ?
+        {this.props.HTServiceLanguage ?
           <DynamicPanelComponent
             ref={(r) => this.editingForm = r}
             FormStructure={this.getFormStructure()}
             onFieldValueChange={(obj) => {
               this.props.OnObjectChange(obj)
             }}
-            Object={this.props.CategoryLanguage}
+            Object={this.props.HTServiceLanguage}
             onValidationChange={(isInvalid) => {
-              this.props.CategoryLanguage['__#isInvalid#__'] = isInvalid
+              this.props.HTServiceLanguage['__#isInvalid#__'] = isInvalid
             }}
           /> : null}
       </div>);
@@ -113,7 +113,7 @@ class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
     return allForms;
   }
 
-  private saveCategory() {
+  private saveHTService() {
     if (this.editingForm.isFormValid()) {
 
     }
@@ -121,4 +121,4 @@ class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
   }
 }
 
-export default CategoryLanguageDetail;
+export default ServiceLanguageDetail;

@@ -1,16 +1,16 @@
-import {CategoryModel} from "./CategoryModel";
+import {HTServiceModel} from "./HTServiceModel";
 import {ImageModel} from "./ImageModel";
 import {LanguageEnums} from "../commons/constant";
-export interface CategoryLanguageModel {
+export interface HTServiceLanguageModel {
   Id: number,
-  CategoryId?: number,
+  HTServiceId?: number,
   Title?: string,
   IconId?: number,
   ImageId?: number,
   CreatedDate?: Date,
   UpdatedDate?: Date,
   Language?: LanguageEnums,
-  Category?: CategoryModel,
+  Category?: HTServiceModel,
   Image?: ImageModel,
   Icon?: ImageModel
 }

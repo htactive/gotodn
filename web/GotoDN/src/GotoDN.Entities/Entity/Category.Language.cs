@@ -14,7 +14,7 @@ namespace GotoDN.Entities
         public int Id { get; set; }
         public int? CategoryId { get; set; }
         public string Title { get; set; }
-        public string Icon { get; set; }
+        public int? IconId { get; set; }
         public int? ImageId { get; set; }
 
         public DateTime? CreatedDate { get; set; }
@@ -26,5 +26,7 @@ namespace GotoDN.Entities
         public Category Category { get; set; }
         [ForeignKey("ImageId")]
         public Image Image { get; set; }
+        [ForeignKey("IconId")]
+        public Image Icon { get; set; }
     }
 }
