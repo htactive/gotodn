@@ -23,6 +23,7 @@ interface thisProps {
   Categories: CategoryModel[],
   HTServices: HTServiceModel[],
   ClickSlectCategory: (Id) => void,
+  ClickSlectHTService: (Id) => void,
 }
 
 class PlaceDetail extends React.Component<thisProps, {}> {
@@ -174,7 +175,7 @@ class PlaceDetail extends React.Component<thisProps, {}> {
       {Language: LanguageEnums.Korean, Title: 'Tiếng Hàn'},
     ];
 
-    let Categories: ReactSelectModel[];
+    let Categories: ReactSelectModel[] = [];
     if (this.props.Categories && this.props.Categories.length > 0) {
       Categories = this.props.Categories.map(
         x => {
@@ -182,6 +183,16 @@ class PlaceDetail extends React.Component<thisProps, {}> {
         }
       );
     }
+    let HTServices: ReactSelectModel[] = [];
+    if (this.props.HTServices && this.props.HTServices.length > 0) {
+      HTServices = this.props.HTServices.map(
+        x => {
+          return {label: x.HTServiceLanguages ? x.HTServiceLanguages[0].Title : "", value: x.Id}
+        }
+      );
+    }
+
+
 
     return (
       <div className="col-lg-8 cate-right-form">
@@ -238,9 +249,9 @@ class PlaceDetail extends React.Component<thisProps, {}> {
               <div className="col-sm-3">
                 <ComboBox
                   placeHolder="Chọn service..."
-                  options={Categories}
-                  value={this.props.SelectedPlace.CategoryId}
-                  onChange={(Id) => this.props.ClickSlectCategory(Id)}
+                  options={HTServices}
+                  value={this.props.SelectedPlace.HTServiceId}
+                  onChange={(Id) => this.props.ClickSlectHTService(Id)}
                 />
               </div>
 

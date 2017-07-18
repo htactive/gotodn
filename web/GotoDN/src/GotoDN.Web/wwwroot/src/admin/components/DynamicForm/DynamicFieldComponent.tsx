@@ -78,7 +78,7 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
         <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
           <input className="form-control" type="text"
                  placeholder={this.props.Field.FieldStructure.PlaceHolder}
-                 value={this.props.FieldValue.Value || 0}
+                 value={this.props.FieldValue.Value || ''}
                  onChange={(e) => {
                    let fv = {...this.props.FieldValue};
                    let val = e.target['value'];

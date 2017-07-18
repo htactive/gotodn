@@ -21,7 +21,6 @@ interface thisProps {
 class HTServiceDetail extends React.Component<thisProps, {}> {
 
   render() {
-    debugger;
     let languages: { Language: LanguageEnums, Title: string }[] = [
       {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
       {Language: LanguageEnums.English, Title: 'Tiếng Anh'},
@@ -30,7 +29,7 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
       {Language: LanguageEnums.Japanese, Title: 'Tiếng Nhật'},
       {Language: LanguageEnums.Korean, Title: 'Tiếng Hàn'},
     ];
-    let Categories: ReactSelectModel[];
+    let Categories: ReactSelectModel[] = [];
     if(this.props.Categories && this.props.Categories.length > 0){
       Categories = this.props.Categories.map(
         x => {return {label: x.CategoryLanguages ? x.CategoryLanguages[0].Title : "", value: x.Id}}

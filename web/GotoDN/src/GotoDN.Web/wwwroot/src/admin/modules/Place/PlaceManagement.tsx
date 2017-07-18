@@ -13,6 +13,7 @@ interface thisState {
   Places?: PlaceModel[],
   Categories?: CategoryModel[],
   HTServices?: HTServiceModel[],
+  HTServicesBackup?: HTServiceModel[],
   SelectedPlace?: PlaceModel,
   SelectedLanguage?: LanguageEnums
 }
@@ -39,7 +40,8 @@ class PlaceManagement extends React.Component<{}, thisState> {
     })();
     (async () => {
       this.setState({
-        HTServices: await HTServiceInstance.GetAll()
+        HTServicesBackup: await HTServiceInstance.GetAll(),
+        HTServices: [],
       });
     })();
   }
@@ -119,7 +121,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
   private ClickSlectCategory(Id: any) {
     this.state.SelectedPlace.CategoryId = Id;
-    this.forceUpdate();
+    this.setState({HTServices: this.state.HTServicesBackup.filter(x => x.CategoryId == Id)});
   }
 
   render() {
@@ -141,10 +143,14 @@ class PlaceManagement extends React.Component<{}, thisState> {
                   <PlaceList
                     Places={this.state.Places}
                     SelectedPlace={this.state.SelectedPlace}
-                    ChangeSelectedPlace={(model) => this.setState({
-                      SelectedPlace: model,
-                      SelectedLanguage: LanguageEnums.Vietnamese,
-                    })}
+                    ChangeSelectedPlace={(model: PlaceModel) => {
+                      this.setState({
+                        SelectedPlace: model, SelectedLanguage: LanguageEnums.Vietnamese,
+                      });
+                      model && model.CategoryId ?
+                        this.setState({HTServices: this.state.HTServicesBackup.filter(x => x.CategoryId == model.CategoryId)})
+                        : null;
+                    }}
                     CreatePlace={() => this.createPlace()}
                   />
                   <PlaceDetail SelectedPlace={this.state.SelectedPlace}
@@ -170,6 +176,10 @@ class PlaceManagement extends React.Component<{}, thisState> {
                                ClickSlectCategory={(Id) => this.ClickSlectCategory(Id)}
                                OnPlaceChange={(obj: PlaceModel) => {
                                  this.setState({SelectedPlace: obj});
+                               }}
+                               ClickSlectHTService={(Id) => {
+                                 this.state.SelectedPlace.HTServiceId = Id;
+                                 this.forceUpdate();
                                }}
                   />
                 </div>
