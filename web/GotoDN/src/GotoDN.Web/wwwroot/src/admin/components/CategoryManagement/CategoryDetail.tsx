@@ -12,6 +12,7 @@ interface thisProps {
   DeleteCategory: (Id: number) => void,
   AddCategoryLanguage: (lang: LanguageEnums) => void,
   DeleteCategoryLanguage: (Id: number) => void,
+  ChangeEvent: (check: boolean) => void,
 }
 
 class CategoryDetail extends React.Component<thisProps, {}> {
@@ -66,6 +67,19 @@ class CategoryDetail extends React.Component<thisProps, {}> {
                 }
               </div>
             </div>
+
+            <div className="toggle-custom">
+              <label htmlFor="checkbox-toggle">Là category sự kiện? &nbsp;&nbsp;</label>
+              <label className="toggle" data-on="YES" data-off="NO">
+                <input type="checkbox" id="checkbox-toggle"
+                       name="checkbox-toggle" defaultChecked={false}
+                       onChange={(e) => this.props.ChangeEvent(e.target.checked)}
+                       checked={this.props.SelectedCategory.IsEvent || false}
+                />
+                <span className="button-radio"></span>
+              </label>
+            </div>
+
             <hr/>
             <div className="form-group">
               <button className="btn btn-danger pull-right"

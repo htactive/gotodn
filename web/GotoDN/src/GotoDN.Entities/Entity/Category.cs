@@ -12,7 +12,7 @@ namespace GotoDN.Entities
         public int Id { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
-
+        public bool? IsEvent { get; set; }
         public List<CategoryLanguage> CategoryLanguages { get; set; }
     }
 }

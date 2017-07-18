@@ -196,7 +196,7 @@ class PlaceDetail extends React.Component<thisProps, {}> {
 
     return (
       <div className="col-lg-8 cate-right-form">
-        <h3>Xem thông tin chi tiết địa điểm</h3>
+        <h3>Thông tin chi tiết của địa điểm hoặc sự kiện</h3>
         <hr/>
         {this.props.SelectedPlace != null ?
           <div className="col-lg-12 col-sm-12 form-horizontal">
@@ -306,7 +306,7 @@ class PlaceDetail extends React.Component<thisProps, {}> {
           </div> :
           <div className="col-lg-12 col-sm-12 form-horizontal">
             <div className="form-group">
-              <span className="help-block">Click vào địa điểm để xem thông tin chi tiết</span>
+              <span className="help-block">Click vào từng mục để xem thông tin chi tiết</span>
             </div>
           </div>
         }

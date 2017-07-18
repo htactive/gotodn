@@ -80,6 +80,7 @@ namespace GotoDN.Web.Controllers
                 .FirstOrDefault(x => x.Id == model.Id);
             if (entity == null) return false;
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+            entity.IsEvent = model.IsEvent;
             foreach (var item in entity.CategoryLanguages)
             {
                 var en = model.CategoryLanguages.FirstOrDefault(x => x.Id == item.Id);

@@ -24,7 +24,7 @@ const menus: LeftSideBarMenuItemModel[] = [
   },
   {
     Icon: 'fa fa-list-alt',
-    Text: 'Quản lý địa điểm',
+    Text: 'Địa điểm - Sự kiện',
     LinkTo: AdminRoutePath.PlaceManagement
   }
 ];

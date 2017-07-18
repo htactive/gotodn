@@ -129,6 +129,10 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                   DeleteCategory={(Id: number) => this.deleteCategory(Id)}
                                   AddCategoryLanguage={(lang: LanguageEnums) => this.addCategoryLanguage(lang)}
                                   DeleteCategoryLanguage={(Id: number) => this.deleteCategoryLanguage(Id)}
+                                  ChangeEvent={(check: boolean) => {
+                                    this.state.SelectedCategory.IsEvent = check;
+                                    this.forceUpdate();
+                                  }}
                   />
                 </div>
               </div>

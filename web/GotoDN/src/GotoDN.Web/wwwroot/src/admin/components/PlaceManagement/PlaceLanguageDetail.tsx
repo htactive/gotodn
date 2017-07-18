@@ -78,8 +78,24 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
         }
       };
 
-      let f_Image: DynamicFieldModel = {
+      let f_Description: DynamicFieldModel = {
         Priority: 2,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Mô tả',
+          FieldName: 'Description',
+          PlaceHolder: '',
+          Type: FieldStructureTypeEnums.TextArea,
+          ValidateRules: [{
+            Type: ValidateRuleTypeEnums.Required,
+            InValidMessage: 'Trường này là bắt buộc'
+          }]
+        }
+      };
+
+      let f_Image: DynamicFieldModel = {
+        Priority: 3,
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
@@ -93,7 +109,7 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
       };
 
       let f_Icon: DynamicFieldModel = {
-        Priority: 3,
+        Priority: 4,
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
@@ -106,6 +122,7 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
         }
       };
       inforForm.DynamicFields.push(f_Title);
+      inforForm.DynamicFields.push(f_Description);
       inforForm.DynamicFields.push(f_Image);
       inforForm.DynamicFields.push(f_Icon);
       allForms.push(inforForm);

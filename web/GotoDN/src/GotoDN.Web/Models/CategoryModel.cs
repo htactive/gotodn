@@ -12,7 +12,7 @@ namespace GotoDN.Web.Models
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int? Priority { get; set; }
-
+        public bool? IsEvent { get; set; }
         public List<CategoryLanguageModel> CategoryLanguages { get; set; }
     }
 

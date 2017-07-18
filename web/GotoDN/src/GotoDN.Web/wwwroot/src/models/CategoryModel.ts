@@ -1,9 +1,9 @@
-
 import {CategoryLanguageModel} from "./CategoryLanguageModel";
 export interface CategoryModel {
   Id: number,
-  CreatedDate?:Date,
-  UpdatedDate?:Date,
-  Priority?:number,
-  CategoryLanguages?:CategoryLanguageModel[]
+  CreatedDate?: Date,
+  UpdatedDate?: Date,
+  IsEvent?: boolean,
+  Priority?: number,
+  CategoryLanguages?: CategoryLanguageModel[]
 }

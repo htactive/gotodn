@@ -25,7 +25,7 @@ class PlaceList extends React.Component<thisProps, thisState> {
   render() {
     return (
       <div className="col-lg-4">
-        <h3>Danh sách địa điểm</h3>
+        <h3>Danh sách địa điểm và sự kiện</h3>
         <hr/>
         <ul className="list-group">
           {this.props.Places ? this.props.Places.map(x =>
@@ -38,7 +38,7 @@ class PlaceList extends React.Component<thisProps, thisState> {
         <div className="form-group">
           <button className="btn btn-primary"
                   onClick={() => this.createPlace()}><i
-            className="fa fa-plus"/> Thêm địa điểm
+            className="fa fa-plus"/> Thêm
           </button>
         </div>
       </div>
