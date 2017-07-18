@@ -15,6 +15,7 @@ interface thisProps {
   SelectedLanguage: LanguageEnums,
   ChangeSelectedLanguage: (l: LanguageEnums) => void,
   OnPlaceLanguageChange: (destination: PlaceLanguageModel) => void,
+  OnPlaceChange: (obj: PlaceModel) => void,
   SavePlace: (model: PlaceModel) => void,
   DeletePlace: (Id: number) => void,
   AddPlaceLanguage: (lang: LanguageEnums) => void,
@@ -73,10 +74,6 @@ class PlaceDetail extends React.Component<thisProps, {}> {
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.Number,
           ValidateRules: [{
-            Type: ValidateRuleTypeEnums.Required,
-            InValidMessage: 'Trường này là bắt buộc'
-          },
-            {
               Type: ValidateRuleTypeEnums.MinValue,
               InValidMessage: 'Không được nhỏ hơn 0',
               RuleData: '0'
@@ -99,21 +96,7 @@ class PlaceDetail extends React.Component<thisProps, {}> {
           FieldName: 'City',
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.TextBox,
-          ValidateRules: [{
-            Type: ValidateRuleTypeEnums.Required,
-            InValidMessage: 'Trường này là bắt buộc'
-          },
-            {
-              Type: ValidateRuleTypeEnums.MinLength,
-              InValidMessage: 'Yêu cầu ít nhất 3 ký tự',
-              RuleData: '3'
-            },
-            {
-              Type: ValidateRuleTypeEnums.MaxLength,
-              InValidMessage: 'Không được vượt quá 50 ký tự',
-              RuleData: '50'
-            }
-          ]
+          ValidateRules: []
         }
       };
 
@@ -126,21 +109,7 @@ class PlaceDetail extends React.Component<thisProps, {}> {
           FieldName: 'District',
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.TextBox,
-          ValidateRules: [{
-            Type: ValidateRuleTypeEnums.Required,
-            InValidMessage: 'Trường này là bắt buộc'
-          },
-            {
-              Type: ValidateRuleTypeEnums.MinLength,
-              InValidMessage: 'Yêu cầu ít nhất 3 ký tự',
-              RuleData: '3'
-            },
-            {
-              Type: ValidateRuleTypeEnums.MaxLength,
-              InValidMessage: 'Không được vượt quá 50 ký tự',
-              RuleData: '50'
-            }
-          ]
+          ValidateRules: []
         }
       };
 
@@ -153,21 +122,7 @@ class PlaceDetail extends React.Component<thisProps, {}> {
           FieldName: 'Address',
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.TextBox,
-          ValidateRules: [{
-            Type: ValidateRuleTypeEnums.Required,
-            InValidMessage: 'Trường này là bắt buộc'
-          },
-            {
-              Type: ValidateRuleTypeEnums.MinLength,
-              InValidMessage: 'Yêu cầu ít nhất 3 ký tự',
-              RuleData: '3'
-            },
-            {
-              Type: ValidateRuleTypeEnums.MaxLength,
-              InValidMessage: 'Không được vượt quá 50 ký tự',
-              RuleData: '50'
-            }
-          ]
+          ValidateRules: []
         }
       };
 
@@ -180,31 +135,30 @@ class PlaceDetail extends React.Component<thisProps, {}> {
           FieldName: 'Phone',
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.TextBox,
-          ValidateRules: [{
-            Type: ValidateRuleTypeEnums.Required,
-            InValidMessage: 'Trường này là bắt buộc'
-          },
-            {
-              Type: ValidateRuleTypeEnums.MinLength,
-              InValidMessage: 'Yêu cầu ít nhất 3 ký tự',
-              RuleData: '3'
-            },
-            {
-              Type: ValidateRuleTypeEnums.MaxLength,
-              InValidMessage: 'Không được vượt quá 50 ký tự',
-              RuleData: '50'
-            }
-          ]
+          ValidateRules: []
         }
       };
 
-      inforForm.DynamicFields.push(IsCategorySlider);
-      inforForm.DynamicFields.push(IsHomeSlider);
+      let Website: DynamicFieldModel = {
+        Priority: 1,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Trang web',
+          FieldName: 'Website',
+          PlaceHolder: '',
+          Type: FieldStructureTypeEnums.TextBox,
+          ValidateRules: []
+        }
+      };
       inforForm.DynamicFields.push(Phone);
       inforForm.DynamicFields.push(Address);
       inforForm.DynamicFields.push(City);
       inforForm.DynamicFields.push(District);
       inforForm.DynamicFields.push(Rating);
+      inforForm.DynamicFields.push(Website);
+      inforForm.DynamicFields.push(IsCategorySlider);
+      inforForm.DynamicFields.push(IsHomeSlider);
       allForms.push(inforForm);
     }
     return allForms;
@@ -230,7 +184,7 @@ class PlaceDetail extends React.Component<thisProps, {}> {
     }
 
     return (
-      <div className="col-lg-8 cate-right-form" style={{marginBottom: 150}}>
+      <div className="col-lg-8 cate-right-form">
         <h3>Xem thông tin chi tiết địa điểm</h3>
         <hr/>
         {this.props.SelectedPlace != null ?
@@ -269,32 +223,9 @@ class PlaceDetail extends React.Component<thisProps, {}> {
                 }
               </div>
             </div>
-            <hr/>
-
-            <DynamicPanelComponent
-              ref={(r) => this.editingForm = r}
-              FormStructure={this.getFormStructure()}
-              onFieldValueChange={(obj) => {
-                {/*this.props.OnObjectChange(obj)*/
-                }
-              }}
-              Object={this.props.SelectedPlace}
-              onValidationChange={(isInvalid) => {
-                this.props.SelectedPlace['__#isInvalid#__'] = isInvalid
-              }}
-            />
 
             <hr/>
             <div className="form-group">
-              <button className="btn btn-danger pull-right"
-                      onClick={() => this.deletePlace()}><i
-                className="fa fa-trash-o"/> Xóa
-              </button>
-
-              <button className="btn btn-primary"
-                      onClick={() => this.savePlace()}>Lưu
-              </button>
-
               <div className="col-sm-3">
                 <ComboBox
                   placeHolder="Chọn category..."
@@ -336,6 +267,30 @@ class PlaceDetail extends React.Component<thisProps, {}> {
                       onClick={() => this.discardChangesEditing()}>Làm lại
               </button>
 
+            </div>
+
+            <hr/>
+
+            <DynamicPanelComponent
+              ref={(r) => this.editingForm = r}
+              FormStructure={this.getFormStructure()}
+              onFieldValueChange={(obj: PlaceModel) => this.props.OnPlaceChange(obj)}
+              Object={this.props.SelectedPlace}
+              onValidationChange={(isInvalid) => {
+                this.props.SelectedPlace['__#isInvalid#__'] = isInvalid
+              }}
+            />
+
+            <hr/>
+            <div className="form-group">
+              <button className="btn btn-danger pull-right"
+                      onClick={() => this.deletePlace()}><i
+                className="fa fa-trash-o"/> Xóa
+              </button>
+
+              <button className="btn btn-primary"
+                      onClick={() => this.savePlace()}>Lưu
+              </button>
             </div>
           </div> :
           <div className="col-lg-12 col-sm-12 form-horizontal">

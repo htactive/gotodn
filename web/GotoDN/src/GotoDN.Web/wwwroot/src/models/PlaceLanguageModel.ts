@@ -12,5 +12,6 @@ export interface PlaceLanguageModel {
   Language?: LanguageEnums,
   Place?: PlaceModel,
   Image?: ImageModel,
-  Icon?: ImageModel
+  Icon?: ImageModel,
+  CategoryId?: number,
 }

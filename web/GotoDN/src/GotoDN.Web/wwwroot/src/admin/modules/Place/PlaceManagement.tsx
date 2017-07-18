@@ -47,6 +47,20 @@ class PlaceManagement extends React.Component<{}, thisState> {
   private async createPlace() {
     let result = await PlaceServiceInstance.CreatePlace();
     if (result) {
+      result.Address = "";
+      result.City = "";
+      result.CloseTime = null;
+      result.District = "";
+      result.EndDate = null;
+      result.IsCategorySlider = false;
+      result.IsHomeSlider = false;
+      result.Latitude = null;
+      result.Longitude = null;
+      result.OpenTime = null;
+      result.Phone = "";
+      result.Rating = null;
+      result.StartDate = null;
+      result.Website = "";
       if (this.state.Places) {
         this.state.Places.push(result);
         this.setState({
@@ -154,6 +168,9 @@ class PlaceManagement extends React.Component<{}, thisState> {
                                Categories={this.state.Categories || []}
                                HTServices={this.state.HTServices || []}
                                ClickSlectCategory={(Id) => this.ClickSlectCategory(Id)}
+                               OnPlaceChange={(obj: PlaceModel) => {
+                                 this.setState({SelectedPlace: obj});
+                               }}
                   />
                 </div>
               </div>
