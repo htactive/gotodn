@@ -90,6 +90,7 @@ namespace GotoDN.Web.Controllers
                     item.Title = en.Title;
                     item.ImageId = en.Image != null ? en.Image.Id : (int?)null;
                     item.IconId = en.Icon != null ? en.Icon.Id : (int?)null;
+                    item.UpdatedDate = DateTimeHelper.GetDateTimeNow();
                 }
             }
 

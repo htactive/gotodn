@@ -21,6 +21,11 @@ const menus: LeftSideBarMenuItemModel[] = [
     Icon: 'fa fa-bars',
     Text: 'Quản lý dịch vụ',
     LinkTo: AdminRoutePath.ServiceManagement
+  },
+  {
+    Icon: 'fa fa-list-alt',
+    Text: 'Quản lý địa điểm',
+    LinkTo: AdminRoutePath.PlaceManagement
   }
 ];
 interface thisState {

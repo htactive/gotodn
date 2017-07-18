@@ -16,6 +16,7 @@ namespace GotoDN.Entities
         public string Title { get; set; }
         public int? IconId { get; set; }
         public int? ImageId { get; set; }
+        public string Description { get; set; }
 
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }

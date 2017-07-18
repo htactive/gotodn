@@ -10,6 +10,7 @@ export const AdminRoutePath = {
   UserManagement: `${virtualPath}/users`,
   CategoryManagement: `${virtualPath}/categories`,
   ServiceManagement: `${virtualPath}/services`,
+  PlaceManagement: `${virtualPath}/places`,
 
 };
 
