@@ -72,7 +72,7 @@ class CategoryDetail extends React.Component<thisProps, {}> {
               <label htmlFor="checkbox-toggle">Là category sự kiện? &nbsp;&nbsp;</label>
               <label className="toggle" data-on="YES" data-off="NO">
                 <input type="checkbox" id="checkbox-toggle"
-                       name="checkbox-toggle" defaultChecked={false}
+                       name="checkbox-toggle"
                        onChange={(e) => this.props.ChangeEvent(e.target.checked)}
                        checked={this.props.SelectedCategory.IsEvent || false}
                 />

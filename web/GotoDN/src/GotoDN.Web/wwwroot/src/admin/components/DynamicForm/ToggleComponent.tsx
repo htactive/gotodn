@@ -19,7 +19,7 @@ export class ToggleComponent extends React.Component<thisProps, {}> {
             <label className="toggle" data-on="ON" data-off="OFF">
               <input className="form-control" type="checkbox"
                      placeholder={this.props.Field.FieldStructure.PlaceHolder}
-                     checked={this.props.FieldValue.Value}
+                     checked={this.props.FieldValue.Value || false}
                      onChange={(e) => {
                        this.props.onFieldValueChange(e.target.checked);
                      }}
