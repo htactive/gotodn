@@ -1,4 +1,6 @@
 import {PlaceLanguageModel} from "./PlaceLanguageModel";
+import {CategoryModel} from "./CategoryModel";
+import {HTServiceModel} from "./HTServiceModel";
 export interface PlaceModel {
   Id: number,
   CreatedDate?: Date,
@@ -7,6 +9,8 @@ export interface PlaceModel {
   HTServiceId?: number,
   CategoryId?: number,
   PlaceLanguages?: PlaceLanguageModel[],
+  Category?: CategoryModel,
+  HTService?: HTServiceModel,
 
   Address?: string
   City?: string

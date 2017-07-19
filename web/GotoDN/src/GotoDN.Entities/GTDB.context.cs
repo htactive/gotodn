@@ -54,6 +54,16 @@ namespace GotoDN.Entities
                 .HasMany(x => x.CategoryLanguages)
                 .WithOne(x => x.Category)
                 .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<HTService>()
+                .HasMany(x => x.HTServiceLanguages)
+                .WithOne(x => x.HTService)
+                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Place>()
+                .HasMany(x => x.PlaceLanguages)
+                .WithOne(x => x.Place)
+                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
         }
     }
 }

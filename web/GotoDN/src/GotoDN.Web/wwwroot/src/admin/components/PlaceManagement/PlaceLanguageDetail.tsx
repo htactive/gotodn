@@ -87,10 +87,7 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
           FieldName: 'Description',
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.TextArea,
-          ValidateRules: [{
-            Type: ValidateRuleTypeEnums.Required,
-            InValidMessage: 'Trường này là bắt buộc'
-          }]
+          ValidateRules: []
         }
       };
 

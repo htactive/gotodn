@@ -10,6 +10,8 @@ import {DynamicPanelComponent} from "../DynamicForm/DynamicPanelComponent";
 import {FieldStructureTypeEnums} from "../../../models/field-structure-model";
 import {DynamicFieldModel} from "../../../models/dynamic-field-model";
 import {DynamicFormModel} from "../../../models/dynamic-form-model";
+import {Modal, Button, Form, FormGroup, Col} from 'react-bootstrap';
+
 interface thisProps {
   SelectedPlace: PlaceModel,
   SelectedLanguage: LanguageEnums,
@@ -26,8 +28,23 @@ interface thisProps {
   ClickSlectHTService: (Id) => void,
 }
 
-class PlaceDetail extends React.Component<thisProps, {}> {
+interface thisState {
+  isShow?: boolean,
+}
+
+class PlaceDetail extends React.Component<thisProps, thisState> {
   editingForm: DynamicPanelComponent;
+  componentWillMount() {
+    this.setState({isShow: false});
+  }
+
+  close() {
+    this.setState({isShow: false});
+  }
+
+  show() {
+    this.setState({isShow: true});
+  }
 
   private getFormStructure(): DynamicFormModel[] {
     let allForms: DynamicFormModel[] = [];
@@ -191,13 +208,16 @@ class PlaceDetail extends React.Component<thisProps, {}> {
         }
       );
     }
-
-
-
+    let firstLang = this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
     return (
-      <div className="col-lg-8 cate-right-form">
-        <h3>Thông tin chi tiết của địa điểm hoặc sự kiện</h3>
-        <hr/>
+      <Modal show={this.state.isShow} onHide={() => this.close()} bsSize="large"
+             aria-labelledby="contained-modal-title-lg">
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-lg">{firstLang ? firstLang.Title : ''}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="panel panel-default plain">
+            <div className="panel-body">
         {this.props.SelectedPlace != null ?
           <div className="col-lg-12 col-sm-12 form-horizontal">
             <div className="tabs mb20">
@@ -255,7 +275,7 @@ class PlaceDetail extends React.Component<thisProps, {}> {
                 />
               </div>
 
-              <div className="btn-group dropup mr10 ml10">
+              <div className="btn-group dropdown col-sm-3">
                 <button type="button" className="btn btn-success dropdown-toggle"
                         data-toggle="dropdown" aria-expanded="false">
                   Thêm ngôn ngữ
@@ -274,9 +294,23 @@ class PlaceDetail extends React.Component<thisProps, {}> {
                 </ul>
               </div>
 
-              <button className="btn btn-default pull-right hidden"
-                      onClick={() => this.discardChangesEditing()}>Làm lại
-              </button>
+              <div className="form-group col-sm-3">
+                <button className="btn btn-danger pull-right" style={{marginLeft:5}}
+                        onClick={() => this.deletePlace()}><i
+                  className="fa fa-trash-o"/> Xóa
+                </button>
+
+                <button className="btn btn-primary pull-right"
+                        onClick={() => this.savePlace()}><i
+                  className="fa fa-save"/> Lưu
+                </button>
+
+                <button className="btn btn-default hidden"
+                        onClick={() => this.discardChangesEditing()}>Làm lại
+                </button>
+              </div>
+
+
 
             </div>
 
@@ -292,30 +326,20 @@ class PlaceDetail extends React.Component<thisProps, {}> {
               }}
             />
 
-            <hr/>
-            <div className="form-group">
-              <button className="btn btn-danger pull-right"
-                      onClick={() => this.deletePlace()}><i
-                className="fa fa-trash-o"/> Xóa
-              </button>
 
-              <button className="btn btn-primary"
-                      onClick={() => this.savePlace()}>Lưu
-              </button>
-            </div>
           </div> :
-          <div className="col-lg-12 col-sm-12 form-horizontal">
-            <div className="form-group">
-              <span className="help-block">Click vào từng mục để xem thông tin chi tiết</span>
+          null
+        }
             </div>
           </div>
-        }
-      </div>
+        </Modal.Body>
+      </Modal>
     )
   }
 
   private deletePlace() {
     this.props.DeletePlace && this.props.DeletePlace(this.props.SelectedPlace.Id);
+    this.close();
   }
 
   private discardChangesEditing() {
@@ -339,6 +363,7 @@ class PlaceDetail extends React.Component<thisProps, {}> {
     // if is valid, do submit here
     console.log('congratulation! your form is valid, do submit now ' + this.props.SelectedPlace);
     this.props.SavePlace && this.props.SavePlace(this.props.SelectedPlace);
+    this.close();
   }
 }
 

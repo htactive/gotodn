@@ -152,5 +152,50 @@ namespace GotoDN.Web.Controllers
             this.HTRepository.Commit();
             return true;
         }
+
+        [HttpPost, Route("filter")]
+        [AllowAnonymous]
+        public GetGridResponseModel<PlaceModel> Filter([FromBody]GetGridRequestModel request)
+        {
+            var query = this.HTRepository.PlaceRepository.GetAll();
+            query = query.Include("PlaceLanguages.Image").Include("PlaceLanguages.Icon")
+                .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages");
+            // search
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                var search = request.Search.ToLower().Trim();
+                query = query.Where(x => (x.City != null && x.City.ToLower().Contains(search))
+                || (x.District != null && x.District.ToLower().Contains(search)));
+            }
+
+            // sort
+            switch (request.SortExpression)
+            {
+                case "Id":
+                    query = request.IsAsc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id);
+                    break;
+            }
+            // count
+            var totalRecord = query.Count();
+
+            // take
+            var entities = query.Skip((request.CurrentPage - 1) * request.PageSize).Take(request.PageSize).ToList();
+
+            //map
+            var models = entities.Select(x => AutoMapper.Mapper.Map<Place, PlaceModel>(
+                x, opt =>
+                {
+                    opt.AfterMap((ent, mod) =>
+                    {
+                        mod.Category = AutoMapper.Mapper.Map<CategoryModel>(ent.Category);
+                        mod.HTService = AutoMapper.Mapper.Map<HTServiceModel>(ent.HTService);
+                    });
+                })).ToList();
+
+            var response = new GetGridResponseModel<PlaceModel>();
+            response.DataSource = models;
+            response.TotalRecord = totalRecord;
+            return response;
+        }
     }
 }

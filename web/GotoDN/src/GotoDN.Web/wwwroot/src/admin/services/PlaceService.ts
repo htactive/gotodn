@@ -2,6 +2,7 @@ import {virtualPath} from "../../commons/constant";
 import {AdminServiceBase} from "./admin-service-base";
 import {PlaceModel} from "../../models/PlaceModel";
 import {PlaceLanguageModel} from "../../models/PlaceLanguageModel";
+import {GetGridRequestModel, GetGridResponseModel} from "../../commons/react-table";
 
 class PlaceService extends AdminServiceBase {
   async GetAll(): Promise<PlaceModel[]> {
@@ -32,6 +33,11 @@ class PlaceService extends AdminServiceBase {
   async DeleteLanguage(Id: number): Promise<boolean> {
     let url = `${virtualPath}/place/delete-language`;
     return await super.executeFetchPost(url, Id);
+  }
+
+  async Filter(request: GetGridRequestModel): Promise<GetGridResponseModel> {
+    let url = `${virtualPath}/place/filter`;
+    return await super.executeFetchPost(url, request);
   }
 }
 
