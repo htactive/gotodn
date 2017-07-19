@@ -184,4 +184,30 @@ namespace GotoDN.Repository
             return model.Id;
         }
 	}
+
+    public partial class CityRepository : BaseRepository<City, GTDBEntities>, ICityRepository
+    {
+        public CityRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		protected override int GetKeyId(City model)
+        {
+            return model.Id;
+        }
+	}
+
+    public partial class DistrictRepository : BaseRepository<District, GTDBEntities>, IDistrictRepository
+    {
+        public DistrictRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		protected override int GetKeyId(District model)
+        {
+            return model.Id;
+        }
+	}
 }

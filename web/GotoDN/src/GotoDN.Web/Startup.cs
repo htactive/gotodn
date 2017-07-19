@@ -79,6 +79,9 @@ namespace GotoDN.Web
                 cf.CreateMap<Place, PlaceModel>().ForMember(x => x.HTService, opt => opt.Ignore());
                 cf.CreateMap<PlaceLanguage, PlaceLanguageModel>().ForMember(x => x.Place, opt => opt.Ignore());
 
+                cf.CreateMap<City, CityModel>();
+                cf.CreateMap<District, DistrictModel>().ForMember(x => x.City, opt => opt.Ignore());
+
                 cf.CreateMap<Image, ImageModel>().AfterMap((entity, model) =>
                 {
                     if (!string.IsNullOrEmpty(entity.S3FileKey))

@@ -58,4 +58,12 @@ namespace GotoDN.Repository
     public partial interface IPlaceLanguageRepository : IBaseRepository<PlaceLanguage>
     {
     }
+
+    public partial interface ICityRepository : IBaseRepository<City>
+    {
+    }
+
+    public partial interface IDistrictRepository : IBaseRepository<District>
+    {
+    }
 }

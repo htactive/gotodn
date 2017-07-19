@@ -153,6 +153,24 @@ namespace GotoDN.Repository
 				(_PlaceLanguageRepository = ServiceProvider.GetService<IPlaceLanguageRepository>());
 			}
 		}
+		private ICityRepository _CityRepository;
+        public ICityRepository CityRepository 
+		{ 
+			get
+			{
+				return _CityRepository ?? 
+				(_CityRepository = ServiceProvider.GetService<ICityRepository>());
+			}
+		}
+		private IDistrictRepository _DistrictRepository;
+        public IDistrictRepository DistrictRepository 
+		{ 
+			get
+			{
+				return _DistrictRepository ?? 
+				(_DistrictRepository = ServiceProvider.GetService<IDistrictRepository>());
+			}
+		}
 		#endregion
     }
 	
@@ -174,6 +192,8 @@ namespace GotoDN.Repository
 			services.AddScoped<IHTServiceLanguageRepository, HTServiceLanguageRepository>();
 			services.AddScoped<IPlaceRepository, PlaceRepository>();
 			services.AddScoped<IPlaceLanguageRepository, PlaceLanguageRepository>();
+			services.AddScoped<ICityRepository, CityRepository>();
+			services.AddScoped<IDistrictRepository, DistrictRepository>();
 		}
     }
 }

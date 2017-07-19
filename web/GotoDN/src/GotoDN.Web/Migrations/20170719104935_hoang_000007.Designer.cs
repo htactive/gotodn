@@ -9,9 +9,10 @@ using GotoDN.Common;
 namespace GotoDN.Web.Migrations
 {
     [DbContext(typeof(GTDBEntities))]
-    partial class GTDBEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20170719104935_hoang_000007")]
+    partial class hoang_000007
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2");
@@ -393,7 +394,7 @@ namespace GotoDN.Web.Migrations
             modelBuilder.Entity("GotoDN.Entities.District", b =>
                 {
                     b.HasOne("GotoDN.Entities.City", "City")
-                        .WithMany("District")
+                        .WithMany()
                         .HasForeignKey("CityId");
                 });
 

@@ -25,6 +25,8 @@ namespace GotoDN.Entities
         public DbSet<HTServiceLanguage> HTServiceLanguage { get; set; }
         public DbSet<Place> Place { get; set; }
         public DbSet<PlaceLanguage> PlaceLanguage { get; set; }
+        public DbSet<City> City { get; set; }
+        public DbSet<District> District { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
