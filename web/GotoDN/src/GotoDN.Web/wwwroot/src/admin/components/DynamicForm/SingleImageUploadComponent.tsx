@@ -3,6 +3,7 @@ import {FieldValueModel} from "../../../models/field-value-model";
 import {DynamicFieldModel} from "../../../models/dynamic-field-model";
 import {ImageModel} from "../../../models/ImageModel";
 import {ImageServiceInstance} from "../../services/image-service";
+import {ICON_SIZE, IMAGE_SIZE} from "../../../commons/constant";
 
 interface thisProps {
   FieldValue: FieldValueModel,
