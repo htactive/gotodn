@@ -75,6 +75,22 @@ namespace GotoDN.Web.Controllers
             this.AddClaimToRoles("User_W", new List<RoleTypeEnums>() {
                 RoleTypeEnums.SuperAdmin,
             });
+            this.AddClaimToRoles("Category_W", new List<RoleTypeEnums>() {
+                RoleTypeEnums.SuperAdmin,
+                RoleTypeEnums.Admin,
+            });
+            this.AddClaimToRoles("Service_W", new List<RoleTypeEnums>() {
+                RoleTypeEnums.SuperAdmin,
+                RoleTypeEnums.Admin,
+            });
+            this.AddClaimToRoles("Place_W", new List<RoleTypeEnums>() {
+                RoleTypeEnums.SuperAdmin,
+                RoleTypeEnums.Admin,
+            });
+            this.AddClaimToRoles("City_W", new List<RoleTypeEnums>() {
+                RoleTypeEnums.SuperAdmin,
+                RoleTypeEnums.Admin,
+            });
             this.HTRepository.Commit();
             return true;
         }

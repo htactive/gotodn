@@ -73,7 +73,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("create-city")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public CityModel CreateCity()
         {
             var entity = new City();
@@ -85,7 +85,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("delete-city")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool DeleteCity([FromBody]int Id)
         {
             var entity = this.HTRepository.CityRepository.GetAll()
@@ -97,7 +97,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("update-city")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool UpdateCity([FromBody]CityModel model)
         {
             if (model == null) return false;
@@ -122,7 +122,7 @@ namespace GotoDN.Web.Controllers
        
 
         [HttpPost, Route("delete-district")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool DeleteDistrict([FromBody]int Id)
         {
             var entity = this.HTRepository.DistrictRepository.GetAll()
@@ -185,7 +185,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("create-district")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public DistrictModel CreateDistrict()
         {
             var entity = new District();
@@ -197,7 +197,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("update-district")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool UpdateDistrict([FromBody]DistrictModel model)
         {
             if (model == null) return false;

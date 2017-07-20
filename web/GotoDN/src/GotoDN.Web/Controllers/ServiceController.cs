@@ -35,7 +35,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("create-service")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public HTServiceModel CreateService()
         {
             var entity = new HTService();
@@ -58,7 +58,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("delete-service")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool DeleteService([FromBody]int Id)
         {
             var entity = this.HTRepository.HTServiceRepository.GetAll()
@@ -70,7 +70,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("update-service")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool UpdateService([FromBody]HTServiceModel model)
         {
             if (model == null) return false;
@@ -101,7 +101,7 @@ namespace GotoDN.Web.Controllers
 
 
         [HttpPost, Route("add-language")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public HTServiceLanguageModel AddLanguage([FromBody]HTServiceLanguageModel model)
         {
             if (model == null) return null;
@@ -125,7 +125,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("delete-language")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool DeleteLanguage([FromBody]int Id)
         {
             var entity = this.HTRepository.HTServiceLanguageRepository.GetAll()

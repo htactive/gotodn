@@ -35,7 +35,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("create-category")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public CategoryModel CreateCategory()
         {
             var entity = new Category();
@@ -58,7 +58,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("delete-category")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool DeleteCategory([FromBody]int Id)
         {
             var entity = this.HTRepository.CategoryRepository.GetAll()
@@ -70,7 +70,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("update-category")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool UpdateCategory([FromBody]CategoryModel model)
         {
             if (model == null) return false;
@@ -100,7 +100,7 @@ namespace GotoDN.Web.Controllers
 
 
         [HttpPost, Route("add-language")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public CategoryLanguageModel AddLanguage([FromBody]CategoryLanguageModel model)
         {
             if (model == null) return null;
@@ -124,7 +124,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("delete-language")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool DeleteLanguage([FromBody]int Id)
         {
             var entity = this.HTRepository.CategoryLanguageRepository.GetAll()

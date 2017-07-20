@@ -170,9 +170,9 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         }
       };
       inforForm.DynamicFields.push(Phone);
-      inforForm.DynamicFields.push(Address);
       inforForm.DynamicFields.push(City);
       inforForm.DynamicFields.push(District);
+      inforForm.DynamicFields.push(Address);
       inforForm.DynamicFields.push(Rating);
       inforForm.DynamicFields.push(Website);
       inforForm.DynamicFields.push(IsCategorySlider);

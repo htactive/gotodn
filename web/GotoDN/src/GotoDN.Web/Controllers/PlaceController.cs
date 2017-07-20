@@ -35,7 +35,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("create-place")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public PlaceModel CreatePlace()
         {
             var entity = new Place();
@@ -59,7 +59,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("delete-place")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool DeletePlace([FromBody]int Id)
         {
             var entity = this.HTRepository.PlaceRepository.GetAll()
@@ -71,7 +71,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("update-place")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool UpdatePlace([FromBody]PlaceModel model)
         {
             if (model == null) return false;
@@ -117,7 +117,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("add-language")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public PlaceLanguageModel AddLanguage([FromBody]PlaceLanguageModel model)
         {
             if (model == null) return null;
@@ -141,7 +141,7 @@ namespace GotoDN.Web.Controllers
         }
 
         [HttpPost, Route("delete-language")]
-        [AllowAnonymous]
+        [HTAuthorize]
         public bool DeleteLanguage([FromBody]int Id)
         {
             var entity = this.HTRepository.PlaceLanguageRepository.GetAll()
