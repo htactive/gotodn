@@ -11,6 +11,8 @@ import {action_SetCurrentUser} from "./admin/modules/CurrentUser/_actions";
 import CategoryManagement from "./admin/modules/Category/CategoryManagement";
 import HTServiceManagement from "./admin/modules/Service/ServiceManagement";
 import PlaceManagement from "./admin/modules/Place/PlaceManagement";
+import CityManagement from "./admin/modules/City/CityManagement";
+import DistrictManagement from "./admin/modules/District/DistrictManagement";
 async function requireAuth(nextState, replace, next) {
   let currentUser = await UserServiceInstance.getMyProfile(() => {
   });
@@ -32,6 +34,8 @@ ReactDOM.render(
       <Route path={`${AdminRoutePath.CategoryManagement}(/:id)`} component={CategoryManagement}/>
       <Route path={`${AdminRoutePath.ServiceManagement}(/:id)`} component={HTServiceManagement}/>
       <Route path={`${AdminRoutePath.PlaceManagement}(/:id)`} component={PlaceManagement}/>
+      <Route path={`${AdminRoutePath.CityManagement}(/:id)`} component={CityManagement}/>
+      <Route path={`${AdminRoutePath.DistrictManagement}(/:id)`} component={DistrictManagement}/>
 
     </Route>
     <Route path={AdminRoutePath.Login} component={Login}/>

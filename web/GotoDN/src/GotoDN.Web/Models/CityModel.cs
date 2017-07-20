@@ -8,7 +8,7 @@ namespace GotoDN.Web.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<DistrictModel> District { get; set; }
+        public List<DistrictModel> Districts { get; set; }
     }
 
     public class DistrictModel

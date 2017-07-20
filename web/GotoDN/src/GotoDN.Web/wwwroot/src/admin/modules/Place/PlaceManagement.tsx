@@ -1,5 +1,4 @@
 import * as React from 'react';
-import PlaceList from "../../components/PlaceManagement/PlaceList";
 import {PlaceServiceInstance} from "../../services/PlaceService";
 import PlaceDetail from "../../components/PlaceManagement/PlaceDetail";
 import {PlaceModel} from "../../../models/PlaceModel";
@@ -15,7 +14,6 @@ import {TableHeaderColumn} from 'react-bootstrap-table';
 interface thisState {
   GridFilter?: GetGridRequestModel,
   GridData?: GetGridResponseModel,
-  Places?: PlaceModel[],
   Categories?: CategoryModel[],
   HTServices?: HTServiceModel[],
   HTServicesBackup?: HTServiceModel[],
@@ -26,7 +24,6 @@ class PlaceManagement extends React.Component<{}, thisState> {
   placeModal: PlaceDetail;
   state: thisState = {
     SelectedLanguage: LanguageEnums.Vietnamese,
-    Places: [],
     GridFilter: {
       CurrentPage: 1,
       IsAsc: false,
@@ -64,7 +61,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
   private async createPlace() {
     let result = await PlaceServiceInstance.CreatePlace();
     if (result) {
-      window['notice_error']();
+      window['notice_save_success']();
       let filter = this.state.GridFilter;
       if (filter) {
         filter.CurrentPage = 1;
@@ -103,7 +100,6 @@ class PlaceManagement extends React.Component<{}, thisState> {
       this.getData(filter);
 
       this.setState({
-        Places: this.state.Places.filter(x => x.Id != Id),
         SelectedPlace: null,
         SelectedLanguage: null
       });
@@ -132,7 +128,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
     if (result) {
       this.state.SelectedPlace.PlaceLanguages = this.state.SelectedPlace.PlaceLanguages
         .filter(x => x.Id != Id);
-      this.setState({SelectedLanguage: LanguageEnums.Vietnamese})
+      this.setState({SelectedLanguage: LanguageEnums.Vietnamese});
       this.forceUpdate();
     }
   }
@@ -165,7 +161,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                         <span className="input-group-btn">
                             <button className="btn btn-primary" type="button"
                                     onClick={() => this.createPlace()}
-                            ><i className="fa fa-plus"></i> Thêm địa điểm - Sự kiện</button>
+                            ><i className="fa fa-plus"/> Thêm địa điểm - Sự kiện</button>
                           </span>
                   </form>
                 </div>
@@ -179,7 +175,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                 <div className="panel-body">
                   <ReactTable request={this.state.GridFilter}
                               data={this.state.GridData}
-                              trClassName={(d) => {
+                              trClassName={() => {
                                 return ""
                               }}
                               defaultSortName={"Id"}
@@ -260,7 +256,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
   private bindNameData(data: PlaceModel) {
     let firstLanguage = data.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
     return <a className="btn btn-link"
-              onClick={(e) => {
+              onClick={() => {
                 this.placeModal.show();
                 this.setState({
                   SelectedPlace: data, SelectedLanguage: LanguageEnums.Vietnamese,

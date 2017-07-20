@@ -26,6 +26,19 @@ const menus: LeftSideBarMenuItemModel[] = [
     Icon: 'fa fa-list-alt',
     Text: 'Địa điểm - Sự kiện',
     LinkTo: AdminRoutePath.PlaceManagement
+  },
+  {
+    Icon: 'fa fa-globe',
+    Text: 'Quản lý khu vực',
+    SubMenuItems: [{
+      Icon: 'fa fa-globe',
+      Text: 'Tỉnh thành',
+      LinkTo: AdminRoutePath.CityManagement,
+    }, {
+      Icon: 'fa fa-globe',
+      Text: 'Quận huyện',
+      LinkTo: AdminRoutePath.DistrictManagement,
+    }],
   }
 ];
 interface thisState {
