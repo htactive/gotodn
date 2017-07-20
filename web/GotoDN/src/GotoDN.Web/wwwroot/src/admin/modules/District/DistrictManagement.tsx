@@ -5,6 +5,7 @@ import {GetGridRequestModel, GetGridResponseModel, ReactTable} from "../../../co
 import {TableHeaderColumn} from 'react-bootstrap-table';
 import DistrictModal from "../../components/DistrictManagement/DistrictModal";
 import {CityServiceInstance} from "../../services/CityService";
+import {SweetAlertResultEnums, SweetAlerts, SweetAlertTypeEnums} from "../../../commons/sweet-alerts";
 
 interface thisState {
   GridFilter?: GetGridRequestModel,
@@ -46,7 +47,7 @@ class DistrictManagement extends React.Component<{}, thisState> {
   private async createDistrict() {
     let result = await DistrictServiceInstance.CreateDistrict();
     if (result) {
-      window['notice_save_success']();
+      window['notice_create_success']();
       let filter = this.state.GridFilter;
       if (filter) {
         filter.CurrentPage = 1;
@@ -66,26 +67,43 @@ class DistrictManagement extends React.Component<{}, thisState> {
   private async updateDistrict(model: DistrictModel) {
     let result = await DistrictServiceInstance.UpdateDistrict(model);
     if (result) {
+      window['notice_save_success']();
       this.getData(this.state.GridFilter);
+    }
+    else {
+      window['notice_error']();
     }
   }
 
   private async deleteDistrict(Id: number) {
-    let result = await DistrictServiceInstance.DeleteDistrict(Id);
-    if (result) {
-      let filter = this.state.GridFilter;
-      if (filter) {
-        filter.CurrentPage = this.state.GridData
-        && this.state.GridData.DataSource
-        && this.state.GridData.DataSource.length <= 1
-          ? Math.max(filter.CurrentPage - 1, 1) : filter.CurrentPage
-        ;
-      }
-      this.getData(filter);
+    if (await SweetAlerts.show({
+        type: SweetAlertTypeEnums.Error,
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc muốn xóa quận huyện này?',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        closeOnConfirm: true
+      }) == SweetAlertResultEnums.Confirm) {
+      let result = await DistrictServiceInstance.DeleteDistrict(Id);
+      if (result) {
+        window['notice_delete_success']();
+        let filter = this.state.GridFilter;
+        if (filter) {
+          filter.CurrentPage = this.state.GridData
+          && this.state.GridData.DataSource
+          && this.state.GridData.DataSource.length <= 1
+            ? Math.max(filter.CurrentPage - 1, 1) : filter.CurrentPage
+          ;
+        }
+        this.getData(filter);
 
-      this.setState({
-        SelectedDistrict: null,
-      });
+        this.setState({
+          SelectedDistrict: null,
+        });
+      }
+      else {
+        window['notice_error']();
+      }
     }
   }
 

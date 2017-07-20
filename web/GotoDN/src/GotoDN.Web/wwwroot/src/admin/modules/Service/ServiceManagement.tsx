@@ -7,6 +7,7 @@ import {LanguageEnums} from "../../../commons/constant";
 import {HTServiceLanguageModel} from "../../../models/HTServiceLanguageModel";
 import {CategoryModel} from "../../../models/CategoryModel";
 import {CategoryServiceInstance} from "../../services/CategoryService";
+import {SweetAlertResultEnums, SweetAlerts, SweetAlertTypeEnums} from "../../../commons/sweet-alerts";
 interface thisState {
   Categories?: CategoryModel[],
   HTServices?: HTServiceModel[],
@@ -39,6 +40,7 @@ class HTServiceManagement extends React.Component<{}, thisState> {
   private async createHTService() {
     let result = await HTServiceInstance.CreateHTService();
     if (result) {
+      window['notice_create_success']();
       if (this.state.HTServices) {
         this.state.HTServices.push(result);
         this.setState({
@@ -48,23 +50,42 @@ class HTServiceManagement extends React.Component<{}, thisState> {
         this.forceUpdate();
       }
     }
+    else {
+      window['notice_error']();
+    }
   }
 
   private async updateHTService() {
     let result = await HTServiceInstance.UpdateHTService(this.state.SelectedHTService);
     if (result) {
-
+      window['notice_save_success']();
+    }
+    else {
+      window['notice_error']();
     }
   }
 
   private async deleteHTService(Id: number) {
-    let result = await HTServiceInstance.DeleteHTService(Id);
-    if (result) {
-      this.setState({
-        HTServices: this.state.HTServices.filter(x => x.Id != Id),
-        SelectedHTService: null,
-        SelectedLanguage: null
-      });
+    if (await SweetAlerts.show({
+        type: SweetAlertTypeEnums.Error,
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc muốn xóa dịch vụ này?',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        closeOnConfirm: true
+      }) == SweetAlertResultEnums.Confirm) {
+      let result = await HTServiceInstance.DeleteHTService(Id);
+      if (result) {
+        window['notice_delete_success']();
+        this.setState({
+          HTServices: this.state.HTServices.filter(x => x.Id != Id),
+          SelectedHTService: null,
+          SelectedLanguage: null
+        });
+      }
+      else {
+        window['notice_error']();
+      }
     }
   }
 
@@ -78,20 +99,37 @@ class HTServiceManagement extends React.Component<{}, thisState> {
 
     let result = await HTServiceInstance.AddLanguage(HTServiceLanguage);
     if (result) {
+      window['notice_create_success']();
       this.state.SelectedHTService.HTServiceLanguages.push(result);
       this.setState({
         SelectedLanguage: lang,
       });
     }
+    else {
+      window['notice_error']();
+    }
   }
 
   private async deleteHTServiceLanguage(Id: number) {
-    let result = await HTServiceInstance.DeleteLanguage(Id);
-    if (result) {
-      this.state.SelectedHTService.HTServiceLanguages = this.state.SelectedHTService.HTServiceLanguages
-        .filter(x => x.Id != Id);
-      this.setState({SelectedLanguage: LanguageEnums.English})
-      this.forceUpdate();
+    if (await SweetAlerts.show({
+        type: SweetAlertTypeEnums.Error,
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc muốn xóa ngôn ngữ này?',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        closeOnConfirm: true
+      }) == SweetAlertResultEnums.Confirm) {
+      let result = await HTServiceInstance.DeleteLanguage(Id);
+      if (result) {
+        window['notice_delete_success']();
+        this.state.SelectedHTService.HTServiceLanguages = this.state.SelectedHTService.HTServiceLanguages
+          .filter(x => x.Id != Id);
+        this.setState({SelectedLanguage: LanguageEnums.English})
+        this.forceUpdate();
+      }
+      else {
+        window['notice_error']();
+      }
     }
   }
 

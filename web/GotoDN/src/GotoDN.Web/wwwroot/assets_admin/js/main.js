@@ -203,11 +203,19 @@ function notice(noticeType, noticeTitle, noticeText, icon, noticeTime, closeIcon
 }
 
 function notice_error() {
-  window['notice']('error-notice', 'Error', 'Occurred an error, Please refresh page and try again !!!', 'glyphicon glyphicon-remove');
+  window['notice']('error-notice', 'Lỗi', 'Đã có lỗi xảy ra!!!', 'glyphicon glyphicon-remove');
 }
 
 function notice_save_success() {
-  window['notice']('success-notice', 'Success', 'Saved successfully.', 'fa fa-check-circle-o');
+  window['notice']('success-notice', 'Thành công', 'Đã lưu dữ liệu thành công.', 'fa fa-check-circle-o');
+}
+
+function notice_delete_success() {
+  window['notice']('success-notice', 'Thành công', 'Đã xóa dữ liệu thành công.', 'fa fa-check-circle-o');
+}
+
+function notice_create_success() {
+  window['notice']('success-notice', 'Thành công', 'Đã tạo dữ liệu thành công.', 'fa fa-check-circle-o');
 }
 
 $(window).on('show.bs.dropdown', function (e) {

@@ -10,6 +10,7 @@ import {CategoryServiceInstance} from "../../services/CategoryService";
 import {HTServiceInstance} from "../../services/HTService";
 import {GetGridRequestModel, GetGridResponseModel, ReactTable} from "../../../commons/react-table";
 import {TableHeaderColumn} from 'react-bootstrap-table';
+import {SweetAlertResultEnums, SweetAlerts, SweetAlertTypeEnums} from "../../../commons/sweet-alerts";
 
 interface thisState {
   GridFilter?: GetGridRequestModel,
@@ -61,7 +62,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
   private async createPlace() {
     let result = await PlaceServiceInstance.CreatePlace();
     if (result) {
-      window['notice_save_success']();
+      window['notice_create_success']();
       let filter = this.state.GridFilter;
       if (filter) {
         filter.CurrentPage = 1;
@@ -82,27 +83,44 @@ class PlaceManagement extends React.Component<{}, thisState> {
   private async updatePlace(model: PlaceModel) {
     let result = await PlaceServiceInstance.UpdatePlace(model);
     if (result) {
+      window['notice_save_success']();
       this.getData(this.state.GridFilter);
+    }
+    else {
+      window['notice_error']();
     }
   }
 
   private async deletePlace(Id: number) {
-    let result = await PlaceServiceInstance.DeletePlace(Id);
-    if (result) {
-      let filter = this.state.GridFilter;
-      if (filter) {
-        filter.CurrentPage = this.state.GridData
-        && this.state.GridData.DataSource
-        && this.state.GridData.DataSource.length <= 1
-          ? Math.max(filter.CurrentPage - 1, 1) : filter.CurrentPage
-        ;
-      }
-      this.getData(filter);
+    if (await SweetAlerts.show({
+        type: SweetAlertTypeEnums.Error,
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc muốn xóa?',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        closeOnConfirm: true
+      }) == SweetAlertResultEnums.Confirm) {
+      let result = await PlaceServiceInstance.DeletePlace(Id);
+      if (result) {
+        window['notice_delete_success']();
+        let filter = this.state.GridFilter;
+        if (filter) {
+          filter.CurrentPage = this.state.GridData
+          && this.state.GridData.DataSource
+          && this.state.GridData.DataSource.length <= 1
+            ? Math.max(filter.CurrentPage - 1, 1) : filter.CurrentPage
+          ;
+        }
+        this.getData(filter);
 
-      this.setState({
-        SelectedPlace: null,
-        SelectedLanguage: null
-      });
+        this.setState({
+          SelectedPlace: null,
+          SelectedLanguage: null
+        });
+      }
+      else {
+        window['notice_error']();
+      }
     }
   }
 
@@ -116,20 +134,37 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
     let result = await PlaceServiceInstance.AddLanguage(PlaceLanguage);
     if (result) {
+      window['notice_create_success']();
       this.state.SelectedPlace.PlaceLanguages.push(result);
       this.setState({
         SelectedLanguage: lang,
       });
     }
+    else {
+      window['notice_error']();
+    }
   }
 
   private async deletePlaceLanguage(Id: number) {
-    let result = await PlaceServiceInstance.DeleteLanguage(Id);
-    if (result) {
-      this.state.SelectedPlace.PlaceLanguages = this.state.SelectedPlace.PlaceLanguages
-        .filter(x => x.Id != Id);
-      this.setState({SelectedLanguage: LanguageEnums.English});
-      this.forceUpdate();
+    if (await SweetAlerts.show({
+        type: SweetAlertTypeEnums.Error,
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc muốn xóa ngôn ngữ này?',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        closeOnConfirm: true
+      }) == SweetAlertResultEnums.Confirm) {
+      let result = await PlaceServiceInstance.DeleteLanguage(Id);
+      if (result) {
+        window['notice_delete_success']();
+        this.state.SelectedPlace.PlaceLanguages = this.state.SelectedPlace.PlaceLanguages
+          .filter(x => x.Id != Id);
+        this.setState({SelectedLanguage: LanguageEnums.English});
+        this.forceUpdate();
+      }
+      else {
+        window['notice_error']();
+      }
     }
   }
 

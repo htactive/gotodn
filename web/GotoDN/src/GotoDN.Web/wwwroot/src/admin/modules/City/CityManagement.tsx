@@ -4,6 +4,7 @@ import {CityModel} from "../../../models/CityModel";
 import {GetGridRequestModel, GetGridResponseModel, ReactTable} from "../../../commons/react-table";
 import {TableHeaderColumn} from 'react-bootstrap-table';
 import CityModal from "../../components/CityManagement/CityModal";
+import {SweetAlertResultEnums, SweetAlerts, SweetAlertTypeEnums} from "../../../commons/sweet-alerts";
 
 interface thisState {
   GridFilter?: GetGridRequestModel,
@@ -39,7 +40,7 @@ class CityManagement extends React.Component<{}, thisState> {
   private async createCity() {
     let result = await CityServiceInstance.CreateCity();
     if (result) {
-      window['notice_save_success']();
+      window['notice_create_success']();
       let filter = this.state.GridFilter;
       if (filter) {
         filter.CurrentPage = 1;
@@ -59,26 +60,43 @@ class CityManagement extends React.Component<{}, thisState> {
   private async updateCity(model: CityModel) {
     let result = await CityServiceInstance.UpdateCity(model);
     if (result) {
+      window['notice_save_success']();
       this.getData(this.state.GridFilter);
+    }
+    else {
+      window['notice_error']();
     }
   }
 
   private async deleteCity(Id: number) {
-    let result = await CityServiceInstance.DeleteCity(Id);
-    if (result) {
-      let filter = this.state.GridFilter;
-      if (filter) {
-        filter.CurrentPage = this.state.GridData
-        && this.state.GridData.DataSource
-        && this.state.GridData.DataSource.length <= 1
-          ? Math.max(filter.CurrentPage - 1, 1) : filter.CurrentPage
-        ;
-      }
-      this.getData(filter);
+    if (await SweetAlerts.show({
+        type: SweetAlertTypeEnums.Error,
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc muốn xóa tỉnh thành này?',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        closeOnConfirm: true
+      }) == SweetAlertResultEnums.Confirm) {
+      let result = await CityServiceInstance.DeleteCity(Id);
+      if (result) {
+        window['notice_delete_success']();
+        let filter = this.state.GridFilter;
+        if (filter) {
+          filter.CurrentPage = this.state.GridData
+          && this.state.GridData.DataSource
+          && this.state.GridData.DataSource.length <= 1
+            ? Math.max(filter.CurrentPage - 1, 1) : filter.CurrentPage
+          ;
+        }
+        this.getData(filter);
 
-      this.setState({
-        SelectedCity: null,
-      });
+        this.setState({
+          SelectedCity: null,
+        });
+      }
+      else {
+        window['notice_error']();
+      }
     }
   }
 

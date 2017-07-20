@@ -5,6 +5,7 @@ import CategoryDetail from "../../components/CategoryManagement/CategoryDetail";
 import {CategoryModel} from "../../../models/CategoryModel";
 import {LanguageEnums} from "../../../commons/constant";
 import {CategoryLanguageModel} from "../../../models/CategoryLanguageModel";
+import {SweetAlertResultEnums, SweetAlerts, SweetAlertTypeEnums} from "../../../commons/sweet-alerts";
 interface thisState {
   Categories?: CategoryModel[],
   SelectedCategory?: CategoryModel,
@@ -31,6 +32,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
   private async createCategory() {
     let result = await CategoryServiceInstance.CreateCategory();
     if (result) {
+      window['notice_create_success']();
       if (this.state.Categories) {
         this.state.Categories.push(result);
         this.setState({
@@ -40,23 +42,39 @@ class CategoryManagement extends React.Component<{}, thisState> {
         this.forceUpdate();
       }
     }
+    else {
+      window['notice_error']();
+    }
   }
 
   private async updateCategory(model: CategoryModel) {
     let result = await CategoryServiceInstance.UpdateCategory(model);
     if (result) {
-
+      window['notice_save_success']();
     }
   }
 
   private async deleteCategory(Id: number) {
-    let result = await CategoryServiceInstance.DeleteCategory(Id);
-    if (result) {
-      this.setState({
-        Categories: this.state.Categories.filter(x => x.Id != Id),
-        SelectedCategory: null,
-        SelectedLanguage: null
-      });
+    if (await SweetAlerts.show({
+        type: SweetAlertTypeEnums.Error,
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc muốn xóa danh mục này?',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        closeOnConfirm: true
+      }) == SweetAlertResultEnums.Confirm) {
+      let result = await CategoryServiceInstance.DeleteCategory(Id);
+      if (result) {
+        window['notice_delete_success']();
+        this.setState({
+          Categories: this.state.Categories.filter(x => x.Id != Id),
+          SelectedCategory: null,
+          SelectedLanguage: null
+        });
+      }
+      else {
+        window['notice_error']();
+      }
     }
   }
 
@@ -70,20 +88,37 @@ class CategoryManagement extends React.Component<{}, thisState> {
 
     let result = await CategoryServiceInstance.AddLanguage(categoryLanguage);
     if (result) {
+      window['notice_create_success']();
       this.state.SelectedCategory.CategoryLanguages.push(result);
       this.setState({
         SelectedLanguage: lang,
       });
     }
+    else {
+      window['notice_error']();
+    }
   }
 
   private async deleteCategoryLanguage(Id: number) {
-    let result = await CategoryServiceInstance.DeleteLanguage(Id);
-    if (result) {
-      this.state.SelectedCategory.CategoryLanguages = this.state.SelectedCategory.CategoryLanguages
-        .filter(x => x.Id != Id);
-      this.setState({SelectedLanguage: LanguageEnums.English})
-      this.forceUpdate();
+    if (await SweetAlerts.show({
+        type: SweetAlertTypeEnums.Error,
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc muốn xóa ngôn ngữ này?',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        closeOnConfirm: true
+      }) == SweetAlertResultEnums.Confirm) {
+      let result = await CategoryServiceInstance.DeleteLanguage(Id);
+      if (result) {
+        window['notice_delete_success']();
+        this.state.SelectedCategory.CategoryLanguages = this.state.SelectedCategory.CategoryLanguages
+          .filter(x => x.Id != Id);
+        this.setState({SelectedLanguage: LanguageEnums.English})
+        this.forceUpdate();
+      }
+      else {
+        window['notice_error']();
+      }
     }
   }
 
