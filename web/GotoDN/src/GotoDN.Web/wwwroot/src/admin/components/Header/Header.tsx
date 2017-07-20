@@ -16,8 +16,8 @@ class Header extends React.Component<any, thisState> {
   render() {
     return (<div id="header" className="page-navbar">
         <a href="/" className="navbar-brand hidden-xs hidden-sm logo logo-title">
-          <img src="/images/admin_logo.png" className="logo hidden-xs" alt="New Homes Admin"/>
-          <img src="/images/admin_logosm.png" className="logo-sm hidden-lg hidden-md" alt="New Homes Admin"/>
+          <img src="/images/ic-goto.png" width="40" height="40" className="logo hidden-xs" alt="GotoDN Admin"/>
+          <img src="/images/ic-goto.png" width="40" height="40" className="logo-sm hidden-lg hidden-md" alt="GotoDN Admin"/>
         </a>
         <div id="navbar-no-collapse" className="navbar-no-collapse">
           <ul className="nav navbar-nav">

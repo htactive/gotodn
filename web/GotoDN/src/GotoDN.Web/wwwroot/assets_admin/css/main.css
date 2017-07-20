@@ -918,7 +918,7 @@ body.fixed-right-sidebar:not(.fixed-header) #right-sidebar.rstop {
   background-color: #303946;
   text-transform: uppercase;
   font-weight: bold;
-  padding: 1px 15px;
+  padding: 5px 15px;
   font-size: 21px;
 }
 .page-navbar .navbar-brand.collapse-sidebar {
@@ -930,7 +930,7 @@ body.fixed-right-sidebar:not(.fixed-header) #right-sidebar.rstop {
 .page-navbar .navbar-brand.collapse-sidebar .logo-sm {
   display: block !important;
   float: left;
-  margin-left: 6px;
+  margin-left: 0px;
 }
 .page-navbar .navbar-brand.hide-logo {
   display: none;

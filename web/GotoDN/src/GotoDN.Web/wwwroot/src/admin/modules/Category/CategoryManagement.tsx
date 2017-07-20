@@ -12,7 +12,7 @@ interface thisState {
 }
 class CategoryManagement extends React.Component<{}, thisState> {
   state: thisState = {
-    SelectedLanguage: LanguageEnums.Vietnamese,
+    SelectedLanguage: LanguageEnums.English,
     Categories: [],
   };
 
@@ -35,8 +35,8 @@ class CategoryManagement extends React.Component<{}, thisState> {
         this.state.Categories.push(result);
         this.setState({
           SelectedCategory: result,
-          SelectedLanguage: result.CategoryLanguages ? result.CategoryLanguages[0].Language : LanguageEnums.Vietnamese,
-        })
+          SelectedLanguage: result.CategoryLanguages ? result.CategoryLanguages[0].Language : LanguageEnums.English,
+        });
         this.forceUpdate();
       }
     }
@@ -82,7 +82,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
     if (result) {
       this.state.SelectedCategory.CategoryLanguages = this.state.SelectedCategory.CategoryLanguages
         .filter(x => x.Id != Id);
-      this.setState({SelectedLanguage: LanguageEnums.Vietnamese})
+      this.setState({SelectedLanguage: LanguageEnums.English})
       this.forceUpdate();
     }
   }
@@ -107,7 +107,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                 SelectedCategory={this.state.SelectedCategory}
                                 ChangeSelectedCateogry={(model) => this.setState({
                                   SelectedCategory: model,
-                                  SelectedLanguage: LanguageEnums.Vietnamese,
+                                  SelectedLanguage: LanguageEnums.English,
                                 })}
                                 CreateCategory={() => this.createCategory()}
                   />

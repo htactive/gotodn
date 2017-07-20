@@ -33,7 +33,8 @@
     "Microsoft.EntityFrameworkCore": "1.1.2",
     "AWSSDK.S3": "3.3.5.15",
     "MailKit": "1.16.1",
-    "AutoMapper": "6.1.1"
+    "AutoMapper": "6.1.1",
+    "CoreCompat.System.Drawing": "1.0.0-beta006"
   },
 
   "tools": {

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {CategoryModel} from "../../../models/CategoryModel";
+import {LanguageEnums} from "../../../commons/constant";
 interface thisProps {
   Model: CategoryModel,
   IsSelected: boolean,
@@ -13,11 +14,13 @@ class CategoryItem extends React.Component<thisProps, thisState> {
   }
 
   render() {
-    let firstLanguage = this.props.Model.CategoryLanguages.sort((a, b) => a.Language - b.Language)[0];
+    let firstLanguage = this.props.Model.CategoryLanguages
+                          .sort((a, b) => a.Language - b.Language)
+                          .filter(t => t.Language == LanguageEnums.English)[0];
     return (
       <a className={`list-group-item${this.props.IsSelected ? ' active' : ''}`}
          onClick={() => this.props.changeSelectedCategory()}>
-        {(firstLanguage ? firstLanguage.Title : '') || ('Chưa đặt tên')}
+        {(firstLanguage ? firstLanguage.Title : '') }
       </a>);
   }
 }

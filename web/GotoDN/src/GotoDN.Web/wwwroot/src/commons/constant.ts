@@ -110,6 +110,7 @@ export enum ValidateRuleTypeEnums{
   IsAPhoneNumber = 11,
   NotEquals = 12,
   Equals = 13,
+  MaxSize=20,
   CustomExpression = 100
 }
 
@@ -187,3 +188,6 @@ export enum LanguageEnums{
   Korean = 5,
   France = 6
 }
+
+export const ICON_SIZE = 1 * 1024 * 1024;
+export const IMAGE_SIZE = 5 * 1024 * 1024;
