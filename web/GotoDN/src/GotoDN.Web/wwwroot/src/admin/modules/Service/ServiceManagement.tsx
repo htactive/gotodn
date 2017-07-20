@@ -15,7 +15,7 @@ interface thisState {
 }
 class HTServiceManagement extends React.Component<{}, thisState> {
   state: thisState = {
-    SelectedLanguage: LanguageEnums.Vietnamese,
+    SelectedLanguage: LanguageEnums.English,
     HTServices: [],
   };
 
@@ -43,7 +43,7 @@ class HTServiceManagement extends React.Component<{}, thisState> {
         this.state.HTServices.push(result);
         this.setState({
           SelectedHTService: result,
-          SelectedLanguage: result.HTServiceLanguages ? result.HTServiceLanguages[0].Language : LanguageEnums.Vietnamese,
+          SelectedLanguage: result.HTServiceLanguages ? result.HTServiceLanguages[0].Language : LanguageEnums.English,
         })
         this.forceUpdate();
       }
@@ -90,7 +90,7 @@ class HTServiceManagement extends React.Component<{}, thisState> {
     if (result) {
       this.state.SelectedHTService.HTServiceLanguages = this.state.SelectedHTService.HTServiceLanguages
         .filter(x => x.Id != Id);
-      this.setState({SelectedLanguage: LanguageEnums.Vietnamese})
+      this.setState({SelectedLanguage: LanguageEnums.English})
       this.forceUpdate();
     }
   }
@@ -120,7 +120,7 @@ class HTServiceManagement extends React.Component<{}, thisState> {
                                  SelectedHTService={this.state.SelectedHTService}
                                  ChangeSelectedService={(model) => this.setState({
                                    SelectedHTService: model,
-                                   SelectedLanguage: LanguageEnums.Vietnamese,
+                                   SelectedLanguage: LanguageEnums.English,
                                  })}
                                  CreateHTService={() => this.createHTService()}
                   />

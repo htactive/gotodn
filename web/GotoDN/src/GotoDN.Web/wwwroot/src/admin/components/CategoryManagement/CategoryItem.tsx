@@ -20,7 +20,7 @@ class CategoryItem extends React.Component<thisProps, thisState> {
     return (
       <a className={`list-group-item${this.props.IsSelected ? ' active' : ''}`}
          onClick={() => this.props.changeSelectedCategory()}>
-        {(firstLanguage ? firstLanguage.Title : '') }
+        {(firstLanguage ? firstLanguage.Title : 'Chưa đặt tên') }
       </a>);
   }
 }

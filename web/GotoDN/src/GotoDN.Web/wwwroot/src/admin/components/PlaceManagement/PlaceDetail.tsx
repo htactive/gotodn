@@ -222,6 +222,66 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
           <div className="col-lg-12 col-sm-12 form-horizontal">
             <div className="tabs mb20">
               <ul className="nav nav-tabs">
+                <div className="form-group">
+                  <div className="col-sm-3">
+                    <ComboBox
+                      placeHolder="Chọn category..."
+                      options={Categories}
+                      value={this.props.SelectedPlace.CategoryId}
+                      onChange={(Id) => this.props.ClickSlectCategory(Id)}
+                    />
+                  </div>
+
+                  <div className="col-sm-3">
+                    <ComboBox
+                      placeHolder="Chọn service..."
+                      options={HTServices}
+                      value={this.props.SelectedPlace.HTServiceId}
+                      onChange={(Id) => this.props.ClickSlectHTService(Id)}
+                    />
+                  </div>
+
+                  <div className="btn-group dropdown col-sm-3">
+                    <button type="button" className="btn btn-success dropdown-toggle"
+                            data-toggle="dropdown" aria-expanded="false">
+                      Thêm ngôn ngữ
+                      <span className="caret"></span>
+                    </button>
+                    <ul className="dropdown-menu left animated fadeIn" role="menu">
+                      {languages.filter(x =>
+                        this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages &&
+                        !this.props.SelectedPlace.PlaceLanguages.some(r => r.Language == x.Language)
+                      ).map((item, index) =>
+                        <li key={index}>
+                          <a onClick={() => this.props.AddPlaceLanguage
+                          && this.props.AddPlaceLanguage(item.Language)}>{item.Title}</a>
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+
+                  <div className="form-group col-sm-3">
+                    <button className="btn btn-danger pull-right" style={{marginLeft:5}}
+                            onClick={() => this.deletePlace()}><i
+                      className="fa fa-trash-o"/> Xóa
+                    </button>
+
+                    <button className="btn btn-primary pull-right"
+                            onClick={() => this.savePlace()}><i
+                      className="fa fa-save"/> Lưu
+                    </button>
+
+                    <button className="btn btn-default hidden"
+                            onClick={() => this.discardChangesEditing()}>Làm lại
+                    </button>
+                  </div>
+
+
+
+                </div>
+
+                <hr/>
+
                 {
                   this.props.SelectedPlace.PlaceLanguages.map(x =>
                     <li key={x.Id}
@@ -230,7 +290,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                         {languages.filter(r => r.Language == x.Language)[0].Title}
                         &nbsp;
                         &nbsp;
-                        {x.Language == LanguageEnums.Vietnamese ?
+                        {x.Language == LanguageEnums.English ?
                           null : <span onClick={() => this.props.DeletePlaceLanguage
                           && this.props.DeletePlaceLanguage(x.Id)}
                           >
@@ -253,65 +313,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                   })
                 }
               </div>
-            </div>
-
-            <hr/>
-            <div className="form-group">
-              <div className="col-sm-3">
-                <ComboBox
-                  placeHolder="Chọn category..."
-                  options={Categories}
-                  value={this.props.SelectedPlace.CategoryId}
-                  onChange={(Id) => this.props.ClickSlectCategory(Id)}
-                />
-              </div>
-
-              <div className="col-sm-3">
-                <ComboBox
-                  placeHolder="Chọn service..."
-                  options={HTServices}
-                  value={this.props.SelectedPlace.HTServiceId}
-                  onChange={(Id) => this.props.ClickSlectHTService(Id)}
-                />
-              </div>
-
-              <div className="btn-group dropdown col-sm-3">
-                <button type="button" className="btn btn-success dropdown-toggle"
-                        data-toggle="dropdown" aria-expanded="false">
-                  Thêm ngôn ngữ
-                  <span className="caret"></span>
-                </button>
-                <ul className="dropdown-menu left animated fadeIn" role="menu">
-                  {languages.filter(x =>
-                    this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages &&
-                    !this.props.SelectedPlace.PlaceLanguages.some(r => r.Language == x.Language)
-                  ).map((item, index) =>
-                    <li key={index}>
-                      <a onClick={() => this.props.AddPlaceLanguage
-                      && this.props.AddPlaceLanguage(item.Language)}>{item.Title}</a>
-                    </li>
-                  )}
-                </ul>
-              </div>
-
-              <div className="form-group col-sm-3">
-                <button className="btn btn-danger pull-right" style={{marginLeft:5}}
-                        onClick={() => this.deletePlace()}><i
-                  className="fa fa-trash-o"/> Xóa
-                </button>
-
-                <button className="btn btn-primary pull-right"
-                        onClick={() => this.savePlace()}><i
-                  className="fa fa-save"/> Lưu
-                </button>
-
-                <button className="btn btn-default hidden"
-                        onClick={() => this.discardChangesEditing()}>Làm lại
-                </button>
-              </div>
-
-
-
             </div>
 
             <hr/>

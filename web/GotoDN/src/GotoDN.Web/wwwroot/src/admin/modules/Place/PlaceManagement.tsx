@@ -23,7 +23,7 @@ interface thisState {
 class PlaceManagement extends React.Component<{}, thisState> {
   placeModal: PlaceDetail;
   state: thisState = {
-    SelectedLanguage: LanguageEnums.Vietnamese,
+    SelectedLanguage: LanguageEnums.English,
     GridFilter: {
       CurrentPage: 1,
       IsAsc: false,
@@ -71,7 +71,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
       this.getData(filter);
       this.setState({
         SelectedPlace: result,
-        SelectedLanguage: result.PlaceLanguages ? result.PlaceLanguages[0].Language : LanguageEnums.Vietnamese,
+        SelectedLanguage: result.PlaceLanguages ? result.PlaceLanguages[0].Language : LanguageEnums.English,
       })
     }
     else {
@@ -128,7 +128,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
     if (result) {
       this.state.SelectedPlace.PlaceLanguages = this.state.SelectedPlace.PlaceLanguages
         .filter(x => x.Id != Id);
-      this.setState({SelectedLanguage: LanguageEnums.Vietnamese});
+      this.setState({SelectedLanguage: LanguageEnums.English});
       this.forceUpdate();
     }
   }
@@ -259,7 +259,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
               onClick={() => {
                 this.placeModal.show();
                 this.setState({
-                  SelectedPlace: data, SelectedLanguage: LanguageEnums.Vietnamese,
+                  SelectedPlace: data, SelectedLanguage: LanguageEnums.English,
                 });
                 data && data.CategoryId ?
                   this.setState({HTServices: this.state.HTServicesBackup.filter(x => x.CategoryId == data.CategoryId)})

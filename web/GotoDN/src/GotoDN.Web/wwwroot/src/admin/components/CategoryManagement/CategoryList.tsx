@@ -5,7 +5,7 @@ import CategoryItem from "./CategoryItem";
 interface thisProps {
   Categories: CategoryModel[],
   SelectedCategory: CategoryModel,
-  ChangeSelectedCateogry: (model: CategoryModel) => void,
+  ChangeSelectedCategory: (model: CategoryModel) => void,
   CreateCategory: () => void,
 }
 interface thisState {
@@ -31,7 +31,7 @@ class CategoryList extends React.Component<thisProps, thisState> {
           {this.props.Categories ? this.props.Categories.map(x =>
             <CategoryItem key={x.Id} Model={x}
                           IsSelected={this.props.SelectedCategory && x.Id == this.props.SelectedCategory.Id}
-                          changeSelectedCategory={() => this.props.ChangeSelectedCateogry(x)}
+                          changeSelectedCategory={() => this.props.ChangeSelectedCategory(x)}
             />) : null}
         </ul>
         <hr/>

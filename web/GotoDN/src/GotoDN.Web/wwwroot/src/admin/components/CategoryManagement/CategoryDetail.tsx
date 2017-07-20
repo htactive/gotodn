@@ -43,7 +43,7 @@ class CategoryDetail extends React.Component<thisProps, {}> {
                         {languages.filter(r => r.Language == x.Language)[0].Title}
                         &nbsp;
                         &nbsp;
-                        {x.Language == LanguageEnums.Vietnamese ?
+                        {x.Language == LanguageEnums.English ?
                           null : <span onClick={() => this.props.DeleteCategoryLanguage
                           && this.props.DeleteCategoryLanguage(x.Id)}
                           >

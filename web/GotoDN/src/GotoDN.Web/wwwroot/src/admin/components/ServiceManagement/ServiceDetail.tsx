@@ -52,7 +52,7 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
                         {languages.filter(r => r.Language == x.Language)[0].Title}
                         &nbsp;
                         &nbsp;
-                        {x.Language == LanguageEnums.Vietnamese ?
+                        {x.Language == LanguageEnums.English ?
                           null : <span onClick={() => this.props.DeleteHTServiceLanguage
                           && this.props.DeleteHTServiceLanguage(x.Id)}
                                     style={{background: 'transparent', border: 'transparent', boxShadow: 'none'}}
