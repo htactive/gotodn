@@ -71,7 +71,7 @@ class UserList extends React.Component<{}, thisState> {
           <div className="panel panel-default plain toggle panelMove">
             <div className="panel-body">
               <div className="table-toolbar">
-                <button className="btn btn-success" onClick={() => this.create()}><i className="fa fa-plus"/> Thêm người
+                <button className="btn btn-primary" onClick={() => this.create()}><i className="fa fa-plus"/> Thêm người
                   dùng
                 </button>
               </div>

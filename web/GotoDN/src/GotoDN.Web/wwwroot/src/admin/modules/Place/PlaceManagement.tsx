@@ -153,26 +153,14 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
           <div className="row">
             <div className="col-lg-12 col-md-12 col-sm-12">
-              <div className="panel panel-default plain toggle panelMove  ">
-                <div className="panel-body">
-
-                  <form className="form-inline">
-
-                        <span className="input-group-btn">
-                            <button className="btn btn-primary" type="button"
-                                    onClick={() => this.createPlace()}
-                            ><i className="fa fa-plus"/> Thêm địa điểm - Sự kiện</button>
-                          </span>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-lg-12 col-md-12 col-sm-12">
               <div className="panel panel-default plain toggle panelMove">
                 <div className="panel-body">
+                  <div className="table-toolbar">
+                    <button className="btn btn-primary" type="button"
+                            onClick={() => this.createPlace()}>
+                      <i className="fa fa-plus"/> Thêm địa điểm - Sự kiện
+                    </button>
+                  </div>
                   <ReactTable request={this.state.GridFilter}
                               data={this.state.GridData}
                               trClassName={() => {
