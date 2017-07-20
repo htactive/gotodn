@@ -19,8 +19,8 @@ class CategoryDetail extends React.Component<thisProps, {}> {
 
   render() {
     let languages: { Language: LanguageEnums, Title: string }[] = [
-      {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
       {Language: LanguageEnums.English, Title: 'Tiếng Anh'},
+      {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
       {Language: LanguageEnums.France, Title: 'Tiếng Pháp'},
       {Language: LanguageEnums.Chinese, Title: 'Tiếng Trung'},
       {Language: LanguageEnums.Japanese, Title: 'Tiếng Nhật'},

@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -47,12 +49,24 @@ namespace GotoDN.Web.Controllers
         {
             if (file == null) return null;
             var stream = file.OpenReadStream();
-            var fileKey = string.Format("coms/img/coms_{0}.png", Guid.NewGuid().ToString());
-
-            var image = await this.CreateNewImage(stream, fileKey);
-
+            var fileKey = string.Format("coms/img/coms_{0}.jpg", Guid.NewGuid().ToString());
+            Stream compressStream = new MemoryStream();
+            compressStream = ImageHelper.CompressImage(stream, 80);
+            var image = await this.CreateNewImage(compressStream, fileKey);
             return Mappers.Mapper.ToModel(image);
         }
 
+        [Route("upload-new-icon"), HttpPost]
+        [AllowAnonymous]
+        public async Task<ImageModel> UploadNewIcon(IFormFile file)
+        {
+            if (file == null) return null;
+            var stream = file.OpenReadStream();
+            var fileKey = string.Format("coms/img/coms_{0}.png", Guid.NewGuid().ToString());
+            Stream compressStream = new MemoryStream();
+            compressStream = ImageHelper.ScaleIcon(stream, 256,256);
+            var image = await this.CreateNewImage(compressStream, fileKey);
+            return Mappers.Mapper.ToModel(image);
+        }
     }
 }

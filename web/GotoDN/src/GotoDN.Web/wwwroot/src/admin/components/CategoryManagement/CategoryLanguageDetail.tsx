@@ -83,12 +83,20 @@ class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
-          Name: 'Image',
+          Name: 'Ảnh đại diện',
           FieldName: 'Image',
           PlaceHolder: '',
-          FieldData: {},
+          FieldData: {
+            CssClass:'dn-image',
+            Type: 'Image',
+          },
           Type: FieldStructureTypeEnums.SingleImage,
-          ValidateRules: []
+          ValidateRules: [
+            {
+              Type: ValidateRuleTypeEnums.Required,
+              InValidMessage: 'Trường này là bắt buộc'
+            },
+          ]
         }
       };
 
@@ -100,7 +108,10 @@ class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
           Name: 'Icon',
           FieldName: 'Icon',
           PlaceHolder: '',
-          FieldData: {},
+          FieldData: {
+            CssClass:'dn-icon',
+            Type: 'Icon',
+          },
           Type: FieldStructureTypeEnums.SingleImage,
           ValidateRules: []
         }

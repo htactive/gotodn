@@ -45,8 +45,8 @@ namespace GotoDN.Web.Controllers
             {
                 new CategoryLanguage()
                 {
-                    Title = "Chưa đặt tên",
-                    Language = LanguageEnums.Vietnamese,
+                    Title = "New Category",
+                    Language = LanguageEnums.English,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 }
