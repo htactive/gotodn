@@ -141,7 +141,6 @@ export enum ListObjectOverviewComponentForTypeEnums
   Cities = 3
 }
 
-
 export class Helper {
   static ESC = 27;
   static TAB = 9;
@@ -154,6 +153,10 @@ export class Helper {
     else if (e.which) {
       return e.which;
     }
+  }
+
+  static CloneObject(obj) {
+    return obj ? JSON.parse(JSON.stringify(obj)) : null;
   }
 }
 export enum RoleTypeEnums

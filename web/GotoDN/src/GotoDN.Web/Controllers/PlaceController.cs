@@ -165,7 +165,13 @@ namespace GotoDN.Web.Controllers
             {
                 var search = request.Search.ToLower().Trim();
                 query = query.Where(x => (x.City != null && x.City.ToLower().Contains(search))
-                || (x.District != null && x.District.ToLower().Contains(search)));
+                || (x.District != null && x.District.ToLower().Contains(search))
+                || (x.PlaceLanguages.Any(y => y.Title.ToLower().Contains(search)))
+                || (x.Category != null && 
+                x.Category.CategoryLanguages.DefaultIfEmpty().First().Title.Contains(search))
+                || (x.HTService != null && 
+                x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search))
+                );
             }
 
             // sort

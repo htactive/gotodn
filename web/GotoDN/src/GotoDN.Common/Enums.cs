@@ -29,8 +29,8 @@ namespace GotoDN.Common
     }
     public enum LanguageEnums
     {
-        Vietnamese =1,
-        English = 2,
+        English = 1,
+        Vietnamese = 2,
         Chinese = 3,
         Japanese = 4,
         Korean = 5,

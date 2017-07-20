@@ -43,7 +43,7 @@ namespace GotoDN.Web.Controllers
             {
                 var search = request.Search.ToLower().Trim();
                 query = query.Where(x => (x.Name != null && x.Name.ToLower().Contains(search))
-                //|| (x.Districts != null && x.Districts.Any(y => y.Name != null && y.Name.ToLower().Contains(search)))
+                || (x.Districts.Any(y => y.Name != null && y.Name.ToLower().Contains(search)))
                 );
             }
 
