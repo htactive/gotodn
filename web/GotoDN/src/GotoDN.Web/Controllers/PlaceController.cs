@@ -168,9 +168,9 @@ namespace GotoDN.Web.Controllers
                 query = query.Where(x => (x.City != null && !string.IsNullOrEmpty(x.City.Name) && x.City.Name.ToLower().Contains(search))
                 || (x.District != null && !string.IsNullOrEmpty(x.District.Name) && x.District.Name.ToLower().Contains(search))
                 || (x.PlaceLanguages.Any(y => y.Title.ToLower().Contains(search)))
-                || (x.Category != null && 
+                || (x.Category != null &&
                 x.Category.CategoryLanguages.DefaultIfEmpty().First().Title.Contains(search))
-                || (x.HTService != null && 
+                || (x.HTService != null &&
                 x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search))
                 );
             }
@@ -180,6 +180,27 @@ namespace GotoDN.Web.Controllers
             {
                 case "Id":
                     query = request.IsAsc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id);
+                    break;
+                case "Name":
+                    query = request.IsAsc ? query.OrderBy(x => x.PlaceLanguages.DefaultIfEmpty().First().Title) : query.OrderByDescending(x => x.PlaceLanguages.DefaultIfEmpty().First().Title);
+                    break;
+                case "Category":
+                    query = request.IsAsc ? query.OrderBy(x => x.Category.CategoryLanguages.DefaultIfEmpty().First().Title) : query.OrderByDescending(x => x.Category.CategoryLanguages.DefaultIfEmpty().First().Title);
+                    break;
+                case "Service":
+                    query = request.IsAsc ? query.OrderBy(x => x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title) : query.OrderByDescending(x => x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title);
+                    break;
+                case "City":
+                    query = request.IsAsc ? query.OrderBy(x => x.City.Name) : query.OrderByDescending(x => x.City.Name);
+                    break;
+                case "District":
+                    query = request.IsAsc ? query.OrderBy(x => x.District.Name) : query.OrderByDescending(x => x.District.Name);
+                    break;
+                case "Highlight":
+                    query = request.IsAsc ? query.OrderBy(x => (bool)x.IsCategorySlider || (bool)x.IsHomeSlider) : query.OrderByDescending(x => (bool)x.IsCategorySlider || (bool)x.IsHomeSlider);
+                    break;
+                case "Ranking":
+                    query = request.IsAsc ? query.OrderBy(x => x.Rating) : query.OrderByDescending(x => x.Rating);
                     break;
             }
             // count

@@ -164,7 +164,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
   private async deletePlaceLanguage(Id: number) {
     if (await SweetAlerts.show({
-        type: SweetAlertTypeEnums.Error,
+        type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
         text: 'Bạn có chắc muốn xóa ngôn ngữ này?',
         showCancelButton: true,
@@ -226,31 +226,31 @@ class PlaceManagement extends React.Component<{}, thisState> {
                                   this.setState({GridFilter: request});
                                 }}>
                     <TableHeaderColumn width="100" dataField="Name"
-                                       dataFormat={(r, data) => this.bindNameData(data)} dataSort={ true }>
+                                       dataFormat={(r, data) => this.bindNameData(data)} dataSort={true}>
                       Tên</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="Category" dataAlign="center"
-                                       dataFormat={(r, data) => this.bindCategoryData(data)} dataSort={ false }>
+                                       dataFormat={(r, data) => this.bindCategoryData(data)} dataSort={true}>
                       Category</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="Service" dataAlign="center"
-                                       dataFormat={(r, data) => this.bindServiceData(data)} dataSort={ false }>
+                                       dataFormat={(r, data) => this.bindServiceData(data)} dataSort={true}>
                       Dịch vụ</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="City" dataAlign="center"
-                                       dataFormat={(r, data) => this.bindCityData(data)} dataSort={ false }>
+                                       dataFormat={(r, data) => this.bindCityData(data)} dataSort={true}>
                       Thành phố</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="District" dataAlign="center"
-                                       dataFormat={(r, data) => this.bindDistrictData(data)} dataSort={ false }>
+                                       dataFormat={(r, data) => this.bindDistrictData(data)} dataSort={true}>
                       Quận huyện</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="Highlight" dataAlign="center"
-                                       dataFormat={(r, data) => this.bindHighlightData(data)} dataSort={ false }>
+                                       dataFormat={(r, data) => this.bindHighlightData(data)} dataSort={true}>
                       Nổi bật</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="StartDate" dataAlign="center"
-                                       dataFormat={(r, data) => this.bindStartDateData(data)} dataSort={ false }>
+                                       dataFormat={(r, data) => this.bindStartDateData(data)} dataSort={false}>
                       Ngày bắt đầu</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="EndDate" dataAlign="center"
-                                       dataFormat={(r, data) => this.bindEndDateData(data)} dataSort={ false }>
+                                       dataFormat={(r, data) => this.bindEndDateData(data)} dataSort={false}>
                       Ngày kết thúc</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="Ranking" dataAlign="center"
-                                       dataFormat={(r, data) => this.bindRankingData(data)} dataSort={ false }>
+                                       dataFormat={(r, data) => this.bindRankingData(data)} dataSort={true}>
                       Đánh giá</TableHeaderColumn>
                   </ReactTable>
 
