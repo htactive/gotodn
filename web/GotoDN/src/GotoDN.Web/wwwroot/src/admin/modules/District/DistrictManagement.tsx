@@ -32,7 +32,7 @@ class DistrictManagement extends React.Component<{}, thisState> {
     this.getData(this.state.GridFilter);
     (async () => {
       this.setState({
-        Cities: await CityServiceInstance.GetAll()
+        Cities: await CityServiceInstance.GetAllCity()
       });
     })();
   }

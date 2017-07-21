@@ -1,6 +1,7 @@
 import {PlaceLanguageModel} from "./PlaceLanguageModel";
 import {CategoryModel} from "./CategoryModel";
 import {HTServiceModel} from "./HTServiceModel";
+import {CityModel, DistrictModel} from "./CityModel";
 export interface PlaceModel {
   Id: number,
   CreatedDate?: Date,
@@ -12,10 +13,10 @@ export interface PlaceModel {
   Category?: CategoryModel,
   HTService?: HTServiceModel,
 
-  Address?: string
-  City?: string
+  Address?: string,
+  CityId?: number,
   CloseTime?: Date,
-  District?: string
+  DistrictId?: number,
   EndDate?: Date,
   IsCategorySlider?: boolean,
   IsHomeSlider?: boolean,
@@ -26,4 +27,6 @@ export interface PlaceModel {
   Rating?: number,
   StartDate?: Date,
   Website?: string,
+  City?: CityModel,
+  District?: DistrictModel,
 }

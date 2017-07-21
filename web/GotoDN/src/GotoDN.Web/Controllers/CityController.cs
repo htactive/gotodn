@@ -20,14 +20,26 @@ namespace GotoDN.Web.Controllers
         {
         }
 
-        [HttpGet, Route("get-all")]
+        [HttpGet, Route("get-all-city")]
         [AllowAnonymous]
-        public List<CityModel> GetAll()
+        public List<CityModel> GetAllCity()
         {
             var entities = this.HTRepository.CityRepository.GetAll()
                 .Take(1000).ToList();
 
             var models = entities.Select(x => AutoMapper.Mapper.Map<City, CityModel>(x)).ToList();
+
+            return models;
+        }
+
+        [HttpGet, Route("get-all-district")]
+        [AllowAnonymous]
+        public List<DistrictModel> GetAllDistrict()
+        {
+            var entities = this.HTRepository.DistrictRepository.GetAll()
+                .Take(1000).ToList();
+
+            var models = entities.Select(x => AutoMapper.Mapper.Map<District, DistrictModel>(x)).ToList();
 
             return models;
         }

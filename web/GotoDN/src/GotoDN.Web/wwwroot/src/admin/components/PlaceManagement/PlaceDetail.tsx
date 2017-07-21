@@ -11,6 +11,7 @@ import {FieldStructureTypeEnums} from "../../../models/field-structure-model";
 import {DynamicFieldModel} from "../../../models/dynamic-field-model";
 import {DynamicFormModel} from "../../../models/dynamic-form-model";
 import {Modal, Button, Form, FormGroup, Col} from 'react-bootstrap';
+import {CityModel, DistrictModel} from "../../../models/CityModel";
 
 interface thisProps {
   SelectedPlace: PlaceModel,
@@ -26,6 +27,10 @@ interface thisProps {
   HTServices: HTServiceModel[],
   ClickSlectCategory: (Id) => void,
   ClickSlectHTService: (Id) => void,
+  Cities: CityModel[],
+  Districts: DistrictModel[],
+  ClickSlectCity: (Id) => void,
+  ClickSlectDistrict: (Id) => void,
 }
 
 interface thisState {
@@ -170,8 +175,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         }
       };
       inforForm.DynamicFields.push(Phone);
-      inforForm.DynamicFields.push(City);
-      inforForm.DynamicFields.push(District);
       inforForm.DynamicFields.push(Address);
       inforForm.DynamicFields.push(Rating);
       inforForm.DynamicFields.push(Website);
@@ -200,6 +203,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         }
       );
     }
+
     let HTServices: ReactSelectModel[] = [];
     if (this.props.HTServices && this.props.HTServices.length > 0) {
       HTServices = this.props.HTServices.map(
@@ -208,7 +212,27 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         }
       );
     }
+
+    let Cities: ReactSelectModel[] = [];
+    if (this.props.Cities && this.props.Cities.length > 0) {
+      Cities = this.props.Cities.map(
+        x => {
+          return {label: x.Name, value: x.Id}
+        }
+      );
+    }
+
+    let Districts: ReactSelectModel[] = [];
+    if (this.props.Districts && this.props.Districts.length > 0) {
+      Districts = this.props.Districts.map(
+        x => {
+          return {label: x.Name, value: x.Id}
+        }
+      );
+    }
+
     let firstLang = this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
+    debugger;
     return (
       <Modal show={this.state.isShow} onHide={() => this.close()} bsSize="large"
              aria-labelledby="contained-modal-title-lg">
@@ -316,6 +340,38 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
             </div>
 
             <hr/>
+
+            <div className="form-horizontal">
+              <fieldset>
+                <div className="form-group col-sm-12 p0">
+                  <label className="col-sm-3 control-label">Tỉnh thành</label>
+                  <div className="col-sm-9">
+                    <ComboBox
+                      placeHolder="Chọn tỉnh thành..."
+                      options={Cities}
+                      value={this.props.SelectedPlace.CityId}
+                      onChange={(Id) => this.props.ClickSlectCity(Id)}
+                    />
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+            <div className="form-horizontal">
+              <fieldset>
+                <div className="form-group col-sm-12 p0">
+                  <label className="col-sm-3 control-label">Quận huyện</label>
+                  <div className="col-sm-9">
+                    <ComboBox
+                      placeHolder="Chọn quận huyện..."
+                      options={Districts}
+                      value={this.props.SelectedPlace.DistrictId}
+                      onChange={(Id) => this.props.ClickSlectDistrict(Id)}
+                    />
+                  </div>
+                </div>
+              </fieldset>
+            </div>
 
             <DynamicPanelComponent
               ref={(r) => this.editingForm = r}

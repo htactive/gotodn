@@ -16,8 +16,8 @@ namespace GotoDN.Web.Models
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public float? Rating { get; set; }
-        public string City { get; set; }
-        public string District { get; set; }
+        public int? CityId { get; set; }
+        public int? DistrictId { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
         public DateTime? OpenTime { get; set; }
@@ -32,6 +32,9 @@ namespace GotoDN.Web.Models
         public HTServiceModel HTService { get; set; }
         public CategoryModel Category { get; set; }
         public List<PlaceLanguageModel> PlaceLanguages { get; set; }
+
+        public CityModel City { get; set; }
+        public DistrictModel District { get; set; }
     }
 
     public class PlaceLanguageModel

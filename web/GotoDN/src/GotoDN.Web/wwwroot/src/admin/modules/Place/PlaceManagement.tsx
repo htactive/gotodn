@@ -11,6 +11,8 @@ import {HTServiceInstance} from "../../services/HTService";
 import {GetGridRequestModel, GetGridResponseModel, ReactTable} from "../../../commons/react-table";
 import {TableHeaderColumn} from 'react-bootstrap-table';
 import {SweetAlertResultEnums, SweetAlerts, SweetAlertTypeEnums} from "../../../commons/sweet-alerts";
+import {CityModel, DistrictModel} from "../../../models/CityModel";
+import {CityServiceInstance} from "../../services/CityService";
 
 interface thisState {
   GridFilter?: GetGridRequestModel,
@@ -20,6 +22,9 @@ interface thisState {
   HTServicesBackup?: HTServiceModel[],
   SelectedPlace?: PlaceModel,
   SelectedLanguage?: LanguageEnums,
+  Cities?: CityModel[],
+  DistrictsBackup?: DistrictModel[],
+  Districts?: DistrictModel[],
 }
 class PlaceManagement extends React.Component<{}, thisState> {
   placeModal: PlaceDetail;
@@ -49,6 +54,18 @@ class PlaceManagement extends React.Component<{}, thisState> {
         HTServices: [],
       });
     })();
+    (async () => {
+      this.setState({
+        Cities: await CityServiceInstance.GetAllCity()
+      });
+    })();
+    (async () => {
+      this.setState({
+        DistrictsBackup: await CityServiceInstance.GetAllDistrict(),
+        Districts: [],
+      });
+    })();
+
     this.getData(this.state.GridFilter);
   }
 
@@ -271,6 +288,17 @@ class PlaceManagement extends React.Component<{}, thisState> {
                        this.forceUpdate();
                      }}
                      ref={e => this.placeModal = e}
+                     Cities={this.state.Cities || []}
+                     Districts={this.state.Districts || []}
+                     ClickSlectCity={(Id) => {
+                       debugger;
+                       this.state.SelectedPlace.CityId = Id;
+                       this.setState({Districts: this.state.DistrictsBackup.filter(x => x.CityId == Id)});
+                     }}
+                     ClickSlectDistrict={(Id) => {
+                       this.state.SelectedPlace.DistrictId = Id;
+                       this.forceUpdate();
+                     }}
         />
       </div>
     );
@@ -286,6 +314,9 @@ class PlaceManagement extends React.Component<{}, thisState> {
                 });
                 data && data.CategoryId ?
                   this.setState({HTServices: this.state.HTServicesBackup.filter(x => x.CategoryId == data.CategoryId)})
+                  : null;
+                data && data.CityId ?
+                  this.setState({Districts: this.state.DistrictsBackup.filter(x => x.CityId == data.CityId)})
                   : null;
               }}
     >{(firstLanguage ? firstLanguage.Title : '') || ('Chưa đặt tên')}</a>;
@@ -308,11 +339,11 @@ class PlaceManagement extends React.Component<{}, thisState> {
   }
 
   private bindCityData(data: PlaceModel) {
-    return <span>{data.City || ''}</span>;
+    return <span>{data.City ? data.City.Name : ''}</span>;
   }
 
   private bindDistrictData(data: PlaceModel) {
-    return <span>{data.District || ''}</span>;
+    return <span>{data.District ? data.District.Name : ''}</span>;
   }
 
   private bindHighlightData(data: PlaceModel) {
