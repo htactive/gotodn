@@ -54,7 +54,42 @@ namespace GotoDN.Web.Controllers
                     Language = LanguageEnums.English,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
-                }
+                },
+                new CategoryLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Vietnamese,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new CategoryLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.France,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new CategoryLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Chinese,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new CategoryLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Korean,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new CategoryLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Japanese,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
             };
 
             this.HTRepository.CategoryRepository.Save(entity);
