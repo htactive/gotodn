@@ -192,5 +192,14 @@ export enum LanguageEnums{
   France = 6
 }
 
+export const Languages: { Language: LanguageEnums, Title: string }[] = [
+  {Language: LanguageEnums.English, Title: 'Tiếng Anh'},
+  {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
+  {Language: LanguageEnums.France, Title: 'Tiếng Pháp'},
+  {Language: LanguageEnums.Chinese, Title: 'Tiếng Trung'},
+  {Language: LanguageEnums.Japanese, Title: 'Tiếng Nhật'},
+  {Language: LanguageEnums.Korean, Title: 'Tiếng Hàn'},
+];
+
 export const ICON_SIZE = 1 * 1024 * 1024;
 export const IMAGE_SIZE = 5 * 1024 * 1024;

@@ -34,7 +34,9 @@
     "AWSSDK.S3": "3.3.5.15",
     "MailKit": "1.16.1",
     "AutoMapper": "6.1.1",
-    "CoreCompat.System.Drawing": "1.0.0-beta006"
+    "CoreCompat.System.Drawing": "1.0.0-beta006",
+    "Google.Apis.Translate.v2": "1.28.0.875",
+    "Google.Cloud.Translation.V2": "1.1.0-beta01"
   },
 
   "tools": {

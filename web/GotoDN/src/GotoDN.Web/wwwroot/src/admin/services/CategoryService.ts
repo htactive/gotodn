@@ -33,6 +33,16 @@ class CategoryService extends AdminServiceBase {
     let url = `${virtualPath}/category/delete-language`;
     return await super.executeFetchPost(url, Id);
   }
+
+  async TranslateCategory(cateModel: CategoryModel): Promise<CategoryLanguageModel> {
+    let url = `${virtualPath}/category/translate-category-language`;
+    return await super.executeFetchPost(url, cateModel);
+  }
+
+  async TranslateAllCategory(model: CategoryModel): Promise<CategoryModel> {
+    let url = `${virtualPath}/category/translate-all-category-language`;
+    return await super.executeFetchPost(url, model);
+  }
 }
 
 const CategoryServiceInstance = new CategoryService();

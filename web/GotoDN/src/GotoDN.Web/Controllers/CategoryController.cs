@@ -10,6 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using GotoDN.Entities;
 using GotoDN.Web.Authentication;
 using GotoDN.Common;
+using Google.Cloud.Translation.V2;
+using Google.Apis.Services;
+using Google.Apis.Translate.v2;
+using Google.Apis.Translate.v2.Data;
+using TranslationsResource = Google.Apis.Translate.v2.Data.TranslationsResource;
 
 namespace GotoDN.Web.Controllers
 {
@@ -98,7 +103,6 @@ namespace GotoDN.Web.Controllers
             return true;
         }
 
-
         [HttpPost, Route("add-language")]
         [HTAuthorize]
         public CategoryLanguageModel AddLanguage([FromBody]CategoryLanguageModel model)
@@ -120,7 +124,7 @@ namespace GotoDN.Web.Controllers
             this.HTRepository.CategoryRepository.Save(CatEntity);
             this.HTRepository.Commit();
 
-            return AutoMapper.Mapper.Map<CategoryLanguage, CategoryLanguageModel>(LangEntity); ;
+            return AutoMapper.Mapper.Map<CategoryLanguage, CategoryLanguageModel>(LangEntity); 
         }
 
         [HttpPost, Route("delete-language")]
@@ -134,6 +138,42 @@ namespace GotoDN.Web.Controllers
             this.HTRepository.CategoryLanguageRepository.Delete(entity);
             this.HTRepository.Commit();
             return true;
+        }
+
+        [HttpPost, Route("translate-category-language")]
+        [AllowAnonymous]
+        public CategoryLanguageModel TranslateCategoryLanguage([FromBody]CategoryModel model)
+        {
+            if (model == null || model.CategoryLanguages == null || model.CategoryLanguages.Count != 2) return null;
+            var entity = model.CategoryLanguages[0];
+            if (entity == null) return null;
+            var enCateLanguage = model.CategoryLanguages[1];
+            if (enCateLanguage == null) return null;
+            entity.Title = TranslateHelper.TranslateText(enCateLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
+            entity.ImageId = enCateLanguage.ImageId;
+            entity.Image = enCateLanguage.Image;
+            entity.IconId = enCateLanguage.IconId;
+            entity.Icon = enCateLanguage.Icon;
+            return entity;
+        }
+
+        [HttpPost, Route("translate-all-category-language")]
+        [AllowAnonymous]
+        public CategoryModel TranslateAllCategoryLanguage([FromBody]CategoryModel model)
+        {
+            if (model == null || model.CategoryLanguages == null) return null;
+            var enCateLanguage = model.CategoryLanguages
+                .FirstOrDefault(x => x.Language == LanguageEnums.English);
+            if (enCateLanguage == null) return null;
+            foreach (var entity in model.CategoryLanguages)
+            {
+                entity.Title = TranslateHelper.TranslateText(enCateLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
+                entity.ImageId = enCateLanguage.ImageId;
+                entity.Image = enCateLanguage.Image;
+                entity.IconId = enCateLanguage.IconId;
+                entity.Icon = enCateLanguage.Icon;
+            }
+            return model;
         }
     }
 }
