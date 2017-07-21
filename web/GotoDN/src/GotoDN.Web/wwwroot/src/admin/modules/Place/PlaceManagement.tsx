@@ -191,6 +191,10 @@ class PlaceManagement extends React.Component<{}, thisState> {
   }
 
   render() {
+    let highlightSelecter = {
+      1: 'Có',
+      0: 'Không'
+    };
     return (
       <div className="page-content-wrapper">
         <div className={`page-content-inner`}>
@@ -237,12 +241,16 @@ class PlaceManagement extends React.Component<{}, thisState> {
                                        dataFormat={(r, data) => this.bindServiceData(data)} dataSort={true}>
                       Dịch vụ</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="City" dataAlign="center"
+                                       filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindCityData(data)} dataSort={true}>
                       Thành phố</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="District" dataAlign="center"
+                                       filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindDistrictData(data)} dataSort={true}>
                       Quận huyện</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="Highlight" dataAlign="center"
+                                       filterFormatted formatExtraData={highlightSelecter}
+                                       filter={{type: 'SelectFilter', options: highlightSelecter}}
                                        dataFormat={(r, data) => this.bindHighlightData(data)} dataSort={true}>
                       Nổi bật</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="StartDate" dataAlign="center"
@@ -252,6 +260,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                                        dataFormat={(r, data) => this.bindEndDateData(data)} dataSort={false}>
                       Ngày kết thúc</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="Ranking" dataAlign="center"
+                                       filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindRankingData(data)} dataSort={true}>
                       Đánh giá</TableHeaderColumn>
                   </ReactTable>
@@ -349,7 +358,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
   private bindHighlightData(data: PlaceModel) {
     return <div className="toggle-custom">
-      <label className="toggle" data-on="YES" data-off="NO">
+      <label className="toggle" data-on="Có" data-off="Ko">
         <input type="checkbox" id="checkbox-toggle"
                name="checkbox-toggle"
                checked={data.IsCategorySlider || data.IsHomeSlider || false}

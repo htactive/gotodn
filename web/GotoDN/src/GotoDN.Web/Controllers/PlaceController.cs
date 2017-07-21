@@ -194,6 +194,31 @@ namespace GotoDN.Web.Controllers
                             query = query.Where(x => x.HTService != null &&
                     x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search));
                             break;
+                        case "City":
+                            query = query.Where(x => x.City != null &&
+                    x.City.Name.ToLower().Contains(search));
+                            break;
+                        case "District":
+                            query = query.Where(x => x.District != null &&
+                    x.District.Name.ToLower().Contains(search));
+                            break;
+                        case "Highlight":
+                            if(search.Equals("0"))
+                            {
+                                query = query.Where(x => (!(bool)x.IsHomeSlider && !(bool)x.IsCategorySlider)
+                                || (x.IsHomeSlider == null && !(bool)x.IsCategorySlider)
+                                || (!(bool)x.IsHomeSlider && !x.IsCategorySlider == null)
+                                || (!x.IsHomeSlider == null && !x.IsCategorySlider == null)
+                                );
+                            }
+                            else if(search.Equals("1"))
+                            {
+                                query = query.Where(x => x.IsCategorySlider.Value || x.IsHomeSlider.Value);
+                            }
+                            break;
+                        case "Ranking":
+                            query = query.Where(x => x.Rating == float.Parse(search));
+                            break;
                     }
                 }
             }
@@ -219,7 +244,7 @@ namespace GotoDN.Web.Controllers
                     query = request.IsAsc ? query.OrderBy(x => x.District.Name) : query.OrderByDescending(x => x.District.Name);
                     break;
                 case "Highlight":
-                    query = request.IsAsc ? query.OrderBy(x => (bool)x.IsCategorySlider || (bool)x.IsHomeSlider) : query.OrderByDescending(x => (bool)x.IsCategorySlider || (bool)x.IsHomeSlider);
+                    query = request.IsAsc ? query.OrderBy(x => x.IsCategorySlider.Value || x.IsHomeSlider.Value) : query.OrderByDescending(x => x.IsCategorySlider.Value || x.IsHomeSlider.Value);
                     break;
                 case "Ranking":
                     query = request.IsAsc ? query.OrderBy(x => x.Rating) : query.OrderByDescending(x => x.Rating);
