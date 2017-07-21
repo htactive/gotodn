@@ -46,7 +46,7 @@ namespace GotoDN.Web.Controllers
             {
                 new PlaceLanguage()
                 {
-                    Title = "Chưa đặt tên",
+                    Title = "Place's Name",
                     Language = LanguageEnums.English,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),

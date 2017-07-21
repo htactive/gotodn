@@ -251,7 +251,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                       Ngày kết thúc</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="Ranking" dataAlign="center"
                                        dataFormat={(r, data) => this.bindRankingData(data)} dataSort={ false }>
-                      Xếp hạng</TableHeaderColumn>
+                      Đánh giá</TableHeaderColumn>
                   </ReactTable>
 
                 </div>
@@ -319,7 +319,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                   this.setState({Districts: this.state.DistrictsBackup.filter(x => x.CityId == data.CityId)})
                   : null;
               }}
-    >{(firstLanguage ? firstLanguage.Title : '') || ('Chưa đặt tên')}</a>;
+    >{(firstLanguage ? firstLanguage.Title : '') || ("Place's Name")}</a>;
   }
 
   private bindCategoryData(data: PlaceModel) {
@@ -347,7 +347,16 @@ class PlaceManagement extends React.Component<{}, thisState> {
   }
 
   private bindHighlightData(data: PlaceModel) {
-    return "";
+    return <div className="toggle-custom">
+      <label className="toggle" data-on="YES" data-off="NO">
+        <input type="checkbox" id="checkbox-toggle"
+               name="checkbox-toggle"
+               checked={data.IsCategorySlider || data.IsHomeSlider || false}
+               disabled={true}
+        />
+        <span className="button-checkbox"/>
+      </label>
+    </div>;
   }
 
   private bindStartDateData(data: PlaceModel) {
