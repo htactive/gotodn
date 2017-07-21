@@ -225,13 +225,15 @@ class PlaceManagement extends React.Component<{}, thisState> {
                                   this.getData(request);
                                   this.setState({GridFilter: request});
                                 }}>
-                    <TableHeaderColumn width="100" dataField="Name"
+                    <TableHeaderColumn width="100" dataField="Name" filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindNameData(data)} dataSort={true}>
                       Tên</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="Category" dataAlign="center"
+                                       filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindCategoryData(data)} dataSort={true}>
                       Category</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="Service" dataAlign="center"
+                                       filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindServiceData(data)} dataSort={true}>
                       Dịch vụ</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="City" dataAlign="center"
@@ -291,7 +293,6 @@ class PlaceManagement extends React.Component<{}, thisState> {
                      Cities={this.state.Cities || []}
                      Districts={this.state.Districts || []}
                      ClickSlectCity={(Id) => {
-                       debugger;
                        this.state.SelectedPlace.CityId = Id;
                        this.setState({Districts: this.state.DistrictsBackup.filter(x => x.CityId == Id)});
                      }}

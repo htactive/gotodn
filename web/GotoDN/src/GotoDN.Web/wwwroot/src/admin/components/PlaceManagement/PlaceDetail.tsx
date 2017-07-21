@@ -232,7 +232,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
     }
 
     let firstLang = this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
-    debugger;
     return (
       <Modal show={this.state.isShow} onHide={() => this.close()} bsSize="large"
              aria-labelledby="contained-modal-title-lg">

@@ -169,12 +169,34 @@ namespace GotoDN.Web.Controllers
                 || (x.District != null && !string.IsNullOrEmpty(x.District.Name) && x.District.Name.ToLower().Contains(search))
                 || (x.PlaceLanguages.Any(y => y.Title.ToLower().Contains(search)))
                 || (x.Category != null &&
-                x.Category.CategoryLanguages.DefaultIfEmpty().First().Title.Contains(search))
+                x.Category.CategoryLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search))
                 || (x.HTService != null &&
                 x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search))
                 );
             }
 
+            // filter
+            if (request.Parameters != null)
+            {
+                foreach (var item in request.Parameters)
+                {
+                    var search = item.Value.ToString().ToLower().Trim();
+                    switch (item.Key)
+                    {
+                        case "Name":
+                            query = query.Where(x => x.PlaceLanguages.Any(y => y.Title.ToLower().Contains(search)));
+                            break;
+                        case "Category":
+                            query = query.Where(x => x.Category != null &&
+                    x.Category.CategoryLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search));
+                            break;
+                        case "Service":
+                            query = query.Where(x => x.HTService != null &&
+                    x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search));
+                            break;
+                    }
+                }
+            }
             // sort
             switch (request.SortExpression)
             {

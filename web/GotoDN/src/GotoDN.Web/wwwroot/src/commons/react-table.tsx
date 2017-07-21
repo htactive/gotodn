@@ -69,6 +69,7 @@ export class ReactTable extends React.Component<thisProps, {}> {
                               sizePerPage: this.props.request.PageSize,
                               onPageChange: (pageNumber, pageSize) => this.onPageChange(pageNumber, pageSize),
                               onSortChange: (sortName, sortOrder) => this.onSortChange(sortName, sortOrder),
+                              onFilterChange: (column) => this.onFilterChange(column),
                               sizePerPageList: [10, 15, 20, 25, 30],
                               page: this.props.request.CurrentPage,
                               sizePerPageDropDown: () => {
@@ -105,6 +106,32 @@ export class ReactTable extends React.Component<thisProps, {}> {
     await this.sendRequest(request);
   }
 
+  private async onFilterChange(filterObj) {
+    let request: GetGridRequestModel = {...this.props.request};
+    request.Parameters = [];
+    if (Object.keys(filterObj).length === 0) {
+      return await this.sendRequest(request);;
+    }
+
+    for (const key in filterObj) {
+      switch (filterObj[key].type) {
+        case 'NumberFilter': {
+          let filterValue = filterObj[key].value.number;
+          let filter = {Key: key, Value: filterValue};
+          request.Parameters.push(filter);
+          break;
+        }
+        default: {
+          let filterValue = (typeof filterObj[key].value === 'string') ? filterObj[key].value.toLowerCase() : filterObj[key].value;
+          let filter = {Key: key, Value: filterValue};
+          request.Parameters.push(filter);
+          break;
+        }
+      }
+    }
+    await this.sendRequest(request);
+  }
+
   private sendRequest(request: GetGridRequestModel) {
     this.props.onFilterRequest(request);
   }
@@ -117,7 +144,7 @@ export interface GetGridRequestModel {
   IsAsc?: boolean;
   Search?: string;
   GridColumnFilterRequest?: GridColumnFilterRequest[];
-  Parameters?: { Key: string, Value: string }[]
+  Parameters?: { Key: string, Value: any }[]
 }
 
 export interface GetGridResponseModel {
