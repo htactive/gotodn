@@ -68,7 +68,7 @@ class CategoryList extends React.Component<thisProps, thisState> {
     })
   }
 
-  private filterCategories(text, categories) {``
+  private filterCategories(text, categories) {
     let tempCates =categories.slice();
     let filters = tempCates.filter(t => {
       let firstLanguage = t.CategoryLanguages
