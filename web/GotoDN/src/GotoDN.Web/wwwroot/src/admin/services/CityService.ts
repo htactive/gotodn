@@ -4,8 +4,13 @@ import {CityModel, DistrictModel} from "../../models/CityModel";
 import {GetGridRequestModel, GetGridResponseModel} from "../../commons/react-table";
 
 class CityService extends AdminServiceBase {
-  async GetAll(): Promise<CityModel[]> {
-    let url = `${virtualPath}/city/get-all`;
+  async GetAllCity(): Promise<CityModel[]> {
+    let url = `${virtualPath}/city/get-all-city`;
+    return await super.executeFetch(url);
+  }
+
+  async GetAllDistrict(): Promise<DistrictModel[]> {
+    let url = `${virtualPath}/city/get-all-district`;
     return await super.executeFetch(url);
   }
 

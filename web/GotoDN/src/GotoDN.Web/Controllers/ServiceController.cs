@@ -46,7 +46,7 @@ namespace GotoDN.Web.Controllers
                 new HTServiceLanguage()
                 {
                     Title = "Service Name",
-                    Language = LanguageEnums.Vietnamese,
+                    Language = LanguageEnums.English,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 }

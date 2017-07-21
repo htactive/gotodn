@@ -19,8 +19,8 @@ namespace GotoDN.Entities
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public float? Rating { get; set; }
-        public string City { get; set; }
-        public string District { get; set; }
+        public int? CityId { get; set; }
+        public int? DistrictId { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
         public DateTime? OpenTime { get; set; }
@@ -37,5 +37,10 @@ namespace GotoDN.Entities
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
         public List<PlaceLanguage> PlaceLanguages { get; set; }
+
+        [ForeignKey("CityId")]
+        public City City { get; set; }
+        [ForeignKey("DistrictId")]
+        public District District { get; set; }
     }
 }

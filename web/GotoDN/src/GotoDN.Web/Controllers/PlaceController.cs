@@ -46,8 +46,8 @@ namespace GotoDN.Web.Controllers
             {
                 new PlaceLanguage()
                 {
-                    Title = "Chưa đặt tên",
-                    Language = LanguageEnums.Vietnamese,
+                    Title = "Place's Name",
+                    Language = LanguageEnums.English,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 }
@@ -82,9 +82,9 @@ namespace GotoDN.Web.Controllers
             if (entity == null) return false;
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             entity.Address = model.Address;
-            entity.City = model.City;
+            entity.CityId = model.CityId;
             entity.CloseTime = model.CloseTime;
-            entity.District = model.District;
+            entity.DistrictId = model.DistrictId;
             entity.EndDate = model.EndDate;
             entity.IsCategorySlider = model.IsCategorySlider;
             entity.IsHomeSlider = model.IsHomeSlider;
@@ -137,7 +137,7 @@ namespace GotoDN.Web.Controllers
             this.HTRepository.PlaceRepository.Save(CatEntity);
             this.HTRepository.Commit();
 
-            return AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(LangEntity); ;
+            return AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(LangEntity);
         }
 
         [HttpPost, Route("delete-language")]
@@ -159,13 +159,14 @@ namespace GotoDN.Web.Controllers
         {
             var query = this.HTRepository.PlaceRepository.GetAll();
             query = query.Include("PlaceLanguages.Image").Include("PlaceLanguages.Icon")
-                .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages");
+                .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages")
+                .Include(x => x.City).Include(x => x.District);
             // search
             if (!string.IsNullOrEmpty(request.Search))
             {
                 var search = request.Search.ToLower().Trim();
-                query = query.Where(x => (x.City != null && x.City.ToLower().Contains(search))
-                || (x.District != null && x.District.ToLower().Contains(search))
+                query = query.Where(x => (x.City != null && !string.IsNullOrEmpty(x.City.Name) && x.City.Name.ToLower().Contains(search))
+                || (x.District != null && !string.IsNullOrEmpty(x.District.Name) && x.District.Name.ToLower().Contains(search))
                 || (x.PlaceLanguages.Any(y => y.Title.ToLower().Contains(search)))
                 || (x.Category != null && 
                 x.Category.CategoryLanguages.DefaultIfEmpty().First().Title.Contains(search))
