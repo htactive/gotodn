@@ -50,7 +50,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
   private async updateCategory(model: CategoryModel) {
     let result = await CategoryServiceInstance.UpdateCategory(model);
     if (result) {
-      window['notice_save_success']();
+      window['notice']('success-notice', 'Thành công', 'Đã lưu dữ liệu thành công.', 'fa fa-check-circle-o');
     }
   }
 

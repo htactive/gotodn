@@ -74,33 +74,32 @@ class CategoryDetail extends React.Component<thisProps, {}> {
                 }
               </div>
             </div>
-            <div className="toggle-custom">
-              <label htmlFor="checkbox-toggle">Là category sự kiện? &nbsp;&nbsp;</label>
-              <label className="toggle" data-on="YES" data-off="NO">
-                <input type="checkbox" id="checkbox-toggle"
-                       name="checkbox-toggle"
-                       onChange={(e) => this.props.ChangeEvent(e.target.checked)}
-                       checked={this.props.SelectedCategory.IsEvent || false}
-                />
-                <span className="button-radio"/>
-              </label>
+            <div className="toggle-custom col-lg-12 p0">
+              <label htmlFor="checkbox-toggle" style={{paddingTop: '2px', fontWeight: 'normal'}} className="col-lg-3 control-label">Là category sự kiện? &nbsp;&nbsp;</label>
+              <div className="col-lg-9">
+                <label className="toggle " data-on="YES" data-off="NO">
+                  <input type="checkbox" id="checkbox-toggle"
+                         name="checkbox-toggle"
+                         onChange={(e) => this.props.ChangeEvent(e.target.checked)}
+                         checked={this.props.SelectedCategory.IsEvent || false}
+                  />
+                  <span className="button-radio"/>
+                </label>
+              </div>
             </div>
-            <div className="form-group">
-              <button className="btn btn-warning mr10 ml10"
-                      onClick={() =>{ this.translateAllLanguage()}}>Dịch tất cả từ Tiếng Anh
-              </button>
-            </div>
-            <hr/>
+            <hr className="col-lg-12 p0" style={{marginTop: 0}}/>
             <div className="form-group">
               <button className="btn btn-danger pull-right"
                       onClick={() => this.deleteCategory()}><i
                 className="fa fa-trash-o"/> Xóa
               </button>
-
-              <button className="btn btn-primary"
+              <button className="btn btn-primary pull-right mr10 ml10"
                       onClick={() => this.saveCategory()}>Lưu
               </button>
-              <div className="btn-group dropup mr10 ml10">
+              <button className="btn btn-warning mr10 ml10"
+                      onClick={() =>{ this.translateAllLanguage()}}>Dịch tất cả từ Tiếng Anh
+              </button>
+              <div className="btn-group dropup">
                 <button type="button" className="btn btn-success dropdown-toggle"
                         data-toggle="dropdown" aria-expanded="false">
                   Thêm ngôn ngữ

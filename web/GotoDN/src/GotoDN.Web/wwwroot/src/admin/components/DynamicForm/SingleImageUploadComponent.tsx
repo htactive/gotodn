@@ -99,7 +99,11 @@ export class SingleImageUploadComponent extends React.Component<thisProps, thisS
               InValidMessage: ''
             });
 
-            let uploadResult = await ImageServiceInstance.uploadNewImage(image);
+            let uploadResult: ImageModel = {Id: 0};
+            if(isIcon)
+              uploadResult = await ImageServiceInstance.uploadNewIcon(image);
+            else
+              uploadResult = await ImageServiceInstance.uploadNewImage(image);
             if (uploadResult) {
               this.props.onImageChanged(uploadResult);
             }

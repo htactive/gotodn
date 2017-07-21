@@ -5,6 +5,8 @@ import ServiceLanguageDetail from "./ServiceLanguageDetail";
 import {HTServiceLanguageModel} from "../../../models/HTServiceLanguageModel";
 import {ComboBox, ReactSelectModel} from "../ComboBox/ComboBox";
 import {CategoryModel} from "../../../models/CategoryModel";
+import {MessageBox, MessageBoxType, MessageBoxButtons, MessageBoxResult} from "../../../commons/message-box";
+import {HTServiceInstance} from "../../services/HTService";
 interface thisProps {
   SelectedHTService: HTServiceModel,
   SelectedLanguage: LanguageEnums,
@@ -21,7 +23,7 @@ interface thisProps {
 class HTServiceDetail extends React.Component<thisProps, {}> {
 
   render() {
-    let languages: { Language: LanguageEnums, Title: string }[] = [
+    let languages: {Language: LanguageEnums, Title: string}[] = [
       {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
       {Language: LanguageEnums.English, Title: 'Tiếng Anh'},
       {Language: LanguageEnums.France, Title: 'Tiếng Pháp'},
@@ -30,12 +32,17 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
       {Language: LanguageEnums.Korean, Title: 'Tiếng Hàn'},
     ];
     let Categories: ReactSelectModel[] = [];
-    if(this.props.Categories && this.props.Categories.length > 0){
+    if (this.props.Categories && this.props.Categories.length > 0) {
       Categories = this.props.Categories.map(
-        x => {return {label: x.CategoryLanguages ? x.CategoryLanguages[0].Title : "", value: x.Id}}
+        x => {
+          return {label: x.CategoryLanguages ? x.CategoryLanguages[0].Title : "", value: x.Id}
+        }
       );
     }
 
+    let enHTServiceLanguage: HTServiceLanguageModel = {Id: 0};
+    if (this.props.SelectedHTService && this.props.SelectedHTService.HTServiceLanguages)
+      enHTServiceLanguage = this.props.SelectedHTService.HTServiceLanguages.filter(t => t.Language == LanguageEnums.English)[0];
     return (
       <div className="col-lg-8 cate-right-form" style={{marginBottom: 150}}>
         <h3>Xem thông tin chi tiết dịch vụ</h3>
@@ -55,7 +62,7 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
                         {x.Language == LanguageEnums.English ?
                           null : <span onClick={() => this.props.DeleteHTServiceLanguage
                           && this.props.DeleteHTServiceLanguage(x.Id)}
-                                    style={{background: 'transparent', border: 'transparent', boxShadow: 'none'}}
+                                       style={{background: 'transparent', border: 'transparent', boxShadow: 'none'}}
                           >
                             <i className="fa fa-remove"/>
                           </span>}
@@ -70,6 +77,7 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
                       key={x.Id}
                       IsSelected={x.Language == this.props.SelectedLanguage}
                       HTServiceLanguage={x}
+                      EnHTServiceLanguage={enHTServiceLanguage}
                       OnObjectChange={(obj: HTServiceLanguageModel) =>
                         this.props.OnHTServiceLanguageChange(obj)}
                     />
@@ -77,26 +85,29 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
                 }
               </div>
             </div>
-            <hr/>
-            <div className="form-group">
-              <button className="btn btn-danger pull-right"
-                      onClick={() => this.deleteHTService()}><i
-                className="fa fa-trash-o"/> Xóa
-              </button>
-
-              <button className="btn btn-primary"
-                      onClick={() => this.saveHTService()}>Lưu
-              </button>
-
-              <div className="col-sm-4">
+            <div className="toggle-custom col-lg-12 p0">
+              <div style={{paddingTop: '5px', fontWeight: 'normal'}} className="col-lg-3 control-label">Danh mục</div>
+              <div className="col-lg-6">
                 <ComboBox
-                  placeHolder="Chọn category..."
+                  placeHolder="None"
                   options={Categories}
                   value={this.props.SelectedHTService.CategoryId}
                   onChange={(Id) => this.props.ClickSlectCategory(Id)}
                 />
               </div>
-
+            </div>
+            <hr className="col-lg-12 p0"/>
+            <div className="form-group">
+              <button className="btn btn-danger pull-right"
+                      onClick={() => this.deleteHTService()}><i
+                className="fa fa-trash-o"/> Xóa
+              </button>
+              <button className="btn btn-primary pull-right mr10 ml10"
+                      onClick={() => this.saveHTService()}>Lưu
+              </button>
+              <button className="btn btn-warning"
+                      onClick={() =>{ this.translateAllLanguage()}}>Dịch tất cả từ Tiếng Anh
+              </button>
               <div className="btn-group dropup mr10 ml10">
                 <button type="button" className="btn btn-success dropdown-toggle"
                         data-toggle="dropdown" aria-expanded="false">
@@ -105,8 +116,7 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
                 </button>
                 <ul className="dropdown-menu left animated fadeIn" role="menu">
                   {languages.filter(x =>
-                    this.props.SelectedHTService && this.props.SelectedHTService.HTServiceLanguages &&
-                    !this.props.SelectedHTService.HTServiceLanguages.some(r => r.Language == x.Language)
+                    this.props.SelectedHTService && this.props.SelectedHTService.HTServiceLanguages && !this.props.SelectedHTService.HTServiceLanguages.some(r => r.Language == x.Language)
                   ).map((item, index) =>
                     <li key={index}>
                       <a onClick={() => this.props.AddHTServiceLanguage
@@ -115,11 +125,9 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
                   )}
                 </ul>
               </div>
-
               <button className="btn btn-default pull-right hidden"
                       onClick={() => this.discardChangesEditing()}>Làm lại
               </button>
-
             </div>
           </div> :
           <div className="col-lg-12 col-sm-12 form-horizontal">
@@ -157,6 +165,25 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
     // if is valid, do submit here
     console.log('congratulation! your form is valid, do submit now ' + this.props.SelectedHTService);
     this.props.SaveHTService && this.props.SaveHTService();
+  }
+
+  private async translateAllLanguage() {
+    let dialogResult = await MessageBox.instance.show({
+      content: 'Dịch từ Tiếng anh sẽ ghi đè dữ liệu lên ngôn ngữ tất cả các ngôn ngữ. Bạn có chắc là bạn muốn dịch?',
+      isShow: true,
+      title: 'Xác nhận',
+      type: MessageBoxType.Confirmation,
+      buttons: MessageBoxButtons.YesNo
+    });
+
+    if (dialogResult == MessageBoxResult.Yes) {
+      let result = await HTServiceInstance.TranslateAllService(this.props.SelectedHTService);
+      if (result != null) {
+        result.HTServiceLanguages.forEach((item) => {
+          this.props.OnHTServiceLanguageChange(item)
+        });
+      }
+    }
   }
 }
 

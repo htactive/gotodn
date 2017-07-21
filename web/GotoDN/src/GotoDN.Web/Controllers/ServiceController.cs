@@ -45,7 +45,7 @@ namespace GotoDN.Web.Controllers
             {
                 new HTServiceLanguage()
                 {
-                    Title = "Chưa đặt tên",
+                    Title = "Service Name",
                     Language = LanguageEnums.Vietnamese,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
@@ -135,6 +135,42 @@ namespace GotoDN.Web.Controllers
             this.HTRepository.HTServiceLanguageRepository.Delete(entity);
             this.HTRepository.Commit();
             return true;
+        }
+
+        [HttpPost, Route("translate-service-language")]
+        [AllowAnonymous]
+        public HTServiceLanguageModel TranslateServiceLanguage([FromBody]HTServiceModel model)
+        {
+            if (model == null || model.HTServiceLanguages == null || model.HTServiceLanguages.Count != 2) return null;
+            var entity = model.HTServiceLanguages[0];
+            if (entity == null) return null;
+            var enServiceLanguage = model.HTServiceLanguages[1];
+            if (enServiceLanguage == null) return null;
+            entity.Title = TranslateHelper.TranslateText(enServiceLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
+            entity.ImageId = enServiceLanguage.ImageId;
+            entity.Image = enServiceLanguage.Image;
+            entity.IconId = enServiceLanguage.IconId;
+            entity.Icon = enServiceLanguage.Icon;
+            return entity;
+        }
+
+        [HttpPost, Route("translate-all-service-language")]
+        [AllowAnonymous]
+        public HTServiceModel TranslateAllServiceLanguage([FromBody]HTServiceModel model)
+        {
+            if (model == null || model.HTServiceLanguages == null) return null;
+            var enServiceLanguage = model.HTServiceLanguages
+                .FirstOrDefault(x => x.Language == LanguageEnums.English);
+            if (enServiceLanguage == null) return null;
+            foreach (var entity in model.HTServiceLanguages)
+            {
+                entity.Title = TranslateHelper.TranslateText(enServiceLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
+                entity.ImageId = enServiceLanguage.ImageId;
+                entity.Image = enServiceLanguage.Image;
+                entity.IconId = enServiceLanguage.IconId;
+                entity.Icon = enServiceLanguage.Icon;
+            }
+            return model;
         }
     }
 }

@@ -33,6 +33,16 @@ class HTService extends AdminServiceBase {
     let url = `${virtualPath}/service/delete-language`;
     return await super.executeFetchPost(url, Id);
   }
+
+  async TranslateService(serviceModel: HTServiceModel): Promise<HTServiceLanguageModel> {
+    let url = `${virtualPath}/service/translate-service-language`;
+    return await super.executeFetchPost(url, serviceModel);
+  }
+
+  async TranslateAllService(model: HTServiceModel): Promise<HTServiceModel> {
+    let url = `${virtualPath}/service/translate-all-service-language`;
+    return await super.executeFetchPost(url, model);
+  }
 }
 
 const HTServiceInstance = new HTService();
