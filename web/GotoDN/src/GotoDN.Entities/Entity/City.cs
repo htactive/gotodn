@@ -13,5 +13,6 @@ namespace GotoDN.Entities
         public string Name { get; set; }
 
         public List<District> Districts { get; set; }
+        public List<Place> Places { get; set; }
     }
 }

@@ -155,7 +155,7 @@ class UserList extends React.Component<{}, thisState> {
 
   private async delete(id: number) {
     if (await SweetAlerts.show({
-        type: SweetAlertTypeEnums.Error,
+        type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
         text: 'Bạn có chắc muốn xóa người dùng này?',
         showCancelButton: true,

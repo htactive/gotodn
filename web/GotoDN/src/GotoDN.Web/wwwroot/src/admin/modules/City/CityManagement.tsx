@@ -70,7 +70,7 @@ class CityManagement extends React.Component<{}, thisState> {
 
   private async deleteCity(Id: number) {
     if (await SweetAlerts.show({
-        type: SweetAlertTypeEnums.Error,
+        type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
         text: 'Bạn có chắc muốn xóa tỉnh thành này?',
         showCancelButton: true,

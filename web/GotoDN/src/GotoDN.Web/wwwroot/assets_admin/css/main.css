@@ -1420,7 +1420,7 @@ body.fixed-right-sidebar:not(.fixed-header) #right-sidebar.rstop {
   border-radius: 3px;
   float: left;
   margin-right: 5px;
-  width: 20px;
+  width: 30px;
 }
 .page-sidebar .user-info .name {
   color: #ffffff;

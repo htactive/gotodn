@@ -140,8 +140,8 @@ class Sidebar extends React.Component<any, thisState> {
             </div>
             <div className="user-info clearfix">
               {this.renderAvatar()}
-              <a className="name">{this.state.CurrentUser ?
-                this.state.CurrentUser.UserName : ''}</a>
+              <span className="name">{this.state.CurrentUser ?
+                this.state.CurrentUser.UserName : ''}</span>
             </div>
             <div className="sidebar-panel">
               <h5 className="sidebar-panel-title">Điều hướng</h5>

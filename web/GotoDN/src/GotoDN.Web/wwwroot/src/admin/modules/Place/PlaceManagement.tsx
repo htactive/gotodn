@@ -135,7 +135,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
   private async deletePlace(Id: number) {
     if (await SweetAlerts.show({
-        type: SweetAlertTypeEnums.Error,
+        type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
         text: 'Bạn có chắc muốn xóa?',
         showCancelButton: true,
@@ -157,8 +157,9 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
         this.setState({
           SelectedPlace: null,
-          SelectedLanguage: null
+          SelectedLanguage: null,
         });
+        browserHistory.push(AdminRoutePath.PlaceManagement);
       }
       else {
         window['notice_error']();

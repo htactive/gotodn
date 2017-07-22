@@ -9,9 +9,10 @@ using GotoDN.Common;
 namespace GotoDN.Web.Migrations
 {
     [DbContext(typeof(GTDBEntities))]
-    partial class GTDBEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20170722092819_hoang_000009")]
+    partial class hoang_000009
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2");

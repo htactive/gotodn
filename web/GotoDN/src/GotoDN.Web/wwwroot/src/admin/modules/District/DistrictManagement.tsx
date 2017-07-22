@@ -77,7 +77,7 @@ class DistrictManagement extends React.Component<{}, thisState> {
 
   private async deleteDistrict(Id: number) {
     if (await SweetAlerts.show({
-        type: SweetAlertTypeEnums.Error,
+        type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
         text: 'Bạn có chắc muốn xóa quận huyện này?',
         showCancelButton: true,

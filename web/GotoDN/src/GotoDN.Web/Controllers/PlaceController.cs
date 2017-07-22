@@ -52,6 +52,41 @@ namespace GotoDN.Web.Controllers
                     Language = LanguageEnums.English,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new PlaceLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Vietnamese,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new PlaceLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.France,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new PlaceLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Chinese,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new PlaceLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Korean,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new PlaceLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Japanese,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 }
             };
 

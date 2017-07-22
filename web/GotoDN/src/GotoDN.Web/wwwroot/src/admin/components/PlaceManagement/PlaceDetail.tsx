@@ -287,7 +287,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                             onChange={(Id) => this.props.ClickSlectHTService(Id)}
                           />
                         </div>
-
+                        {this.props.SelectedPlace.PlaceLanguages && this.props.SelectedPlace.PlaceLanguages.length < 6 ?
                         <div className="btn-group dropdown col-sm-3">
                           <button type="button" className="btn btn-success dropdown-toggle"
                                   data-toggle="dropdown" aria-expanded="false">
@@ -305,7 +305,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                               </li>
                             )}
                           </ul>
-                        </div>
+                        </div> : <div className="col-sm-3"></div> }
 
                         <div className="form-group col-sm-3">
                           <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
@@ -449,7 +449,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
 
   private deletePlace() {
     this.props.DeletePlace && this.props.DeletePlace(this.props.SelectedPlace.Id);
-    this.close();
   }
 
   private discardChangesEditing() {

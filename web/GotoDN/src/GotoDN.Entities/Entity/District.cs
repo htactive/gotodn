@@ -16,5 +16,7 @@ namespace GotoDN.Entities
 
         [ForeignKey("CityId")]
         public City City { get; set; }
+
+        public List<Place> Places { get; set; }
     }
 }

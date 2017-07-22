@@ -42,7 +42,6 @@ namespace GotoDN.Entities
                 .HasMany(x => x.UserLoginTokens)
                 .WithOne(x => x.User)
                 .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
-
             modelBuilder.Entity<Claim>()
                 .HasMany(x => x.RoleClaims)
                 .WithOne(x => x.Claim)
@@ -56,16 +55,42 @@ namespace GotoDN.Entities
                 .HasMany(x => x.CategoryLanguages)
                 .WithOne(x => x.Category)
                 .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
+            modelBuilder.Entity<Category>()
+                .HasMany(x => x.HTServices)
+                .WithOne(x => x.Category)
+                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
+            modelBuilder.Entity<Category>()
+                .HasMany(x => x.Places)
+                .WithOne(x => x.Category)
+                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.SetNull);
 
             modelBuilder.Entity<HTService>()
                 .HasMany(x => x.HTServiceLanguages)
                 .WithOne(x => x.HTService)
                 .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
+            modelBuilder.Entity<HTService>()
+                .HasMany(x => x.Places)
+                .WithOne(x => x.HTService)
+                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Place>()
                 .HasMany(x => x.PlaceLanguages)
                 .WithOne(x => x.Place)
                 .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<City>()
+                .HasMany(x => x.Districts)
+                .WithOne(x => x.City)
+                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
+            modelBuilder.Entity<City>()
+                .HasMany(x => x.Places)
+                .WithOne(x => x.City)
+                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<District>()
+                .HasMany(x => x.Places)
+                .WithOne(x => x.District)
+                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.SetNull);
         }
     }
 }
