@@ -12,7 +12,7 @@ export const AdminRoutePath = {
   ServiceManagement: `${virtualPath}/services`,
   PlaceManagement: `${virtualPath}/places`,
   CityManagement: `${virtualPath}/cities`,
-  DistrictManagement: `${virtualPath}/districts`,
+  DistrictManagement: `${virtualPath}/provinces`,
 };
 
 export const SearchRoutePath = {

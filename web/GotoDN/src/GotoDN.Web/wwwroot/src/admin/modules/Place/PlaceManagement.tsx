@@ -2,7 +2,7 @@ import * as React from 'react';
 import {PlaceServiceInstance} from "../../services/PlaceService";
 import PlaceDetail from "../../components/PlaceManagement/PlaceDetail";
 import {PlaceModel} from "../../../models/PlaceModel";
-import {LanguageEnums, TimeHelper} from "../../../commons/constant";
+import {LanguageEnums, TimeHelper, AdminRoutePath} from "../../../commons/constant";
 import {PlaceLanguageModel} from "../../../models/PlaceLanguageModel";
 import {CategoryModel} from "../../../models/CategoryModel";
 import {HTServiceModel} from "../../../models/HTServiceModel";
@@ -13,6 +13,7 @@ import {TableHeaderColumn} from 'react-bootstrap-table';
 import {SweetAlertResultEnums, SweetAlerts, SweetAlertTypeEnums} from "../../../commons/sweet-alerts";
 import {CityModel, DistrictModel} from "../../../models/CityModel";
 import {CityServiceInstance} from "../../services/CityService";
+import {Link, browserHistory} from 'react-router';
 
 interface thisState {
   GridFilter?: GetGridRequestModel,
@@ -25,9 +26,9 @@ interface thisState {
   Cities?: CityModel[],
   DistrictsBackup?: DistrictModel[],
   Districts?: DistrictModel[],
+  showDetail?: boolean,
 }
 class PlaceManagement extends React.Component<{}, thisState> {
-  placeModal: PlaceDetail;
   state: thisState = {
     SelectedLanguage: LanguageEnums.English,
     GridFilter: {
@@ -40,6 +41,11 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
   setState(state: thisState) {
     super.setState(state);
+  }
+
+  async componentWillMount() {
+    await this.getData(this.state.GridFilter);
+    await this.componentWillReceiveProps(this.props);
   }
 
   componentDidMount() {
@@ -65,8 +71,27 @@ class PlaceManagement extends React.Component<{}, thisState> {
         Districts: [],
       });
     })();
+  }
 
-    this.getData(this.state.GridFilter);
+  componentWillReceiveProps(props) {
+    if(!props.params['id']) {
+      this.setState({showDetail: false});
+      return
+    }
+    if(!this.state.GridData) return;
+    let data = this.state.GridData.DataSource.filter(x => x.Id == props.params['id'])[0];
+    this.setState({
+      SelectedPlace: data,
+      SelectedLanguage: LanguageEnums.English,
+      showDetail: true,
+    });
+    data && data.CategoryId ?
+      this.setState({HTServices: this.state.HTServicesBackup.filter(x => x.CategoryId == data.CategoryId)})
+      : null;
+    data && data.CityId ?
+      this.setState({Districts: this.state.DistrictsBackup.filter(x => x.CityId == data.CityId)})
+      : null;
+
   }
 
   private async getData(request: GetGridRequestModel) {
@@ -197,7 +222,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
     };
     return (
       <div className="page-content-wrapper">
-        <div className={`page-content-inner`}>
+        <div className={`page-content-inner ${this.state.showDetail ? "hidden" : null}`}>
           <div id="page-header" className="clearfix">
             <div className="page-header">
               <h2>Địa điểm - Sự kiện</h2>
@@ -206,7 +231,6 @@ class PlaceManagement extends React.Component<{}, thisState> {
             <div className="header-stats">
             </div>
           </div>
-
           <div className="row">
             <div className="col-lg-12 col-md-12 col-sm-12">
               <div className="panel panel-default plain toggle panelMove">
@@ -300,7 +324,6 @@ class PlaceManagement extends React.Component<{}, thisState> {
                        this.state.SelectedPlace.HTServiceId = Id;
                        this.forceUpdate();
                      }}
-                     ref={e => this.placeModal = e}
                      Cities={this.state.Cities || []}
                      Districts={this.state.Districts || []}
                      ClickSlectCity={(Id) => {
@@ -319,6 +342,10 @@ class PlaceManagement extends React.Component<{}, thisState> {
                        this.state.SelectedPlace.StartDate = e;
                        this.forceUpdate();
                      }}
+                     isShow={this.state.showDetail}
+                     clickGoBack={() => {
+                       browserHistory.push(AdminRoutePath.PlaceManagement);
+                     }}
         />
       </div>
     );
@@ -326,20 +353,9 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
   private bindNameData(data: PlaceModel) {
     let firstLanguage = data.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
-    return <a className="btn btn-link"
-              onClick={() => {
-                this.placeModal.show();
-                this.setState({
-                  SelectedPlace: data, SelectedLanguage: LanguageEnums.English,
-                });
-                data && data.CategoryId ?
-                  this.setState({HTServices: this.state.HTServicesBackup.filter(x => x.CategoryId == data.CategoryId)})
-                  : null;
-                data && data.CityId ?
-                  this.setState({Districts: this.state.DistrictsBackup.filter(x => x.CityId == data.CityId)})
-                  : null;
-              }}
-    >{(firstLanguage ? firstLanguage.Title : '') || ("Place's Name")}</a>;
+    return <Link className="btn btn-link"
+                 to={`${AdminRoutePath.PlaceManagement}/${data.Id}`}>
+      {(firstLanguage ? firstLanguage.Title : '') || ("Place's Name")}</Link>;
   }
 
   private bindCategoryData(data: PlaceModel) {

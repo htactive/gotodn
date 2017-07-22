@@ -34,6 +34,8 @@ interface thisProps {
   ClickSlectDistrict: (Id) => void,
   onStartDateChange: (e) => void,
   onEndDateChange: (e) => void,
+  isShow: boolean,
+  clickGoBack: () => void,
 }
 
 interface thisState {
@@ -53,6 +55,15 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
 
   show() {
     this.setState({isShow: true});
+  }
+
+  componentWillReceiveProps(props) {
+    if(props.isShow) {
+      this.show();
+    }
+    else {
+      this.close();
+    }
   }
 
   private getFormStructure(): DynamicFormModel[] {
@@ -239,12 +250,19 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
     let IsEvent = selectCategory ? selectCategory.IsEvent : false;
     let firstLang = this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
     return (
-      <Modal show={this.state.isShow} onHide={() => this.close()} bsSize="large"
-             aria-labelledby="contained-modal-title-lg">
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-lg">{firstLang ? firstLang.Title : ''}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
+      <div className={`page-content-wrapper ${!this.state.isShow ? "hidden" : null}`}>
+        <div className={`page-content-inner`}>
+          <div id="page-header" className="clearfix">
+            <button type="button" className="btn btn-sm btn-danger btn-round btn-alt mr15 mt25 pull-left"
+                    onClick={() => this.props.clickGoBack()}
+            >
+              <i className="fa fa-arrow-left"></i></button>
+            <div className="page-header">
+              <h2>{firstLang && firstLang.Title}</h2>
+            </div>
+            <div className="header-stats">
+            </div>
+          </div>
           <div className="panel panel-default plain">
             <div className="panel-body">
               {this.props.SelectedPlace != null ?
@@ -424,8 +442,8 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
               }
             </div>
           </div>
-        </Modal.Body>
-      </Modal>
+        </div>
+      </div>
     )
   }
 
