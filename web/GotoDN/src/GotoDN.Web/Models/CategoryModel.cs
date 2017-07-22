@@ -14,6 +14,8 @@ namespace GotoDN.Web.Models
         public int? Priority { get; set; }
         public bool? IsEvent { get; set; }
         public List<CategoryLanguageModel> CategoryLanguages { get; set; }
+        public List<PlaceModel> Places { get; set; }
+        public List<HTServiceModel> HTServices { get; set; }
     }
 
     public class CategoryLanguageModel
