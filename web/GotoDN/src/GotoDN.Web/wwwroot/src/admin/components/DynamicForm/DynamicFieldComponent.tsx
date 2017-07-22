@@ -6,6 +6,7 @@ import {FieldStructureTypeEnums, SelectInitValueModel} from "../../../models/fie
 import {ToggleComponent} from "./ToggleComponent";
 import {SingleImageUploadComponent} from "./SingleImageUploadComponent";
 import {RichTextEditorComponent} from "./RichTextEditorComponent";
+import {DateRangePicker} from "../../../commons/date-range-picker";
 interface thisProps {
   Field: DynamicFieldModel,
   onFieldValueChange: (fv: FieldValueModel) => void,
@@ -226,8 +227,28 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
     );
   }
 
-  render() {
+  renderCalendar(): JSX.Element {
+    return (
+      <div className={`form-group col-lg-12 p0`}>
+        <label
+          className={`${this.props.Field.LabelClass ? this.props.Field.LabelClass : 'col-lg-2 col-md-3'} control-label`}>
+          {this.props.Field.FieldStructure.Name}</label>
+        <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
+          <label className="form-control-static">{this.props.FieldValue.Value}</label>
+        </div>
 
+        <DateRangePicker Date={null}
+                         onDateChanged={(v) => {
+                           let fv = {...this.props.FieldValue};
+                           fv.Value = v.Value;
+                           this.props.onFieldValueChange(fv);
+                         }}
+        />
+      </div>
+    );
+  }
+
+  render() {
     if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.StaticLabel) {
       return this.renderStaticLabel();
     }
@@ -259,6 +280,10 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
 
     if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.CheckBox) {
       return this.renderCheckboxGroupField();
+    }
+
+    if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.Calendar) {
+      return this.renderCalendar();
     }
 
     if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.Toggle) {

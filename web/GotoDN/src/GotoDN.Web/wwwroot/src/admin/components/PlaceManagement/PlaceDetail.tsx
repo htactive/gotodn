@@ -12,6 +12,7 @@ import {DynamicFieldModel} from "../../../models/dynamic-field-model";
 import {DynamicFormModel} from "../../../models/dynamic-form-model";
 import {Modal, Button, Form, FormGroup, Col} from 'react-bootstrap';
 import {CityModel, DistrictModel} from "../../../models/CityModel";
+import {DateRangePicker} from "../../../commons/date-range-picker";
 
 interface thisProps {
   SelectedPlace: PlaceModel,
@@ -31,6 +32,8 @@ interface thisProps {
   Districts: DistrictModel[],
   ClickSlectCity: (Id) => void,
   ClickSlectDistrict: (Id) => void,
+  onStartDateChange: (e) => void,
+  onEndDateChange: (e) => void,
 }
 
 interface thisState {
@@ -39,6 +42,7 @@ interface thisState {
 
 class PlaceDetail extends React.Component<thisProps, thisState> {
   editingForm: DynamicPanelComponent;
+
   componentWillMount() {
     this.setState({isShow: false});
   }
@@ -97,10 +101,10 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.Number,
           ValidateRules: [{
-              Type: ValidateRuleTypeEnums.MinValue,
-              InValidMessage: 'Không được nhỏ hơn 0',
-              RuleData: '0'
-            },
+            Type: ValidateRuleTypeEnums.MinValue,
+            InValidMessage: 'Không được nhỏ hơn 0',
+            RuleData: '0'
+          },
             {
               Type: ValidateRuleTypeEnums.MaxValue,
               InValidMessage: 'Không được lớn hơn 5',
@@ -174,6 +178,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
           ValidateRules: []
         }
       };
+
       inforForm.DynamicFields.push(Phone);
       inforForm.DynamicFields.push(Address);
       inforForm.DynamicFields.push(Rating);
@@ -230,7 +235,8 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         }
       );
     }
-
+    let selectCategory = this.props.Categories.filter(x => x.Id == (this.props.SelectedPlace ? this.props.SelectedPlace.CategoryId : 0))[0];
+    let IsEvent = selectCategory ? selectCategory.IsEvent : false;
     let firstLang = this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
     return (
       <Modal show={this.state.isShow} onHide={() => this.close()} bsSize="large"
@@ -241,151 +247,181 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         <Modal.Body>
           <div className="panel panel-default plain">
             <div className="panel-body">
-        {this.props.SelectedPlace != null ?
-          <div className="col-lg-12 col-sm-12 form-horizontal">
-            <div className="tabs mb20">
-              <ul className="nav nav-tabs">
-                <div className="form-group">
-                  <div className="col-sm-3">
-                    <ComboBox
-                      placeHolder="Chọn category..."
-                      options={Categories}
-                      value={this.props.SelectedPlace.CategoryId}
-                      onChange={(Id) => this.props.ClickSlectCategory(Id)}
-                    />
-                  </div>
+              {this.props.SelectedPlace != null ?
+                <div className="col-lg-12 col-sm-12 form-horizontal">
+                  <div className="tabs mb20">
+                    <ul className="nav nav-tabs">
+                      <div className="form-group">
+                        <div className="col-sm-3">
+                          <ComboBox
+                            placeHolder="Chọn category..."
+                            options={Categories}
+                            value={this.props.SelectedPlace.CategoryId}
+                            onChange={(Id) => this.props.ClickSlectCategory(Id)}
+                          />
+                        </div>
 
-                  <div className="col-sm-3">
-                    <ComboBox
-                      placeHolder="Chọn service..."
-                      options={HTServices}
-                      value={this.props.SelectedPlace.HTServiceId}
-                      onChange={(Id) => this.props.ClickSlectHTService(Id)}
-                    />
-                  </div>
+                        <div className="col-sm-3">
+                          <ComboBox
+                            placeHolder="Chọn service..."
+                            options={HTServices}
+                            value={this.props.SelectedPlace.HTServiceId}
+                            onChange={(Id) => this.props.ClickSlectHTService(Id)}
+                          />
+                        </div>
 
-                  <div className="btn-group dropdown col-sm-3">
-                    <button type="button" className="btn btn-success dropdown-toggle"
-                            data-toggle="dropdown" aria-expanded="false">
-                      Thêm ngôn ngữ
-                      <span className="caret"></span>
-                    </button>
-                    <ul className="dropdown-menu left animated fadeIn" role="menu">
-                      {languages.filter(x =>
-                        this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages &&
-                        !this.props.SelectedPlace.PlaceLanguages.some(r => r.Language == x.Language)
-                      ).map((item, index) =>
-                        <li key={index}>
-                          <a onClick={() => this.props.AddPlaceLanguage
-                          && this.props.AddPlaceLanguage(item.Language)}>{item.Title}</a>
-                        </li>
-                      )}
-                    </ul>
-                  </div>
+                        <div className="btn-group dropdown col-sm-3">
+                          <button type="button" className="btn btn-success dropdown-toggle"
+                                  data-toggle="dropdown" aria-expanded="false">
+                            Thêm ngôn ngữ
+                            <span className="caret"></span>
+                          </button>
+                          <ul className="dropdown-menu left animated fadeIn" role="menu">
+                            {languages.filter(x =>
+                              this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages &&
+                              !this.props.SelectedPlace.PlaceLanguages.some(r => r.Language == x.Language)
+                            ).map((item, index) =>
+                              <li key={index}>
+                                <a onClick={() => this.props.AddPlaceLanguage
+                                && this.props.AddPlaceLanguage(item.Language)}>{item.Title}</a>
+                              </li>
+                            )}
+                          </ul>
+                        </div>
 
-                  <div className="form-group col-sm-3">
-                    <button className="btn btn-danger pull-right" style={{marginLeft:5}}
-                            onClick={() => this.deletePlace()}><i
-                      className="fa fa-trash-o"/> Xóa
-                    </button>
+                        <div className="form-group col-sm-3">
+                          <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
+                                  onClick={() => this.deletePlace()}><i
+                            className="fa fa-trash-o"/> Xóa
+                          </button>
 
-                    <button className="btn btn-primary pull-right"
-                            onClick={() => this.savePlace()}><i
-                      className="fa fa-save"/> Lưu
-                    </button>
+                          <button className="btn btn-primary pull-right"
+                                  onClick={() => this.savePlace()}><i
+                            className="fa fa-save"/> Lưu
+                          </button>
 
-                    <button className="btn btn-default hidden"
-                            onClick={() => this.discardChangesEditing()}>Làm lại
-                    </button>
-                  </div>
+                          <button className="btn btn-default hidden"
+                                  onClick={() => this.discardChangesEditing()}>Làm lại
+                          </button>
+                        </div>
 
 
+                      </div>
 
-                </div>
+                      <hr/>
 
-                <hr/>
-
-                {
-                  this.props.SelectedPlace.PlaceLanguages.map(x =>
-                    <li key={x.Id}
-                        className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
-                      <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
-                        {languages.filter(r => r.Language == x.Language)[0].Title}
-                        &nbsp;
-                        &nbsp;
-                        {x.Language == LanguageEnums.English ?
-                          null : <span onClick={() => this.props.DeletePlaceLanguage
-                          && this.props.DeletePlaceLanguage(x.Id)}
-                          >
+                      {
+                        this.props.SelectedPlace.PlaceLanguages.map(x =>
+                          <li key={x.Id}
+                              className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
+                            <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
+                              {languages.filter(r => r.Language == x.Language)[0].Title}
+                              &nbsp;
+                              &nbsp;
+                              {x.Language == LanguageEnums.English ?
+                                null : <span onClick={() => this.props.DeletePlaceLanguage
+                                && this.props.DeletePlaceLanguage(x.Id)}
+                                >
                             <i className="fa fa-remove"/>
                           </span>}
-                      </a>
-                    </li>)
-                }
-              </ul>
-              <div className="tab-content">
-                {
-                  this.props.SelectedPlace.PlaceLanguages.map(x => {
-                    return <PlaceLanguageDetail
-                      key={x.Id}
-                      IsSelected={x.Language == this.props.SelectedLanguage}
-                      PlaceLanguage={x}
-                      OnObjectChange={(obj: PlaceLanguageModel) =>
-                        this.props.OnPlaceLanguageChange(obj)}
-                    />
-                  })
-                }
-              </div>
-            </div>
-
-            <hr/>
-
-            <div className="form-horizontal">
-              <fieldset>
-                <div className="form-group col-sm-12 p0">
-                  <label className="col-sm-3 control-label">Tỉnh thành</label>
-                  <div className="col-sm-9">
-                    <ComboBox
-                      placeHolder="Chọn tỉnh thành..."
-                      options={Cities}
-                      value={this.props.SelectedPlace.CityId}
-                      onChange={(Id) => this.props.ClickSlectCity(Id)}
-                    />
+                            </a>
+                          </li>)
+                      }
+                    </ul>
+                    <div className="tab-content">
+                      {
+                        this.props.SelectedPlace.PlaceLanguages.map(x => {
+                          return <PlaceLanguageDetail
+                            key={x.Id}
+                            IsSelected={x.Language == this.props.SelectedLanguage}
+                            PlaceLanguage={x}
+                            OnObjectChange={(obj: PlaceLanguageModel) =>
+                              this.props.OnPlaceLanguageChange(obj)}
+                          />
+                        })
+                      }
+                    </div>
                   </div>
-                </div>
-              </fieldset>
-            </div>
 
-            <div className="form-horizontal">
-              <fieldset>
-                <div className="form-group col-sm-12 p0">
-                  <label className="col-sm-3 control-label">Quận huyện</label>
-                  <div className="col-sm-9">
-                    <ComboBox
-                      placeHolder="Chọn quận huyện..."
-                      options={Districts}
-                      value={this.props.SelectedPlace.DistrictId}
-                      onChange={(Id) => this.props.ClickSlectDistrict(Id)}
-                    />
+                  <hr/>
+
+                  <div className="form-horizontal">
+                    <fieldset>
+                      <div className="form-group col-sm-12 p0">
+                        <label className="col-sm-3 control-label">Tỉnh thành</label>
+                        <div className="col-sm-9">
+                          <ComboBox
+                            placeHolder="Chọn tỉnh thành..."
+                            options={Cities}
+                            value={this.props.SelectedPlace.CityId}
+                            onChange={(Id) => this.props.ClickSlectCity(Id)}
+                          />
+                        </div>
+                      </div>
+                    </fieldset>
                   </div>
-                </div>
-              </fieldset>
-            </div>
 
-            <DynamicPanelComponent
-              ref={(r) => this.editingForm = r}
-              FormStructure={this.getFormStructure()}
-              onFieldValueChange={(obj: PlaceModel) => this.props.OnPlaceChange(obj)}
-              Object={this.props.SelectedPlace}
-              onValidationChange={(isInvalid) => {
-                this.props.SelectedPlace['__#isInvalid#__'] = isInvalid
-              }}
-            />
+                  <div className="form-horizontal">
+                    <fieldset>
+                      <div className="form-group col-sm-12 p0">
+                        <label className="col-sm-3 control-label">Quận huyện</label>
+                        <div className="col-sm-9">
+                          <ComboBox
+                            placeHolder="Chọn quận huyện..."
+                            options={Districts}
+                            value={this.props.SelectedPlace.DistrictId}
+                            onChange={(Id) => this.props.ClickSlectDistrict(Id)}
+                          />
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
 
+                  <DynamicPanelComponent
+                    ref={(r) => this.editingForm = r}
+                    FormStructure={this.getFormStructure()}
+                    onFieldValueChange={(obj: PlaceModel) => this.props.OnPlaceChange(obj)}
+                    Object={this.props.SelectedPlace}
+                    onValidationChange={(isInvalid) => {
+                      this.props.SelectedPlace['__#isInvalid#__'] = isInvalid
+                    }}
+                  />
 
-          </div> :
-          null
-        }
+                  {IsEvent ? <div className="form-horizontal">
+                      <fieldset>
+                        <div className="form-group col-sm-12 p0">
+                          <label className="col-sm-3 control-label">Ngày bắt đầu</label>
+                          <div className="col-sm-9">
+                            <DateRangePicker
+                              Date={this.props.SelectedPlace.StartDate}
+                              onDateChanged={(e) => {
+                                this.props.onStartDateChange(e);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div> : null}
+
+                  {IsEvent ? <div className="form-horizontal">
+                      <fieldset>
+                        <div className="form-group col-sm-12 p0">
+                          <label className="col-sm-3 control-label">Ngày kết thúc</label>
+                          <div className="col-sm-9">
+                            <DateRangePicker
+                              Date={this.props.SelectedPlace.EndDate}
+                              onDateChanged={(e) => {
+                                this.props.onEndDateChange(e);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div> : null}
+
+                </div> :
+                null
+              }
             </div>
           </div>
         </Modal.Body>

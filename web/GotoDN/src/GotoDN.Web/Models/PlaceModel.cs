@@ -54,4 +54,10 @@ namespace GotoDN.Web.Models
         public ImageModel Image { get; set; }
         public ImageModel Icon { get; set; }
     }
+
+    public class CompareModel
+    {
+        public DateTime? date { get; set; }
+        public string comparator { get; set; }
+    }
 }

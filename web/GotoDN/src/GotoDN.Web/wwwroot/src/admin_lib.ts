@@ -14,6 +14,7 @@ import * as Reactstrap from 'reactstrap';
 import * as ReactAddonsCssTransitionGroup from 'react-addons-css-transition-group';
 import * as ReactAddonsTransitionGroup from 'react-addons-transition-group';
 import * as ReactSelect from 'react-select';
+import * as DatePicker from 'react-datepicker';
 
 window['react-bootstrap-table'] = ReactBootstrapTable;
 window['react-bootstrap'] = ReactBootstrap;
@@ -31,3 +32,4 @@ window['reactstrap'] = Reactstrap;
 window['react-addons-css-transition-group'] = ReactAddonsCssTransitionGroup;
 window['react-addons-transition-group'] = ReactAddonsTransitionGroup;
 window['react-select'] = ReactSelect;
+window['react-datepicker'] = DatePicker;

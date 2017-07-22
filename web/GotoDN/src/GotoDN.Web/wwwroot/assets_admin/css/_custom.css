@@ -453,3 +453,35 @@ div.toggle-custom.disabled label.toggle input[type="radio"]:checked + .button-ra
 .bs-dropdown-open .main-panel {
   margin-bottom: 350px;
 }
+
+
+.date-picker {
+  display: inline-block;
+}
+
+.date-picker .start-date,
+.date-picker .end-date {
+  background-color: #fff !important;
+}
+
+.date-picker .date-picker-start {
+  padding-bottom: 5px;
+  display: inline-block;
+  padding-right: 20px;
+}
+
+.date-picker .date-picker-end {
+  display: inline-block;
+}
+
+.date-picker .title-start,
+.date-picker .title-end {
+  display: inline-block;
+  padding-right: 10px;
+}
+
+.date-picker-section {
+  position: absolute;
+  top: 10px;
+  z-index: 9;
+}

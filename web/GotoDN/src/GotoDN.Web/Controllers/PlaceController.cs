@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using GotoDN.Entities;
 using GotoDN.Web.Authentication;
 using GotoDN.Common;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace GotoDN.Web.Controllers
 {
@@ -218,6 +220,24 @@ namespace GotoDN.Web.Controllers
                             break;
                         case "Ranking":
                             query = query.Where(x => x.Rating == float.Parse(search));
+                            break;
+                        case "StartDate":
+                            var json = JsonConvert.DeserializeObject<CompareModel>(search);
+                            
+                            if (json != null)
+                            {
+                                var startTime = json.date;
+                                var endTime = json.date.Value.AddDays(1);
+                                if (json.comparator.Equals("="))
+                                {
+                                    query = query.Where(x => x.StartDate.Value >= startTime && x.StartDate.Value < endTime);
+                                }
+                            }
+                            break;
+
+                        case "EndDate":
+                            var tmp1 = (search.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries));
+
                             break;
                     }
                 }

@@ -32,6 +32,7 @@ export enum FieldStructureTypeEnums
   PageLayoutConfiguration = 11,
   StaticLabel = 12,
   StaticControl = 13,
+  Calendar = 14,
   C_Splitter = 100,
   C_PriceSet = 101,
   C_ImagesUpload = 102,

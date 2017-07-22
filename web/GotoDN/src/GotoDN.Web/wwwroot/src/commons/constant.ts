@@ -141,6 +141,32 @@ export enum ListObjectOverviewComponentForTypeEnums
   Cities = 3
 }
 
+export class TimeHelper {
+  static toLocalTime(time: Date): Date {
+    return moment.utc(time)['_d'];
+  }
+
+  static convertToString(time: Date): string {
+    time = TimeHelper.toLocalTime(time);
+    var d = moment(time, "YYYY-MM-DD HH:mm:ss");
+    var result = d.format("DD-MM-YYYY HH:mm");
+    return result;
+  }
+
+  static convertToNumber(time: Date): number {
+    time = TimeHelper.toLocalTime(time);
+    var d = moment(time, "YYYY-MM-DD HH:mm:ss");
+    var result = moment(d).unix();
+    return result;
+  }
+
+  static convertToDay(time: Date): string {
+    var d = moment(time, "YYYY-MM-DD HH:mm:ss");
+    var result = d.format("DD-MM-YYYY");
+    return result;
+  }
+}
+
 export class Helper {
   static ESC = 27;
   static TAB = 9;
