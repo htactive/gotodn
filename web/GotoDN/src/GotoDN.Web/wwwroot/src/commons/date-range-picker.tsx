@@ -15,7 +15,6 @@ const DATE_FORMAT = ["DD/MM/YYYY", "D/M/YYYY"];
 export class DateRangePicker extends React.Component<thisProps, thisState> {
 
   render() {
-    debugger;
     let date = this.props.Date ? moment(this.props.Date) : moment();
     return (
       <div className="date-picker">

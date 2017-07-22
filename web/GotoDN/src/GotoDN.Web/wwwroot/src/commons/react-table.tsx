@@ -107,7 +107,6 @@ export class ReactTable extends React.Component<thisProps, {}> {
   }
 
   private async onFilterChange(filterObj) {
-    debugger;
     let request: GetGridRequestModel = {...this.props.request};
     request.Parameters = [];
     if (Object.keys(filterObj).length === 0) {

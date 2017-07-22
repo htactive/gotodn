@@ -232,16 +232,36 @@ class PlaceManagement extends React.Component<{}, thisState> {
                     <TableHeaderColumn width="100" dataField="Name" filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindNameData(data)} dataSort={true}>
                       Tên</TableHeaderColumn>
-
-                    <TableHeaderColumn width="100" dataField="StartDate" dataAlign="center"
+                    <TableHeaderColumn width="100" dataField="Category" dataAlign="center"
+                                       filter={{type: 'TextFilter'}}
+                                       dataFormat={(r, data) => this.bindCategoryData(data)} dataSort={true}>
+                      Category</TableHeaderColumn>
+                    <TableHeaderColumn width="100" dataField="Service" dataAlign="center"
+                                       filter={{type: 'TextFilter'}}
+                                       dataFormat={(r, data) => this.bindServiceData(data)} dataSort={true}>
+                      Dịch vụ</TableHeaderColumn>
+                    <TableHeaderColumn width="100" dataField="City" dataAlign="center"
+                                       filter={{type: 'TextFilter'}}
+                                       dataFormat={(r, data) => this.bindCityData(data)} dataSort={true}>
+                      Thành phố</TableHeaderColumn>
+                    <TableHeaderColumn width="100" dataField="District" dataAlign="center"
+                                       filter={{type: 'TextFilter'}}
+                                       dataFormat={(r, data) => this.bindDistrictData(data)} dataSort={true}>
+                      Quận huyện</TableHeaderColumn>
+                    <TableHeaderColumn width="50" dataField="Highlight" dataAlign="center"
+                                       filterFormatted formatExtraData={highlightSelecter}
+                                       filter={{type: 'SelectFilter', options: highlightSelecter}}
+                                       dataFormat={(r, data) => this.bindHighlightData(data)} dataSort={true}>
+                      Nổi bật</TableHeaderColumn>
+                    <TableHeaderColumn width="150" dataField="StartDate" dataAlign="center"
                                        filter={{type: 'DateFilter'}}
                                        dataFormat={(r, data) => this.bindStartDateData(data)} dataSort={false}>
                       Ngày bắt đầu</TableHeaderColumn>
-                    <TableHeaderColumn width="100" dataField="EndDate" dataAlign="center"
+                    <TableHeaderColumn width="150" dataField="EndDate" dataAlign="center"
                                        filter={{type: 'DateFilter'}}
                                        dataFormat={(r, data) => this.bindEndDateData(data)} dataSort={false}>
                       Ngày kết thúc</TableHeaderColumn>
-                    <TableHeaderColumn width="100" dataField="Ranking" dataAlign="center"
+                    <TableHeaderColumn width="50" dataField="Ranking" dataAlign="center"
                                        filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindRankingData(data)} dataSort={true}>
                       Đánh giá</TableHeaderColumn>

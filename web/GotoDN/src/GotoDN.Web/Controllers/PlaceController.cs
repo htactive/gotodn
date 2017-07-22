@@ -205,7 +205,7 @@ namespace GotoDN.Web.Controllers
                     x.District.Name.ToLower().Contains(search));
                             break;
                         case "Highlight":
-                            if(search.Equals("0"))
+                            if (search.Equals("0"))
                             {
                                 query = query.Where(x => (!(bool)x.IsHomeSlider && !(bool)x.IsCategorySlider)
                                 || (x.IsHomeSlider == null && !(bool)x.IsCategorySlider)
@@ -213,7 +213,7 @@ namespace GotoDN.Web.Controllers
                                 || (!x.IsHomeSlider == null && !x.IsCategorySlider == null)
                                 );
                             }
-                            else if(search.Equals("1"))
+                            else if (search.Equals("1"))
                             {
                                 query = query.Where(x => x.IsCategorySlider.Value || x.IsHomeSlider.Value);
                             }
@@ -223,25 +223,74 @@ namespace GotoDN.Web.Controllers
                             break;
                         case "StartDate":
                             var json = JsonConvert.DeserializeObject<CompareModel>(search);
-                            
                             if (json != null)
                             {
-                                var startTime = json.date;
-                                var endTime = json.date.Value.AddDays(1);
-                                if (json.comparator.Equals("="))
+                                var startTime0h = json.date.Value;
+                                var endTime24h = json.date.Value.AddHours(23).AddMinutes(59).AddSeconds(59);
+                                var comparator = json.comparator;
+                                if (comparator.Equals("="))
                                 {
-                                    query = query.Where(x => x.StartDate.Value >= startTime && x.StartDate.Value < endTime);
+                                    query = query.Where(x => x.StartDate.Value >= startTime0h && x.StartDate.Value <= endTime24h);
+                                }
+                                else if (comparator.Equals(">"))
+                                {
+                                    query = query.Where(x => x.StartDate.Value > endTime24h);
+                                }
+                                else if (comparator.Equals("<"))
+                                {
+                                    query = query.Where(x => x.StartDate.Value < startTime0h);
+                                }
+                                else if (comparator.Equals(">="))
+                                {
+                                    query = query.Where(x => x.StartDate.Value >= startTime0h);
+                                }
+                                else if (comparator.Equals("<="))
+                                {
+                                    query = query.Where(x => x.StartDate.Value <= endTime24h);
+                                }
+                                else if (comparator.Equals("!="))
+                                {
+                                    query = query.Where(x => x.StartDate.Value < startTime0h || x.StartDate.Value > endTime24h);
                                 }
                             }
                             break;
-
                         case "EndDate":
-                            var tmp1 = (search.Split(new[] { ", " }, StringSplitOptions.RemoveEmptyEntries));
-
+                            var jsonD = JsonConvert.DeserializeObject<CompareModel>(search);
+                            if (jsonD != null)
+                            {
+                                var startTime0h = jsonD.date.Value;
+                                var endTime24h = jsonD.date.Value.AddHours(23).AddMinutes(59).AddSeconds(59);
+                                var comparator = jsonD.comparator;
+                                if (comparator.Equals("="))
+                                {
+                                    query = query.Where(x => x.EndDate.Value >= startTime0h && x.EndDate.Value <= endTime24h);
+                                }
+                                else if (comparator.Equals(">"))
+                                {
+                                    query = query.Where(x => x.EndDate.Value > endTime24h);
+                                }
+                                else if (comparator.Equals("<"))
+                                {
+                                    query = query.Where(x => x.EndDate.Value < startTime0h);
+                                }
+                                else if (comparator.Equals(">="))
+                                {
+                                    query = query.Where(x => x.EndDate.Value >= startTime0h);
+                                }
+                                else if (comparator.Equals("<="))
+                                {
+                                    query = query.Where(x => x.EndDate.Value <= endTime24h);
+                                }
+                                else if (comparator.Equals("!="))
+                                {
+                                    query = query.Where(x => x.EndDate.Value < startTime0h || x.EndDate.Value > endTime24h);
+                                }
+                            }
                             break;
                     }
                 }
             }
+
             // sort
             switch (request.SortExpression)
             {
