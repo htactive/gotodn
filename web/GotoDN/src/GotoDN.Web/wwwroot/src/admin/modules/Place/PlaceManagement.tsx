@@ -279,11 +279,11 @@ class PlaceManagement extends React.Component<{}, thisState> {
                       Nổi bật</TableHeaderColumn>
                     <TableHeaderColumn width="150" dataField="StartDate" dataAlign="center"
                                        filter={{type: 'DateFilter'}}
-                                       dataFormat={(r, data) => this.bindStartDateData(data)} dataSort={false}>
+                                       dataFormat={(r, data) => this.bindStartDateData(data)} dataSort={true}>
                       Ngày bắt đầu</TableHeaderColumn>
                     <TableHeaderColumn width="150" dataField="EndDate" dataAlign="center"
                                        filter={{type: 'DateFilter'}}
-                                       dataFormat={(r, data) => this.bindEndDateData(data)} dataSort={false}>
+                                       dataFormat={(r, data) => this.bindEndDateData(data)} dataSort={true}>
                       Ngày kết thúc</TableHeaderColumn>
                     <TableHeaderColumn width="50" dataField="Ranking" dataAlign="center"
                                        filter={{type: 'TextFilter'}}

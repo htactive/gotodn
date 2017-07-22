@@ -315,6 +315,12 @@ namespace GotoDN.Web.Controllers
                 case "Highlight":
                     query = request.IsAsc ? query.OrderBy(x => x.IsCategorySlider.Value || x.IsHomeSlider.Value) : query.OrderByDescending(x => x.IsCategorySlider.Value || x.IsHomeSlider.Value);
                     break;
+                case "StartDate":
+                    query = request.IsAsc ? query.OrderBy(x => x.StartDate) : query.OrderByDescending(x => x.StartDate);
+                    break;
+                case "EndDate":
+                    query = request.IsAsc ? query.OrderBy(x => x.EndDate) : query.OrderByDescending(x => x.EndDate);
+                    break;
                 case "Ranking":
                     query = request.IsAsc ? query.OrderBy(x => x.Rating) : query.OrderByDescending(x => x.Rating);
                     break;
