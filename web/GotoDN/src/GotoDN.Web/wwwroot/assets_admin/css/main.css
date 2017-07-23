@@ -1260,10 +1260,6 @@ body.fixed-right-sidebar:not(.fixed-header) #right-sidebar.rstop {
   background-color: #ffffff !important;
   border-color: #ffffff !important;
 }
-.page-sidebar .side-nav .nav > li a:focus {
-  background-color: #303946;
-  color: #8b929a;
-}
 .page-sidebar .side-nav .nav > li a.expand {
   background-color: #1c2128;
   color: #ffffff;

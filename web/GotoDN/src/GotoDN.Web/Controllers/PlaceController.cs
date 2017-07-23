@@ -202,6 +202,9 @@ namespace GotoDN.Web.Controllers
             if (!string.IsNullOrEmpty(request.Search))
             {
                 var search = request.Search.ToLower().Trim();
+                var searchInt = 0;
+                var canParse = int.TryParse(search,out searchInt);
+
                 query = query.Where(x => (x.City != null && !string.IsNullOrEmpty(x.City.Name) && x.City.Name.ToLower().Contains(search))
                 || (x.District != null && !string.IsNullOrEmpty(x.District.Name) && x.District.Name.ToLower().Contains(search))
                 || (x.PlaceLanguages.Any(y => y.Title.ToLower().Contains(search)))
@@ -209,6 +212,11 @@ namespace GotoDN.Web.Controllers
                 x.Category.CategoryLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search))
                 || (x.HTService != null &&
                 x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search))
+                || (x.Rating != null && canParse && x.Rating == searchInt)
+                || (x.StartDate.HasValue && canParse && (x.StartDate.Value.Year == searchInt 
+                || x.StartDate.Value.Month == searchInt || x.StartDate.Value.Day == searchInt))
+                || (x.EndDate.HasValue && canParse && (x.EndDate.Value.Year == searchInt
+                || x.EndDate.Value.Month == searchInt || x.EndDate.Value.Day == searchInt))
                 );
             }
 
