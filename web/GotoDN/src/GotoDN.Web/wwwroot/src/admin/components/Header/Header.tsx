@@ -29,40 +29,6 @@ class Header extends React.Component<any, thisState> {
             </li>
           </ul>
           <ul className="nav navbar-nav navbar-right">
-            <li className="dropdown">
-              <a href="#" data-toggle="dropdown">
-                <i className="fa fa-cog"></i>
-                <span className="sr-only">Settings</span>
-              </a>
-              <ul className="dropdown-menu dropdown-form dynamic-settings right" role="menu">
-                <li><a href="#" className="dropdown-menu-header">Layout settings</a>
-                </li>
-                <li>
-                  <div className="toggle-custom">
-                    <label className="toggle" data-on="ON" data-off="OFF">
-                      <input type="checkbox" id="fixed-header-toggle" name="fixed-header-toggle" defaultChecked={true}/>
-                      <span className="button-checkbox"></span>
-                    </label>
-                    <label htmlFor="fixed-header-toggle">Fixed header</label>
-                  </div>
-                </li>
-                <li>
-                  <div className="toggle-custom">
-                    <label className="toggle" data-on="ON" data-off="OFF">
-                      <input type="checkbox" id="fixed-left-sidebar" name="fixed-left-sidebar" defaultChecked={true}/>
-                      <span className="button-checkbox"></span>
-                    </label>
-                    <label htmlFor="fixed-left-sidebar">Fixed Left Sidebar</label>
-                  </div>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="/" title="Visit page">
-                <i className="fa fa-home"></i>
-                <span className="sr-only">Go to HomePage</span>
-              </a>
-            </li>
             <li>
               <a onClick={() => this.logOut()}>
                 <i className="fa fa-power-off" title="Sign out"></i>
