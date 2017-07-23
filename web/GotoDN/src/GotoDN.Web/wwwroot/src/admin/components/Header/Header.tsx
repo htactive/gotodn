@@ -15,14 +15,14 @@ class Header extends React.Component<any, thisState> {
 
   render() {
     return (<div id="header" className="page-navbar">
-        <a href="/" className="navbar-brand hidden-xs hidden-sm logo logo-title">
+        <a href="/" className="navbar-brand hidden-xs hidden-sm logo logo-title" title="Trang chủ">
           <img src="/images/ic-goto.png" width="40" height="40" className="logo hidden-xs" alt="GotoDN Admin"/>
           <img src="/images/ic-goto.png" width="40" height="40" className="logo-sm hidden-lg hidden-md" alt="GotoDN Admin"/>
         </a>
         <div id="navbar-no-collapse" className="navbar-no-collapse">
           <ul className="nav navbar-nav">
             <li className="toggle-sidebar">
-              <a href="#">
+              <a href="#" title="Thu gọn">
                 <i className="fa fa-reorder"></i>
                 <span className="sr-only">Collapse sidebar</span>
               </a>
@@ -30,12 +30,12 @@ class Header extends React.Component<any, thisState> {
           </ul>
           <ul className="nav navbar-nav navbar-right">
             <li className="dropdown">
-              <a href="#" data-toggle="dropdown">
+              <a href="#" data-toggle="dropdown" title="Cài đặt">
                 <i className="fa fa-cog"></i>
-                <span className="sr-only">Settings</span>
+                <span className="sr-only">Cài đặt</span>
               </a>
               <ul className="dropdown-menu dropdown-form dynamic-settings right" role="menu">
-                <li><a href="#" className="dropdown-menu-header">Layout settings</a>
+                <li><a href="#" className="dropdown-menu-header">Cài đặt layout</a>
                 </li>
                 <li>
                   <div className="toggle-custom">
@@ -43,7 +43,7 @@ class Header extends React.Component<any, thisState> {
                       <input type="checkbox" id="fixed-header-toggle" name="fixed-header-toggle" defaultChecked={true}/>
                       <span className="button-checkbox"></span>
                     </label>
-                    <label htmlFor="fixed-header-toggle">Fixed header</label>
+                    <label htmlFor="fixed-header-toggle">Cố định header</label>
                   </div>
                 </li>
                 <li>
@@ -52,20 +52,20 @@ class Header extends React.Component<any, thisState> {
                       <input type="checkbox" id="fixed-left-sidebar" name="fixed-left-sidebar" defaultChecked={true}/>
                       <span className="button-checkbox"></span>
                     </label>
-                    <label htmlFor="fixed-left-sidebar">Fixed Left Sidebar</label>
+                    <label htmlFor="fixed-left-sidebar">Cố định sidebar</label>
                   </div>
                 </li>
               </ul>
             </li>
             <li>
-              <a href="/" title="Visit page">
+              <a href="/" title="Trang chủ">
                 <i className="fa fa-home"></i>
-                <span className="sr-only">Go to HomePage</span>
+                <span className="sr-only">Đến trang chủ</span>
               </a>
             </li>
             <li>
-              <a onClick={() => this.logOut()}>
-                <i className="fa fa-power-off" title="Sign out"></i>
+              <a onClick={() => this.logOut()} title="Đăng xuất">
+                <i className="fa fa-power-off" title="Đăng xuất"></i>
                 <span className="sr-only">Logout</span>
               </a>
             </li>

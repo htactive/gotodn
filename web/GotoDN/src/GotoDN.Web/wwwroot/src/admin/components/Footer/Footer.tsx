@@ -7,11 +7,6 @@ class Footer extends React.Component<{},{}> {
         <p className="pull-left">
           Copyrights &copy; 2017 <a href="/" className="color-blue strong" target="_blank">GotoDN</a>. All rights reserved.
         </p>
-        <p className="pull-right">
-          <a href="/privacy" target="_blank" className="mr5">Terms of use</a>
-          |
-          <a href="/privacy" target="_blank" className="ml5 mr25">Privacy police</a>
-        </p>
       </div>
     );
   }

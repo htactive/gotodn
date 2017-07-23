@@ -27,6 +27,7 @@ namespace GotoDN.Web
 
         public static string TranslateText(string text, string targetLanguage)
         {
+            if (string.IsNullOrEmpty(text)) return "";
             string[] srcText = new[] { text };
             var response = Service.Translations.List(srcText, targetLanguage).Execute();
             var translateResult = response.Translations.FirstOrDefault();
