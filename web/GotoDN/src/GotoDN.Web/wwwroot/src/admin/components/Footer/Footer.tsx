@@ -5,7 +5,7 @@ class Footer extends React.Component<{},{}> {
     return (
       <div id="footer" className="clearfix sidebar-page right-sidebar-page">
         <p className="pull-left">
-          Copyrights &copy; 2017 <a href="/" className="color-blue strong" target="_blank">DFW New Homes</a>. All rights reserved.
+          Copyrights &copy; 2017 <a href="/" className="color-blue strong" target="_blank">GotoDN</a>. All rights reserved.
         </p>
         <p className="pull-right">
           <a href="/privacy" target="_blank" className="mr5">Terms of use</a>

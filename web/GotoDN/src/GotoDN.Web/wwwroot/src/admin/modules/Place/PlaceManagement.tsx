@@ -260,7 +260,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                     <TableHeaderColumn width="100" dataField="Category" dataAlign="center"
                                        filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindCategoryData(data)} dataSort={true}>
-                      Category</TableHeaderColumn>
+                      Danh mục</TableHeaderColumn>
                     <TableHeaderColumn width="100" dataField="Service" dataAlign="center"
                                        filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindServiceData(data)} dataSort={true}>

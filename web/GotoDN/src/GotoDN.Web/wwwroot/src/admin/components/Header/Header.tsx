@@ -77,11 +77,11 @@ class Header extends React.Component<any, thisState> {
 
   private async logOut() {
     let result = await SweetAlerts.show({
-      title: 'Sure ?',
-      text: 'Wanna log out?',
+      title: 'Xác nhận',
+      text: 'Bạn có muốn đăng xuất?',
       type: SweetAlertTypeEnums.Warning,
       showCancelButton: true,
-      confirmButtonText: 'Yes, sign me out!',
+      confirmButtonText: 'Đồng ý!',
 
     });
     if (result == SweetAlertResultEnums.Confirm) {
