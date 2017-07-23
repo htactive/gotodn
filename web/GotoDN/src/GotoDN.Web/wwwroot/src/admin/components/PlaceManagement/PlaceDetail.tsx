@@ -13,6 +13,8 @@ import {DynamicFormModel} from "../../../models/dynamic-form-model";
 import {Modal, Button, Form, FormGroup, Col} from 'react-bootstrap';
 import {CityModel, DistrictModel} from "../../../models/CityModel";
 import {DateRangePicker} from "../../../commons/date-range-picker";
+import {MessageBox, MessageBoxType, MessageBoxButtons, MessageBoxResult} from "../../../commons/message-box";
+import {PlaceServiceInstance} from "../../services/PlaceService";
 
 interface thisProps {
   SelectedPlace: PlaceModel,
@@ -58,7 +60,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
   }
 
   componentWillReceiveProps(props) {
-    if(props.isShow) {
+    if (props.isShow) {
       this.show();
     }
     else {
@@ -202,7 +204,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
   }
 
   render() {
-    let languages: { Language: LanguageEnums, Title: string }[] = [
+    let languages: {Language: LanguageEnums, Title: string}[] = [
       {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
       {Language: LanguageEnums.English, Title: 'Tiếng Anh'},
       {Language: LanguageEnums.France, Title: 'Tiếng Pháp'},
@@ -249,6 +251,11 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
     let selectCategory = this.props.Categories.filter(x => x.Id == (this.props.SelectedPlace ? this.props.SelectedPlace.CategoryId : 0))[0];
     let IsEvent = selectCategory ? selectCategory.IsEvent : false;
     let firstLang = this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
+
+    let enPlaceLanguage: PlaceLanguageModel = {Id: 0};
+    if (this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages)
+      enPlaceLanguage = this.props.SelectedPlace.PlaceLanguages.filter(t => t.Language == LanguageEnums.English)[0];
+
     return (
       <div className={`page-content-wrapper ${!this.state.isShow ? "hidden" : null}`}>
         <div className={`page-content-inner`}>
@@ -278,7 +285,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                             onChange={(Id) => this.props.ClickSlectCategory(Id)}
                           />
                         </div>
-
                         <div className="col-sm-3">
                           <ComboBox
                             placeHolder="Chọn service..."
@@ -287,47 +293,47 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                             onChange={(Id) => this.props.ClickSlectHTService(Id)}
                           />
                         </div>
-                        {this.props.SelectedPlace.PlaceLanguages && this.props.SelectedPlace.PlaceLanguages.length < 6 ?
-                        <div className="btn-group dropdown col-sm-3">
-                          <button type="button" className="btn btn-success dropdown-toggle"
-                                  data-toggle="dropdown" aria-expanded="false">
-                            Thêm ngôn ngữ
-                            <span className="caret"></span>
+                        <div className="btn-group dropdown col-sm-2 p0">
+                          <button className="btn btn-warning"
+                                  onClick={() => {
+                                    this.translateAllLanguage()
+                                  }}>Dịch từ Tiếng Anh
                           </button>
-                          <ul className="dropdown-menu left animated fadeIn" role="menu">
-                            {languages.filter(x =>
-                              this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages &&
-                              !this.props.SelectedPlace.PlaceLanguages.some(r => r.Language == x.Language)
-                            ).map((item, index) =>
-                              <li key={index}>
-                                <a onClick={() => this.props.AddPlaceLanguage
+                        </div>
+                        {this.props.SelectedPlace.PlaceLanguages && this.props.SelectedPlace.PlaceLanguages.length < 6 ?
+                          <div className="btn-group dropdown col-sm-2 p0">
+                            <button type="button" className="btn btn-success dropdown-toggle"
+                                    data-toggle="dropdown" aria-expanded="false">
+                              Thêm ngôn ngữ
+                              <span className="caret"></span>
+                            </button>
+                            <ul className="dropdown-menu left animated fadeIn" role="menu">
+                              {languages.filter(x =>
+                                this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages && !this.props.SelectedPlace.PlaceLanguages.some(r => r.Language == x.Language)
+                              ).map((item, index) =>
+                                <li key={index}>
+                                  <a onClick={() => this.props.AddPlaceLanguage
                                 && this.props.AddPlaceLanguage(item.Language)}>{item.Title}</a>
-                              </li>
-                            )}
-                          </ul>
-                        </div> : <div className="col-sm-3"></div> }
+                                </li>
+                              )}
+                            </ul>
+                          </div> : <div className="col-sm-2 p0"></div> }
+                        <div className="form-group col-sm-2 p0">
 
-                        <div className="form-group col-sm-3">
                           <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
                                   onClick={() => this.deletePlace()}><i
                             className="fa fa-trash-o"/> Xóa
                           </button>
-
                           <button className="btn btn-primary pull-right"
                                   onClick={() => this.savePlace()}><i
                             className="fa fa-save"/> Lưu
                           </button>
-
                           <button className="btn btn-default hidden"
                                   onClick={() => this.discardChangesEditing()}>Làm lại
                           </button>
                         </div>
-
-
                       </div>
-
                       <hr/>
-
                       {
                         this.props.SelectedPlace.PlaceLanguages.map(x =>
                           <li key={x.Id}
@@ -353,6 +359,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                             key={x.Id}
                             IsSelected={x.Language == this.props.SelectedLanguage}
                             PlaceLanguage={x}
+                            EnPlaceLanguage={enPlaceLanguage}
                             OnObjectChange={(obj: PlaceLanguageModel) =>
                               this.props.OnPlaceLanguageChange(obj)}
                           />
@@ -360,9 +367,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                       }
                     </div>
                   </div>
-
                   <hr/>
-
                   <div className="form-horizontal">
                     <fieldset>
                       <div className="form-group col-sm-12 p0">
@@ -378,7 +383,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                       </div>
                     </fieldset>
                   </div>
-
                   <div className="form-horizontal">
                     <fieldset>
                       <div className="form-group col-sm-12 p0">
@@ -394,7 +398,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                       </div>
                     </fieldset>
                   </div>
-
                   <DynamicPanelComponent
                     ref={(r) => this.editingForm = r}
                     FormStructure={this.getFormStructure()}
@@ -404,7 +407,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                       this.props.SelectedPlace['__#isInvalid#__'] = isInvalid
                     }}
                   />
-
                   {IsEvent ? <div className="form-horizontal">
                       <fieldset>
                         <div className="form-group col-sm-12 p0">
@@ -420,7 +422,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                         </div>
                       </fieldset>
                     </div> : null}
-
                   {IsEvent ? <div className="form-horizontal">
                       <fieldset>
                         <div className="form-group col-sm-12 p0">
@@ -436,7 +437,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                         </div>
                       </fieldset>
                     </div> : null}
-
                 </div> :
                 null
               }
@@ -473,6 +473,25 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
     console.log('congratulation! your form is valid, do submit now ' + this.props.SelectedPlace);
     this.props.SavePlace && this.props.SavePlace(this.props.SelectedPlace);
     this.close();
+  }
+
+  private async translateAllLanguage() {
+    let dialogResult = await MessageBox.instance.show({
+      content: 'Dịch từ Tiếng anh sẽ ghi đè dữ liệu lên ngôn ngữ tất cả các ngôn ngữ. Bạn có chắc là bạn muốn dịch?',
+      isShow: true,
+      title: 'Xác nhận',
+      type: MessageBoxType.Confirmation,
+      buttons: MessageBoxButtons.YesNo
+    });
+
+    if (dialogResult == MessageBoxResult.Yes) {
+      let result = await PlaceServiceInstance.TranslateAllPlaceLanguage(this.props.SelectedPlace);
+      if (result != null) {
+        result.PlaceLanguages.forEach((item) => {
+          this.props.OnPlaceLanguageChange(item)
+        });
+      }
+    }
   }
 }
 

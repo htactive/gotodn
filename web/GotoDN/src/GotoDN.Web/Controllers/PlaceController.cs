@@ -636,7 +636,8 @@ namespace GotoDN.Web.Controllers
                 .FirstOrDefault(x => x.Language == LanguageEnums.English);
             if (enPlaceLanguage == null) return null;
             foreach (var entity in model.PlaceLanguages)
-            {
+            { 
+                if (entity.Id == enPlaceLanguage.Id) continue;
                 entity.Title = TranslateHelper.TranslateText(enPlaceLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
                 entity.Description = TranslateHelper.TranslateText(enPlaceLanguage.Description, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
                 entity.ImageId = enPlaceLanguage.ImageId;

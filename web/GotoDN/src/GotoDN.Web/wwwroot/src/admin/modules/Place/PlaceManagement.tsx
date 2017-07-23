@@ -465,7 +465,6 @@ class PlaceManagement extends React.Component<{}, thisState> {
   }
 
   private async handleImportData() {
-    debugger;
     await this.getData(this.state.GridFilter);
   }
 }

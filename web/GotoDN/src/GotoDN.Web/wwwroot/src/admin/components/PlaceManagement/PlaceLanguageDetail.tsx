@@ -4,9 +4,14 @@ import {DynamicPanelComponent} from "../DynamicForm/DynamicPanelComponent";
 import {DynamicFormModel} from "../../../models/dynamic-form-model";
 import {DynamicFieldModel} from "../../../models/dynamic-field-model";
 import {FieldStructureTypeEnums} from "../../../models/field-structure-model";
-import {ValidateRuleTypeEnums} from "../../../commons/constant";
+import {ValidateRuleTypeEnums, LanguageEnums} from "../../../commons/constant";
+import {MessageBox, MessageBoxType, MessageBoxButtons, MessageBoxResult} from "../../../commons/message-box";
+import {HTServiceModel} from "../../../models/HTServiceModel";
+import {PlaceServiceInstance} from "../../services/PlaceService";
+import {PlaceModel} from "../../../models/PlaceModel";
 interface thisProps {
   PlaceLanguage: PlaceLanguageModel,
+  EnPlaceLanguage: PlaceLanguageModel,
   IsSelected: boolean,
   OnObjectChange: (obj: PlaceLanguageModel) => void
 }
@@ -38,6 +43,15 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
               this.props.PlaceLanguage['__#isInvalid#__'] = isInvalid
             }}
           /> : null}
+        {this.props.PlaceLanguage && this.props.PlaceLanguage.Language != LanguageEnums.English ?
+          <div className="form-group">
+            <div className="col-lg-9 col-lg-offset-3 p0">
+              <button className="btn btn-warning"
+                      onClick={() => this.translateCategory()}>Dịch từ Tiếng Anh
+              </button>
+            </div>
+          </div>: null
+        }
       </div>);
   }
 
@@ -134,6 +148,26 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
 
     }
     this.forceUpdate();
+  }
+
+  private async translateCategory() {
+    let dialogResult = await MessageBox.instance.show({
+      content: 'Dịch từ Tiếng anh sẽ ghi đè dữ liệu lên ngôn ngữ hiện tại. Bạn có chắc là bạn muốn dịch?',
+      isShow: true,
+      title: 'Xác nhận',
+      type: MessageBoxType.Confirmation,
+      buttons: MessageBoxButtons.YesNo
+    });
+
+    if (dialogResult == MessageBoxResult.Yes) {
+      let placeModel: PlaceModel = {Id: 0, PlaceLanguages: []};
+
+      placeModel.PlaceLanguages.push(this.props.PlaceLanguage, this.props.EnPlaceLanguage);
+      let translatedServiceLang = await PlaceServiceInstance.TranslatePlaceLanguage(placeModel);
+      if(translatedServiceLang != null && this.props.OnObjectChange) {
+        this.props.OnObjectChange(translatedServiceLang);
+      }
+    }
   }
 }
 
