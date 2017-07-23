@@ -293,33 +293,32 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                             onChange={(Id) => this.props.ClickSlectHTService(Id)}
                           />
                         </div>
-                        <div className="btn-group dropdown col-sm-2 p0">
-                          <button className="btn btn-warning"
-                                  onClick={() => {
-                                    this.translateAllLanguage()
-                                  }}>Dịch từ Tiếng Anh
-                          </button>
-                        </div>
-                        {this.props.SelectedPlace.PlaceLanguages && this.props.SelectedPlace.PlaceLanguages.length < 6 ?
-                          <div className="btn-group dropdown col-sm-2 p0">
-                            <button type="button" className="btn btn-success dropdown-toggle"
-                                    data-toggle="dropdown" aria-expanded="false">
-                              Thêm ngôn ngữ
-                              <span className="caret"></span>
+                        <div className="form-group col-sm-6 p0">
+                          <div className="btn-group dropdown col-sm-2 p0" style={{marginLeft: 5}}>
+                            <button className="btn btn-warning"
+                                    onClick={() => {
+                                      this.translateAllLanguage()
+                                    }}>Dịch từ Tiếng Anh
                             </button>
-                            <ul className="dropdown-menu left animated fadeIn" role="menu">
-                              {languages.filter(x =>
-                                this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages && !this.props.SelectedPlace.PlaceLanguages.some(r => r.Language == x.Language)
-                              ).map((item, index) =>
-                                <li key={index}>
-                                  <a onClick={() => this.props.AddPlaceLanguage
-                                && this.props.AddPlaceLanguage(item.Language)}>{item.Title}</a>
-                                </li>
-                              )}
-                            </ul>
-                          </div> : <div className="col-sm-2 p0"></div> }
-                        <div className="form-group col-sm-2 p0">
-
+                          </div>
+                          {this.props.SelectedPlace.PlaceLanguages && this.props.SelectedPlace.PlaceLanguages.length < 6 ?
+                            <div className="btn-group dropdown col-sm-2 p0" style={{marginLeft: 10}}>
+                              <button type="button" className="btn btn-success dropdown-toggle"
+                                      data-toggle="dropdown" aria-expanded="false">
+                                Thêm ngôn ngữ
+                                <span className="caret"></span>
+                              </button>
+                              <ul className="dropdown-menu left animated fadeIn" role="menu">
+                                {languages.filter(x =>
+                                  this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages && !this.props.SelectedPlace.PlaceLanguages.some(r => r.Language == x.Language)
+                                ).map((item, index) =>
+                                  <li key={index}>
+                                    <a onClick={() => this.props.AddPlaceLanguage
+                                    && this.props.AddPlaceLanguage(item.Language)}>{item.Title}</a>
+                                  </li>
+                                )}
+                              </ul>
+                            </div> : null }
                           <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
                                   onClick={() => this.deletePlace()}><i
                             className="fa fa-trash-o"/> Xóa
