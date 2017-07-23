@@ -12,6 +12,7 @@ using GotoDN.Web.Authentication;
 using GotoDN.Common;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace GotoDN.Web.Controllers
 {
@@ -644,6 +645,15 @@ namespace GotoDN.Web.Controllers
                 entity.Image = enPlaceLanguage.Image;
             }
             return model;
+        }
+        [HttpGet, Route("download-template-high-level")]
+        [AllowAnonymous]
+        public FileResult DownloadTemplateHighLevel()
+        {
+            var filePath = Directory.GetCurrentDirectory() + @"\Resources\ImportTemplate.xlsx";
+            var stream = new MemoryStream(System.IO.File.ReadAllBytes(filePath));
+            var response = File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "ImportTemplate_" + DateTime.Now.Ticks + ".xlsx");
+            return response;
         }
     }
 }

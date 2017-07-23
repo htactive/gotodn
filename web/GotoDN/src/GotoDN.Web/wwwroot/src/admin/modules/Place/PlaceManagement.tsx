@@ -255,6 +255,9 @@ class PlaceManagement extends React.Component<{}, thisState> {
                             onClick={() => this.importExcelHL()}>
                       <i className="fa fa-upload"/> Nhập từ Excel
                     </button>
+                            >
+                      <i className="fa fa-download"/> Download Template
+                    </a>
                   </div>
                   <input className="hidden" type="file" multiple={false}
                          accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
