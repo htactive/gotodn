@@ -14,6 +14,7 @@ namespace GotoDN.Web.Models
 
         public CategoryModel Category { get; set; }
         public List<HTServiceLanguageModel> HTServiceLanguages { get; set; }
+        public List<PlaceModel> Places { get; set; }
     }
 
     public class HTServiceLanguageModel

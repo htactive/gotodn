@@ -52,6 +52,41 @@ namespace GotoDN.Web.Controllers
                     Language = LanguageEnums.English,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new PlaceLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Vietnamese,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new PlaceLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.France,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new PlaceLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Chinese,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new PlaceLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Korean,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                },
+                new PlaceLanguage()
+                {
+                    Title = "",
+                    Language = LanguageEnums.Japanese,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 }
             };
 
@@ -350,10 +385,256 @@ namespace GotoDN.Web.Controllers
 
         [HttpPost, Route("save-imported-place")]
         [AllowAnonymous]
-        public bool SaveImportedPlace(List<ImportPlaceGroupModel> model)
+        public bool SaveImportedPlace([FromBody]List<ImportPlaceGroupModel> model)
         {
+            var enImportPlaceG = model.FirstOrDefault(t => t.Language == LanguageEnums.English);
+            if (enImportPlaceG == null) return false;
+            for (int i = 0; i < enImportPlaceG.ImportPlaces.Count; i++)
+            {
+                var enImportPlace = enImportPlaceG.ImportPlaces[i];
 
+                var viImportPlaceG = model.FirstOrDefault(t => t.Language == LanguageEnums.Vietnamese);
+                var viImportPlace = viImportPlaceG != null && viImportPlaceG.ImportPlaces.Count > i ? viImportPlaceG.ImportPlaces[i] : null;
+
+                var jaImportPlaceG = model.FirstOrDefault(t => t.Language == LanguageEnums.Japanese);
+                var jaImportPlace = jaImportPlaceG != null && jaImportPlaceG.ImportPlaces.Count > i ? jaImportPlaceG.ImportPlaces[i] : null;
+
+                var chiImportPlaceG = model.FirstOrDefault(t => t.Language == LanguageEnums.Chinese);
+                var chiImportPlace = chiImportPlaceG != null && chiImportPlaceG.ImportPlaces.Count > i ? chiImportPlaceG.ImportPlaces[i] : null;
+
+                var koImportPlaceG = model.FirstOrDefault(t => t.Language == LanguageEnums.Korean);
+                var koImportPlace = koImportPlaceG != null && koImportPlaceG.ImportPlaces.Count > i ? koImportPlaceG.ImportPlaces[i] : null;
+
+                var frImportPlaceG = model.FirstOrDefault(t => t.Language == LanguageEnums.France);
+                var frImportPlace = frImportPlaceG != null && frImportPlaceG.ImportPlaces.Count > i ? frImportPlaceG.ImportPlaces[i] : null;
+
+                if (enImportPlace.PlaceInValid) continue;
+                var placeEntity = this.HTRepository.PlaceRepository.GetAll()
+                .Include("PlaceLanguages.Image")
+                .Include("PlaceLanguages.Icon")
+                .FirstOrDefault(x => x.PlaceLanguages
+                                .Any(p => p.Language == LanguageEnums.English && p.Title.ToLower() == enImportPlace.PlaceName.ToLower()));
+                if (placeEntity == null) placeEntity = new Place();
+                placeEntity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+                placeEntity.Address = enImportPlace.Address;
+                var city = HTRepository.CityRepository.GetAll().FirstOrDefault(c => c.Name.Trim().ToLower() == enImportPlace.City.Trim().ToLower());
+                placeEntity.CityId = city != null ? city.Id : (int?)null;
+                placeEntity.CloseTime = DateTime.Parse(enImportPlace.CloseTime);
+                var district = HTRepository.DistrictRepository.GetAll().FirstOrDefault(d => d.Name.Trim().ToLower() == enImportPlace.District.Trim().ToLower());
+                placeEntity.DistrictId = district != null ? district.Id : (int?)null;
+                placeEntity.IsCategorySlider = enImportPlace.IsCategorySlider;
+                placeEntity.IsHomeSlider = enImportPlace.IsHomeSlider;
+                placeEntity.OpenTime = DateTime.Parse(enImportPlace.OpenTime);
+                placeEntity.Phone = enImportPlace.Phone;
+                placeEntity.Website = enImportPlace.Website;
+                var cateE = HTRepository.CategoryLanguageRepository.GetAll().FirstOrDefault(ca => ca.Language == LanguageEnums.English && ca.Title.ToLower() == enImportPlace.Category.ToLower());
+                if (cateE != null)
+                {
+                    placeEntity.CategoryId = cateE.CategoryId;
+                }
+                var serviceE = HTRepository.HTServiceLanguageRepository.GetAll().FirstOrDefault(s => s.Language == LanguageEnums.English && s.Title.ToLower() == enImportPlace.Service.ToLower());
+                if (serviceE != null)
+                {
+                    placeEntity.HTServiceId = serviceE.HTServiceId;
+                }
+                if (placeEntity.PlaceLanguages == null)
+                    placeEntity.PlaceLanguages = new List<PlaceLanguage>();
+
+                //Add English
+                var enLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.English) : null;
+                if (enLanguage == null)
+                {
+                    enLanguage = new PlaceLanguage();
+                    placeEntity.PlaceLanguages.Add(enLanguage);
+                }
+                enLanguage.Title = enImportPlace.PlaceName;
+                enLanguage.Language = LanguageEnums.English;
+                if (enLanguage.ImageId.HasValue && enLanguage.ImageId != 0)
+                {
+                    enLanguage.Image.Url = enImportPlace.CoverImage;
+                }
+                else
+                {
+                    enLanguage.Image = new Image
+                    {
+                        Url = enImportPlace.CoverImage
+                    };
+                }
+                enLanguage.Description = enImportPlace.Description;
+                enLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+
+                //Add VietNam
+                if(viImportPlace != null && !viImportPlace.PlaceInValid)
+                {
+                    var viLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.Vietnamese) : null;
+                    if (viLanguage == null)
+                    {
+                        viLanguage = new PlaceLanguage();
+                        placeEntity.PlaceLanguages.Add(viLanguage);
+                    }
+                    viLanguage.Title = viImportPlace.PlaceName;
+                    viLanguage.Language = LanguageEnums.Vietnamese;
+                    if (viLanguage.ImageId.HasValue && viLanguage.ImageId != 0)
+                    {
+                        viLanguage.Image.Url = viImportPlace.CoverImage;
+                    }
+                    else
+                    {
+                        viLanguage.Image = new Image
+                        {
+                            Url = viImportPlace.CoverImage
+                        };
+                    }
+                    viLanguage.Description = viImportPlace.Description;
+                    viLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+                    
+                }
+
+                //Add Japanese
+                if (jaImportPlace != null && !jaImportPlace.PlaceInValid)
+                {
+                    var jaLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.Japanese) : null;
+                    if (jaLanguage == null)
+                    {
+                        jaLanguage = new PlaceLanguage();
+                        placeEntity.PlaceLanguages.Add(jaLanguage);
+                    }
+                    jaLanguage.Title = jaImportPlace.PlaceName;
+                    jaLanguage.Language = LanguageEnums.Japanese;
+                    if (jaLanguage.ImageId.HasValue && jaLanguage.ImageId != 0)
+                    {
+                        jaLanguage.Image.Url = jaImportPlace.CoverImage;
+                    }
+                    else
+                    {
+                        jaLanguage.Image = new Image
+                        {
+                            Url = jaImportPlace.CoverImage
+                        };
+                    }
+                    jaLanguage.Description = jaImportPlace.Description;
+                    jaLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+
+                }
+
+                //Add Chinese
+                if (chiImportPlace != null && !chiImportPlace.PlaceInValid)
+                {
+                    var chiLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.Chinese) : null;
+                    if (chiLanguage == null)
+                    {
+                        chiLanguage = new PlaceLanguage();
+                        placeEntity.PlaceLanguages.Add(chiLanguage);
+                    }
+                    chiLanguage.Title = chiImportPlace.PlaceName;
+                    chiLanguage.Language = LanguageEnums.Chinese;
+                    if (chiLanguage.ImageId.HasValue && chiLanguage.ImageId != 0)
+                    {
+                        chiLanguage.Image.Url = chiImportPlace.CoverImage;
+                    }
+                    else
+                    {
+                        chiLanguage.Image = new Image
+                        {
+                            Url = chiImportPlace.CoverImage
+                        };
+                    }
+                    chiLanguage.Description = chiImportPlace.Description;
+                    chiLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+
+                }
+
+                //Add Korea
+                if (koImportPlace != null && !koImportPlace.PlaceInValid)
+                {
+                    var koLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.Korean) : null;
+                    if (koLanguage == null)
+                    {
+                        koLanguage = new PlaceLanguage();
+                        placeEntity.PlaceLanguages.Add(koLanguage);
+                    }
+                    koLanguage.Title = koImportPlace.PlaceName;
+                    koLanguage.Language = LanguageEnums.Korean;
+                    if (koLanguage.ImageId.HasValue && koLanguage.ImageId != 0)
+                    {
+                        koLanguage.Image.Url = koImportPlace.CoverImage;
+                    }
+                    else
+                    {
+                        koLanguage.Image = new Image
+                        {
+                            Url = koImportPlace.CoverImage
+                        };
+                    }
+                    koLanguage.Description = koImportPlace.Description;
+                    koLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+
+                }
+
+                //Add France
+                if (frImportPlace != null && !frImportPlace.PlaceInValid)
+                {
+                    var frLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.France) : null;
+                    if (frLanguage == null)
+                    {
+                        frLanguage = new PlaceLanguage();
+                        placeEntity.PlaceLanguages.Add(frLanguage);
+                    }
+                    frLanguage.Title = frImportPlace.PlaceName;
+                    frLanguage.Language = LanguageEnums.France;
+                    if (frLanguage.ImageId.HasValue && frLanguage.ImageId != 0)
+                    {
+                        frLanguage.Image.Url = frImportPlace.CoverImage;
+                    }
+                    else
+                    {
+                        frLanguage.Image = new Image
+                        {
+                            Url = frImportPlace.CoverImage
+                        };
+                    }
+                    frLanguage.Description = frImportPlace.Description;
+                    frLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+
+                }
+                HTRepository.PlaceRepository.Save(placeEntity);
+            }
+            HTRepository.Commit();
             return true;
+        }
+
+        [HttpPost, Route("translate-place-language")]
+        [AllowAnonymous]
+        public PlaceLanguageModel TranslateServiceLanguage([FromBody]PlaceModel model)
+        {
+            if (model == null || model.PlaceLanguages == null || model.PlaceLanguages.Count != 2) return null;
+            var entity = model.PlaceLanguages[0];
+            if (entity == null) return null;
+            var enPlaceLanguage = model.PlaceLanguages[1];
+            if (enPlaceLanguage == null) return null;
+            entity.Title = TranslateHelper.TranslateText(enPlaceLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
+            entity.Description = TranslateHelper.TranslateText(enPlaceLanguage.Description, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
+            entity.ImageId = enPlaceLanguage.ImageId;
+            entity.Image = enPlaceLanguage.Image;
+            return entity;
+        }
+
+        [HttpPost, Route("translate-all-place-language")]
+        [AllowAnonymous]
+        public PlaceModel TranslateAllServiceLanguage([FromBody]PlaceModel model)
+        {
+            if (model == null || model.PlaceLanguages == null) return null;
+            var enPlaceLanguage = model.PlaceLanguages
+                .FirstOrDefault(x => x.Language == LanguageEnums.English);
+            if (enPlaceLanguage == null) return null;
+            foreach (var entity in model.PlaceLanguages)
+            {
+                entity.Title = TranslateHelper.TranslateText(enPlaceLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
+                entity.Description = TranslateHelper.TranslateText(enPlaceLanguage.Description, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
+                entity.ImageId = enPlaceLanguage.ImageId;
+                entity.Image = enPlaceLanguage.Image;
+            }
+            return model;
         }
     }
 }

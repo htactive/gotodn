@@ -3,6 +3,7 @@ import {AdminServiceBase} from "./admin-service-base";
 import {PlaceModel} from "../../models/PlaceModel";
 import {PlaceLanguageModel} from "../../models/PlaceLanguageModel";
 import {GetGridRequestModel, GetGridResponseModel} from "../../commons/react-table";
+import {ImportPlaceGroupModel} from "../../models/ImportPlaceModel";
 
 class PlaceService extends AdminServiceBase {
   async GetAll(): Promise<PlaceModel[]> {
@@ -37,6 +38,21 @@ class PlaceService extends AdminServiceBase {
 
   async Filter(request: GetGridRequestModel): Promise<GetGridResponseModel> {
     let url = `${virtualPath}/place/filter`;
+    return await super.executeFetchPost(url, request);
+  }
+
+  async SaveImportedPlace(request: ImportPlaceGroupModel[]): Promise<boolean> {
+    let url = `${virtualPath}/place/save-imported-place`;
+    return await super.executeFetchPost(url, request);
+  }
+
+  async TranslatePlaceLanguage(request: PlaceModel): Promise<PlaceLanguageModel> {
+    let url = `${virtualPath}/place/translate-place-language`;
+    return await super.executeFetchPost(url, request);
+  }
+
+  async TranslateAllPlaceLanguage(request: PlaceModel): Promise<PlaceModel> {
+    let url = `${virtualPath}/place/translate-all-place-language`;
     return await super.executeFetchPost(url, request);
   }
 }

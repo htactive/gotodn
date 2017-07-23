@@ -67,7 +67,7 @@ class HTServiceManagement extends React.Component<{}, thisState> {
 
   private async deleteHTService(Id: number) {
     if (await SweetAlerts.show({
-        type: SweetAlertTypeEnums.Error,
+        type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
         text: 'Bạn có chắc muốn xóa dịch vụ này?',
         showCancelButton: true,
@@ -112,7 +112,7 @@ class HTServiceManagement extends React.Component<{}, thisState> {
 
   private async deleteHTServiceLanguage(Id: number) {
     if (await SweetAlerts.show({
-        type: SweetAlertTypeEnums.Error,
+        type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
         text: 'Bạn có chắc muốn xóa ngôn ngữ này?',
         showCancelButton: true,

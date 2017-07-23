@@ -9,9 +9,10 @@ using GotoDN.Common;
 namespace GotoDN.Web.Migrations
 {
     [DbContext(typeof(GTDBEntities))]
-    partial class GTDBEntitiesModelSnapshot : ModelSnapshot
+    [Migration("20170722092819_hoang_000009")]
+    partial class hoang_000009
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2");
@@ -218,24 +219,6 @@ namespace GotoDN.Web.Migrations
                     b.ToTable("Place");
                 });
 
-            modelBuilder.Entity("GotoDN.Entities.PlaceImage", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("ImageId");
-
-                    b.Property<int>("PlaceLangId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ImageId");
-
-                    b.HasIndex("PlaceLangId");
-
-                    b.ToTable("PlaceImage");
-                });
-
             modelBuilder.Entity("GotoDN.Entities.PlaceLanguage", b =>
                 {
                     b.Property<int>("Id")
@@ -266,30 +249,6 @@ namespace GotoDN.Web.Migrations
                     b.HasIndex("PlaceId");
 
                     b.ToTable("PlaceLanguage");
-                });
-
-            modelBuilder.Entity("GotoDN.Entities.PlaceMoreInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int?>("IconId");
-
-                    b.Property<bool?>("IsHalf");
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("PlaceLangId");
-
-                    b.Property<string>("Value");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IconId");
-
-                    b.HasIndex("PlaceLangId");
-
-                    b.ToTable("PlaceMoreInfo");
                 });
 
             modelBuilder.Entity("GotoDN.Entities.Role", b =>
@@ -491,18 +450,6 @@ namespace GotoDN.Web.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 
-            modelBuilder.Entity("GotoDN.Entities.PlaceImage", b =>
-                {
-                    b.HasOne("GotoDN.Entities.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId");
-
-                    b.HasOne("GotoDN.Entities.PlaceLanguage", "PlaceLanguage")
-                        .WithMany("PlaceImages")
-                        .HasForeignKey("PlaceLangId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("GotoDN.Entities.PlaceLanguage", b =>
                 {
                     b.HasOne("GotoDN.Entities.Image", "Icon")
@@ -516,18 +463,6 @@ namespace GotoDN.Web.Migrations
                     b.HasOne("GotoDN.Entities.Place", "Place")
                         .WithMany("PlaceLanguages")
                         .HasForeignKey("PlaceId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("GotoDN.Entities.PlaceMoreInfo", b =>
-                {
-                    b.HasOne("GotoDN.Entities.Image", "Icon")
-                        .WithMany()
-                        .HasForeignKey("IconId");
-
-                    b.HasOne("GotoDN.Entities.PlaceLanguage", "PlaceLanguage")
-                        .WithMany("PlaceMoreInfo")
-                        .HasForeignKey("PlaceLangId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

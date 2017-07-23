@@ -23,7 +23,7 @@ interface thisProps {
 class HTServiceDetail extends React.Component<thisProps, {}> {
 
   render() {
-    let languages: {Language: LanguageEnums, Title: string}[] = [
+    let languages: { Language: LanguageEnums, Title: string }[] = [
       {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
       {Language: LanguageEnums.English, Title: 'Tiếng Anh'},
       {Language: LanguageEnums.France, Title: 'Tiếng Pháp'},
@@ -106,25 +106,28 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
                       onClick={() => this.saveHTService()}>Lưu
               </button>
               <button className="btn btn-warning"
-                      onClick={() =>{ this.translateAllLanguage()}}>Dịch tất cả từ Tiếng Anh
+                      onClick={() => {
+                        this.translateAllLanguage()
+                      }}>Dịch tất cả từ Tiếng Anh
               </button>
-              <div className="btn-group dropup mr10 ml10">
-                <button type="button" className="btn btn-success dropdown-toggle"
-                        data-toggle="dropdown" aria-expanded="false">
-                  Thêm ngôn ngữ
-                  <span className="caret"></span>
-                </button>
-                <ul className="dropdown-menu left animated fadeIn" role="menu">
-                  {languages.filter(x =>
-                    this.props.SelectedHTService && this.props.SelectedHTService.HTServiceLanguages && !this.props.SelectedHTService.HTServiceLanguages.some(r => r.Language == x.Language)
-                  ).map((item, index) =>
-                    <li key={index}>
-                      <a onClick={() => this.props.AddHTServiceLanguage
-                      && this.props.AddHTServiceLanguage(item.Language)}>{item.Title}</a>
-                    </li>
-                  )}
-                </ul>
-              </div>
+              {this.props.SelectedHTService.HTServiceLanguages && this.props.SelectedHTService.HTServiceLanguages.length < 6 ?
+                <div className="btn-group dropup mr10 ml10">
+                  <button type="button" className="btn btn-success dropdown-toggle"
+                          data-toggle="dropdown" aria-expanded="false">
+                    Thêm ngôn ngữ
+                    <span className="caret"></span>
+                  </button>
+                  <ul className="dropdown-menu left animated fadeIn" role="menu">
+                    {languages.filter(x =>
+                      this.props.SelectedHTService && this.props.SelectedHTService.HTServiceLanguages && !this.props.SelectedHTService.HTServiceLanguages.some(r => r.Language == x.Language)
+                    ).map((item, index) =>
+                      <li key={index}>
+                        <a onClick={() => this.props.AddHTServiceLanguage
+                        && this.props.AddHTServiceLanguage(item.Language)}>{item.Title}</a>
+                      </li>
+                    )}
+                  </ul>
+                </div> : null}
               <button className="btn btn-default pull-right hidden"
                       onClick={() => this.discardChangesEditing()}>Làm lại
               </button>

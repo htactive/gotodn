@@ -30,6 +30,7 @@ ReactDOM.render(
     <Route path={AdminRoutePath.Index} component={Index}
            onEnter={(nextState, replace, next) => requireAuth(nextState, replace, next)}
     >
+      <IndexRoute component={UserManagement}/>
       <Route path={`${AdminRoutePath.UserManagement}(/:id)`} component={UserManagement}/>
       <Route path={`${AdminRoutePath.CategoryManagement}(/:id)`} component={CategoryManagement}/>
       <Route path={`${AdminRoutePath.ServiceManagement}(/:id)`} component={HTServiceManagement}/>

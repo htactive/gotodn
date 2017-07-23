@@ -9,6 +9,7 @@ namespace GotoDN.Web.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public List<DistrictModel> Districts { get; set; }
+        public List<PlaceModel> Places { get; set; }
     }
 
     public class DistrictModel
@@ -18,5 +19,6 @@ namespace GotoDN.Web.Models
 
         public int? CityId { get; set; }
         public CityModel City { get; set; }
+        public List<PlaceModel> Places { get; set; }
     }
 }

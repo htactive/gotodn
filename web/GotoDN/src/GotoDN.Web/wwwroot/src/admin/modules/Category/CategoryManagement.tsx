@@ -56,7 +56,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
 
   private async deleteCategory(Id: number) {
     if (await SweetAlerts.show({
-        type: SweetAlertTypeEnums.Error,
+        type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
         text: 'Bạn có chắc muốn xóa danh mục này?',
         showCancelButton: true,
@@ -101,7 +101,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
 
   private async deleteCategoryLanguage(Id: number) {
     if (await SweetAlerts.show({
-        type: SweetAlertTypeEnums.Error,
+        type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
         text: 'Bạn có chắc muốn xóa ngôn ngữ này?',
         showCancelButton: true,

@@ -1,4 +1,5 @@
-﻿using GotoDN.Repository;
+﻿using GotoDN.Common;
+using GotoDN.Repository;
 using GotoDN.Web.Authentication;
 using GotoDN.Web.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -103,18 +104,14 @@ namespace GotoDN.Web.Controllers
                         if (c <= workSheet.Dimension.End.Column)
                         {
                             var cate = workSheet.Cells[r, c++].Value.ToString();
-                            var cateE = cateEntities.FirstOrDefault(ca => ca.Title.ToLower() == cate.ToLower());
-                            if (cateE != null)
+
+                            var currentCate = cateEntities
+                                .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English) 
+                                                        && l.Title.ToLower().Equals(cate.ToLower()));
+                            
+                            if (currentCate != null)
                             {
-                                var category = this.HTRepository.CategoryRepository.GetAll().FirstOrDefault(t => t.Id == cateE.CategoryId);
-                                var categoryLang = category.CategoryLanguages.FirstOrDefault(t => t.Language == ExcelHelper.GetLangEnums(currentLang));
-                                if (categoryLang != null)
-                                    iPlace.Category = categoryLang.Title;
-                                else
-                                {
-                                    iPlace.Category = cate;
-                                    iPlace.CategoryNotExist = true;
-                                }
+                                iPlace.Category = currentCate.Title;
                             }
                             else
                             {
@@ -125,18 +122,12 @@ namespace GotoDN.Web.Controllers
                         if (c <= workSheet.Dimension.End.Column)
                         {
                             var serv = workSheet.Cells[r, c++].Value.ToString();
-                            var serviceE = serviceEntities.FirstOrDefault(s => s.Title.ToLower() == serv.ToLower());
-                            if (serviceE != null)
+                            var currentService = serviceEntities
+                                .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English) 
+                                                        && l.Title.ToLower() == serv.ToLower());
+                            if (currentService != null)
                             {
-                                var service = this.HTRepository.HTServiceRepository.GetAll().FirstOrDefault(t => t.Id == serviceE.HTServiceId);
-                                var serviceLang = service.HTServiceLanguages.FirstOrDefault(t => t.Language == ExcelHelper.GetLangEnums(currentLang));
-                                if (serviceLang != null)
-                                    iPlace.Service = serviceLang.Title;
-                                else
-                                {
-                                    iPlace.Service = serv;
-                                    iPlace.ServiceNotExist = true;
-                                }
+                                iPlace.Service = currentService.Title;
                             }
                             else
                             {

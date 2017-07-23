@@ -18,5 +18,6 @@ namespace GotoDN.Entities
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
         public List<HTServiceLanguage> HTServiceLanguages { get; set; }
+        public List<Place> Places { get; set; }
     }
 }

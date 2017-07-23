@@ -3,6 +3,8 @@ import {Modal, Button, Form, FormGroup, Col, ControlLabel, FormControl, Checkbox
 import {ImportPlaceGroupModel} from "../../../models/ImportPlaceModel";
 import {LanguageEnums, Languages} from "../../../commons/constant";
 import {ReactTable} from "../../../commons/react-table";
+import {PlaceServiceInstance} from "../../services/PlaceService";
+import * as moment from 'moment';
 
 interface thisProps {
   ImportData?: ImportPlaceGroupModel[],
@@ -160,8 +162,8 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
                             </td>
                             <td>{place.Phone}</td>
                             <td>{place.Fax}</td>
-                            <td>{place.OpenTime}</td>
-                            <td>{place.CloseTime}</td>
+                            <td>{moment(place.OpenTime).format('HH:mm')}</td>
+                            <td>{moment(place.CloseTime).format('HH:mm')}</td>
                             <td><a className="cut-line-1" style={{width: 110, display: 'block'}} target="_blank"
                                    href={place.Website}>{place.Website}</a></td>
                             <td>{place.AdditionalInfoError ?
@@ -195,9 +197,15 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
 
   private hideModal() {
     this.setState({IsShow: false});
+    this.props.onModalClosed && this.props.onModalClosed();
   }
 
-  private importData() {
-
+  private async importData() {
+    let result = await PlaceServiceInstance.SaveImportedPlace(this.props.ImportData);
+    if(!result) {
+      window['notice']('error-notice', 'Lỗi', 'Lỗi trong quá trình ghi dữ liệu từ file Excel vào CSDL.', 'fa fa-exclamation-circle');
+    }
+    this.hideModal();
+    this.props.onImportData && this.props.onImportData();
   }
 }

@@ -21,7 +21,7 @@ interface thisProps {
 class CategoryDetail extends React.Component<thisProps, {}> {
 
   render() {
-    let languages: {Language: LanguageEnums, Title: string}[] = [
+    let languages: { Language: LanguageEnums, Title: string }[] = [
       {Language: LanguageEnums.English, Title: 'Tiếng Anh'},
       {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
       {Language: LanguageEnums.France, Title: 'Tiếng Pháp'},
@@ -75,7 +75,8 @@ class CategoryDetail extends React.Component<thisProps, {}> {
               </div>
             </div>
             <div className="toggle-custom col-lg-12 p0">
-              <label htmlFor="checkbox-toggle" style={{paddingTop: '2px', fontWeight: 'normal'}} className="col-lg-3 control-label">Là category sự kiện? &nbsp;&nbsp;</label>
+              <label htmlFor="checkbox-toggle" style={{paddingTop: '2px', fontWeight: 'normal'}}
+                     className="col-lg-3 control-label">Là category sự kiện? &nbsp;&nbsp;</label>
               <div className="col-lg-9">
                 <label className="toggle " data-on="YES" data-off="NO">
                   <input type="checkbox" id="checkbox-toggle"
@@ -97,25 +98,28 @@ class CategoryDetail extends React.Component<thisProps, {}> {
                       onClick={() => this.saveCategory()}>Lưu
               </button>
               <button className="btn btn-warning mr10 ml10"
-                      onClick={() =>{ this.translateAllLanguage()}}>Dịch tất cả từ Tiếng Anh
+                      onClick={() => {
+                        this.translateAllLanguage()
+                      }}>Dịch tất cả từ Tiếng Anh
               </button>
-              <div className="btn-group dropup">
-                <button type="button" className="btn btn-success dropdown-toggle"
-                        data-toggle="dropdown" aria-expanded="false">
-                  Thêm ngôn ngữ
-                  <span className="caret"></span>
-                </button>
-                <ul className="dropdown-menu left animated fadeIn" role="menu">
-                  {languages.filter(x =>
-                    this.props.SelectedCategory && this.props.SelectedCategory.CategoryLanguages && !this.props.SelectedCategory.CategoryLanguages.some(r => r.Language == x.Language)
-                  ).map((item, index) =>
-                    <li key={index}>
-                      <a onClick={() => this.props.AddCategoryLanguage
-                      && this.props.AddCategoryLanguage(item.Language)}>{item.Title}</a>
-                    </li>
-                  )}
-                </ul>
-              </div>
+              { this.props.SelectedCategory.CategoryLanguages && this.props.SelectedCategory.CategoryLanguages.length < 6 ?
+                <div className="btn-group dropup">
+                  <button type="button" className="btn btn-success dropdown-toggle"
+                          data-toggle="dropdown" aria-expanded="false">
+                    Thêm ngôn ngữ
+                    <span className="caret"></span>
+                  </button>
+                  <ul className="dropdown-menu left animated fadeIn" role="menu">
+                    {languages.filter(x =>
+                      this.props.SelectedCategory && this.props.SelectedCategory.CategoryLanguages && !this.props.SelectedCategory.CategoryLanguages.some(r => r.Language == x.Language)
+                    ).map((item, index) =>
+                      <li key={index}>
+                        <a onClick={() => this.props.AddCategoryLanguage
+                        && this.props.AddCategoryLanguage(item.Language)}>{item.Title}</a>
+                      </li>
+                    )}
+                  </ul>
+                </div> : null}
               <button className="btn btn-default pull-right hidden"
                       onClick={() => this.discardChangesEditing()}>Làm lại
               </button>

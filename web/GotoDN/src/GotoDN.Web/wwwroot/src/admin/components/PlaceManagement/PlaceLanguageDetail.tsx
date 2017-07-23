@@ -99,7 +99,10 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
           Name: 'Image',
           FieldName: 'Image',
           PlaceHolder: '',
-          FieldData: {},
+          FieldData: {
+            CssClass: 'dn-image-place',
+            Type: 'Image',
+          },
           Type: FieldStructureTypeEnums.SingleImage,
           ValidateRules: []
         }
@@ -121,7 +124,6 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
       inforForm.DynamicFields.push(f_Title);
       inforForm.DynamicFields.push(f_Description);
       inforForm.DynamicFields.push(f_Image);
-      inforForm.DynamicFields.push(f_Icon);
       allForms.push(inforForm);
     }
     return allForms;
