@@ -73,7 +73,8 @@
       "Data",
       "appsettings.json",
       "appsettings.production.json",
-      "web.config"
+      "web.config",
+      "Resources"
     ],
     "exclude": [
       "wwwroot/node_modules",
@@ -94,7 +95,7 @@
   },
 
   "scripts": {
-    "prepublish": [],
+    "prepublish": [ "wwwroot/build.bat" ],
     "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
   }
 }
