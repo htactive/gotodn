@@ -255,6 +255,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                             onClick={() => this.importExcelHL()}>
                       <i className="fa fa-upload"/> Nhập từ Excel
                     </button>
+                    <a className="btn btn-success mr10" href="place/download-template-high-level"
                             >
                       <i className="fa fa-download"/> Download Template
                     </a>
