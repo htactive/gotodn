@@ -22,6 +22,9 @@ namespace GotoDN.Entities
         public DateTime? UpdatedDate { get; set; }
         public LanguageEnums? Language { get; set; }
 
+        public List<PlaceImage> PlaceImages { get; set; }
+        public List<PlaceMoreInfo> PlaceMoreInfo { get; set; }
+
         [ForeignKey("PlaceId")]
         public Place Place { get; set; }
         [ForeignKey("ImageId")]

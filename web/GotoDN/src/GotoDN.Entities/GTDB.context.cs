@@ -66,6 +66,16 @@ namespace GotoDN.Entities
                 .HasMany(x => x.PlaceLanguages)
                 .WithOne(x => x.Place)
                 .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PlaceLanguage>()
+                .HasMany(x => x.PlaceImages)
+                .WithOne(x => x.PlaceLanguage)
+                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PlaceLanguage>()
+                .HasMany(x => x.PlaceMoreInfo)
+                .WithOne(x => x.PlaceLanguage)
+                .OnDelete(Microsoft.EntityFrameworkCore.Metadata.DeleteBehavior.Cascade);
         }
     }
 }

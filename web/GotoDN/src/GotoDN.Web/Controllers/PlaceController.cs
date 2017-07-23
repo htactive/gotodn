@@ -347,5 +347,13 @@ namespace GotoDN.Web.Controllers
             response.TotalRecord = totalRecord;
             return response;
         }
+
+        [HttpPost, Route("save-imported-place")]
+        [AllowAnonymous]
+        public bool SaveImportedPlace(List<ImportPlaceGroupModel> model)
+        {
+
+            return true;
+        }
     }
 }

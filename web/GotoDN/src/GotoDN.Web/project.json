@@ -36,7 +36,8 @@
     "AutoMapper": "6.1.1",
     "CoreCompat.System.Drawing": "1.0.0-beta006",
     "Google.Apis.Translate.v2": "1.28.0.875",
-    "Google.Cloud.Translation.V2": "1.1.0-beta01"
+    "Google.Cloud.Translation.V2": "1.1.0-beta01",
+    "EPPlus.Core": "1.5.1"
   },
 
   "tools": {

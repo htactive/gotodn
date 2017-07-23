@@ -134,6 +134,8 @@ a {
 .table-toolbar {
   position: absolute;
   z-index: 1;
+  top: 12px;
+  left: 15px;
 }
 
 /**
@@ -484,4 +486,85 @@ div.toggle-custom.disabled label.toggle input[type="radio"]:checked + .button-ra
   position: absolute;
   top: 10px;
   z-index: 9;
+}
+
+.place-body .react-bs-container-body::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+  background-color: #F5F5F5;
+}
+
+.place-body .react-bs-container-body::-webkit-scrollbar
+{
+  height: 10px;
+  background-color: #F5F5F5;
+}
+
+.place-body .react-bs-container-body::-webkit-scrollbar-thumb
+{
+  background-color: #c1c1c1;
+}
+
+.text-red {
+  color: red;
+}
+
+.overflow-x {
+  overflow-x: auto;
+}
+
+.overflow-x::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
+  background-color: #F5F5F5;
+}
+
+.overflow-x::-webkit-scrollbar
+{
+  height: 10px;
+  background-color: #F5F5F5;
+}
+
+.overflow-x.small::-webkit-scrollbar
+{
+  height: 6px;
+  background-color: #F5F5F5;
+}
+
+.overflow-x::-webkit-scrollbar-thumb
+{
+  background-color: #c1c1c1;
+}
+
+.preview-table {
+  table-layout: fixed;
+}
+
+.preview-table > thead > tr > th {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.cut-line-1 {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.cut-line-3 {
+  height: 60px;
+  margin: 0 auto;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  display: -webkit-box;
+}
+
+@media (min-width: 1024px) {
+  .modal-lg {
+    width: 1150px;
+  }
 }

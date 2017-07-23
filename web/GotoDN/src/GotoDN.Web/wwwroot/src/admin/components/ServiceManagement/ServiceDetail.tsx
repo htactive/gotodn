@@ -89,7 +89,7 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
               <div style={{paddingTop: '5px', fontWeight: 'normal'}} className="col-lg-3 control-label">Danh mục</div>
               <div className="col-lg-6">
                 <ComboBox
-                  placeHolder="None"
+                  placeHolder="Chọn service..."
                   options={Categories}
                   value={this.props.SelectedHTService.CategoryId}
                   onChange={(Id) => this.props.ClickSlectCategory(Id)}
