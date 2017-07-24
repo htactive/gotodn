@@ -1,0 +1,140 @@
+﻿[
+  {
+    "controller": "Account",
+    "actions": [
+      {
+        "name": "GetMyProfile",
+        "claim": "MyProfile_R"
+      }
+    ]
+  },
+  {
+    "controller": "User",
+    "actions": [
+      {
+        "name": "Update",
+        "claim": "User_W"
+      },
+      {
+        "name": "Create",
+        "claim": "User_W"
+      },
+      {
+        "name": "Delete",
+        "claim": "User_W"
+      },
+      {
+        "name": "ChangeUserStatus",
+        "claim": "User_W"
+      },
+      {
+        "name": "ChangePassword",
+        "claim": "User_W"
+      }
+    ]
+  },
+  {
+    "controller": "City",
+    "actions": [
+      {
+        "name": "CreateCity",
+        "claim": "City_W"
+      },
+      {
+        "name": "DeleteCity",
+        "claim": "City_W"
+      },
+      {
+        "name": "UpdateCity",
+        "claim": "City_W"
+      },
+      {
+        "name": "DeleteDistrict",
+        "claim": "City_W"
+      },
+      {
+        "name": "CreateDistrict",
+        "claim": "City_W"
+      },
+      {
+        "name": "UpdateDistrict",
+        "claim": "City_W"
+      }
+    ]
+  },
+  {
+    "controller": "Category",
+    "actions": [
+      {
+        "name": "CreateCategory",
+        "claim": "Category_W"
+      },
+      {
+        "name": "DeleteCategory",
+        "claim": "Category_W"
+      },
+      {
+        "name": "UpdateCategory",
+        "claim": "Category_W"
+      },
+      {
+        "name": "AddLanguage",
+        "claim": "Category_W"
+      },
+      {
+        "name": "DeleteLanguage",
+        "claim": "Category_W"
+      }
+    ]
+  },
+  {
+    "controller": "Place",
+    "actions": [
+      {
+        "name": "CreatePlace",
+        "claim": "Place_W"
+      },
+      {
+        "name": "DeletePlace",
+        "claim": "Place_W"
+      },
+      {
+        "name": "UpdatePlace",
+        "claim": "Place_W"
+      },
+      {
+        "name": "AddLanguage",
+        "claim": "Place_W"
+      },
+      {
+        "name": "DeleteLanguage",
+        "claim": "Place_W"
+      }
+    ]
+  },
+  {
+    "controller": "Service",
+    "actions": [
+      {
+        "name": "CreateService",
+        "claim": "Service_W"
+      },
+      {
+        "name": "DeleteService",
+        "claim": "Service_W"
+      },
+      {
+        "name": "UpdateService",
+        "claim": "Service_W"
+      },
+      {
+        "name": "AddLanguage",
+        "claim": "Service_W"
+      },
+      {
+        "name": "DeleteLanguage",
+        "claim": "Service_W"
+      }
+    ]
+  }
+]

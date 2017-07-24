@@ -1,0 +1,74 @@
+code/npm-debug.log.2236709147
+
+# OSX
+#
+.DS_Store
+
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
+
+# node.js
+#
+node_modules/
+npm-debug.log
+
+# BUCK
+buck-out/
+\.buckd/
+android/app/libs
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Gitignore.md
+
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+
+# .gitignore
+
+# Typescript Output
+built
+app/node_modules.rar
+app/ios/gotoDN.xcodeproj/project.pbxproj
+
+**/dist/
+**/*.jsx
+**/packages/**
+**/*.suo
+**/obj/**
+**/bin/**
+**/*.user
+**/.idea
+**/node_modules/**
+**/.vs
+*.dg
+**/*.lock.json

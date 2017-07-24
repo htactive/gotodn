@@ -1,0 +1,25 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true"#>
+<#@ include file="Config.ttinclude"#>using HTActive.Core;
+using GotoDN.Entities;
+namespace GotoDN.Repository
+{<#
+foreach(var entity in entities){
+    #>
+
+    public partial class <#=entity.Name#>Repository : BaseRepository<<#=entity.Name#>, GTDBEntities>, I<#=entity.Name#>Repository
+    {
+        public <#=entity.Name#>Repository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		<# if(!entity.IsOverrideKeyMethod) {#>protected override int GetKeyId(<#=entity.Name#> model)
+        {
+            return model.<#=entity.IdKey#>;
+        }
+<#}#>
+	}
+<# 
+  }
+#>
+}
