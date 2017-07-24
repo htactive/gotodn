@@ -1,0 +1,15 @@
+﻿<#@ template language="C#" debug="true" hostspecific="true"#>
+<#@ include file="Config.ttinclude"#>using HTActive.Core;
+using GotoDN.Entities;
+namespace GotoDN.Repository
+{<#
+foreach(var entity in entities){
+    #>
+
+    public partial interface I<#=entity.Name#>Repository : IBaseRepository<<#=entity.Name#>>
+    {
+    }
+<# 
+  }
+#>
+}

@@ -1,0 +1,8 @@
+keytool -genkey -v -keystore gotoDN.keystore -alias gotoDN -keyalg RSA -keysize 2048 -validity 10000
+
+
+Generating 2,048 bit RSA key pair and self-signed certificate (SHA256withRSA) with a validity of 10,000 days
+        for: CN=HT Active, OU=HT Active, O=HT Active, L=DN, ST=DN, C=VN
+Enter key password for <gotoDN>
+        (RETURN if same as keystore password):
+[Storing gotoDN.keystore]
