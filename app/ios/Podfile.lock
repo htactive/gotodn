@@ -1,60 +1,16 @@
 PODS:
-  - GoogleMaps (2.3.1):
-    - GoogleMaps/Maps (= 2.3.1)
-  - GoogleMaps/Base (2.3.1)
-  - GoogleMaps/Maps (2.3.1):
+  - GoogleMaps (2.1.1):
+    - GoogleMaps/Maps (= 2.1.1)
+  - GoogleMaps/Base (2.1.1)
+  - GoogleMaps/Maps (2.1.1):
     - GoogleMaps/Base
-  - React/Core (0.46.1):
-    - Yoga (= 0.46.1.React)
-  - React/RCTActionSheet (0.46.1):
-    - React/Core
-  - React/RCTAnimation (0.46.1):
-    - React/Core
-  - React/RCTGeolocation (0.46.1):
-    - React/Core
-  - React/RCTImage (0.46.1):
-    - React/Core
-    - React/RCTNetwork
-  - React/RCTLinkingIOS (0.46.1):
-    - React/Core
-  - React/RCTNetwork (0.46.1):
-    - React/Core
-  - React/RCTSettings (0.46.1):
-    - React/Core
-  - React/RCTText (0.46.1):
-    - React/Core
-  - React/RCTVibration (0.46.1):
-    - React/Core
-  - React/RCTWebSocket (0.46.1):
-    - React/Core
-  - Yoga (0.46.1.React)
 
 DEPENDENCIES:
   - GoogleMaps
-  - React/Core (from `../node_modules/react-native`)
-  - React/RCTActionSheet (from `../node_modules/react-native`)
-  - React/RCTAnimation (from `../node_modules/react-native`)
-  - React/RCTGeolocation (from `../node_modules/react-native`)
-  - React/RCTImage (from `../node_modules/react-native`)
-  - React/RCTLinkingIOS (from `../node_modules/react-native`)
-  - React/RCTNetwork (from `../node_modules/react-native`)
-  - React/RCTSettings (from `../node_modules/react-native`)
-  - React/RCTText (from `../node_modules/react-native`)
-  - React/RCTVibration (from `../node_modules/react-native`)
-  - React/RCTWebSocket (from `../node_modules/react-native`)
-  - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
-
-EXTERNAL SOURCES:
-  React:
-    :path: ../node_modules/react-native
-  Yoga:
-    :path: ../node_modules/react-native/ReactCommon/yoga
 
 SPEC CHECKSUMS:
-  GoogleMaps: c66a71058b9b1294bcdd5463a68e357fa50c079f
-  React: 0c6f45ca8c39fe48ed4e3a5583861a8e1bc0959e
-  Yoga: 9148a870ff3adaba107edb8ef48ab189c9d9a3d1
+  GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
 
-PODFILE CHECKSUM: 830687fc4716e216b21ba7e87a9919d12c451b04
+PODFILE CHECKSUM: df9db64e14822ec7399e15184e25b6a16e2a74a3
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.2.0

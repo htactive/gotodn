@@ -13,39 +13,29 @@
 
 #import <GoogleMaps/GMSCALayer.h>
 
-NS_ASSUME_NONNULL_BEGIN
+#if __has_feature(modules)
+@import GoogleMapsBase;
+#else
+#import <GoogleMapsBase/GoogleMapsBase.h>
+#endif
 
-/**
- * kGMSLayerPanoramaHeadingKey ranges from [0, 360).
- *
- * @related GMSPanoramaLayer
- */
+GMS_ASSUME_NONNULL_BEGIN
+
+/** kGMSLayerPanoramaHeadingKey ranges from [0, 360). */
 extern NSString *const kGMSLayerPanoramaHeadingKey;
 
-/**
- * kGMSLayerPanoramaPitchKey ranges from [-90, 90].
- *
- * @related GMSPanoramaLayer
- */
+/** kGMSLayerPanoramaPitchKey ranges from [-90, 90]. */
 extern NSString *const kGMSLayerPanoramaPitchKey;
 
-/**
- * kGMSLayerCameraZoomLevelKey ranges from [1, 5], default 1.
- *
- * @related GMSPanoramaLayer
- */
+/** kGMSLayerCameraZoomLevelKey ranges from [1, 5], default 1. */
 extern NSString *const kGMSLayerPanoramaZoomKey;
 
-/**
- * kGMSLayerPanoramaFOVKey ranges from [1, 160] (in degrees), default 90.
- *
- * @related GMSPanoramaLayer
- */
+/** kGMSLayerPanoramaFOVKey ranges from [1, 160] (in degrees), default 90. */
 extern NSString *const kGMSLayerPanoramaFOVKey;
 
 /**
- * GMSPanoramaLayer is a custom subclass of CALayer, provided as the layer class on GMSPanoramaView.
- * This layer should not be instantiated directly.
+ * GMSPanoramaLayer is a custom subclass of CALayer, provided as the layer
+ * class on GMSPanoramaView. This layer should not be instantiated directly.
  */
 @interface GMSPanoramaLayer : GMSCALayer
 @property(nonatomic, assign) CLLocationDirection cameraHeading;
@@ -54,4 +44,4 @@ extern NSString *const kGMSLayerPanoramaFOVKey;
 @property(nonatomic, assign) double cameraFOV;
 @end
 
-NS_ASSUME_NONNULL_END
+GMS_ASSUME_NONNULL_END
