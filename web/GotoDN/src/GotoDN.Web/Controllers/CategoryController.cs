@@ -210,5 +210,22 @@ namespace GotoDN.Web.Controllers
             }
             return model;
         }
+
+        [HttpGet, Route("translate-all-category-language")]
+        [AllowAnonymous]
+        public List<SliderModel> GetCategorySlider()
+        {
+            var result = new List<SliderModel>() ;
+            var eventCategory = this.HTRepository.CategoryRepository.GetAll()
+                .Where(x => x.IsEvent == true).Include(x => x.Places);
+
+            if(eventCategory != null)
+            {
+
+            }
+
+
+            return result;
+        }
     }
 }
