@@ -1,14 +1,19 @@
 import {ServiceBase} from './ServiceBase';
-import {timeout, SliderData, MenuListData} from '../common/DummyData';
+import {timeout,  MenuListData} from '../common/DummyData';
 
-export class GDNService extends ServiceBase {
-  static async getHomeSlider() {
-    await timeout(1000);
-    return SliderData;
+class GDNService extends ServiceBase {
+  host = "http://192.168.1.113:50915/";
+
+  async getHomeSlider() {
+    let url = this.host + "category/get-category-slider";
+    return (await super.executeFetch(url)) || [];
   }
 
-  static async getHomeMenuList() {
+  async getHomeMenuList() {
     await timeout(1500);
     return MenuListData;
   }
 }
+
+const GDNServiceInstance = new GDNService();
+export {GDNServiceInstance};

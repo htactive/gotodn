@@ -1,5 +1,6 @@
 import {StyleSheet, Dimensions, Platform} from 'react-native';
 import {StyleBase} from './style';
+import {viewportHeight, viewportWidth} from '../common/constain';
 
 const platform = Platform.OS;
 
@@ -11,8 +12,6 @@ export const colors = {
   background1: '#00b140',
   background2: 'hsl(230, 30%, 45%)'
 };
-
-const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 
 export function wp(percentage) {
   const value = (percentage * viewportWidth) / 100;

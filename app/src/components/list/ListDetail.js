@@ -5,6 +5,7 @@ import TopSlider from '../slider/TopSlider';
 import {SlideType} from '../../common/constain';
 import {ListItemDetail} from './ListItemDetail';
 import {ListSlider} from './ListSlider';
+import {viewportHeight} from '../../common/constain';
 
 export class ListDetail extends React.Component {
   state = {

@@ -211,20 +211,32 @@ namespace GotoDN.Web.Controllers
             return model;
         }
 
-        [HttpGet, Route("translate-all-category-language")]
+        [HttpGet, Route("get-category-slider")]
         [AllowAnonymous]
         public List<SliderModel> GetCategorySlider()
         {
             var result = new List<SliderModel>() ;
-            var eventCategory = this.HTRepository.CategoryRepository.GetAll()
-                .Where(x => x.IsEvent == true).Include(x => x.Places);
+            var eventCategories = this.HTRepository.CategoryRepository.GetAll()
+                .Where(x => x.IsEvent == true).Include("Places.PlaceLanguages.Image").ToList();
 
-            if(eventCategory != null)
+            if(eventCategories != null)
             {
-
+                foreach(var category in eventCategories)
+                {
+                    var a = category.Places.Select(x => 
+                        new SliderModel()
+                        {
+                            Id = x.Id,
+                            SubTitle = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Description,
+                            Title = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
+                            Url = AutoMapper.Mapper.Map<Image,ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image)?.Url,
+                        }).ToList();
+                    foreach(var item in a)
+                    {
+                        result.Add(item);
+                    }
+                }
             }
-
-
             return result;
         }
     }

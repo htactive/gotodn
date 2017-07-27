@@ -6,7 +6,7 @@ import {viewportHeight} from '../common/constain';
 import HomeSlider from '../components/home/HomeSlider';
 import {NavigationActions} from 'react-navigation';
 import {navigationStore, navigateAction} from '../stores/NavigationStore';
-import {GDNService} from '../services/GDNService';
+import {GDNServiceInstance} from '../services/GDNService';
 
 export class HomeScreen extends React.Component {
 
@@ -37,7 +37,7 @@ export class HomeScreen extends React.Component {
 
   loadHomeData() {
     (async () => {
-      let menuListData = await GDNService.getHomeMenuList();
+      let menuListData = await GDNServiceInstance.getHomeMenuList();
       this.setState({menuListData, menuListLoad: true});
       if(this.state.sliderLoaded) {
         this.setState({
@@ -46,7 +46,7 @@ export class HomeScreen extends React.Component {
       }
     })();
     (async () => {
-      let sliderData = await GDNService.getHomeSlider();
+      let sliderData = await GDNServiceInstance.getHomeSlider();
       this.setState({sliderData, sliderLoaded: true});
       if(this.state.menuListLoad) {
         this.setState({

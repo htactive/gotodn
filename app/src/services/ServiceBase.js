@@ -9,7 +9,6 @@ export class ServiceBase {
         /**
          * make a fetch request with credentials such as cookies
          */
-        credentials: 'include'
       });
       if (result.ok) {
         return await result.json();

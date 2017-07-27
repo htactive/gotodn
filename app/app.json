@@ -1,7 +1,4 @@
 {
   "name": "gotoDN",
-  "displayName": "gotoDN",
-  "expo": {
-    "sdkVersion": "17.0.0"
-  }
+  "displayName": "gotoDN"
 }
