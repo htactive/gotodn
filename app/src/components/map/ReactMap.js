@@ -83,7 +83,6 @@ export class ReactMap extends React.Component<thisProps, thisState> {
     }
 
     animateRegion(position) {
-        console.log(position);
         let region = {
             latitude: position.coords.latitude - .003,
             longitude: position.coords.longitude,
