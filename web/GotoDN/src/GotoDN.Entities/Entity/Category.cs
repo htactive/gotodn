@@ -16,5 +16,6 @@ namespace GotoDN.Entities
         public List<CategoryLanguage> CategoryLanguages { get; set; }
         public List<Place> Places { get; set; }
         public List<HTService> HTServices { get; set; }
+        public int? Order { get; set; }
     }
 }

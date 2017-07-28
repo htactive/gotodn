@@ -2,11 +2,14 @@ import * as React from 'react';
 import {CategoryModel} from "../../../models/CategoryModel";
 import CategoryItem from "./CategoryItem";
 import {LanguageEnums} from "../../../commons/constant";
+import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
+import {CategoryServiceInstance} from "../../services/CategoryService";
 
 interface thisProps {
   Categories: CategoryModel[],
   SelectedCategory: CategoryModel,
   ChangeSelectedCategory: (model: CategoryModel) => void,
+  OnChangeOrder: (models: CategoryModel[]) => void,
   CreateCategory: () => void,
 }
 interface thisState {
@@ -31,24 +34,36 @@ class CategoryList extends React.Component<thisProps, thisState> {
     this.props.CreateCategory && this.props.CreateCategory();
   }
 
+  onSortEnd = async ({oldIndex, newIndex}) => {
+    let categories = this.state.Categories.slice();
+    categories = arrayMove(categories, oldIndex, newIndex);
+    let cateIds = categories.map(t => {return t.Id});
+    let orderedCategories = await CategoryServiceInstance.OrderCategory(cateIds);
+    this.props.OnChangeOrder && this.props.OnChangeOrder(orderedCategories);
+  };
+
   render() {
+    const SortableItem = SortableElement(({value}) => {
+      return (
+        <CategoryItem Model={value}
+                      IsSelected={this.props.SelectedCategory && value.Id == this.props.SelectedCategory.Id}
+                      changeSelectedCategory={() => this.props.ChangeSelectedCategory(value)}
+        />);
+    });
+
+    const SortableList = SortableContainer((data: any) => {
+      return (
+        <ul className="list-group">
+          {data.items && data.items.map((value, index) => (
+            <SortableItem key={`item-${index}`} index={index} value={value} />
+          ))}
+        </ul>
+      );
+    });
+
     return (
       <div className="col-lg-4">
         <h3>Danh sách danh mục</h3>
-        <hr/>
-        <div className="form-group" style={{position: 'relative'}}>
-          <input value={this.state.Search} onChange={(e) => this.handleSearch(e)} type="text" className="form-control"
-                 placeholder="Tìm kiếm danh mục..."/>
-          {this.state.Search != '' &&
-          <a onClick={() => this.clearSearch()} style={{position: 'absolute', top: 6, right: 8, zIndex: 2, color: '#555555'}}><i className="fa fa-times"/></a>}
-        </div>
-        <ul className="list-group">
-          {this.state.Categories ? this.state.Categories.map(x =>
-              <CategoryItem key={x.Id} Model={x}
-                            IsSelected={this.props.SelectedCategory && x.Id == this.props.SelectedCategory.Id}
-                            changeSelectedCategory={() => this.props.ChangeSelectedCategory(x)}
-              />) : null}
-        </ul>
         <hr/>
         <div className="form-group">
           <button className="btn btn-primary"
@@ -56,6 +71,24 @@ class CategoryList extends React.Component<thisProps, thisState> {
             className="fa fa-plus"/> Thêm danh mục
           </button>
         </div>
+        <div className="form-group" style={{position: 'relative'}}>
+          <input value={this.state.Search} onChange={(e) => this.handleSearch(e)} type="text" className="form-control"
+                 placeholder="Tìm kiếm danh mục..."/>
+          {this.state.Search != '' &&
+          <a onClick={() => this.clearSearch()} style={{position: 'absolute', top: 6, right: 8, zIndex: 2, color: '#555555'}}><i className="fa fa-times"/></a>}
+        </div>
+        <hr/>
+        {this.state.Categories &&
+          <SortableList items={this.state.Categories} onSortEnd={this.onSortEnd} axis={'y'} distance={3}/>
+        }
+
+        {/*<ul className="list-group">*/}
+          {/*{this.state.Categories ? this.state.Categories.map(x =>*/}
+              {/*<CategoryItem key={x.Id} Model={x}*/}
+                            {/*IsSelected={this.props.SelectedCategory && x.Id == this.props.SelectedCategory.Id}*/}
+                            {/*changeSelectedCategory={() => this.props.ChangeSelectedCategory(x)}*/}
+              {/*/>) : null}*/}
+        {/*</ul>*/}
       </div>
     );
   }

@@ -4,6 +4,6 @@ export interface CategoryModel {
   CreatedDate?: Date,
   UpdatedDate?: Date,
   IsEvent?: boolean,
-  Priority?: number,
+  Order?: number,
   CategoryLanguages?: CategoryLanguageModel[]
 }

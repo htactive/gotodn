@@ -32,7 +32,7 @@ namespace GotoDN.Web.Controllers
             var entities = this.HTRepository.CategoryRepository.GetAll()
                 .Include("CategoryLanguages.Image")
                 .Include("CategoryLanguages.Icon")
-                .Take(1000).ToList();
+                .Take(1000).OrderBy(t => t.Order).ToList();
 
             var models = entities.Select(x => AutoMapper.Mapper.Map<Category, CategoryModel>(x)).ToList();
 
@@ -282,6 +282,30 @@ namespace GotoDN.Web.Controllers
                 Items = null})).ToList();
 
             return result;
+        }
+
+        [HttpPost, Route("order-category")]
+        [AllowAnonymous]
+        public List<CategoryModel> OrderCategory([FromBody]List<int> categoryIds)
+        {
+            for (int i = 0; i < categoryIds.Count; i++)
+            {
+                var cateEntity = HTRepository.CategoryRepository.GetObject(categoryIds[i]);
+                if (cateEntity != null)
+                {
+                    cateEntity.Order = (i + 1);
+                    HTRepository.CategoryRepository.Save(cateEntity);
+                }
+            }
+            HTRepository.Commit();
+            var entities = this.HTRepository.CategoryRepository.GetAll()
+                .Include("CategoryLanguages.Image")
+                .Include("CategoryLanguages.Icon")
+                .Take(1000).OrderBy(t => t.Order).ToList();
+
+            var models = entities.Select(x => AutoMapper.Mapper.Map<Category, CategoryModel>(x)).ToList();
+
+            return models;
         }
 
     }

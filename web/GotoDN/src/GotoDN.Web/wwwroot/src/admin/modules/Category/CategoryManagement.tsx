@@ -34,7 +34,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
     if (result) {
       window['notice_create_success']();
       if (this.state.Categories) {
-        this.state.Categories.push(result);
+        this.state.Categories.unshift(result);
         this.setState({
           SelectedCategory: result,
           SelectedLanguage: result.CategoryLanguages ? result.CategoryLanguages[0].Language : LanguageEnums.English,
@@ -143,6 +143,9 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                 ChangeSelectedCategory={(model) => this.setState({
                                   SelectedCategory: model,
                                   SelectedLanguage: LanguageEnums.English,
+                                })}
+                                OnChangeOrder={(models) => this.setState({
+                                  Categories: models
                                 })}
                                 CreateCategory={() => this.createCategory()}
                   />

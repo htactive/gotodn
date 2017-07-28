@@ -43,6 +43,11 @@ class CategoryService extends AdminServiceBase {
     let url = `${virtualPath}/category/translate-all-category-language`;
     return await super.executeFetchPost(url, model);
   }
+
+  async OrderCategory(cateIds: number[]): Promise<CategoryModel[]> {
+    let url = `${virtualPath}/category/order-category`;
+    return await super.executeFetchPost(url, cateIds);
+  }
 }
 
 const CategoryServiceInstance = new CategoryService();
