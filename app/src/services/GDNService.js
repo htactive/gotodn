@@ -1,6 +1,6 @@
 import {ServiceBase} from './ServiceBase';
 import {timeout, MenuListData} from '../common/DummyData';
-
+import {Helper} from '../common/constain';
 class GDNService extends ServiceBase {
   host = "http://192.168.1.113:50915/";
 
@@ -57,6 +57,25 @@ class GDNService extends ServiceBase {
       return data;
     }
     return null;
+  }
+
+  async getPlaceById(Id: number) {
+    let url = this.host + "place/get-place-by-id?id=" + Id;
+    let result = await super.executeFetch(url);
+    if (result) {
+      let data = {};
+      data.id = result.Id;
+      data.heroImage = result.PlaceLanguages[0].Image ? result.PlaceLanguages[0].Image.Url : Helper.ImageUrl;
+      data.title = result.PlaceLanguages[0].Title;
+      data.description = result.PlaceLanguages[0].Description;
+      data.star = result.Rating;
+      data.address = result.Address;
+      data.phone = result.Phone;
+      data.website = result.Website;
+
+
+      return data;
+    }
   }
 }
 

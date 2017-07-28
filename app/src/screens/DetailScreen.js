@@ -18,6 +18,7 @@ import {ReactMapDirection} from '../components/map/ReactMapDirection';
 import { NavigationActions } from 'react-navigation';
 import {navigationStore, navigateToRouteAction} from '../stores/NavigationStore';
 import Communications from 'react-native-communications';
+import {GDNServiceInstance} from '../services/GDNService';
 
 export class DetailScreen extends React.Component {
   state = {
@@ -37,17 +38,17 @@ export class DetailScreen extends React.Component {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {params} = this.props.navigation.state;
     let itemId = (params && params.itemId) || 0;
-    let data = MenuListItemData.filter(t => t.id == itemId);
+    let data = await GDNServiceInstance.getPlaceById(itemId);
     this.setState({
-      dataDetail: data.length > 0 ? data[0] : null
+      dataDetail: data,
     });
   }
 
   render() {
-
+    if(!this.state.dataDetail) return null;
     let data = this.state.dataDetail;
     let detailInfo = [];
     detailInfo.push({infoIcon: data.addressIcon || '?', infoText: data.address});
