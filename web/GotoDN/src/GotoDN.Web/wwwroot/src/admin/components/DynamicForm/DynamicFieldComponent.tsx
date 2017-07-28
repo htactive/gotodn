@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FieldValueModel} from '../../../models/field-value-model';
+import {FieldValueModel, ImageSetValueModel} from '../../../models/field-value-model';
 import ReactElement = React.ReactElement;
 import {DynamicFieldModel} from "../../../models/dynamic-field-model";
 import {FieldStructureTypeEnums, SelectInitValueModel} from "../../../models/field-structure-model";
@@ -7,6 +7,8 @@ import {ToggleComponent} from "./ToggleComponent";
 import {SingleImageUploadComponent} from "./SingleImageUploadComponent";
 import {RichTextEditorComponent} from "./RichTextEditorComponent";
 import {DateRangePicker} from "../../../commons/date-range-picker";
+import {MultiImageUploadComponent} from "./MultiImageUploadComponent";
+import {PlaceImageModel} from "../../../models/PlaceLanguageModel";
 interface thisProps {
   Field: DynamicFieldModel,
   onFieldValueChange: (fv: FieldValueModel) => void,
@@ -316,8 +318,23 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
                                       }
       />
     }
-
+    if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.C_ImagesUpload) {
+      let irv: ImageSetValueModel = {images: []};
+      if (this.props.FieldValue && this.props.FieldValue.ValueString) {
+        irv = JSON.parse(this.props.FieldValue.ValueString);
+      }
+      return <MultiImageUploadComponent Field={this.props.Field}  ImageSetValue={this.props.FieldValue.Value}
+                                    onImageSetChanged={(irv: PlaceImageModel[]) => this.onImageSetChanged(irv)}
+      />;
+    }
 
     return this.renderTextBoxField();
+  }
+
+  private onImageSetChanged(irv: PlaceImageModel[]) {
+    let fv: FieldValueModel = {...this.props.FieldValue};
+    fv.Value = irv;
+    fv.ValueNumber = 0;
+    this.props.onFieldValueChange(fv);
   }
 }

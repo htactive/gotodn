@@ -15,6 +15,8 @@ import * as ReactAddonsCssTransitionGroup from 'react-addons-css-transition-grou
 import * as ReactAddonsTransitionGroup from 'react-addons-transition-group';
 import * as ReactSelect from 'react-select';
 import * as DatePicker from 'react-datepicker';
+import * as ReactSortableHoc from 'react-sortable-hoc';
+import * as Lightbox  from 'react-image-lightbox';
 
 window['react-bootstrap-table'] = ReactBootstrapTable;
 window['react-bootstrap'] = ReactBootstrap;
@@ -33,3 +35,5 @@ window['react-addons-css-transition-group'] = ReactAddonsCssTransitionGroup;
 window['react-addons-transition-group'] = ReactAddonsTransitionGroup;
 window['react-select'] = ReactSelect;
 window['react-datepicker'] = DatePicker;
+window['react-sortable-hoc'] = ReactSortableHoc;
+window['react-image-lightbox'] = Lightbox;

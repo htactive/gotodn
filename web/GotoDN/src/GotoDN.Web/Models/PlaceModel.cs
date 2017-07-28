@@ -50,9 +50,20 @@ namespace GotoDN.Web.Models
         public DateTime? UpdatedDate { get; set; }
         public LanguageEnums? Language { get; set; }
 
+        public List<PlaceImageModel> PlaceImages { get; set; }
+
         public PlaceModel Place { get; set; }
         public ImageModel Image { get; set; }
         public ImageModel Icon { get; set; }
+    }
+
+    public class PlaceImageModel
+    {
+        public int Id { get; set; }
+        public int PlaceLangId { get; set; }
+        public int? ImageId { get; set; }
+        
+        public ImageModel Image { get; set; }
     }
 
     public class CompareModel

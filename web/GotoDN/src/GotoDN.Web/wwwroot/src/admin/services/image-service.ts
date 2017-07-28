@@ -9,6 +9,11 @@ class ImageService extends AdminServiceBase {
     return await super.executeFetchPostImage(url, image);
   }
 
+  public async uploadMultiImage(images): Promise<ImageModel[]> {
+    let url = `${virtualPath}/Image/upload-multi-image`;
+    return await super.executeFetchPostImages(url, images);
+  }
+
   public async uploadNewIcon(icon): Promise<ImageModel> {
     let url = `${virtualPath}/Image/upload-new-icon`;
     return await super.executeFetchPostImage(url, icon);

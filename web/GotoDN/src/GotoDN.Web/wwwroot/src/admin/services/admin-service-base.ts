@@ -42,4 +42,17 @@ export class AdminServiceBase extends ServiceBase {
       }
     }
   }
+
+  protected async executeFetchPostImages(url, images, shouldBlockUI = true, _401Callback?: () => void): Promise<any> {
+    try {
+      return await super.executeFetchPostImages(url, images, shouldBlockUI);
+    }
+    catch (e) {
+
+      if (e === 401) {
+        _401Callback = _401Callback || default401Callback;
+        _401Callback();
+      }
+    }
+  }
 }

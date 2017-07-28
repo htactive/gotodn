@@ -110,7 +110,7 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
-          Name: 'Image',
+          Name: 'Ảnh đại diện',
           FieldName: 'Image',
           PlaceHolder: '',
           FieldData: {
@@ -118,6 +118,23 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
             Type: 'Image',
           },
           Type: FieldStructureTypeEnums.SingleImage,
+          ValidateRules: []
+        }
+      };
+
+      let f_MultiImage: DynamicFieldModel = {
+        Priority: 4,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Ảnh địa điểm',
+          FieldName: 'PlaceImages',
+          PlaceHolder: '',
+          FieldData: {
+            CssClass: 'dn-m-image-place',
+            Type: 'Image',
+          },
+          Type: FieldStructureTypeEnums.C_ImagesUpload,
           ValidateRules: []
         }
       };
@@ -138,6 +155,7 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
       inforForm.DynamicFields.push(f_Title);
       inforForm.DynamicFields.push(f_Description);
       inforForm.DynamicFields.push(f_Image);
+      inforForm.DynamicFields.push(f_MultiImage);
       allForms.push(inforForm);
     }
     return allForms;

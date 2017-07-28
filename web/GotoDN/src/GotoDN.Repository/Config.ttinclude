@@ -18,6 +18,7 @@ new EntityMetadataRender(){Name = "Place"},
 new EntityMetadataRender(){Name = "PlaceLanguage"},
 new EntityMetadataRender(){Name = "City"},
 new EntityMetadataRender(){Name = "District"},
+new EntityMetadataRender(){Name = "PlaceImage"},
 };
 #>
 
