@@ -38,10 +38,10 @@ export class HomeMenuList extends React.Component {
       let data = menuListData[i];
       if (leftHeight <= rightHeight) {
         dataLeft.push(data);
-        leftHeight += menuItemHeaderHeight + (data.services.length) * menuItemHeight;
+        leftHeight += menuItemHeaderHeight + (data.services ? data.services.length : 50) * menuItemHeight;
       } else {
         dataRight.push(data);
-        rightHeight += menuItemHeaderHeight + (data.services.length) * menuItemHeight;
+        rightHeight += menuItemHeaderHeight + (data.services ? data.services.length : 50) * menuItemHeight;
       }
     }
 
@@ -65,7 +65,7 @@ export class HomeMenuList extends React.Component {
                 <View key={index} style={{alignSelf: 'stretch'}}>
                   <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => {this.goToList(data.id, 0, data.isIndustry)}}
+                    onPress={() => {this.goToList(data.id, 0, data.isNoService)}}
                     style={style.menuItemHeader}
                   >
                     <Image style={[style.iconImgXs, {tintColor: '#12a1e7', marginBottom: 10, flex:2}]}
@@ -77,7 +77,7 @@ export class HomeMenuList extends React.Component {
                     <TouchableOpacity
                       activeOpacity={0.7}
                       style={style.menuItem}
-                      onPress={() => {this.goToList(data.id, sIndex, data.isIndustry)}}
+                      onPress={() => {this.goToList(data.id, sIndex, data.isNoService)}}
                       key={sIndex}
                     >
                       <View style={style.imageContainer}>
@@ -86,7 +86,7 @@ export class HomeMenuList extends React.Component {
                             source={{uri: service.heroImage}}
                             style={style.image}
                           >
-                            {data.isIndustry || (
+                            {data.isNoService || (
                               <View style={style.textInner}>
                                 <View style={style.textContain}>
                                   <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
@@ -106,7 +106,7 @@ export class HomeMenuList extends React.Component {
                   <View key={index} style={{alignSelf: 'stretch'}}>
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      onPress={() => {this.goToList(data.id, 0, data.isIndustry)}}
+                      onPress={() => {this.goToList(data.id, 0, data.isNoService)}}
                       style={style.menuItemHeader}
                     >
                       <Image style={[style.iconImgXs, {tintColor: '#12a1e7', flex:2}]}
@@ -118,7 +118,7 @@ export class HomeMenuList extends React.Component {
                       <TouchableOpacity
                         activeOpacity={0.7}
                         style={style.menuItem}
-                        onPress={() => {this.goToList(data.id, sIndex, data.isIndustry)}}
+                        onPress={() => {this.goToList(data.id, sIndex, data.isNoService)}}
                         key={sIndex}
                       >
                         <View style={style.imageContainer}>
@@ -127,7 +127,7 @@ export class HomeMenuList extends React.Component {
                               source={{uri: service.heroImage}}
                               style={style.image}
                             >
-                              {data.isIndustry || (
+                              {data.isNoService || (
                                 <View style={style.textInner}>
                                   <View style={style.textContain}>
                                     <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
@@ -146,8 +146,8 @@ export class HomeMenuList extends React.Component {
         ))
   }
 
-  goToList(id, index, isIndustry) {
-    if (isIndustry)
+  goToList(id, index, isNoService) {
+    if (isNoService)
       navigationStore.dispatch(navigateToRouteAction('IndustryListScreen', {listId: id}));
 
     else

@@ -95,7 +95,7 @@ export const DNNavigatorOptions = {
           params = transProps.scene.route.params;
           listId = (params && params.listId) || 0;
           currentList = MenuListData.filter(t => t.id == listId)[0];
-          Menu.instance.setTitle(currentList.categoryName);
+          Menu.instance.setTitle(currentList ? currentList.categoryName : "");
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.ListScreen);
           break;
@@ -104,7 +104,7 @@ export const DNNavigatorOptions = {
           params = transProps.scene.route.params;
           listId = (params && params.listId) || 0;
           currentList = MenuListData.filter(t => t.id == listId)[0];
-          Menu.instance.setTitle(currentList.categoryName);
+          Menu.instance.setTitle(currentList ? currentList.categoryName : "");
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.ListScreen);
           break;

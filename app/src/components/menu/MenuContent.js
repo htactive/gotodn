@@ -16,7 +16,7 @@ export class MenuContent extends React.Component {
 
   render() {
     let props = {
-      onListItemClicked: (id, isIndustry) => this.listItemClicked(id, isIndustry),
+      onListItemClicked: (id, isNoService) => this.listItemClicked(id, isNoService),
       onHelpClicked: () => this.helpClicked(),
       onAboutUsClicked: () => this.aboutUsClicked(),
       onLanguageClicked: () => this.languageUsClicked(),
@@ -58,8 +58,8 @@ export class MenuContent extends React.Component {
 
   }
 
-  listItemClicked(id, isIndustry) {
-    if (isIndustry) {
+  listItemClicked(id, isNoService) {
+    if (isNoService) {
       let r = {listId: id};
       navigationStore.dispatch(navigateToRouteAction('IndustryListScreen',r));
 

@@ -53,7 +53,8 @@ export class ListScreen extends React.Component {
             renderTabBar={()=> <ScrollableTab />}
             style={{backgroundColor: '#29b6f6'}}
       >
-        {this.state.listData.length > 0 && this.state.listData.filter(t => t.id == listId)[0].services.map((data, index) =>
+        {this.state.listData.length > 0 && this.state.listData.filter(t => t.id == listId)[0] != null
+        && this.state.listData.filter(t => t.id == listId)[0].services.map((data, index) =>
           <Tab key={index}
                tabStyle={{backgroundColor:'#29b6f6',borderBottomWidth: 3, borderBottomColor:'#eeeeee'}}
                textStyle={{color:'#556c7a', fontWeight: 'normal'}}
