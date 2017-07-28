@@ -159,7 +159,7 @@ namespace GotoDN.Web.Controllers
             this.HTRepository.CategoryRepository.Save(CatEntity);
             this.HTRepository.Commit();
 
-            return AutoMapper.Mapper.Map<CategoryLanguage, CategoryLanguageModel>(LangEntity); 
+            return AutoMapper.Mapper.Map<CategoryLanguage, CategoryLanguageModel>(LangEntity);
         }
 
         [HttpPost, Route("delete-language")]
@@ -215,29 +215,74 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public List<SliderModel> GetCategorySlider()
         {
-            var result = new List<SliderModel>() ;
-            var eventCategories = this.HTRepository.CategoryRepository.GetAll()
-                .Where(x => x.IsEvent == true).Include("Places.PlaceLanguages.Image").ToList();
+            var result = new List<SliderModel>();
+            var today = DateTimeHelper.GetDateTimeNow();
 
-            if(eventCategories != null)
-            {
-                foreach(var category in eventCategories)
+            var eventPlaces = this.HTRepository.PlaceRepository.GetAll().
+                Where(x => x.Category != null && x.Category.IsEvent.HasValue && x.Category.IsEvent.Value
+                && x.StartDate <= today && x.EndDate > today)
+                .Include("PlaceLanguages.Image").ToList();
+
+            result = result.Union(eventPlaces.Select(x =>
+                new SliderModel()
                 {
-                    var a = category.Places.Select(x => 
-                        new SliderModel()
-                        {
-                            Id = x.Id,
-                            SubTitle = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Description,
-                            Title = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
-                            Url = AutoMapper.Mapper.Map<Image,ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image)?.Url,
-                        }).ToList();
-                    foreach(var item in a)
-                    {
-                        result.Add(item);
-                    }
-                }
-            }
+                    Id = x.Id,
+                    SubTitle = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Description,
+                    Title = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
+                    Url = AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image) != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
+                }).ToList()).ToList();
+
+            var Places = this.HTRepository.PlaceRepository.GetAll().
+                Where(x => x.IsHomeSlider.HasValue && x.IsHomeSlider.Value)
+                .Include("PlaceLanguages.Image").ToList();
+
+            result = result.Union(Places.Select(x =>
+                new SliderModel()
+                {
+                    Id = x.Id,
+                    SubTitle = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Description,
+                    Title = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
+                    Url = AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image) != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
+                }).ToList()).ToList();
+
             return result;
         }
+
+        [HttpGet, Route("get-category-data")]
+        [AllowAnonymous]
+        public List<MenuListModel> GetCategoryData()
+        {
+            var result = new List<MenuListModel>();
+            var CategoryEntity = this.HTRepository.CategoryRepository.GetAll()
+                .Include("HTServices.HTServiceLanguages.Image");
+
+            var CateService = CategoryEntity.Where(x => x.HTServices.Count > 0);
+            var CatePlace = CategoryEntity.Where(x => x.HTServices.Count == 0 && x.Places.Count > 0);
+
+            result = result.Union(CateService.Select(x =>
+                new MenuListModel()
+                {
+                    Id = x.Id,
+                    Name = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
+                    Icon = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon).Url : null,
+                    Items = x.HTServices.Select(y => new MenuItemModel()
+                    {
+                        Title = y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
+                        Url = y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image != null ? AutoMapper.Mapper.Map<Image, ImageModel>(y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
+                    }).ToList(),
+                })).ToList();
+
+            result = result.Union(CatePlace.Select(x =>
+            new MenuListModel()
+            {
+                Id = x.Id,
+                Name = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
+                Image = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
+                Icon = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon).Url : null,
+                Items = null})).ToList();
+
+            return result;
+        }
+
     }
 }

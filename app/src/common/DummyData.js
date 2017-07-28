@@ -174,7 +174,7 @@ export const MenuListData = [
     id:5,
     categoryName: 'Khu công nghiệp',
     categoryIcon: IconName.CIndustry,
-    isIndustry: true,
+    isNoService: true,
     services: [
       {
         heroImage: 'http://giaoducthoidai.vn/Uploaded/ngocnd/2017_04_05/1_YKIQ.jpg',

@@ -27,7 +27,7 @@ export class MenuList extends React.Component {
                             isAboutActived: false
                           });
                           if(this.props.onListItemClicked)
-                            this.props.onListItemClicked(menuD.id, menuD.isIndustry);
+                            this.props.onListItemClicked(menuD.id, menuD.isNoService);
                         }}/>
         )}
         <MenuListItem itemText='Trợ giúp' actived={this.state.isHelpActived} system itemIcon={AppIcon.Help} onItemClicked={() => {

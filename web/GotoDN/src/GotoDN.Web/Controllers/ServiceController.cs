@@ -207,5 +207,27 @@ namespace GotoDN.Web.Controllers
             }
             return model;
         }
+
+        [HttpGet, Route("get-service-slider")]
+        [AllowAnonymous]
+        public List<SliderModel> GetServiceSlider()
+        {
+            var result = new List<SliderModel>();
+
+            var Places = this.HTRepository.PlaceRepository.GetAll().
+                Where(x => x.IsCategorySlider.HasValue && x.IsCategorySlider.Value)
+                .Include("PlaceLanguages.Image").ToList();
+
+            result = result.Union(Places.Select(x =>
+                new SliderModel()
+                {
+                    Id = x.Id,
+                    SubTitle = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Description,
+                    Title = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
+                    Url = AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image) != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
+                }).ToList()).ToList();
+
+            return result;
+        }
     }
 }
