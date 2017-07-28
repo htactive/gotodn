@@ -18,7 +18,7 @@ namespace GotoDN.Web.Models
         {
             get
             {
-                return CategoryNotExist || ServiceNotExist || CityNotExist || DistrictNotExist || AdditionalInfoError || PlaceImageError;
+                return CategoryNotExist || ServiceNotExist || CityNotExist || DistrictNotExist;
             }
         }
 

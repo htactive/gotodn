@@ -59,6 +59,26 @@ namespace GotoDN.Web.Controllers
             return Mappers.Mapper.ToModel(image);
         }
 
+        [Route("upload-multi-image"), HttpPost]
+        [AllowAnonymous]
+        public async Task<List<ImageModel>> UploadMultiImage()
+        {
+            var imageModels = new List<ImageModel>();
+            var files = Request.Form.Files;
+            if (files == null || files.Count == 0) return null;
+            for (int i = 0; i < files.Count; i++)
+            {
+                var file = files[i];
+                var stream = file.OpenReadStream();
+                var fileKey = string.Format("coms/img/coms_{0}.jpg", Guid.NewGuid().ToString());
+                Stream compressStream = new MemoryStream();
+                compressStream = ImageHelper.CompressImage(stream, 80);
+                var image = await this.CreateNewImage(compressStream, fileKey);
+                imageModels.Add(Mappers.Mapper.ToModel(image));
+            }
+            return imageModels;
+        }
+
         [Route("upload-new-icon"), HttpPost]
         [AllowAnonymous]
         public async Task<ImageModel> UploadNewIcon(IFormFile file)
@@ -80,10 +100,10 @@ namespace GotoDN.Web.Controllers
             var stream = file.OpenReadStream();
             var package = new ExcelPackage(stream);
             var importedPlaces = new List<ImportPlaceModel>();
-            var cateEntities = this.HTRepository.CategoryLanguageRepository.GetAll();
-            var serviceEntities = this.HTRepository.HTServiceLanguageRepository.GetAll();
-            var cityEntities = this.HTRepository.CityRepository.GetAll();
-            var dicstrictEntities = this.HTRepository.DistrictRepository.GetAll().Include(t => t.City);
+            var cateEntities = this.HTRepository.CategoryLanguageRepository.GetAll().ToList();
+            var serviceEntities = this.HTRepository.HTServiceLanguageRepository.GetAll().ToList();
+            var cityEntities = this.HTRepository.CityRepository.GetAll().ToList();
+            var dicstrictEntities = this.HTRepository.DistrictRepository.GetAll().Include(t => t.City).ToList();
             try
             {
                 for (int i = 0; i < package.Workbook.Worksheets.Count; i++)

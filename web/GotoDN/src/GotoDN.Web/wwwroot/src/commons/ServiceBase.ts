@@ -112,4 +112,45 @@ export class ServiceBase {
       }
     }
   }
+
+  protected async executeFetchPostImages(url, images, shouldBlockUI = true): Promise<any> {
+    try {
+      if(!UIBlocker || !UIBlocker.instance){
+        shouldBlockUI=false;
+      }
+
+      if (shouldBlockUI) {
+        UIBlocker.instance.block();
+      }
+      const formData = new FormData();
+      for (let i = 0; i < images.length ; i++) {
+        formData.append(images[i].name, images[i]);
+      }
+      let result = await fetch(url,
+        {
+          headers: {
+            'auth': localStorage.getItem("user_token") + ""
+          },
+          method: 'POST',
+          credentials: 'include',
+          body: formData
+        });
+
+      if (shouldBlockUI) {
+        UIBlocker.instance.unblock();
+      }
+      if (result.ok) {
+        return await result.json();
+      }
+      if (result.status == 401) {
+        throw 401;
+      }
+      return null;
+    }
+    catch (e) {
+      if(e==401){
+        throw e;
+      }
+    }
+  }
 }

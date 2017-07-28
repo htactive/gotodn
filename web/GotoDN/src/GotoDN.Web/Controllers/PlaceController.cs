@@ -116,6 +116,7 @@ namespace GotoDN.Web.Controllers
             var entity = this.HTRepository.PlaceRepository.GetAll()
                 .Include("PlaceLanguages.Image")
                 .Include("PlaceLanguages.Icon")
+                .Include("PlaceLanguages.PlaceImages.Image")
                 .FirstOrDefault(x => x.Id == model.Id);
             if (entity == null) return false;
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
@@ -145,6 +146,13 @@ namespace GotoDN.Web.Controllers
                     item.ImageId = en.Image != null ? en.Image.Id : (int?)null;
                     item.IconId = en.Icon != null ? en.Icon.Id : (int?)null;
                     item.Description = en.Description;
+                    if (item.PlaceImages == null) item.PlaceImages = new List<PlaceImage>();
+                    item.PlaceImages.Clear();
+                    item.PlaceImages.AddRange(en.PlaceImages.Take(10).Select(t => new PlaceImage
+                    {
+                        ImageId = t.ImageId,
+                        PlaceLangId = en.Id,
+                    }));
                     item.UpdatedDate = DateTimeHelper.GetDateTimeNow();
                 }
             }
@@ -196,7 +204,7 @@ namespace GotoDN.Web.Controllers
         public GetGridResponseModel<PlaceModel> Filter([FromBody]GetGridRequestModel request)
         {
             var query = this.HTRepository.PlaceRepository.GetAll();
-            query = query.Include("PlaceLanguages.Image").Include("PlaceLanguages.Icon")
+            query = query.Include("PlaceLanguages.Image").Include("PlaceLanguages.PlaceImages.Image").Include("PlaceLanguages.Icon")
                 .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages")
                 .Include(x => x.City).Include(x => x.District);
             // search
@@ -396,8 +404,21 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public bool SaveImportedPlace([FromBody]List<ImportPlaceGroupModel> model)
         {
+            this.HTRepository.GTDBUnitOfWork.DbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+            this.HTRepository.GTDBUnitOfWork.DbContext.ChangeTracker.QueryTrackingBehavior = Microsoft.EntityFrameworkCore.QueryTrackingBehavior.NoTracking;
             var enImportPlaceG = model.FirstOrDefault(t => t.Language == LanguageEnums.English);
             if (enImportPlaceG == null) return false;
+            var cateEntities = this.HTRepository.CategoryLanguageRepository.GetAll().ToList();
+            var serviceEntities = this.HTRepository.HTServiceLanguageRepository.GetAll().ToList();
+            var cityEntities = this.HTRepository.CityRepository.GetAll().ToList();
+            var dicstrictEntities = this.HTRepository.DistrictRepository.GetAll().Include(t => t.City).ToList();
+            var enImportPlaceNames = enImportPlaceG.ImportPlaces.Select(t => t.PlaceName).ToList();
+            var placeEntities = this.HTRepository.PlaceRepository.GetAll()
+                .Include("PlaceLanguages.Image")
+                .Include("PlaceLanguages.PlaceImages")
+                .Where(x => x.PlaceLanguages
+                    .Any(p => p.Language == LanguageEnums.English && enImportPlaceNames.Contains(p.Title, StringComparer.CurrentCultureIgnoreCase)))
+                .ToList();
             for (int i = 0; i < enImportPlaceG.ImportPlaces.Count; i++)
             {
                 var enImportPlace = enImportPlaceG.ImportPlaces[i];
@@ -418,198 +439,93 @@ namespace GotoDN.Web.Controllers
                 var frImportPlace = frImportPlaceG != null && frImportPlaceG.ImportPlaces.Count > i ? frImportPlaceG.ImportPlaces[i] : null;
 
                 if (enImportPlace.PlaceInValid) continue;
-                var placeEntity = this.HTRepository.PlaceRepository.GetAll()
-                .Include("PlaceLanguages.Image")
-                .Include("PlaceLanguages.Icon")
+                var placeEntity = placeEntities
                 .FirstOrDefault(x => x.PlaceLanguages
-                                .Any(p => p.Language == LanguageEnums.English && p.Title.ToLower() == enImportPlace.PlaceName.ToLower()));
+                                .Any(p => p.Language == LanguageEnums.English && p.Title.Equals(enImportPlace.PlaceName, StringComparison.CurrentCultureIgnoreCase)));
                 if (placeEntity == null) placeEntity = new Place();
                 placeEntity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
                 placeEntity.Address = enImportPlace.Address;
-                var city = HTRepository.CityRepository.GetAll().FirstOrDefault(c => c.Name.Trim().ToLower() == enImportPlace.City.Trim().ToLower());
+                var city = cityEntities.FirstOrDefault(c => c.Name.Trim().ToLower() == enImportPlace.City.Trim().ToLower());
                 placeEntity.CityId = city != null ? city.Id : (int?)null;
                 placeEntity.CloseTime = DateTime.Parse(enImportPlace.CloseTime);
-                var district = HTRepository.DistrictRepository.GetAll().FirstOrDefault(d => d.Name.Trim().ToLower() == enImportPlace.District.Trim().ToLower());
+                var district = dicstrictEntities.FirstOrDefault(d => d.Name.Trim().ToLower() == enImportPlace.District.Trim().ToLower());
                 placeEntity.DistrictId = district != null ? district.Id : (int?)null;
                 placeEntity.IsCategorySlider = enImportPlace.IsCategorySlider;
                 placeEntity.IsHomeSlider = enImportPlace.IsHomeSlider;
                 placeEntity.OpenTime = DateTime.Parse(enImportPlace.OpenTime);
                 placeEntity.Phone = enImportPlace.Phone;
                 placeEntity.Website = enImportPlace.Website;
-                var cateE = HTRepository.CategoryLanguageRepository.GetAll().FirstOrDefault(ca => ca.Language == LanguageEnums.English && ca.Title.ToLower() == enImportPlace.Category.ToLower());
+                var cateE = cateEntities.FirstOrDefault(ca => ca.Language == LanguageEnums.English && ca.Title.ToLower() == enImportPlace.Category.ToLower());
                 if (cateE != null)
                 {
                     placeEntity.CategoryId = cateE.CategoryId;
                 }
-                var serviceE = HTRepository.HTServiceLanguageRepository.GetAll().FirstOrDefault(s => s.Language == LanguageEnums.English && s.Title.ToLower() == enImportPlace.Service.ToLower());
+                var serviceE = serviceEntities.FirstOrDefault(s => s.Language == LanguageEnums.English && s.Title.ToLower() == enImportPlace.Service.ToLower());
                 if (serviceE != null)
                 {
                     placeEntity.HTServiceId = serviceE.HTServiceId;
                 }
-                if (placeEntity.PlaceLanguages == null)
-                    placeEntity.PlaceLanguages = new List<PlaceLanguage>();
 
-                //Add English
-                var enLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.English) : null;
-                if (enLanguage == null)
-                {
-                    enLanguage = new PlaceLanguage();
-                    placeEntity.PlaceLanguages.Add(enLanguage);
-                }
-                enLanguage.Title = enImportPlace.PlaceName;
-                enLanguage.Language = LanguageEnums.English;
-                if (enLanguage.ImageId.HasValue && enLanguage.ImageId != 0)
-                {
-                    enLanguage.Image.Url = enImportPlace.CoverImage;
-                }
-                else
-                {
-                    enLanguage.Image = new Image
-                    {
-                        Url = enImportPlace.CoverImage
-                    };
-                }
-                enLanguage.Description = enImportPlace.Description;
-                enLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
-
-                //Add VietNam
-                if(viImportPlace != null && !viImportPlace.PlaceInValid)
-                {
-                    var viLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.Vietnamese) : null;
-                    if (viLanguage == null)
-                    {
-                        viLanguage = new PlaceLanguage();
-                        placeEntity.PlaceLanguages.Add(viLanguage);
-                    }
-                    viLanguage.Title = viImportPlace.PlaceName;
-                    viLanguage.Language = LanguageEnums.Vietnamese;
-                    if (viLanguage.ImageId.HasValue && viLanguage.ImageId != 0)
-                    {
-                        viLanguage.Image.Url = viImportPlace.CoverImage;
-                    }
-                    else
-                    {
-                        viLanguage.Image = new Image
-                        {
-                            Url = viImportPlace.CoverImage
-                        };
-                    }
-                    viLanguage.Description = viImportPlace.Description;
-                    viLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
-                    
-                }
-
-                //Add Japanese
-                if (jaImportPlace != null && !jaImportPlace.PlaceInValid)
-                {
-                    var jaLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.Japanese) : null;
-                    if (jaLanguage == null)
-                    {
-                        jaLanguage = new PlaceLanguage();
-                        placeEntity.PlaceLanguages.Add(jaLanguage);
-                    }
-                    jaLanguage.Title = jaImportPlace.PlaceName;
-                    jaLanguage.Language = LanguageEnums.Japanese;
-                    if (jaLanguage.ImageId.HasValue && jaLanguage.ImageId != 0)
-                    {
-                        jaLanguage.Image.Url = jaImportPlace.CoverImage;
-                    }
-                    else
-                    {
-                        jaLanguage.Image = new Image
-                        {
-                            Url = jaImportPlace.CoverImage
-                        };
-                    }
-                    jaLanguage.Description = jaImportPlace.Description;
-                    jaLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
-
-                }
-
-                //Add Chinese
-                if (chiImportPlace != null && !chiImportPlace.PlaceInValid)
-                {
-                    var chiLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.Chinese) : null;
-                    if (chiLanguage == null)
-                    {
-                        chiLanguage = new PlaceLanguage();
-                        placeEntity.PlaceLanguages.Add(chiLanguage);
-                    }
-                    chiLanguage.Title = chiImportPlace.PlaceName;
-                    chiLanguage.Language = LanguageEnums.Chinese;
-                    if (chiLanguage.ImageId.HasValue && chiLanguage.ImageId != 0)
-                    {
-                        chiLanguage.Image.Url = chiImportPlace.CoverImage;
-                    }
-                    else
-                    {
-                        chiLanguage.Image = new Image
-                        {
-                            Url = chiImportPlace.CoverImage
-                        };
-                    }
-                    chiLanguage.Description = chiImportPlace.Description;
-                    chiLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
-
-                }
-
-                //Add Korea
-                if (koImportPlace != null && !koImportPlace.PlaceInValid)
-                {
-                    var koLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.Korean) : null;
-                    if (koLanguage == null)
-                    {
-                        koLanguage = new PlaceLanguage();
-                        placeEntity.PlaceLanguages.Add(koLanguage);
-                    }
-                    koLanguage.Title = koImportPlace.PlaceName;
-                    koLanguage.Language = LanguageEnums.Korean;
-                    if (koLanguage.ImageId.HasValue && koLanguage.ImageId != 0)
-                    {
-                        koLanguage.Image.Url = koImportPlace.CoverImage;
-                    }
-                    else
-                    {
-                        koLanguage.Image = new Image
-                        {
-                            Url = koImportPlace.CoverImage
-                        };
-                    }
-                    koLanguage.Description = koImportPlace.Description;
-                    koLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
-
-                }
-
-                //Add France
-                if (frImportPlace != null && !frImportPlace.PlaceInValid)
-                {
-                    var frLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == LanguageEnums.France) : null;
-                    if (frLanguage == null)
-                    {
-                        frLanguage = new PlaceLanguage();
-                        placeEntity.PlaceLanguages.Add(frLanguage);
-                    }
-                    frLanguage.Title = frImportPlace.PlaceName;
-                    frLanguage.Language = LanguageEnums.France;
-                    if (frLanguage.ImageId.HasValue && frLanguage.ImageId != 0)
-                    {
-                        frLanguage.Image.Url = frImportPlace.CoverImage;
-                    }
-                    else
-                    {
-                        frLanguage.Image = new Image
-                        {
-                            Url = frImportPlace.CoverImage
-                        };
-                    }
-                    frLanguage.Description = frImportPlace.Description;
-                    frLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
-
-                }
                 HTRepository.PlaceRepository.Save(placeEntity);
+
+                SaveImportLanguage(placeEntity, enImportPlace, LanguageEnums.English);
+                SaveImportLanguage(placeEntity, viImportPlace, LanguageEnums.Vietnamese);
+                SaveImportLanguage(placeEntity, jaImportPlace, LanguageEnums.Japanese);
+                SaveImportLanguage(placeEntity, chiImportPlace, LanguageEnums.Chinese);
+                SaveImportLanguage(placeEntity, koImportPlace, LanguageEnums.Korean);
+                SaveImportLanguage(placeEntity, frImportPlace, LanguageEnums.France);
             }
             HTRepository.Commit();
+            this.HTRepository.GTDBUnitOfWork.DbContext.ChangeTracker.AutoDetectChangesEnabled = true;
+            this.HTRepository.GTDBUnitOfWork.DbContext.ChangeTracker.QueryTrackingBehavior = Microsoft.EntityFrameworkCore.QueryTrackingBehavior.TrackAll;
             return true;
+        }
+
+        private void SaveImportLanguage(Place placeEntity, ImportPlaceModel importPlace, LanguageEnums lang)
+        {
+            if (importPlace == null) return;
+            var placeLanguage = placeEntity.PlaceLanguages != null ? placeEntity.PlaceLanguages.FirstOrDefault(p => p.Language == lang) : null;
+            if (placeLanguage == null)
+            {
+                placeLanguage = new PlaceLanguage();
+            }
+            placeLanguage.Title = importPlace.PlaceName;
+            placeLanguage.Language = lang;
+            if (placeLanguage.ImageId.HasValue && placeLanguage.ImageId != 0)
+            {
+                placeLanguage.Image.Url = importPlace.CoverImage;
+            }
+            else
+            {
+                placeLanguage.Image = new Image
+                {
+                    Url = importPlace.CoverImage
+                };
+            }
+            placeLanguage.Description = importPlace.Description;
+            placeLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+            placeLanguage.PlaceId = placeEntity.Id;
+            HTRepository.PlaceLanguageRepository.Save(placeLanguage);
+            if (!importPlace.PlaceImageError && importPlace.PlaceImages != null && importPlace.PlaceImages.Count > 0)
+            {
+                var imgs = importPlace.PlaceImages.Select(img => new Image
+                {
+                    Url = img
+                }).Take(10).ToList();
+                this.HTRepository.ImageRepository.Save(imgs);
+
+                var placeImgs = placeLanguage.PlaceImages;
+                if (placeImgs != null)
+                {
+                    HTRepository.PlaceImageRepository.Delete(placeImgs);
+                }
+                placeImgs = imgs.Select(t => new PlaceImage
+                {
+                    PlaceLangId = placeLanguage.Id,
+                    ImageId = t.Id
+                }).ToList();
+                HTRepository.PlaceImageRepository.Save(placeImgs);
+            }
         }
 
         [HttpPost, Route("translate-place-language")]
@@ -625,6 +541,7 @@ namespace GotoDN.Web.Controllers
             entity.Description = TranslateHelper.TranslateText(enPlaceLanguage.Description, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
             entity.ImageId = enPlaceLanguage.ImageId;
             entity.Image = enPlaceLanguage.Image;
+            entity.PlaceImages = enPlaceLanguage.PlaceImages;
             return entity;
         }
 
@@ -643,6 +560,7 @@ namespace GotoDN.Web.Controllers
                 entity.Description = TranslateHelper.TranslateText(enPlaceLanguage.Description, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
                 entity.ImageId = enPlaceLanguage.ImageId;
                 entity.Image = enPlaceLanguage.Image;
+                entity.PlaceImages = enPlaceLanguage.PlaceImages;
             }
             return model;
         }

@@ -210,4 +210,17 @@ namespace GotoDN.Repository
             return model.Id;
         }
 	}
+
+    public partial class PlaceImageRepository : BaseRepository<PlaceImage, GTDBEntities>, IPlaceImageRepository
+    {
+        public PlaceImageRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		protected override int GetKeyId(PlaceImage model)
+        {
+            return model.Id;
+        }
+	}
 }

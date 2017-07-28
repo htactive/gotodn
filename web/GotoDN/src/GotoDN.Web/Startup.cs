@@ -78,6 +78,8 @@ namespace GotoDN.Web
                 cf.CreateMap<HTServiceLanguage, HTServiceLanguageModel>().ForMember(x => x.HTService, opt => opt.Ignore());
                 cf.CreateMap<Place, PlaceModel>().ForMember(x => x.HTService, opt => opt.Ignore()).ForMember(x => x.Category, opt => opt.Ignore());
                 cf.CreateMap<PlaceLanguage, PlaceLanguageModel>().ForMember(x => x.Place, opt => opt.Ignore());
+                cf.CreateMap<PlaceImage, PlaceImageModel>();
+                cf.CreateMap<PlaceImageModel, PlaceImage>();
 
                 cf.CreateMap<City, CityModel>().ForMember(x => x.Places, opt => opt.Ignore());
                 cf.CreateMap<District, DistrictModel>().ForMember(x => x.City, opt => opt.Ignore()).ForMember(x => x.Places, opt => opt.Ignore());
