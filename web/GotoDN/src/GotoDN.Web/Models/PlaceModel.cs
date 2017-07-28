@@ -71,4 +71,24 @@ namespace GotoDN.Web.Models
         public DateTime? date { get; set; }
         public string comparator { get; set; }
     }
+
+    public class SearchPlaceModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public int? CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public int? ServiceId { get; set; }
+        public string ServiceName { get; set; }
+        public int? CityId { get; set; }
+        public string City { get; set; }
+        public int? DistrictId { get; set; }
+        public string District { get; set; }
+        public bool? IsCategorySlider { get; set; }
+        public bool? IsHomeSlider { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public bool? IsEvent { get; set; }
+        public float? Rating { get; set; }
+    }
 }

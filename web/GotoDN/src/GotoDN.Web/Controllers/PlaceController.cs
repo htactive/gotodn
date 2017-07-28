@@ -201,12 +201,33 @@ namespace GotoDN.Web.Controllers
 
         [HttpPost, Route("filter")]
         [AllowAnonymous]
-        public GetGridResponseModel<PlaceModel> Filter([FromBody]GetGridRequestModel request)
+        public GetGridResponseModel<SearchPlaceModel> Filter([FromBody]GetGridRequestModel request)
         {
             var query = this.HTRepository.PlaceRepository.GetAll();
-            query = query.Include("PlaceLanguages.Image").Include("PlaceLanguages.PlaceImages.Image").Include("PlaceLanguages.Icon")
+            query = query.Include("PlaceLanguages")
                 .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages")
                 .Include(x => x.City).Include(x => x.District);
+
+            var searchQuery = query.Select(q => new SearchPlaceModel
+            {
+                Id = q.Id,
+                Title = q.PlaceLanguages.FirstOrDefault(t => t.Language == LanguageEnums.English).Title,
+                CategoryId = q.CategoryId,
+                CategoryName = q.Category.CategoryLanguages.FirstOrDefault(t => t.Language == LanguageEnums.English).Title,
+                ServiceId = q.HTServiceId,
+                ServiceName = q.HTServiceId != null ? q.HTService.HTServiceLanguages.FirstOrDefault(t => t.Language == LanguageEnums.English).Title : "",
+                CityId = q.CityId,
+                City = q.City.Name,
+                DistrictId = q.DistrictId,
+                District = q.District.Name,
+                IsCategorySlider = q.IsCategorySlider,
+                IsHomeSlider = q.IsHomeSlider,
+                StartDate = q.StartDate,
+                EndDate = q.EndDate,
+                Rating = q.Rating,
+                IsEvent = q.Category.IsEvent
+            });
+
             // search
             if (!string.IsNullOrEmpty(request.Search))
             {
@@ -214,18 +235,11 @@ namespace GotoDN.Web.Controllers
                 var searchInt = 0;
                 var canParse = int.TryParse(search,out searchInt);
 
-                query = query.Where(x => (x.City != null && !string.IsNullOrEmpty(x.City.Name) && x.City.Name.ToLower().Contains(search))
-                || (x.District != null && !string.IsNullOrEmpty(x.District.Name) && x.District.Name.ToLower().Contains(search))
-                || (x.PlaceLanguages.Any(y => y.Title.ToLower().Contains(search)))
-                || (x.Category != null &&
-                x.Category.CategoryLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search))
-                || (x.HTService != null &&
-                x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search))
-                || (x.Rating != null && canParse && x.Rating == searchInt)
-                || (x.StartDate.HasValue && canParse && (x.StartDate.Value.Year == searchInt 
-                || x.StartDate.Value.Month == searchInt || x.StartDate.Value.Day == searchInt))
-                || (x.EndDate.HasValue && canParse && (x.EndDate.Value.Year == searchInt
-                || x.EndDate.Value.Month == searchInt || x.EndDate.Value.Day == searchInt))
+                searchQuery = searchQuery.Where(x => (x.City != null && x.City.ToLower().Contains(search))
+                || (x.District != null && x.District.ToLower().Contains(search))
+                || (x.Title != null && x.Title.ToLower().Contains(search))
+                || (x.CategoryName != null && x.CategoryName.ToLower().Contains(search))
+                || (x.ServiceName != null && x.ServiceName.ToLower().Contains(search))
                 );
             }
 
@@ -238,40 +252,54 @@ namespace GotoDN.Web.Controllers
                     switch (item.Key)
                     {
                         case "Name":
-                            query = query.Where(x => x.PlaceLanguages.Any(y => y.Title.ToLower().Contains(search)));
+                            searchQuery = searchQuery.Where(x => x.Title != null && x.Title.ToLower().Contains(search));
                             break;
                         case "Category":
-                            query = query.Where(x => x.Category != null &&
-                    x.Category.CategoryLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search));
+                            searchQuery = searchQuery.Where(x => x.CategoryName != null && x.CategoryName.ToLower().Contains(search));
                             break;
                         case "Service":
-                            query = query.Where(x => x.HTService != null &&
-                    x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title.ToLower().Contains(search));
+                            searchQuery = searchQuery.Where(x => x.ServiceName != null && x.ServiceName.ToLower().Contains(search));
                             break;
                         case "City":
-                            query = query.Where(x => x.City != null &&
-                    x.City.Name.ToLower().Contains(search));
+                            searchQuery = searchQuery.Where(x => x.City != null && x.City.ToLower().Contains(search));
                             break;
                         case "District":
-                            query = query.Where(x => x.District != null &&
-                    x.District.Name.ToLower().Contains(search));
+                            searchQuery = searchQuery.Where(x => x.District != null && x.District.ToLower().Contains(search));
                             break;
-                        case "Highlight":
+                        case "HomeHighlight":
                             if (search.Equals("0"))
                             {
-                                query = query.Where(x => (!(bool)x.IsHomeSlider && !(bool)x.IsCategorySlider)
-                                || (x.IsHomeSlider == null && !(bool)x.IsCategorySlider)
-                                || (!(bool)x.IsHomeSlider && !x.IsCategorySlider == null)
-                                || (!x.IsHomeSlider == null && !x.IsCategorySlider == null)
-                                );
+                                searchQuery = searchQuery.Where(x => !x.IsHomeSlider.HasValue || !x.IsHomeSlider.Value);
                             }
                             else if (search.Equals("1"))
                             {
-                                query = query.Where(x => x.IsCategorySlider.Value || x.IsHomeSlider.Value);
+                                searchQuery = searchQuery.Where(x => x.IsHomeSlider.HasValue && x.IsHomeSlider.Value);
+                            }
+                            break;
+                        case "CategoryHighlight":
+                            if (search.Equals("0"))
+                            {
+                                searchQuery = searchQuery.Where(x => !x.IsCategorySlider.HasValue || !x.IsCategorySlider.Value);
+                            }
+                            else if (search.Equals("1"))
+                            {
+                                searchQuery = searchQuery.Where(x => x.IsCategorySlider.HasValue && x.IsCategorySlider.Value);
+                            }
+                            break;
+                        case "IsEvent":
+                            if (search.Equals("0"))
+                            {
+                                searchQuery = searchQuery.Where(x => !x.IsEvent.HasValue || !x.IsEvent.Value);
+                            }
+                            else if (search.Equals("1"))
+                            {
+                                searchQuery = searchQuery.Where(x => x.IsEvent.HasValue && x.IsEvent.Value);
                             }
                             break;
                         case "Ranking":
-                            query = query.Where(x => x.Rating == float.Parse(search));
+                            int searchInt = 0;
+                            var canParse = int.TryParse(search, out searchInt);
+                            searchQuery = searchQuery.Where(x => x.Rating == (float)searchInt);
                             break;
                         case "StartDate":
                             var json = JsonConvert.DeserializeObject<CompareModel>(search);
@@ -280,29 +308,30 @@ namespace GotoDN.Web.Controllers
                                 var startTime0h = json.date.Value;
                                 var endTime24h = json.date.Value.AddHours(23).AddMinutes(59).AddSeconds(59);
                                 var comparator = json.comparator;
+                                searchQuery = searchQuery.Where(x => x.StartDate.HasValue);
                                 if (comparator.Equals("="))
                                 {
-                                    query = query.Where(x => x.StartDate.Value >= startTime0h && x.StartDate.Value <= endTime24h);
+                                    searchQuery = searchQuery.Where(x => x.StartDate.Value >= startTime0h && x.StartDate.Value <= endTime24h);
                                 }
                                 else if (comparator.Equals(">"))
                                 {
-                                    query = query.Where(x => x.StartDate.Value > endTime24h);
+                                    searchQuery = searchQuery.Where(x => x.StartDate.Value > endTime24h);
                                 }
                                 else if (comparator.Equals("<"))
                                 {
-                                    query = query.Where(x => x.StartDate.Value < startTime0h);
+                                    searchQuery = searchQuery.Where(x => x.StartDate.Value < startTime0h);
                                 }
                                 else if (comparator.Equals(">="))
                                 {
-                                    query = query.Where(x => x.StartDate.Value >= startTime0h);
+                                    searchQuery = searchQuery.Where(x => x.StartDate.Value >= startTime0h);
                                 }
                                 else if (comparator.Equals("<="))
                                 {
-                                    query = query.Where(x => x.StartDate.Value <= endTime24h);
+                                    searchQuery = searchQuery.Where(x => x.StartDate.Value <= endTime24h);
                                 }
                                 else if (comparator.Equals("!="))
                                 {
-                                    query = query.Where(x => x.StartDate.Value < startTime0h || x.StartDate.Value > endTime24h);
+                                    searchQuery = searchQuery.Where(x => x.StartDate.Value < startTime0h || x.StartDate.Value > endTime24h);
                                 }
                             }
                             break;
@@ -313,29 +342,30 @@ namespace GotoDN.Web.Controllers
                                 var startTime0h = jsonD.date.Value;
                                 var endTime24h = jsonD.date.Value.AddHours(23).AddMinutes(59).AddSeconds(59);
                                 var comparator = jsonD.comparator;
+                                searchQuery = searchQuery.Where(x => x.EndDate.HasValue);
                                 if (comparator.Equals("="))
                                 {
-                                    query = query.Where(x => x.EndDate.Value >= startTime0h && x.EndDate.Value <= endTime24h);
+                                    searchQuery = searchQuery.Where(x => x.EndDate.Value >= startTime0h && x.EndDate.Value <= endTime24h);
                                 }
                                 else if (comparator.Equals(">"))
                                 {
-                                    query = query.Where(x => x.EndDate.Value > endTime24h);
+                                    searchQuery = searchQuery.Where(x => x.EndDate.Value > endTime24h);
                                 }
                                 else if (comparator.Equals("<"))
                                 {
-                                    query = query.Where(x => x.EndDate.Value < startTime0h);
+                                    searchQuery = searchQuery.Where(x => x.EndDate.Value < startTime0h);
                                 }
                                 else if (comparator.Equals(">="))
                                 {
-                                    query = query.Where(x => x.EndDate.Value >= startTime0h);
+                                    searchQuery = searchQuery.Where(x => x.EndDate.Value >= startTime0h);
                                 }
                                 else if (comparator.Equals("<="))
                                 {
-                                    query = query.Where(x => x.EndDate.Value <= endTime24h);
+                                    searchQuery = searchQuery.Where(x => x.EndDate.Value <= endTime24h);
                                 }
                                 else if (comparator.Equals("!="))
                                 {
-                                    query = query.Where(x => x.EndDate.Value < startTime0h || x.EndDate.Value > endTime24h);
+                                    searchQuery = searchQuery.Where(x => x.EndDate.Value < startTime0h || x.EndDate.Value > endTime24h);
                                 }
                             }
                             break;
@@ -347,58 +377,85 @@ namespace GotoDN.Web.Controllers
             switch (request.SortExpression)
             {
                 case "Id":
-                    query = request.IsAsc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id);
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.Id) : searchQuery.OrderByDescending(x => x.Id);
                     break;
                 case "Name":
-                    query = request.IsAsc ? query.OrderBy(x => x.PlaceLanguages.DefaultIfEmpty().First().Title) : query.OrderByDescending(x => x.PlaceLanguages.DefaultIfEmpty().First().Title);
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.Title) : searchQuery.OrderByDescending(x => x.Title);
                     break;
                 case "Category":
-                    query = request.IsAsc ? query.OrderBy(x => x.Category.CategoryLanguages.DefaultIfEmpty().First().Title) : query.OrderByDescending(x => x.Category.CategoryLanguages.DefaultIfEmpty().First().Title);
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.CategoryName) : searchQuery.OrderByDescending(x => x.CategoryName);
                     break;
                 case "Service":
-                    query = request.IsAsc ? query.OrderBy(x => x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title) : query.OrderByDescending(x => x.HTService.HTServiceLanguages.DefaultIfEmpty().First().Title);
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.ServiceName) : searchQuery.OrderByDescending(x => x.ServiceName);
                     break;
                 case "City":
-                    query = request.IsAsc ? query.OrderBy(x => x.City.Name) : query.OrderByDescending(x => x.City.Name);
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.City) : searchQuery.OrderByDescending(x => x.City);
                     break;
                 case "District":
-                    query = request.IsAsc ? query.OrderBy(x => x.District.Name) : query.OrderByDescending(x => x.District.Name);
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.District) : searchQuery.OrderByDescending(x => x.District);
                     break;
-                case "Highlight":
-                    query = request.IsAsc ? query.OrderBy(x => x.IsCategorySlider.Value || x.IsHomeSlider.Value) : query.OrderByDescending(x => x.IsCategorySlider.Value || x.IsHomeSlider.Value);
+                case "HomeHighlight":
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.IsHomeSlider) : searchQuery.OrderByDescending(x => x.IsHomeSlider);
+                    break;
+                case "CategoryHighlight":
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.IsCategorySlider) : searchQuery.OrderByDescending(x => x.IsCategorySlider);
                     break;
                 case "StartDate":
-                    query = request.IsAsc ? query.OrderBy(x => x.StartDate) : query.OrderByDescending(x => x.StartDate);
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.StartDate) : searchQuery.OrderByDescending(x => x.StartDate);
                     break;
                 case "EndDate":
-                    query = request.IsAsc ? query.OrderBy(x => x.EndDate) : query.OrderByDescending(x => x.EndDate);
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.EndDate) : searchQuery.OrderByDescending(x => x.EndDate);
                     break;
                 case "Ranking":
-                    query = request.IsAsc ? query.OrderBy(x => x.Rating) : query.OrderByDescending(x => x.Rating);
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.Rating) : searchQuery.OrderByDescending(x => x.Rating);
+                    break;
+                case "IsEvent":
+                    searchQuery = request.IsAsc ? searchQuery.OrderBy(x => x.IsEvent) : searchQuery.OrderByDescending(x => x.IsEvent);
                     break;
             }
             // count
-            var totalRecord = query.Count();
+            var totalRecord = searchQuery.Count();
 
             // take
-            var entities = query.Skip((request.CurrentPage - 1) * request.PageSize).Take(request.PageSize).ToList();
+            var models = searchQuery.Skip((request.CurrentPage - 1) * request.PageSize).Take(request.PageSize).ToList();
 
-            //map
-            var models = entities.Select(x => AutoMapper.Mapper.Map<Place, PlaceModel>(
-                x, opt =>
+            ////map
+            //var models = entities.Select(x => AutoMapper.Mapper.Map<Place, PlaceModel>(
+            //    x, opt =>
+            //    {
+            //        opt.AfterMap((ent, mod) =>
+            //        {
+            //            mod.Category = AutoMapper.Mapper.Map<CategoryModel>(ent.Category);
+            //            mod.HTService = AutoMapper.Mapper.Map<HTServiceModel>(ent.HTService);
+            //        });
+            //    })).ToList();
+
+            var response = new GetGridResponseModel<SearchPlaceModel>();
+            response.DataSource = models;
+            response.TotalRecord = totalRecord;
+            return response;
+        }
+
+        [HttpGet, Route("get-place-by-id")]
+        [AllowAnonymous]
+        public PlaceModel GetPlaceById(int id)
+        {
+            var query = this.HTRepository.PlaceRepository.GetAll();
+            var entity = query.Include("PlaceLanguages.Image").Include("PlaceLanguages.PlaceImages.Image")
+                .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages")
+                .Include(x => x.City).Include(x => x.District).FirstOrDefault(q => q.Id == id);
+            if (entity == null) return null;
+            var model = AutoMapper.Mapper.Map<Place, PlaceModel>(
+                entity, opt =>
                 {
                     opt.AfterMap((ent, mod) =>
                     {
                         mod.Category = AutoMapper.Mapper.Map<CategoryModel>(ent.Category);
                         mod.HTService = AutoMapper.Mapper.Map<HTServiceModel>(ent.HTService);
                     });
-                })).ToList();
-
-            var response = new GetGridResponseModel<PlaceModel>();
-            response.DataSource = models;
-            response.TotalRecord = totalRecord;
-            return response;
-        }
+                });
+            return model;
+        } 
 
         [HttpPost, Route("save-imported-place")]
         [AllowAnonymous]

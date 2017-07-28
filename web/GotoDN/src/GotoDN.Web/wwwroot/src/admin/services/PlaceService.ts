@@ -41,6 +41,11 @@ class PlaceService extends AdminServiceBase {
     return await super.executeFetchPost(url, request);
   }
 
+  async GetPlace(id: number): Promise<PlaceModel> {
+    let url = `${virtualPath}/place/get-place-by-id?id=` + id;
+    return await super.executeFetch(url);
+  }
+
   async SaveImportedPlace(request: ImportPlaceGroupModel[]): Promise<boolean> {
     let url = `${virtualPath}/place/save-imported-place`;
     return await super.executeFetchPost(url, request);

@@ -83,13 +83,14 @@ class PlaceManagement extends React.Component<{}, thisState> {
     })();
   }
 
-  componentWillReceiveProps(props) {
+  async componentWillReceiveProps(props) {
     if (!props.params['id']) {
       this.setState({showDetail: false});
       return
     }
     if (!this.state.GridData) return;
-    let data = this.state.GridData.DataSource.filter(x => x.Id == props.params['id'])[0];
+    // let data = this.state.GridData.DataSource.filter(x => x.Id == props.params['id'])[0];
+    let data = await PlaceServiceInstance.GetPlace(props.params['id']);
     this.setState({
       SelectedPlace: data,
       SelectedLanguage: LanguageEnums.English,
@@ -296,11 +297,21 @@ class PlaceManagement extends React.Component<{}, thisState> {
                                        filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindDistrictData(data)} dataSort={true}>
                       Quận huyện</TableHeaderColumn>
-                    <TableHeaderColumn width="100" dataField="Highlight" dataAlign="center"
+                    <TableHeaderColumn width="120" dataField="HomeHighlight" dataAlign="center"
                                        filterFormatted formatExtraData={highlightSelecter}
                                        filter={{type: 'SelectFilter', options: highlightSelecter}}
-                                       dataFormat={(r, data) => this.bindHighlightData(data)} dataSort={true}>
-                      Nổi bật</TableHeaderColumn>
+                                       dataFormat={(r, data) => this.bindHighlightData(data.IsHomeSlider)} dataSort={true}>
+                      Nổi bật trang chủ</TableHeaderColumn>
+                    <TableHeaderColumn width="120" dataField="CategoryHighlight" dataAlign="center"
+                                       filterFormatted formatExtraData={highlightSelecter}
+                                       filter={{type: 'SelectFilter', options: highlightSelecter}}
+                                       dataFormat={(r, data) => this.bindHighlightData(data.IsCategorySlider)} dataSort={true}>
+                      Nổi bật thư mục</TableHeaderColumn>
+                    <TableHeaderColumn width="120" dataField="IsEvent" dataAlign="center"
+                                       filterFormatted formatExtraData={highlightSelecter}
+                                       filter={{type: 'SelectFilter', options: highlightSelecter}}
+                                       dataFormat={(r, data) => this.bindHighlightData(data.IsEvent)} dataSort={true}>
+                      Sự kiện</TableHeaderColumn>
                     <TableHeaderColumn width="200" dataField="StartDate" dataAlign="center"
                                        filter={{type: 'DateFilter'}}
                                        dataFormat={(r, data) => this.bindStartDateData(data)} dataSort={true}>
@@ -382,43 +393,40 @@ class PlaceManagement extends React.Component<{}, thisState> {
     );
   }
 
-  private bindNameData(data: PlaceModel) {
-    let firstLanguage = data.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
+  private bindNameData(data: any) {
+
     return <Link className="btn btn-link"
-                 to={`${AdminRoutePath.PlaceManagement}/${data.Id}`}>
-      {(firstLanguage ? firstLanguage.Title : '') || ("Place's Name")}</Link>;
+                 to={`${AdminRoutePath.PlaceManagement}/${data.Id}`}>{data.Title}</Link>;
   }
 
-  private bindCategoryData(data: PlaceModel) {
-    if (data.Category && data.Category.CategoryLanguages) {
-      let firstLanguage = data.Category.CategoryLanguages.sort((a, b) => a.Language - b.Language)[0];
-      return <span>{(firstLanguage ? firstLanguage.Title : '') || ('')}</span>;
+  private bindCategoryData(data: any) {
+    if (data.CategoryName) {
+      return <span>{data.CategoryName}</span>;
     }
     return <span></span>;
   }
 
-  private bindServiceData(data: PlaceModel) {
-    if (data.HTService && data.HTService.HTServiceLanguages) {
-      let firstLanguage = data.HTService.HTServiceLanguages.sort((a, b) => a.Language - b.Language)[0];
-      return <span>{(firstLanguage ? firstLanguage.Title : '') || ('')}</span>;
+  private bindServiceData(data: any) {
+    if (data.ServiceName) {
+      return <span>{data.ServiceName}</span>;
     }
     return <span></span>;
   }
 
-  private bindCityData(data: PlaceModel) {
-    return <span>{data.City ? data.City.Name : ''}</span>;
+  private bindCityData(data: any) {
+    return <span>{data.City}</span>;
   }
 
-  private bindDistrictData(data: PlaceModel) {
-    return <span>{data.District ? data.District.Name : ''}</span>;
+  private bindDistrictData(data: any) {
+    return <span>{data.District}</span>;
   }
 
-  private bindHighlightData(data: PlaceModel) {
+  private bindHighlightData(data?: boolean) {
     return <div className="toggle-custom">
       <label className="toggle" data-on="Có" data-off="Ko">
         <input type="checkbox" id="checkbox-toggle"
                name="checkbox-toggle"
-               checked={data.IsCategorySlider || data.IsHomeSlider || false}
+               checked={data || false}
                disabled={true}
         />
         <span className="button-checkbox"/>
@@ -426,15 +434,15 @@ class PlaceManagement extends React.Component<{}, thisState> {
     </div>;
   }
 
-  private bindStartDateData(data: PlaceModel) {
+  private bindStartDateData(data: any) {
     return <span>{data.StartDate ? TimeHelper.convertToDay(data.StartDate) : ""}</span>;
   }
 
-  private bindEndDateData(data: PlaceModel) {
+  private bindEndDateData(data: any) {
     return <span>{data.EndDate ? TimeHelper.convertToDay(data.EndDate) : ""}</span>;
   }
 
-  private bindRankingData(data: PlaceModel) {
+  private bindRankingData(data: any) {
     return <span>{data.Rating || ''}</span>;
   }
 
