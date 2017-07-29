@@ -662,11 +662,21 @@ namespace GotoDN.Web.Controllers
             if (entity == null) return result;
 
             var nearBy = this.HTRepository.PlaceLanguageRepository.GetAll()
-                .Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image").Include(x => x.Place)
-                .Where(x => x.Language == LanguageEnums.English && x.Place.City.Id == entity.City.Id).OrderBy(x => x.CreatedDate).Take(5);
+                .Include(x => x.Place).Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image")
+                .Where(x => x.Language == LanguageEnums.English && x.Place.City.Id == entity.City.Id && x.Place.Id != id)
+                .OrderBy(x => x.CreatedDate).Take(5).ToList();
             
-                //result.Add(AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(item));
-            
+            foreach(var item in nearBy)
+            {
+                result.Add(AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(item));
+            }
+
+            foreach(var item in result)
+            {
+                item.Place = AutoMapper.Mapper.Map<Place, PlaceModel>(nearBy.Where(x => x.PlaceId == item.PlaceId).FirstOrDefault().Place);
+            }
+
+
             return result;
         }
     }

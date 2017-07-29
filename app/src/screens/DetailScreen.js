@@ -38,12 +38,24 @@ export class DetailScreen extends React.Component {
     });
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     const {params} = this.props.navigation.state;
     let itemId = (params && params.itemId) || 0;
-    let data = await GDNServiceInstance.getPlaceById(itemId);
+    this.getDetailData(itemId);
+    this.getNearByData(itemId);
+  }
+
+  async getDetailData(id) {
+    let data = await GDNServiceInstance.getPlaceById(id);
     this.setState({
       dataDetail: data,
+    });
+  }
+
+  async getNearByData(id) {
+    let data = await GDNServiceInstance.getNearByPlaceById(id);
+    this.setState({
+      detailNearBy: data,
     });
   }
 
@@ -55,7 +67,7 @@ export class DetailScreen extends React.Component {
     detailInfo.push({infoIcon: data.phoeneIcon || '?', infoText: data.phone});
     detailInfo.push({infoIcon: data.websiteIcon || '?', infoText: data.website, isUrl: true});
     detailInfo.push({infoIcon: data.openHourIcon || '?', infoText: data.openHour});
-    let detailNearBy = MenuListItemData.filter(t => t.id != data.id);
+    //let detailNearBy = MenuListItemData.filter(t => t.id != data.id);
     let destCoord = {
       latitude: 16.0699448,
       longitude: 108.2241556,
@@ -98,7 +110,7 @@ export class DetailScreen extends React.Component {
                       </View>
                     </View>
                     <DetailImage images={data.images}/>
-                    <DetailNearPlace nearByPlaces={detailNearBy} onNearByClicked={(id) => this.goToPlace(id)}/>
+                    <DetailNearPlace nearByPlaces={this.state.detailNearBy || []} onNearByClicked={(id) => this.goToPlace(id)}/>
                   </View>
                 </Row>
               </ScrollView>
