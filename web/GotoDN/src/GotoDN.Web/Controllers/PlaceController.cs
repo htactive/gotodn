@@ -651,6 +651,25 @@ namespace GotoDN.Web.Controllers
             return model;
         }
 
-        
+        [HttpGet, Route("get-nearby-place-by-id")]
+        [AllowAnonymous]
+        public List<PlaceLanguageModel> GetNearByPlaceById(int id)
+        {
+            var result = new List<PlaceLanguageModel>();
+
+            var entity = this.HTRepository.PlaceRepository.GetAll()
+                .Include(x => x.City).Include(x => x.District).FirstOrDefault(x => x.Id == id);
+            if (entity == null) return result;
+
+            var nearBy = this.HTRepository.PlaceLanguageRepository.GetAll()
+                .Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image").Include(x => x.Place)
+                .Where(x => x.Language == LanguageEnums.English && x.Place.City.Id == entity.City.Id).OrderBy(x => x.CreatedDate).Take(5);
+
+            foreach (var item in nearBy)
+            {
+                result.Add(AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(item));
+            }
+            return result;
+        }
     }
 }
