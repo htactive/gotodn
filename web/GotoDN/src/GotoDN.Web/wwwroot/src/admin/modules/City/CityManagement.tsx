@@ -153,6 +153,9 @@ class CityManagement extends React.Component<{}, thisState> {
                     <TableHeaderColumn width="200" dataField="District" dataAlign="center"
                                        dataFormat={(r, data) => this.bindDistrictData(data)} dataSort={ false }>
                       Quận huyện trực thuộc</TableHeaderColumn>
+                    <TableHeaderColumn width="80" dataField="Action" dataAlign="center"
+                                       dataFormat={(r, data) => this.bindActionData(data)} dataSort={ false }>
+                      Thao tác</TableHeaderColumn>
                   </ReactTable>
 
                 </div>
@@ -180,6 +183,14 @@ class CityManagement extends React.Component<{}, thisState> {
   private bindDistrictData(data: CityModel) {
     let districts = data && data.Districts && data.Districts.map(x => x.Name);
     return <span>{districts.toString()}</span>;
+  }
+
+  private bindActionData(data: any) {
+    return (<div className="table--actions-container">
+      <button className="btn btn-danger" onClick={() => this.deleteCity(data.Id)}>
+        <i className="fa fa-trash" aria-hidden="true">Xóa</i>
+      </button>
+    </div>);
   }
 }
 

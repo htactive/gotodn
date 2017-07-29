@@ -325,6 +325,9 @@ class PlaceManagement extends React.Component<{}, thisState> {
                                        filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindRankingData(data)} dataSort={true}>
                       Đánh giá</TableHeaderColumn>
+                    <TableHeaderColumn width="80" dataField="Action" dataAlign="center"
+                                       dataFormat={(r, data) => this.bindActionData(data)} dataSort={ false }>
+                      Thao tác</TableHeaderColumn>
                   </ReactTable>
                 </div>
               </div>
@@ -481,6 +484,14 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
   private async handleImportData() {
     await this.getData(this.state.GridFilter);
+  }
+
+  private bindActionData(data: any) {
+    return (<div className="table--actions-container">
+      <button className="btn btn-danger" onClick={() => this.deletePlace(data.Id)}>
+        <i className="fa fa-trash" aria-hidden="true">Xóa</i>
+      </button>
+    </div>);
   }
 }
 

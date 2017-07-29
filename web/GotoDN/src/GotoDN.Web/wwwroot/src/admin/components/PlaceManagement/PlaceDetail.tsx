@@ -172,6 +172,19 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         }
       };
 
+      let Fax: DynamicFieldModel = {
+        Priority: 1,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Fax',
+          FieldName: 'Fax',
+          PlaceHolder: '',
+          Type: FieldStructureTypeEnums.TextBox,
+          ValidateRules: []
+        }
+      };
+
       let OpenTime: DynamicFieldModel = {
         Priority: 1,
         LabelClass: 'col-lg-3',
@@ -220,6 +233,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
       };
 
       inforForm.DynamicFields.push(Phone);
+      inforForm.DynamicFields.push(Fax);
       inforForm.DynamicFields.push(Address);
       inforForm.DynamicFields.push(OpenTime);
       inforForm.DynamicFields.push(CloseTime);

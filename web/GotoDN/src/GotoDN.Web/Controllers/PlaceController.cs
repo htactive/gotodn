@@ -131,6 +131,7 @@ namespace GotoDN.Web.Controllers
             entity.Longitude = model.Longitude;
             entity.OpenTime = model.OpenTime;
             entity.Phone = model.Phone;
+            entity.Fax = model.Fax;
             entity.Rating = model.Rating;
             entity.StartDate = model.StartDate;
             entity.Website = model.Website;
@@ -511,6 +512,7 @@ namespace GotoDN.Web.Controllers
                 placeEntity.IsHomeSlider = enImportPlace.IsHomeSlider;
                 placeEntity.OpenTime = DateTime.Parse(enImportPlace.OpenTime);
                 placeEntity.Phone = enImportPlace.Phone;
+                placeEntity.Fax = enImportPlace.Fax;
                 placeEntity.Website = enImportPlace.Website;
                 var cateE = cateEntities.FirstOrDefault(ca => ca.Language == LanguageEnums.English && ca.Title.ToLower() == enImportPlace.Category.ToLower());
                 if (cateE != null)

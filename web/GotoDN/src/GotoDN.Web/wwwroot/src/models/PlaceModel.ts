@@ -24,6 +24,7 @@ export interface PlaceModel {
   Longitude?: number,
   OpenTime?: Date,
   Phone?: string,
+  Fax?: string,
   Rating?: number,
   StartDate?: Date,
   Website?: string,

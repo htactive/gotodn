@@ -141,19 +141,26 @@ namespace GotoDN.Web.Controllers
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            var serv = workSheet.Cells[r, c++].Value.ToString();
-                            var currentService = serviceEntities
-                                .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English)
-                                                        && l.Title.ToLower() == serv.ToLower());
-                            if (currentService != null)
+                            var serv = workSheet.Cells[r, c].Value != null ? workSheet.Cells[r, c].Value.ToString() : "";
+                            if(serv.Trim().ToLower() == "" || serv.Trim().ToLower() == "none")
                             {
-                                iPlace.Service = currentService.Title;
-                            }
-                            else
+                                iPlace.Service = "";
+                            } else
                             {
-                                iPlace.Service = serv;
-                                iPlace.ServiceNotExist = true;
+                                var currentService = serviceEntities
+                                    .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English)
+                                                            && l.Title.ToLower() == serv.ToLower());
+                                if (currentService != null)
+                                {
+                                    iPlace.Service = currentService.Title;
+                                }
+                                else
+                                {
+                                    iPlace.Service = serv;
+                                    iPlace.ServiceNotExist = true;
+                                }
                             }
+                            c++;
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
