@@ -79,11 +79,6 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
             InValidMessage: 'Trường này là bắt buộc'
           },
             {
-              Type: ValidateRuleTypeEnums.MinLength,
-              InValidMessage: 'Yêu cầu ít nhất 3 ký tự',
-              RuleData: '3'
-            },
-            {
               Type: ValidateRuleTypeEnums.MaxLength,
               InValidMessage: 'Không được vượt quá 50 ký tự',
               RuleData: '50'
