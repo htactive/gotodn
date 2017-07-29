@@ -8,6 +8,8 @@ import {HTServiceLanguageModel} from "../../../models/HTServiceLanguageModel";
 import {CategoryModel} from "../../../models/CategoryModel";
 import {CategoryServiceInstance} from "../../services/CategoryService";
 import {SweetAlertResultEnums, SweetAlerts, SweetAlertTypeEnums} from "../../../commons/sweet-alerts";
+import * as _ from 'lodash';
+
 interface thisState {
   Categories?: CategoryModel[],
   HTServices?: HTServiceModel[],
@@ -25,12 +27,12 @@ class HTServiceManagement extends React.Component<{}, thisState> {
   }
 
   componentDidMount() {
-    (async () => {
+    (async() => {
       this.setState({
         HTServices: await HTServiceInstance.GetAll()
       });
     })();
-    (async () => {
+    (async() => {
       this.setState({
         Categories: await CategoryServiceInstance.GetAll()
       });
@@ -56,8 +58,18 @@ class HTServiceManagement extends React.Component<{}, thisState> {
   }
 
   private async updateHTService() {
+
     let result = await HTServiceInstance.UpdateHTService(this.state.SelectedHTService);
     if (result) {
+      let services = this.state.HTServices.slice();
+      let index = _.findIndex(services, (sv) => {
+        return sv.Id == this.state.SelectedHTService.Id
+      });
+      if (index)
+        services[index] = this.state.SelectedHTService;
+      this.setState({
+        HTServices: services
+      });
       window['notice_save_success']();
     }
     else {

@@ -36,6 +36,14 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
     }
   }
 
+  renderShowsTotal(start, to, total) {
+    return (
+      <p style={ { color: '#1a1a1a' } }>
+        Hiển thị bảng ghi <b>{ start }</b> đến <b>{ to }</b> trên tổng số <b>{ total }</b>&nbsp;&nbsp;
+      </p>
+    );
+  }
+
   renderImportPlaces(place: ImportPlaceModel[]) {
     const options = {
       page: 1,  // which page you want to show as default
@@ -48,7 +56,7 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
       }, {
         text: '50', value: 50
       } ],
-      sizePerPage: 5,  // which size per page you want to locate as default
+      sizePerPage: 10,  // which size per page you want to locate as default
       pageStartIndex: 1, // where to start counting the pages
       paginationSize: 5,  // the pagination bar size.
       prePage: 'Trước', // Previous page button text
@@ -58,12 +66,14 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
       paginationPosition: 'bottom',  // default is bottom, top and both is all available
       // hideSizePerPage: true > You can hide the dropdown for sizePerPage
       alwaysShowAllBtns: true ,// Always show next and previous button
-      withFirstAndLast: true
+      withFirstAndLast: true,
+      paginationShowsTotal: this.renderShowsTotal,
     };
 
     return (
 
-      <BootstrapTable data={ place } pagination={ true } options={ options }>
+      <BootstrapTable data={ place } pagination={ true } options={ options } height='500px'>
+        <TableHeaderColumn width='60' dataFormat={(cell, row) => this.statusFormat(cell,row)} dataAlign="center">Status</TableHeaderColumn>
         <TableHeaderColumn dataField="PlaceName" isKey width='120'>Tên địa điểm</TableHeaderColumn>
         <TableHeaderColumn dataField="Category" dataFormat={(cell, row) => this.categoryFormat(cell,row)} width='120'>Thư mục</TableHeaderColumn>
         <TableHeaderColumn dataField="Service" dataFormat={(cell, row) => this.serviceFormat(cell,row)} width='120'>Dịch vụ</TableHeaderColumn>
@@ -107,8 +117,6 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
   }
 
   render() {
-
-
     return (
       <Modal show={this.state.IsShow} onHide={() => this.hideModal()} bsSize="large"
              dialogClassName="custom-modal"
@@ -118,7 +126,7 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
         </Modal.Header>
         <Modal.Body>
           <div className="col-lg-12">
-            <p>Lưu ý*: Những dữ liệu được <span style={{color:'red'}}>bôi đỏ</span>
+            <p>Lưu ý*: Những dữ liệu được <span style={{color:'red', fontWeight:'bold'}}>đánh dấu đỏ (<i className="fa fa-times-circle-o" />) </span>
               là bị sai, sẽ không được nhập vào CSDL.</p>
             <div className="col-lg-12 col-sm-12 form-horizontal">
               <div className="tabs mb20">
@@ -253,5 +261,14 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
                href={img}>{img}</a>)}
         </div>
     )
+  }
+
+  private statusFormat(cell: any, row: any) {
+    let hasError = row.CategoryNotExist || row.ServiceNotExist || row.CityNotExist || row.DistrictNotExist
+      || row.PlaceImageError;
+    let statusIcon = hasError ? 'fa fa-times-circle-o' : 'fa fa-check-circle-o';
+    return (<span style={hasError ? {color: 'red', fontSize: '26px'} : {color: 'green', fontSize: '26px'}}>
+      <i className={statusIcon}  />
+    </span>);
   }
 }

@@ -54,6 +54,14 @@ export class ReactTable extends React.Component<thisProps, {}> {
     this.setState({});
   }
 
+  renderShowsTotal(start, to, total) {
+    return (
+      <p style={ { color: '#1a1a1a' } }>
+        Hiển thị bảng ghi <b>{ start }</b> đến <b>{ to }</b> trên tổng số <b>{ total }</b>&nbsp;&nbsp;
+      </p>
+    );
+  }
+
   render() {
     if (!this.props.data) return null;
     return (<BootstrapTable data={this.props.data.DataSource || []}
@@ -78,7 +86,8 @@ export class ReactTable extends React.Component<thisProps, {}> {
                               searchField: (props) => (<ReactTableSearchPanel { ...props }/>),
                               onSearchChange: (searchText, colInfos, multiColumnSearch) => this.onSearchChange(searchText, colInfos, multiColumnSearch),
                               defaultSortName: this.props.defaultSortName || 'Id',
-                              defaultSortOrder: this.props.defaultSortOrder || 'desc'
+                              defaultSortOrder: this.props.defaultSortOrder || 'desc',
+                              paginationShowsTotal: this.renderShowsTotal,
                             }}>
 
       {this.props.children}

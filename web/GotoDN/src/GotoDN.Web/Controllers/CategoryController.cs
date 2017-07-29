@@ -32,6 +32,7 @@ namespace GotoDN.Web.Controllers
             var entities = this.HTRepository.CategoryRepository.GetAll()
                 .Include("CategoryLanguages.Image")
                 .Include("CategoryLanguages.Icon")
+                .Include(c => c.HTServices)
                 .Take(1000).OrderBy(t => t.Order).ToList();
 
             var models = entities.Select(x => AutoMapper.Mapper.Map<Category, CategoryModel>(x)).ToList();

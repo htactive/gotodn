@@ -91,7 +91,7 @@ export class DynamicPanelComponent extends React.Component<thisProps, thisState>
     let cfv: FieldValueModel = this.state.FieldValues.filter(x => x.FieldStructure.FieldName == fv.FieldStructure.FieldName)[0];
     cfv.Value = fv.Value;
 
-    cfv.ValueNumber = fv.ValueNumber;debugger;
+    cfv.ValueNumber = fv.ValueNumber;
     cfv.ValueString = fv.ValueString;
     let fieldStructure: FieldStructureModel = (this.props.FormStructure.map(x => x.DynamicFields)
       .reduce((a, b) => a.concat(b)).filter(x => x.FieldStructure.FieldName == cfv.FieldStructure.FieldName)[0]

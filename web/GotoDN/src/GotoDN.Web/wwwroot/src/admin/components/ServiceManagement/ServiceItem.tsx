@@ -15,7 +15,7 @@ class HTServiceItem extends React.Component<thisProps, thisState> {
   render() {
     let firstLanguage = this.props.Model.HTServiceLanguages.sort((a, b) => a.Language - b.Language)[0];
     return (
-      <a className={`list-group-item${this.props.IsSelected ? ' active' : ''}`}
+      <a className={`list-group-item sub-item${this.props.IsSelected ? ' active' : ''}`}
          onClick={() => this.props.changeSelectedHTService()}>
         {(firstLanguage ? firstLanguage.Title : '') || ('Chưa đặt tên')}
       </a>);

@@ -112,18 +112,11 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
           Name: 'Đánh giá',
           FieldName: 'Rating',
           PlaceHolder: '',
-          Type: FieldStructureTypeEnums.Number,
-          ValidateRules: [{
-            Type: ValidateRuleTypeEnums.MinValue,
-            InValidMessage: 'Không được nhỏ hơn 0',
-            RuleData: '0'
-          },
-            {
-              Type: ValidateRuleTypeEnums.MaxValue,
-              InValidMessage: 'Không được lớn hơn 5',
-              RuleData: '5'
-            }
-          ]
+          Type: FieldStructureTypeEnums.Rating,
+          ValidateRules: [],
+          FieldData: {
+            Color:'#1a1a1a',
+          }
         }
       };
 
@@ -179,6 +172,40 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         }
       };
 
+      let OpenTime: DynamicFieldModel = {
+        Priority: 1,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Thời gian mở cửa',
+          FieldName: 'OpenTime',
+          PlaceHolder: 'HH:mm',
+          Type: FieldStructureTypeEnums.MaskTextBox,
+          ValidateRules: [],
+          FieldData: {
+            Mask:'11:11',
+            Format:'HH:mm',
+          }
+        }
+      };
+
+      let CloseTime: DynamicFieldModel = {
+        Priority: 1,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Thời gian đóng cửa',
+          FieldName: 'CloseTime',
+          PlaceHolder: 'HH:mm',
+          Type: FieldStructureTypeEnums.MaskTextBox,
+          ValidateRules: [],
+          FieldData: {
+            Mask:'11:11',
+            Format:'HH:mm',
+          }
+        }
+      };
+
       let Website: DynamicFieldModel = {
         Priority: 1,
         LabelClass: 'col-lg-3',
@@ -194,6 +221,8 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
 
       inforForm.DynamicFields.push(Phone);
       inforForm.DynamicFields.push(Address);
+      inforForm.DynamicFields.push(OpenTime);
+      inforForm.DynamicFields.push(CloseTime);
       inforForm.DynamicFields.push(Rating);
       inforForm.DynamicFields.push(Website);
       inforForm.DynamicFields.push(IsCategorySlider);
@@ -436,6 +465,17 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                         </div>
                       </fieldset>
                     </div> : null}
+                  <div className="form-group">
+
+                    <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
+                            onClick={() => this.deletePlace()}><i
+                      className="fa fa-trash-o"/> Xóa
+                    </button>
+                    <button className="btn btn-primary pull-right"
+                            onClick={() => this.savePlace()}><i
+                      className="fa fa-save"/> Lưu
+                    </button>
+                  </div>
                 </div> :
                 null
               }

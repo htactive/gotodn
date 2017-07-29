@@ -39,5 +39,7 @@ export enum FieldStructureTypeEnums
   C_LocationPicker = 103,
   C_Title = 104,
   C_Description = 105,
-  D_DummyDnd = 1000
+  D_DummyDnd = 1000,
+  MaskTextBox = 15,
+  Rating = 16,
 }

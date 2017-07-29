@@ -17,6 +17,7 @@ import {Link, browserHistory} from 'react-router';
 import {ImageServiceInstance} from "../../services/image-service";
 import {PlaceImportPreview} from "../../components/PlaceManagement/PlaceImportPreview";
 import {ImportPlaceGroupModel} from "../../../models/ImportPlaceModel";
+import {UIBlocker} from "../../../commons/ui-blocker";
 
 interface thisState {
   GridFilter?: GetGridRequestModel,
@@ -462,7 +463,9 @@ class PlaceManagement extends React.Component<{}, thisState> {
           window['notice']('error-notice', 'Lỗi', 'Sai định dạng file Excel (.xlsx).', 'fa fa-exclamation-circle');
           return;
         }
+        UIBlocker.instance.block();
         let uploadResult = await ImageServiceInstance.uploadExcelHL(excelFile);
+        UIBlocker.instance.unblock();
         if (uploadResult) {
           this.setState({
             ImportData: uploadResult,

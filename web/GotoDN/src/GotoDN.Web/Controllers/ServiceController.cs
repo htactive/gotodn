@@ -27,9 +27,19 @@ namespace GotoDN.Web.Controllers
             var entities = this.HTRepository.HTServiceRepository.GetAll()
                 .Include("HTServiceLanguages.Image")
                 .Include("HTServiceLanguages.Icon")
+                .Include("Category.CategoryLanguages")
                 .Take(1000).ToList();
 
-            var models = entities.Select(x => AutoMapper.Mapper.Map<HTService, HTServiceModel>(x)).ToList();
+            var models = entities.Select(x => AutoMapper.Mapper.Map<HTService, HTServiceModel>
+            (
+                x, opt =>
+                {
+                    opt.AfterMap((ent, mod) =>
+                    {
+                        mod.Category = AutoMapper.Mapper.Map<CategoryModel>(ent.Category);
+                    });
+                })
+            ).ToList();
 
             return models;
         }

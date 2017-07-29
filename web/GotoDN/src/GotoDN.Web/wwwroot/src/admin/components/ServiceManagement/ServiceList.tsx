@@ -2,6 +2,9 @@ import * as React from 'react';
 import {HTServiceModel} from "../../../models/HTServiceModel";
 import HTServiceItem from "./ServiceItem";
 import {LanguageEnums} from "../../../commons/constant";
+import {CategoryModel} from "../../../models/CategoryModel";
+import * as _ from 'lodash';
+import {CategoryServiceInstance} from "../../services/CategoryService";
 
 interface thisProps {
   HTServices: HTServiceModel[],
@@ -11,7 +14,8 @@ interface thisProps {
 }
 interface thisState {
   Search?: string,
-  Services?: HTServiceModel[]
+  Services?: HTServiceModel[],
+  Categories?: CategoryModel[]
 }
 
 class HTServiceList extends React.Component<thisProps, thisState> {
@@ -21,9 +25,12 @@ class HTServiceList extends React.Component<thisProps, thisState> {
     this.componentWillReceiveProps(this.props.HTServices);
   }
 
-  componentWillReceiveProps(nextProps) {
+  async componentWillReceiveProps(nextProps) {
     if (nextProps.HTServices) {
       this.filterCategories(this.state.Search, nextProps.HTServices);
+      // let cates = await CategoryServiceInstance.GetAll();
+      // cates = cates.filter(c => c.HTServices && c.HTServices.length > 0);
+
     }
   }
 
@@ -32,6 +39,25 @@ class HTServiceList extends React.Component<thisProps, thisState> {
   }
 
   render() {
+    let groupServices = [];
+    if (this.state.Services) {
+      let services = this.state.Services.slice();
+      groupServices = _.chain(services).groupBy('CategoryId').map((value, key) => {
+        return {
+          Category: key,
+          Services: value,
+          CategoryName: key != 'null' && value.length > 0 ? value[0].Category.CategoryLanguages.filter(c => c.Language == LanguageEnums.English)[0].Title : null
+        }
+      })
+        .value();
+    }
+    let flatGroupService = [];
+    for (let i = 0; i < groupServices.length; i++) {
+      flatGroupService.push({IsCategory: true, Title: groupServices[i].CategoryName});
+      for (let j = 0; j < groupServices[i].Services.length; j++) {
+        flatGroupService.push({IsCategory: false, ...groupServices[i].Services[j]})
+      }
+    }
     return (
       <div className="col-lg-4">
         <h3>Danh sách dịch vụ</h3>
@@ -40,14 +66,17 @@ class HTServiceList extends React.Component<thisProps, thisState> {
           <input value={this.state.Search} onChange={(e) => this.handleSearch(e)} type="text" className="form-control"
                  placeholder="Tìm kiếm dịch vụ..."/>
           {this.state.Search != '' &&
-          <a onClick={() => this.clearSearch()} style={{position: 'absolute', top: 6, right: 8, zIndex: 2, color: '#555555'}}><i className="fa fa-times"/></a>}
+          <a onClick={() => this.clearSearch()}
+             style={{position: 'absolute', top: 6, right: 8, zIndex: 2, color: '#555555'}}><i className="fa fa-times"/></a>}
         </div>
         <ul className="list-group">
-          {this.state.Services ? this.state.Services.map(x =>
-            <HTServiceItem key={x.Id} Model={x}
-                          IsSelected={this.props.SelectedHTService && x.Id == this.props.SelectedHTService.Id}
-                          changeSelectedHTService={() => this.props.ChangeSelectedService(x)}
-            />) : null}
+          {flatGroupService ? flatGroupService.map((gs, id) =>
+              gs.IsCategory ? <li key={id} className="list-group-item category-title">{gs.Title || " "}</li> :
+                <HTServiceItem key={id} Model={gs}
+                               IsSelected={this.props.SelectedHTService && gs.Id == this.props.SelectedHTService.Id}
+                               changeSelectedHTService={() => this.props.ChangeSelectedService(gs)}
+                />
+            ) : null}
         </ul>
         <hr/>
         <div className="form-group">
@@ -69,13 +98,14 @@ class HTServiceList extends React.Component<thisProps, thisState> {
   }
 
   private filterCategories(text, services) {
-    let tempCates =services.slice();
+    let tempCates = services.slice();
     let filters = tempCates.filter(t => {
       let firstLanguage = t.HTServiceLanguages
         .sort((a, b) => a.Language - b.Language)
         .filter(t => t.Language == LanguageEnums.English)[0];
       return (text.trim() == '') || firstLanguage.Title.toLowerCase().indexOf(text.toLowerCase()) != -1
     });
+
     this.setState({
       Services: filters
     })

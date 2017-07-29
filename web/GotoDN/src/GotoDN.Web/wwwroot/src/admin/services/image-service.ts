@@ -21,7 +21,7 @@ class ImageService extends AdminServiceBase {
 
   public async uploadExcelHL(excel): Promise<ImportPlaceGroupModel[]> {
     let url = `${virtualPath}/Image/import-excel-high-level`;
-    return await super.executeFetchPostImage(url, excel);
+    return await super.executeFetchPostImage(url, excel, false);
   }
 }
 

@@ -126,9 +126,9 @@ namespace GotoDN.Web.Controllers
                             var cate = workSheet.Cells[r, c++].Value.ToString();
 
                             var currentCate = cateEntities
-                                .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English) 
+                                .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English)
                                                         && l.Title.ToLower().Equals(cate.ToLower()));
-                            
+
                             if (currentCate != null)
                             {
                                 iPlace.Category = currentCate.Title;
@@ -143,7 +143,7 @@ namespace GotoDN.Web.Controllers
                         {
                             var serv = workSheet.Cells[r, c++].Value.ToString();
                             var currentService = serviceEntities
-                                .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English) 
+                                .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English)
                                                         && l.Title.ToLower() == serv.ToLower());
                             if (currentService != null)
                             {
@@ -248,7 +248,7 @@ namespace GotoDN.Web.Controllers
             placeGroup = importedPlaces.GroupBy(t => t.Language).Select(t => new ImportPlaceGroupModel
             {
                 Language = t.Key,
-                ImportPlaces = t.ToList(),
+                ImportPlaces = t.AsQueryable().OrderByDescending(a => (a.PlaceInValid || a.PlaceImageError)).ToList()
             }).ToList();
 
             return placeGroup;

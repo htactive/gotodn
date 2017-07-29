@@ -596,4 +596,17 @@ div.toggle-custom.disabled label.toggle input[type="radio"]:checked + .button-ra
   width: 95%;
 }
 
-.modal .modal-content
+.list-group-item.sub-item {
+  padding-left: 30px;
+}
+
+.list-group-item.category-title {
+  background-color: #eee;
+  padding: 5px 10px;
+  min-height: 32px;
+}
+
+.list-group-item.category-title:hover,
+.list-group-item.category-title:focus{
+  background-color: #eee;
+}
