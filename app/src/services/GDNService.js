@@ -39,20 +39,20 @@ class GDNService extends ServiceBase {
     if (result && result.length > 0) {
       let data = [];
       for (var i = 0; i < result.length; i++) {
-          data.push({
-            id: result[i] ? result[i].Id : 0,
-            categoryName: result[i] ? result[i].Name : "",
-            categoryIcon: result[i] ? result[i].Icon : null,
-            isNoService: result[i] && result[i].Items == null,
-            services: result[i].Items ? result[i].Items.map(x => {
-              return {heroImage: x ? x.Url : null, title: x ? x.Title : ""};
-            }) : [
-              {
-                heroImage: result[i].Image,
-                title: result[i].Name,
-              }
-            ],
-          });
+        data.push({
+          id: result[i] ? result[i].Id : 0,
+          categoryName: result[i] ? result[i].Name : "",
+          categoryIcon: result[i] ? result[i].Icon : null,
+          isNoService: result[i] && result[i].Items == null,
+          services: result[i].Items ? result[i].Items.map(x => {
+            return {heroImage: x ? x.Url : null, title: x ? x.Title : ""};
+          }) : [
+            {
+              heroImage: result[i].Image,
+              title: result[i].Name,
+            }
+          ],
+        });
       }
       return data;
     }
@@ -72,13 +72,18 @@ class GDNService extends ServiceBase {
       data.address = result.Address;
       data.phone = result.Phone;
       data.website = result.Website;
-      data.images = result.PlaceLanguages[0].PlaceImages.map(x => {return {
-        id: x.Id,
-        url: x.Image.Url,
-      };})
+      data.city = result.City ? result.City.Name : "";
+      data.district = result.District ? result.District.Name : "";
+      data.images = result.PlaceLanguages[0].PlaceImages.map(x => {
+        return {
+          id: x.Id,
+          url: x.Image.Url,
+        };
+      })
 
       return data;
     }
+    return null;
   }
 
   async getNearByPlaceById(Id: number) {
@@ -96,14 +101,33 @@ class GDNService extends ServiceBase {
           address: result[i].Place.Address,
           phone: result[i].Place.Phone,
           website: result[i].Place.Website,
-          images : result[i].PlaceImages.map(x => {return {
-            id: x.Id,
-            url: x.Image.Url,
-          };})
+          images: result[i].PlaceImages.map(x => {
+            return {
+              id: x.Id,
+              url: x.Image.Url,
+            };
+          })
         });
       }
       return data;
     }
+    return null;
+  }
+
+  async getServiceById(Id) {
+    let url = this.host + "category/get-category-by-id?id=" + Id;
+    let result = await super.executeFetch(url);
+    if (result) {
+      let data = {};
+      data.id = result.Id;
+      data.categoryName = result.Name;
+      data.categoryIcon = result.Icon;
+      data.services = result.Items.map(x => {
+        return {heroImage: x ? x.Url : null, title: x ? x.Title : ""};
+      });
+      return data;
+    }
+    return null;
   }
 }
 

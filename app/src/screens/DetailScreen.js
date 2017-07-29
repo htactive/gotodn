@@ -19,6 +19,7 @@ import { NavigationActions } from 'react-navigation';
 import {navigationStore, navigateToRouteAction} from '../stores/NavigationStore';
 import Communications from 'react-native-communications';
 import {GDNServiceInstance} from '../services/GDNService';
+import {GoogleAPIServiceInstance} from '../services/GoogleAPIService';
 
 export class DetailScreen extends React.Component {
   state = {
@@ -50,6 +51,8 @@ export class DetailScreen extends React.Component {
     this.setState({
       dataDetail: data,
     });
+    let coord = await GoogleAPIServiceInstance.getGPSByAddress(data.address, data.district, data.city);
+    this.setState({destCoord: coord});
   }
 
   async getNearByData(id) {
@@ -68,10 +71,7 @@ export class DetailScreen extends React.Component {
     detailInfo.push({infoIcon: data.websiteIcon || '?', infoText: data.website, isUrl: true});
     detailInfo.push({infoIcon: data.openHourIcon || '?', infoText: data.openHour});
     //let detailNearBy = MenuListItemData.filter(t => t.id != data.id);
-    let destCoord = {
-      latitude: 16.0699448,
-      longitude: 108.2241556,
-    };
+
     return (
       data ? (
           <Grid>
@@ -93,7 +93,8 @@ export class DetailScreen extends React.Component {
 
                         <DetailMapTextItem leftText={data.address} leftIcon={data.addressIcon}
                                             rightText={"CHỈ ĐƯỜNG"} rightIcon={AppIcon.Direction}
-                                           onMapItemClicked={()=> this.handleDirection(data.address, MapHelper.getRandomDestination())}
+                                           onMapItemClicked={()=>
+                                             this.handleDirection(data.address, this.state.destCoord)}
                         />
                         <DetailMapTextItem leftText={data.phone} leftIcon={data.phoeneIcon}
                                            rightText={"GỌI"} rightIcon={AppIcon.Calling}

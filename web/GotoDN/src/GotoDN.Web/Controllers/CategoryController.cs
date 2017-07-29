@@ -315,5 +315,26 @@ namespace GotoDN.Web.Controllers
             return models;
         }
 
+
+        [HttpGet, Route("get-category-by-id")]
+        [AllowAnonymous]
+        public MenuListModel GetCategoryById(int Id)
+        {
+            var result = new MenuListModel();
+            var CategoryEntity = this.HTRepository.CategoryLanguageRepository.GetAll()
+                .Where(x => x.CategoryId == Id && x.Language == LanguageEnums.English).FirstOrDefault();
+
+
+            result.Id = CategoryEntity.CategoryId.Value;
+            result.Icon = CategoryEntity.Icon.Url;
+            result.Name = CategoryEntity.Title;
+            result.Items = CategoryEntity.Category.HTServices.Select(y => new MenuItemModel()
+            {
+                Title = y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
+                Url = y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image != null ? AutoMapper.Mapper.Map<Image, ImageModel>(y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
+            }).ToList();
+
+            return result;
+        }
     }
 }
