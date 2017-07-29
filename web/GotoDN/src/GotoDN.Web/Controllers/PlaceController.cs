@@ -441,15 +441,20 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public PlaceModel GetPlaceById(int id)
         {
-            var entity = this.HTRepository.PlaceRepository.GetAll()
-                .Include(x => x.City).Include(x => x.District).FirstOrDefault(x => x.Id == id);
-            if (entity == null) return null;
-            var model = AutoMapper.Mapper.Map<Place, PlaceModel>(entity);
+            var query = this.HTRepository.PlaceRepository.GetAll();
+            var entity = query.Include("PlaceLanguages.Image").Include("PlaceLanguages.PlaceImages.Image")
+                .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages")
+                .Include(x => x.City).Include(x => x.District).FirstOrDefault(q => q.Id == id);
 
-            var lang = this.HTRepository.PlaceLanguageRepository.GetAll()
-                .Include(x => x.Image).Include(x => x.Icon)
-                .Where(x => x.Language == LanguageEnums.English && x.PlaceId == id).FirstOrDefault();
-            model.PlaceLanguages.Add(AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(lang));
+            var model = AutoMapper.Mapper.Map<Place, PlaceModel>(
+                entity, opt =>
+                {
+                    opt.AfterMap((ent, mod) =>
+                    {
+                        mod.Category = AutoMapper.Mapper.Map<CategoryModel>(ent.Category);
+                        mod.HTService = AutoMapper.Mapper.Map<HTServiceModel>(ent.HTService);
+                    });
+                });
 
             return model;
         } 
@@ -629,13 +634,23 @@ namespace GotoDN.Web.Controllers
             return response;
         }
 
-        [HttpGet, Route("get-place-by-id1")]
+        [HttpGet, Route("app-get-place-by-id")]
         [AllowAnonymous]
-        public PlaceModel GetPlaceById1(int Id)
+        public PlaceModel AppGetPlaceById(int id)
         {
-            var entity = this.HTRepository.PlaceRepository.GetAll().FirstOrDefault(x => x.Id == Id);
+            var entity = this.HTRepository.PlaceRepository.GetAll()
+                .Include(x => x.City).Include(x => x.District).FirstOrDefault(x => x.Id == id);
+            if (entity == null) return null;
+            var model = AutoMapper.Mapper.Map<Place, PlaceModel>(entity);
 
-            return AutoMapper.Mapper.Map<Place, PlaceModel>(entity);
+            var lang = this.HTRepository.PlaceLanguageRepository.GetAll()
+                .Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image")
+                .Where(x => x.Language == LanguageEnums.English && x.PlaceId == id).FirstOrDefault();
+            model.PlaceLanguages.Add(AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(lang));
+
+            return model;
         }
+
+        
     }
 }

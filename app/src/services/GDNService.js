@@ -60,7 +60,7 @@ class GDNService extends ServiceBase {
   }
 
   async getPlaceById(Id: number) {
-    let url = this.host + "place/get-place-by-id?id=" + Id;
+    let url = this.host + "place/app-get-place-by-id?id=" + Id;
     let result = await super.executeFetch(url);
     if (result) {
       let data = {};
@@ -72,7 +72,10 @@ class GDNService extends ServiceBase {
       data.address = result.Address;
       data.phone = result.Phone;
       data.website = result.Website;
-
+      data.images = result.PlaceLanguages[0].PlaceImages.map(x => {return {
+        id: x.Id,
+        url: x.Image.Url,
+      };})
 
       return data;
     }
