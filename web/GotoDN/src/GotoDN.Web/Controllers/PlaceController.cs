@@ -526,7 +526,7 @@ namespace GotoDN.Web.Controllers
                     placeEntity.HTServiceId = serviceE.HTServiceId;
                 }
 
-                HTRepository.PlaceRepository.Save(placeEntity);
+                this.HTRepository.PlaceRepository.Save(placeEntity);
 
                 SaveImportLanguage(placeEntity, enImportPlace, LanguageEnums.English);
                 SaveImportLanguage(placeEntity, viImportPlace, LanguageEnums.Vietnamese);
@@ -535,7 +535,7 @@ namespace GotoDN.Web.Controllers
                 SaveImportLanguage(placeEntity, koImportPlace, LanguageEnums.Korean);
                 SaveImportLanguage(placeEntity, frImportPlace, LanguageEnums.France);
             }
-            HTRepository.Commit();
+            this.HTRepository.Commit();
             this.HTRepository.GTDBUnitOfWork.DbContext.ChangeTracker.AutoDetectChangesEnabled = true;
             this.HTRepository.GTDBUnitOfWork.DbContext.ChangeTracker.QueryTrackingBehavior = Microsoft.EntityFrameworkCore.QueryTrackingBehavior.TrackAll;
             return true;
@@ -565,7 +565,7 @@ namespace GotoDN.Web.Controllers
             placeLanguage.Description = importPlace.Description;
             placeLanguage.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             placeLanguage.PlaceId = placeEntity.Id;
-            HTRepository.PlaceLanguageRepository.Save(placeLanguage);
+            this.HTRepository.PlaceLanguageRepository.Save(placeLanguage);
             if (!importPlace.PlaceImageError && importPlace.PlaceImages != null && importPlace.PlaceImages.Count > 0)
             {
                 var imgs = importPlace.PlaceImages.Select(img => new Image
@@ -577,14 +577,14 @@ namespace GotoDN.Web.Controllers
                 var placeImgs = placeLanguage.PlaceImages;
                 if (placeImgs != null)
                 {
-                    HTRepository.PlaceImageRepository.Delete(placeImgs);
+                    this.HTRepository.PlaceImageRepository.Delete(placeImgs);
                 }
                 placeImgs = imgs.Select(t => new PlaceImage
                 {
                     PlaceLangId = placeLanguage.Id,
                     ImageId = t.Id
                 }).ToList();
-                HTRepository.PlaceImageRepository.Save(placeImgs);
+                this.HTRepository.PlaceImageRepository.Save(placeImgs);
             }
         }
 
@@ -664,11 +664,9 @@ namespace GotoDN.Web.Controllers
             var nearBy = this.HTRepository.PlaceLanguageRepository.GetAll()
                 .Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image").Include(x => x.Place)
                 .Where(x => x.Language == LanguageEnums.English && x.Place.City.Id == entity.City.Id).OrderBy(x => x.CreatedDate).Take(5);
-
-            foreach (var item in nearBy)
-            {
-                result.Add(AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(item));
-            }
+            
+                //result.Add(AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(item));
+            
             return result;
         }
     }

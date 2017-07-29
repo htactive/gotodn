@@ -11,5 +11,6 @@ namespace GotoDN.Web.Models
         public string Title { get; set; }
         public string SubTitle { get; set; }
         public string Url { get; set; }
+        public DateTime? CreateDate { get; set; }
     }
 }

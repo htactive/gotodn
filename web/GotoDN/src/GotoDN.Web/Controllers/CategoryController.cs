@@ -231,6 +231,7 @@ namespace GotoDN.Web.Controllers
                     SubTitle = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Description,
                     Title = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
                     Url = AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image) != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
+                    CreateDate = x.CreatedDate,
                 }).ToList()).ToList();
 
             var Places = this.HTRepository.PlaceRepository.GetAll().
@@ -244,8 +245,10 @@ namespace GotoDN.Web.Controllers
                     SubTitle = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Description,
                     Title = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
                     Url = AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image) != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
+                    CreateDate = x.CreatedDate,
                 }).ToList()).ToList();
 
+            result = result.OrderByDescending(x => x.CreateDate).Take(30).ToList();
             return result;
         }
 
@@ -264,6 +267,7 @@ namespace GotoDN.Web.Controllers
                 new MenuListModel()
                 {
                     Id = x.Id,
+                    Order = x.Order,
                     Name = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
                     Icon = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon).Url : null,
                     Items = x.HTServices.Select(y => new MenuItemModel()
@@ -277,11 +281,13 @@ namespace GotoDN.Web.Controllers
             new MenuListModel()
             {
                 Id = x.Id,
+                Order = x.Order,
                 Name = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
                 Image = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
                 Icon = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon).Url : null,
                 Items = null})).ToList();
 
+            result = result.OrderBy(x => x.Order).ToList();
             return result;
         }
 
@@ -291,14 +297,14 @@ namespace GotoDN.Web.Controllers
         {
             for (int i = 0; i < categoryIds.Count; i++)
             {
-                var cateEntity = HTRepository.CategoryRepository.GetObject(categoryIds[i]);
+                var cateEntity = this.HTRepository.CategoryRepository.GetObject(categoryIds[i]);
                 if (cateEntity != null)
                 {
                     cateEntity.Order = (i + 1);
-                    HTRepository.CategoryRepository.Save(cateEntity);
+                    this.HTRepository.CategoryRepository.Save(cateEntity);
                 }
             }
-            HTRepository.Commit();
+            this.HTRepository.Commit();
             var entities = this.HTRepository.CategoryRepository.GetAll()
                 .Include("CategoryLanguages.Image")
                 .Include("CategoryLanguages.Icon")
