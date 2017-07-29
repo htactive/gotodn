@@ -99,6 +99,31 @@ class GDNService extends ServiceBase {
       return rs;
     }
   }
+
+  async getNearByPlaceById(Id: number) {
+    let url = this.host + "place/get-nearby-place-by-id?id=" + Id;
+    let result = await super.executeFetch(url);
+    if (result && result.length > 0) {
+      let data = [];
+      for (var i = 0; i < result.length; i++) {
+        data.push({
+          id: result[i] ? result[i].Id : 0,
+          heroImage: result[i].Image ? result[i].Image.Url : Helper.ImageUrl,
+          title: result[i] ? result[i].Title : "",
+          description: result[i].Description,
+          star: result[i].Place.Rating,
+          address: result[i].Place.Address,
+          phone: result[i].Place.Phone,
+          website: result[i].Place.Website,
+          images : result[i].PlaceImages.map(x => {return {
+            id: x.Id,
+            url: x.Image.Url,
+          };})
+        });
+      }
+      return data;
+    }
+  }
 }
 
 const GDNServiceInstance = new GDNService();
