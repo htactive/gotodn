@@ -61,15 +61,15 @@ export class HomeScreen extends React.Component {
     return (
       <ScrollView
         refreshControl={
-              <RefreshControl
+          <RefreshControl
             refreshing={this.state.refreshing}
             onRefresh={() => this.onFresh()} />
-            }
+        }
       >
         <Grid>
-          <Row style={{ height: viewportHeight*.38 }}>
-            <HomeSlider dataSource={this.state.sliderData} title="Nổi Bật"/>
-          </Row>
+          {this.state.sliderData ? <Row style={{ height: viewportHeight*.38 }}>
+            <HomeSlider dataSource={this.state.sliderData} title="Highlight"/>
+          </Row> : <Row></Row>}
           <Row >
             <HomeMenuList dataSource={this.state.menuListData}  />
           </Row>

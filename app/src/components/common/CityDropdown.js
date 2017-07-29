@@ -76,7 +76,7 @@ export class CityDropdown extends React.Component {
                       <Text numberOfLines={1} style={{
                         color:'#546e7a', fontFamily: StyleBase.sp_italic,
                         position: 'absolute', left: 5, top: 10,
-                        fontSize: 15, paddingRight:5}}>ĐI ĐẾN</Text>
+                        fontSize: 15, paddingRight:5}}>GOTO</Text>
                     )}
                   </View>
                 </TouchableOpacity>

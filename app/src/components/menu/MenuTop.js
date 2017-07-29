@@ -14,7 +14,7 @@ export class MenuTop extends React.Component {
           <Text style={{marginLeft: 50, color:'#fff', fontSize: 16}}> </Text>
         </View>
         <View style={{flex:6, justifyContent:'center', alignItems: 'flex-start', paddingTop: 10, paddingLeft: 5}}>
-          <Text style={{color:'#fff', fontSize: 16, fontFamily: 'Source Sans Pro'}}>ĐI ĐẾN</Text>
+          <Text style={{color:'#fff', fontSize: 16, fontFamily: 'Source Sans Pro'}}>Goto</Text>
         </View>
         <View style={{flex:2, justifyContent:'center',paddingTop: 10, alignItems: 'flex-end'}}>
           <TouchableOpacity onPress={() => this.closeMenu()} style={{alignSelf:'flex-end',paddingRight: 10}}>

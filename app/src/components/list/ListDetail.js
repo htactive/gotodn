@@ -24,7 +24,7 @@ export class ListDetail extends React.Component {
       >
         <Grid>
           <Row style={{ height: viewportHeight*.4 }}>
-            <ListSlider navigation={this.props.navigation} title="Nổi Bật"/>
+            <ListSlider navigation={this.props.navigation} title="Highlight"/>
           </Row>
           <Row >
             <ListItemDetail navigation={this.props.navigation}/>

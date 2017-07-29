@@ -47,7 +47,7 @@ export class LocationPicker extends React.Component {
     return (
       <Row>
         <Col size={3} style={{justifyContent:'center',alignItems:'flex-start'}}>
-          <Text numberOfLines={1} style={{color:'#fff', fontFamily: StyleBase.sp_italic, fontSize: 15, paddingRight:5}}>ĐI ĐẾN</Text>
+          <Text numberOfLines={1} style={{color:'#fff', fontFamily: StyleBase.sp_italic, fontSize: 15, paddingRight:5}}>GOTO</Text>
         </Col>
         <Col size={7} style={{justifyContent:'center',alignItems:'flex-start'}}>
           <TouchableOpacity style={{flexDirection: 'row',justifyContent:'center',alignItems:'center'}}
