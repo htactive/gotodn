@@ -1,8 +1,8 @@
 import {ServiceBase} from './ServiceBase';
 import {timeout, MenuListData} from '../common/DummyData';
-import {Helper} from '../common/constain';
+import {Helper,LanguageEnums} from '../common/constain';
 class GDNService extends ServiceBase {
-  host = "http://192.168.1.113:50915/";
+  host = "http://192.168.1.30:50915/";
 
   async getHomeSlider() {
     let url = this.host + "category/get-category-slider";
@@ -75,9 +75,28 @@ class GDNService extends ServiceBase {
       data.images = result.PlaceLanguages[0].PlaceImages.map(x => {return {
         id: x.Id,
         url: x.Image.Url,
-      };})
+      };});
 
       return data;
+    }
+  }
+
+  async getMenuData() {
+
+    let url = this.host + "category/get-all";
+    let result = await super.executeFetch(url);
+    if (result) {
+      let rs = [];
+      rs = result.map(t => {
+        let enLanguage = t.CategoryLanguages.filter(l => l.Language == LanguageEnums.English)[0];
+        return {
+          id: result.Id,
+          categoryName: enLanguage ? enLanguage.Title : '',
+          categoryIcon: enLanguage && enLanguage.Icon ? enLanguage.Icon.Url : null,
+          isNoService: !t.HTServices || t.HTServices.length == 0,
+        }
+      });
+      return rs;
     }
   }
 }

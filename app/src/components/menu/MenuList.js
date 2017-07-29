@@ -4,20 +4,24 @@ import {MenuListItem} from './MenuListItem';
 import {style} from '../../styles/style';
 import {Icon}  from 'native-base';
 import {MenuListData, AppIcon} from '../../common/constain';
+import {GDNServiceInstance} from '../../services/GDNService';
 
 export class MenuList extends React.Component {
   state = {menuData: [], activeIndex: -1, isHelpActived: false, isAboutActived: false};
 
   componentDidMount() {
-    this.setState({
-      menuData: MenuListData
-    });
+    (async () => {
+      let menuData = await GDNServiceInstance.getMenuData();
+      this.setState({
+        menuData: menuData
+      });
+    })();
   }
 
   render() {
     return (
       <ScrollView style={[style.size1, {backgroundColor: '#01589d'}]}>
-        {this.state.menuData.map((menuD, index) =>
+        {this.state.menuData && this.state.menuData.map((menuD, index) =>
           <MenuListItem key={index} actived={index==this.state.activeIndex} itemText={menuD.categoryName}
                         itemIcon={menuD.categoryIcon} onItemClicked={() => {
 
@@ -30,23 +34,23 @@ export class MenuList extends React.Component {
                             this.props.onListItemClicked(menuD.id, menuD.isNoService);
                         }}/>
         )}
-        <MenuListItem itemText='Trợ giúp' actived={this.state.isHelpActived} system itemIcon={AppIcon.Help} onItemClicked={() => {
-          this.setState({
-            activeIndex: -1,
-            isHelpActived: true,
-            isAboutActived: false
-          });
-          this.props.onHelpClicked();
-        }}/>
-        <MenuListItem itemText='Về chúng tôi' system actived={this.state.isAboutActived} itemIcon={AppIcon.AppLogo}
-                      onItemClicked={() => {
-                        this.setState({
-                          activeIndex: -1,
-                          isHelpActived: false,
-                          isAboutActived: true
-                        });
-                        this.props.onAboutUsClicked();
-                      }}/>
+        {/*<MenuListItem itemText='Trợ giúp' actived={this.state.isHelpActived} system itemIcon={AppIcon.Help} onItemClicked={() => {*/}
+          {/*this.setState({*/}
+            {/*activeIndex: -1,*/}
+            {/*isHelpActived: true,*/}
+            {/*isAboutActived: false*/}
+          {/*});*/}
+          {/*this.props.onHelpClicked();*/}
+        {/*}}/>*/}
+        {/*<MenuListItem itemText='Về chúng tôi' system actived={this.state.isAboutActived} itemIcon={AppIcon.AppLogo}*/}
+                      {/*onItemClicked={() => {*/}
+                        {/*this.setState({*/}
+                          {/*activeIndex: -1,*/}
+                          {/*isHelpActived: false,*/}
+                          {/*isAboutActived: true*/}
+                        {/*});*/}
+                        {/*this.props.onAboutUsClicked();*/}
+                      {/*}}/>*/}
         <MenuListItem itemText='Ngôn ngữ' system itemIcon={AppIcon.Language} onItemClicked={() => {
           this.props.onLanguageClicked();
         }}/>

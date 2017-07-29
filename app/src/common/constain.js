@@ -783,3 +783,12 @@ export class Helper {
 
   static ImageUrl = "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg";
 }
+
+export class LanguageEnums{
+  static English = 1;
+  static Vietnamese = 2;
+  static Chinese = 3;
+  static Japanese = 4;
+  static Korean = 5;
+  static France = 6;
+}
