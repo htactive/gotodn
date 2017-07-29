@@ -322,11 +322,12 @@ namespace GotoDN.Web.Controllers
         {
             var result = new MenuListModel();
             var CategoryEntity = this.HTRepository.CategoryLanguageRepository.GetAll()
+                .Include(x => x.Icon).Include("Category.HTServices.HTServiceLanguages.Image")
                 .Where(x => x.CategoryId == Id && x.Language == LanguageEnums.English).FirstOrDefault();
 
 
             result.Id = CategoryEntity.CategoryId.Value;
-            result.Icon = CategoryEntity.Icon.Url;
+            result.Icon = CategoryEntity.Icon != null ? CategoryEntity.Icon.Url : "";
             result.Name = CategoryEntity.Title;
             result.Items = CategoryEntity.Category.HTServices.Select(y => new MenuItemModel()
             {

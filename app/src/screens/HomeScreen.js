@@ -29,6 +29,7 @@ export class HomeScreen extends React.Component {
         this.props.navigation.dispatch(navigateAction);
       }
     });
+    this.setState({showSlider: true});
   }
 
   componentDidMount() {
@@ -47,6 +48,9 @@ export class HomeScreen extends React.Component {
     })();
     (async () => {
       let sliderData = await GDNServiceInstance.getHomeSlider();
+      if(!sliderData || sliderData.length == 0) {
+        this.setState({showSlider: false});
+      }
       this.setState({sliderData, sliderLoaded: true});
       if(this.state.menuListLoad) {
         this.setState({
@@ -67,7 +71,7 @@ export class HomeScreen extends React.Component {
         }
       >
         <Grid>
-          {this.state.sliderData ? <Row style={{ height: viewportHeight*.38 }}>
+          {this.state.showSlider ? <Row style={{ height: viewportHeight*.38 }}>
             <HomeSlider dataSource={this.state.sliderData} title="Highlight"/>
           </Row> : <Row></Row>}
           <Row >

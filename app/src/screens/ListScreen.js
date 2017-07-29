@@ -7,6 +7,7 @@ import {Menu} from '../components/menu/Menu'
 import {StyleBase} from '../styles/style';
 import { NavigationActions } from 'react-navigation';
 import {navigationStore, navigateAction} from '../stores/NavigationStore';
+import {GDNServiceInstance} from '../services/GDNService';
 
 export class ListScreen extends React.Component {
   state = {
@@ -31,9 +32,11 @@ export class ListScreen extends React.Component {
     });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const { params } = this.props.navigation.state;
+    let listId = (params && params.listId) || 0;
     this.setState({
-      listData: MenuListData
+      listData: await GDNServiceInstance.getCategoryById(listId),
     });
   }
 
@@ -46,6 +49,7 @@ export class ListScreen extends React.Component {
     const { params } = this.props.navigation.state;
     let listId = (params && params.listId) || 0;
     let curTab = params && params.initIndex;
+    if(!this.state.listData || !this.state.listData.services) return null;
     return (
       <Tabs initialPage={curTab || 0}
             locked
@@ -53,8 +57,7 @@ export class ListScreen extends React.Component {
             renderTabBar={()=> <ScrollableTab />}
             style={{backgroundColor: '#29b6f6'}}
       >
-        {this.state.listData.length > 0 && this.state.listData.filter(t => t.id == listId)[0] != null
-        && this.state.listData.filter(t => t.id == listId)[0].services.map((data, index) =>
+        {this.state.listData.services.map((data, index) =>
           <Tab key={index}
                tabStyle={{backgroundColor:'#29b6f6',borderBottomWidth: 3, borderBottomColor:'#eeeeee'}}
                textStyle={{color:'#556c7a', fontWeight: 'normal'}}

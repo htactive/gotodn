@@ -2,7 +2,7 @@ import {ServiceBase} from './ServiceBase';
 import {timeout, MenuListData} from '../common/DummyData';
 import {Helper,LanguageEnums} from '../common/constain';
 class GDNService extends ServiceBase {
-  host = "http://192.168.1.30:50915/";
+  host = "http://192.168.1.113:50915/";
 
   async getHomeSlider() {
     let url = this.host + "category/get-category-slider";
@@ -133,7 +133,7 @@ class GDNService extends ServiceBase {
     return null;
   }
 
-  async getServiceById(Id) {
+  async getCategoryById(Id) {
     let url = this.host + "category/get-category-by-id?id=" + Id;
     let result = await super.executeFetch(url);
     if (result) {

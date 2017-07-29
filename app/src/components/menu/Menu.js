@@ -185,7 +185,7 @@ export class Menu extends React.Component {
   }
 
   logoClicked() {
-
+    navigationStore.dispatch(navigateToRouteAction('HomeScreen'));
   }
 
   goBack() {
