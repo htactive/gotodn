@@ -328,8 +328,6 @@ export const style = StyleSheet.create({
     paddingVertical: 20,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    borderBottomWidth: 1,
-    borderBottomColor: '#a6a6a6',
   },
   listSliderContainer: {
     flexDirection: 'row',

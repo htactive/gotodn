@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Image, TouchableOpacity, ScrollView, Text} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
-import {MenuListItemData, MenuType, AppIcon, MapHelper} from '../common/constain';
+import {MenuListItemData, MenuType, AppIcon, IconName} from '../common/constain';
 import {Icon} from 'native-base';
 import {DetailBanner} from '../components/detail/DetailBanner';
 import {style} from '../styles/style';
@@ -20,6 +20,7 @@ import {navigationStore, navigateToRouteAction} from '../stores/NavigationStore'
 import Communications from 'react-native-communications';
 import {GDNServiceInstance} from '../services/GDNService';
 import {GoogleAPIServiceInstance} from '../services/GoogleAPIService';
+import moment from 'moment';
 
 export class DetailScreen extends React.Component {
   state = {
@@ -85,32 +86,32 @@ export class DetailScreen extends React.Component {
                 </Row>
                 <Row size={2}>
                   <View style={style.detailContent}>
-                    <DetailText title={data.title} description={data.description}/>
+                    <DetailImage images={data.images}/>
+                    <DetailText title={data.title || 'No Title'} description={data.description || 'No Description'}/>
                     <View style={style.detailMap}>
                       <ReactMap />
 
                       <View style={style.detailOverlay}>
 
-                        <DetailMapTextItem leftText={data.address} leftIcon={data.addressIcon}
-                                            rightText={"CHỈ ĐƯỜNG"} rightIcon={AppIcon.Direction}
+                        <DetailMapTextItem leftText={data.address} leftIcon={IconName.Location}
+                                            rightText={"DIRECTION"} rightIcon={AppIcon.Direction}
                                            onMapItemClicked={()=>
                                              this.handleDirection(data.address, this.state.destCoord)}
                         />
-                        <DetailMapTextItem leftText={data.phone} leftIcon={data.phoeneIcon}
-                                           rightText={"GỌI"} rightIcon={AppIcon.Calling}
+                        <DetailMapTextItem leftText={data.phone} leftIcon={IconName.Telephone}
+                                           rightText={"CALL"} rightIcon={AppIcon.Calling}
                                            onMapItemClicked={()=> this.handleCalling(data.phone)}
                         />
-                        <DetailMapTextItem leftText={data.website} leftIcon={data.websiteIcon}
-                                           rightText={"LIÊN KẾT"} rightIcon={AppIcon.Link}
+                        <DetailMapTextItem leftText={data.website} leftIcon={IconName.Web}
+                                           rightText={"LINK"} rightIcon={AppIcon.Link}
                                            onMapItemClicked={()=> this.handleLink(data.website)}
                         />
-                        <DetailMapTextItem lastItem leftText={data.address} leftIcon={data.addressIcon}
-                                           rightText={"ĐANG MỞ"}
+                        <DetailMapTextItem lastItem leftText={this.renderHour(data.open, data.close)} leftIcon={IconName.Clock}
+                                           rightText={"TIME"}
                                            onMapItemClicked={()=> {}}
                         />
                       </View>
                     </View>
-                    <DetailImage images={data.images}/>
                     <DetailNearPlace nearByPlaces={this.state.detailNearBy || []} onNearByClicked={(id) => this.goToPlace(id)}/>
                   </View>
                 </Row>
@@ -142,5 +143,18 @@ export class DetailScreen extends React.Component {
 
   handleLink(website) {
     Communications.web(website);
+  }
+
+  renderHour(open, close) {
+    if(moment(open).isValid() && moment(close).isValid()) {
+      return moment(open).format('HH:mm') + ' - ' + moment(close).format('HH:mm');
+    } else {
+      if(moment(open).isValid()) {
+        return 'from ' + moment(open).format('HH:mm');
+      } else if(moment(close).isValid()) {
+        return 'to ' + moment(close).format('HH:mm');
+      }
+    }
+    return '';
   }
 }

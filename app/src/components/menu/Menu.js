@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity} from 'react-native';
+import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity, NetInfo} from 'react-native';
 import {Title, Icon, Picker, Drawer, Input, Item} from 'native-base';
 import {StyleBase} from '../../styles/style';
 import {MenuContent} from './MenuContent';
 
 import {MenuHeader} from './MenuHeader';
-import {MenuType, viewportHeight, MenuListItemData} from '../../common/constain';
+import {MenuType, viewportHeight, viewportWidth} from '../../common/constain';
 import {MenuSearch} from './MenuSearch';
 import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
@@ -76,17 +76,46 @@ export class Menu extends React.Component {
     searchValue: '',
     menuType: MenuType.HomeScreen,
     title: '',
+    hasConnection: true,
+    showConnectText: false,
   };
 
   componentWillMount() {
     Menu.instance = this;
     this.drawer = {};
+    this.setState({
+      hasConnection: false,
+    });
   }
 
   componentDidMount() {
     this.setState({
       selectedCity: 1
     });
+  }
+
+  isHandle = false;
+
+  handleNetInfo() {
+    if (!this.isHandle) {
+      this.isHandle = true;
+      NetInfo.addEventListener(
+        'change',
+        (value) => {
+          if (value == 'WIFI' || value == 'wifi' || value == 'MOBILE' || value == 'cell' || value == 'VPN') {
+            NetInfo.removeEventListener(
+              'change'
+            );
+            this.setState({hasConnection: true})
+            setTimeout(() => {
+              this.setState({showConnectText: false})
+            }, 1000)
+          } else {
+            this.setState({hasConnection: false, showConnectText: true})
+          }
+        }
+      );
+    }
   }
 
   render() {
@@ -130,6 +159,19 @@ export class Menu extends React.Component {
                 type={this.state.menuType}
                 menuTitle={this.state.title}
               />
+              {this.state.showConnectText ?
+                <View style={{position: 'absolute', top: 5, left: viewportWidth*.125,
+        backgroundColor: 'rgba(255,255,255,1)',
+        flexDirection: 'row', alignItems:'center', justifyContent: 'center',
+        width: viewportWidth*.75, height: 45, borderRadius: 5, padding: 5 }}>
+                  <TouchableOpacity onPress={() => {}} style={
+            {flexDirection: 'row', alignItems:'center', justifyContent: 'center'}
+          }>
+                    <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 13, color:'#039be5'}}>
+                      {this.state.hasConnection ? 'Connected' : 'No Connect'}
+                    </Text>
+                  </TouchableOpacity>
+                </View> : null}
             </View>
           ) }
           <View style={{flex:1, flexDirection: 'column', backgroundColor: '#fff', position:'relative'}}>
@@ -195,12 +237,12 @@ export class Menu extends React.Component {
   toggleSearchBar(toggle) {
     this.setState({
       showSearchBar: toggle,
-      searchValue:''
+      searchValue: ''
     });
   }
 
   searchSelect(data) {
-    navigationStore.dispatch(navigateToRouteAction('DetailScreen',{itemId: data && data.id}));
+    navigationStore.dispatch(navigateToRouteAction('DetailScreen', {itemId: data && data.id}));
 
     this.toggleSearchBar(false);
   }

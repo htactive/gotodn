@@ -8,7 +8,7 @@ import {Spinner}  from 'native-base';
 import {viewportWidth, AppIcon, platform} from '../../common/constain';
 import {style, StyleBase} from '../../styles/style';
 
-const slideWidth = wp(75);
+const slideWidth = wp(80);
 const itemWidth = slideWidth + wp(1);
 
 export default class HomeSlider extends React.Component {
@@ -34,7 +34,7 @@ export default class HomeSlider extends React.Component {
   }
 
   render() {
-    let sW = viewportWidth, iW = itemWidth, sScale = .9, sOpacity = 0.6;
+    let sW = viewportWidth, iW = itemWidth, sScale = .95, sOpacity = 0.7;
     let sliders = this.state.sliders;
     return (
       sliders ? (

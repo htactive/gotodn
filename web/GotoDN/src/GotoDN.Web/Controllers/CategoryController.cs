@@ -248,7 +248,7 @@ namespace GotoDN.Web.Controllers
                     CreateDate = x.CreatedDate,
                 }).ToList()).ToList();
 
-            result = result.OrderByDescending(x => x.CreateDate).Take(30).ToList();
+            result = result.OrderByDescending(x => x.CreateDate).Take(20).ToList();
             return result;
         }
 
@@ -336,6 +336,17 @@ namespace GotoDN.Web.Controllers
             }).ToList();
 
             return result;
+        }
+
+        [HttpGet, Route("get-category-no-service-by-id")]
+        [AllowAnonymous]
+        public CategoryModel GetCategoryNoServiceById(int id)
+        {
+            var category = this.HTRepository.CategoryRepository.GetAll()
+                .Include("Places.PlaceLanguages.Image")
+                .Where(x => x.Places.All(p => p.HTServiceId == null || p.HTServiceId == 0) && x.Id == id).FirstOrDefault();
+            if (category == null) return null;
+            return AutoMapper.Mapper.Map<CategoryModel>(category);
         }
     }
 }

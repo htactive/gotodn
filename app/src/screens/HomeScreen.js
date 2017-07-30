@@ -72,8 +72,8 @@ export class HomeScreen extends React.Component {
       >
         <Grid>
           {this.state.showSlider ? <Row style={{ height: viewportHeight*.38 }}>
-            <HomeSlider dataSource={this.state.sliderData} title="Highlight"/>
-          </Row> : <Row></Row>}
+            <HomeSlider dataSource={this.state.sliderData} title="Must See"/>
+          </Row> : null}
           <Row >
             <HomeMenuList dataSource={this.state.menuListData}  />
           </Row>

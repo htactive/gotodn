@@ -24,16 +24,16 @@ export class SplashScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.handleNetInfo();
-    // this.handleNetInterval = setInterval(() => {
-    //   this.handleNetInfo()
-    // }, 1000)
+    //this.handleNetInfo();
+    this.handleNetInterval = setInterval(() => {
+      this.handleNetInfo()
+    }, 1000)
   }
 
   handleNetInfo() {
     NetInfo.isConnected.fetch().then(
       isConnected => {
-        if(true) {
+        if(isConnected) {
           clearInterval(this.handleNetInterval);
           this.goNextDelay = setTimeout(() => {
             this.goNext();
@@ -74,7 +74,7 @@ export class SplashScreen extends React.Component {
             {flexDirection: 'row', alignItems:'center', justifyContent: 'center'}
           }>
               <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 13, color:'#039be5'}}>
-                {this.state.hasConnection ? 'Đã Kết Nối' : 'Chờ Mạng...'}
+                {this.state.hasConnection ? 'Connected' : 'Connecting...'}
               </Text>
             </TouchableOpacity>
           </View>

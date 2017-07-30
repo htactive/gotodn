@@ -83,10 +83,12 @@ export const DNNavigatorOptions = {
       }
       let params;
       let listId = 0;
+      let title = '';
       let currentList = {};
       switch (transProps.scene.route.routeName) {
         case propName(DNNavigatorConfig, DNNavigatorConfig.HomeScreen):
           Menu.instance.enableMenu();
+          Menu.instance.handleNetInfo();
           Menu.instance.setType(MenuType.HomeScreen);
           Menu.instance.setTitle('');
           break;
@@ -94,8 +96,8 @@ export const DNNavigatorOptions = {
           Menu.instance.enableMenu();
           params = transProps.scene.route.params;
           listId = (params && params.listId) || 0;
-          currentList = MenuListData.filter(t => t.id == listId)[0];
-          Menu.instance.setTitle(currentList ? currentList.categoryName : "");
+          title = (params && params.categoryName) || '';
+          Menu.instance.setTitle(title);
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.ListScreen);
           break;
@@ -103,8 +105,8 @@ export const DNNavigatorOptions = {
           Menu.instance.enableMenu();
           params = transProps.scene.route.params;
           listId = (params && params.listId) || 0;
-          currentList = MenuListData.filter(t => t.id == listId)[0];
-          Menu.instance.setTitle(currentList ? currentList.categoryName : "");
+          title = (params && params.categoryName) || '';
+          Menu.instance.setTitle(title);
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.ListScreen);
           break;

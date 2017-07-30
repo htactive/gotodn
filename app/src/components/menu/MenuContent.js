@@ -12,11 +12,11 @@ import { NavigationActions } from 'react-navigation';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 
 export class MenuContent extends React.Component {
-  state = {selectedLang: 1, showPicker: false};
+  state = {selectedLang: 3, showPicker: false};
 
   render() {
     let props = {
-      onListItemClicked: (id, isNoService) => this.listItemClicked(id, isNoService),
+      onListItemClicked: (id, isNoService, categoryName) => this.listItemClicked(id, isNoService, categoryName),
       onHelpClicked: () => this.helpClicked(),
       onAboutUsClicked: () => this.aboutUsClicked(),
       onLanguageClicked: () => this.languageUsClicked(),
@@ -32,12 +32,12 @@ export class MenuContent extends React.Component {
         </View>
         <View style={{flex: 90}}>
           <MenuList {...props}/>
-          <PickerModal tilte="Chọn ngôn ngữ"
+          <PickerModal tilte="Choose Language"
                        visible={this.state.showPicker}
                        onCloseModal={() => { this.setState({showPicker: false}) }}
                        selectedItem={language}
                        dataSource={Language}
-                       onDataSelected={(d) => this.setState({selectedLang: d.Id, showPicker: false})}/>
+                       onDataSelected={(d) => this.setState({selectedLang: 3, showPicker: false})}/>
         </View>
       </View>
 
@@ -58,14 +58,14 @@ export class MenuContent extends React.Component {
 
   }
 
-  listItemClicked(id, isNoService) {
+  listItemClicked(id, isNoService, categoryName) {
     if (isNoService) {
-      let r = {listId: id};
+      let r = {listId: id, categoryName: categoryName};
       navigationStore.dispatch(navigateToRouteAction('IndustryListScreen',r));
 
     }
     else {
-      let r = {listId: id, initIndex: 0};
+      let r = {listId: id, initIndex: 0, categoryName: categoryName};
       navigationStore.dispatch(navigateToRouteAction('ListScreen', r));
 
     }

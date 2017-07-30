@@ -42,7 +42,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
 
   componentDidMount() {
     if (this.state.destination == null) {
-      this.setState({gpsError: true});
+        this.setState({gpsError: true});
       return;
     }
     this.getCurrentPos();
@@ -181,7 +181,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
           }} style={
             {flexDirection: 'row', justifyContent: 'space-between'}
           }>
-            <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 18, color: '#fff'}}>CHỈ ĐƯỜNG</Text>
+            <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 18, color: '#fff'}}>DIRECTION</Text>
             <Image style={[{resizeMode: 'cover', width: 30, height: 30,}, {tintColor: '#fff'}]}
                    source={AppIcon.Direction}/>
           </TouchableOpacity>
@@ -198,8 +198,8 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
               {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}
             }>
               <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 12, color: '#039be5'}}>
-                {this.state.waitingForLocation && ("Chờ Vị Trí...")}
-                {this.state.gpsError && ("Không Tìm Thấy...")}
+                {this.state.waitingForLocation && ("Waiting Location...")}
+                {this.state.gpsError && ("Can Get Location...")}
               </Text>
             </TouchableOpacity>
           </View>

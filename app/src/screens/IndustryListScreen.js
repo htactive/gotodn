@@ -8,6 +8,7 @@ import {DetailScreen} from '../screens/DetailScreen';
 import {IndustryDetailScreen} from './IndustryDetailScreen';
 import { NavigationActions } from 'react-navigation';
 import {navigationStore, navigateToRouteAction} from '../stores/NavigationStore';
+import {GDNServiceInstance} from '../services/GDNService';
 
 const imgHeight = Math.round((viewportWidth - 30) / 2);
 const textHeight = Math.round(viewportHeight / 3.3);
@@ -21,6 +22,8 @@ export class IndustryListScreen extends React.Component {
     refreshing: false,
     searchValue: '',
   };
+
+  savedData;
 
   componentWillMount() {
     navigationStore.subscribe(() => {
@@ -39,28 +42,40 @@ export class IndustryListScreen extends React.Component {
     this.loadData();
   }
 
-  loadData() {
-    let dataLeft = [], dataRight = [];
-    for (let i = 0; i < IndustryData.length; i++) {
-      let data = IndustryData[i];
-      if (i % 2 === 0) dataLeft.push(data);
-      else dataRight.push(data);
-    }
+  async loadData() {
+    const { params } = this.props.navigation.state;
+    let listId = (params && params.listId) || 0;
+    let result = await GDNServiceInstance.getCagegoryNoServiceById(listId);
+    if(result) {
+      this.savedData = result;
+      let dataLeft = [], dataRight = [];
+      for (let i = 0; i < result.length; i++) {
+        let data = result[i];
+        if (i % 2 === 0) dataLeft.push(data);
+        else dataRight.push(data);
+      }
 
-    setTimeout(() => {
       this.setState({
         dataLeft: dataLeft,
         dataRight: dataRight,
         isLoaded: true,
         refreshing: false,
       });
-    }, 1000)
+    } else {
+      setTimeout(() => {
+        this.setState({
+          isLoaded: true,
+          refreshing: false,
+        });
+      }, 1000)
+    }
+
   }
 
   searchData(searchValue) {
-    let data = searchValue != '' ? IndustryData
+    let data = searchValue != '' ? this.savedData
       .filter(t => Helper.stripDiacritics(t.title.toLowerCase()).indexOf(Helper.stripDiacritics(searchValue.toLowerCase())) != -1)
-      : IndustryData;
+      : this.savedData;
     let dataLeft = [], dataRight = [];
     for (let i = 0; i < data.length; i++) {
       let d = data[i];
@@ -94,7 +109,7 @@ export class IndustryListScreen extends React.Component {
     alignItems: 'center',}}>
                 <Icon active name='ios-search-outline' style={{color:'#8e8e93', fontSize:25}}/>
                 <Input value={this.state.searchValue}
-                       placeholder={'Tìm kiếm ' }
+                       placeholder={'Search...' }
                        placeholderTextColor='#8e8e93'
                        style={{color: '#263238', height: 40,
                              fontFamily: StyleBase.sp_regular,
@@ -139,7 +154,7 @@ export class IndustryListScreen extends React.Component {
                             <View
                               style={{flex: textHeight/itemHeight, backgroundColor: 'rgba(0,0,0,0)'}}>
                               <View style={style.menuItemTextContain}>
-                                <Text style={style.industryItemTitle} numberOfLines={2}>{ data.title }</Text>
+                                <Text style={style.industryItemTitle} numberOfLines={1}>{ data.title }</Text>
                                 <Text style={style.industryItemSubTitle} numberOfLines={6}>{ data.description }</Text>
                               </View>
                             </View>
@@ -168,7 +183,7 @@ export class IndustryListScreen extends React.Component {
                               <View
                                 style={{flex: textHeight/itemHeight, backgroundColor: 'rgba(0,0,0,0)'}}>
                                 <View style={style.menuItemTextContain}>
-                                  <Text style={style.industryItemTitle} numberOfLines={2}>{ data.title }</Text>
+                                  <Text style={style.industryItemTitle} numberOfLines={1}>{ data.title }</Text>
                                   <Text style={style.industryItemSubTitle} numberOfLines={6}>{ data.description }</Text>
                                 </View>
                               </View>
@@ -191,7 +206,7 @@ export class IndustryListScreen extends React.Component {
   }
 
   goToDetailIndustry(id) {
-    navigationStore.dispatch(navigateToRouteAction('IndustryDetailScreen',{itemId: 1}));
+    navigationStore.dispatch(navigateToRouteAction('DetailScreen',{itemId: id}));
   }
 
   handleChanged(text) {

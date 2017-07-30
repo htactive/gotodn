@@ -11,19 +11,19 @@ const platform = Platform.OS;
 const CITIES = [
   {
     Id: 1,
-    Name: 'Đà Nẵng',
+    Name: 'Da Nang',
   },
   {
     Id: 2,
-    Name: 'Hà Nội',
+    Name: 'Ha Noi',
   },
   {
     Id: 3,
-    Name: 'Hồ Chí Minh',
+    Name: 'Ho Chi Minh',
   },
   {
     Id: 4,
-    Name: 'Huế',
+    Name: 'Hue',
   }
 ];
 

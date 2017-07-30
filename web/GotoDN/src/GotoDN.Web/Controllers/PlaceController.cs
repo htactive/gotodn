@@ -713,8 +713,9 @@ namespace GotoDN.Web.Controllers
 
             var nearBy = this.HTRepository.PlaceLanguageRepository.GetAll()
                 .Include(x => x.Place).Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image")
-                .Where(x => x.Language == LanguageEnums.English && x.Place.City.Id == entity.City.Id && x.Place.Id != id)
-                .OrderBy(x => x.CreatedDate).Take(5).ToList();
+                .Where(x => x.Language == LanguageEnums.English && 
+                        x.Place.CityId.HasValue && entity.CityId.HasValue && x.Place.CityId == entity.CityId && x.Place.Id != id)
+                .OrderByDescending(x => x.CreatedDate).Take(5).ToList();
 
             foreach (var item in nearBy)
             {

@@ -11,7 +11,7 @@ export class DetailNearPlace extends React.Component {
     return (
       <View style={style.detailInfoContainer}>
         <View style={style.nearPlaceTitle}>
-          <Text style={style.nearPlaceTitleText}>ĐỊA ĐIỂM LÂN CẬN</Text>
+          <Text style={style.nearPlaceTitleText}>NEAR BY PLACE</Text>
         </View>
         {this.props.nearByPlaces && this.props.nearByPlaces.map((d, index) =>
           <View key={index} style={[style.detailInfoItem, { paddingVertical: 10, paddingLeft: 0}]}>

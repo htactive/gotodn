@@ -65,7 +65,7 @@ export class HomeMenuList extends React.Component {
                 <View key={index} style={{alignSelf: 'stretch'}}>
                   <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => {this.goToList(data.id, 0, data.isNoService)}}
+                    onPress={() => {this.goToList(data.id, 0, data.isNoService, data.categoryName)}}
                     style={style.menuItemHeader}
                   >
                     <Image style={[style.iconImgXs, {tintColor: '#12a1e7', marginBottom: 10, flex:2}]}
@@ -77,7 +77,7 @@ export class HomeMenuList extends React.Component {
                     <TouchableOpacity
                       activeOpacity={0.7}
                       style={style.menuItem}
-                      onPress={() => {this.goToList(data.id, sIndex, data.isNoService)}}
+                      onPress={() => {this.goToList(data.id, sIndex, data.isNoService, data.categoryName)}}
                       key={sIndex}
                     >
                       <View style={style.imageContainer}>
@@ -106,7 +106,7 @@ export class HomeMenuList extends React.Component {
                   <View key={index} style={{alignSelf: 'stretch'}}>
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      onPress={() => {this.goToList(data.id, 0, data.isNoService)}}
+                      onPress={() => {this.goToList(data.id, 0, data.isNoService, data.categoryName)}}
                       style={style.menuItemHeader}
                     >
                       <Image style={[style.iconImgXs, {tintColor: '#12a1e7', flex:2}]}
@@ -118,7 +118,7 @@ export class HomeMenuList extends React.Component {
                       <TouchableOpacity
                         activeOpacity={0.7}
                         style={style.menuItem}
-                        onPress={() => {this.goToList(data.id, sIndex, data.isNoService)}}
+                        onPress={() => {this.goToList(data.id, sIndex, data.isNoService, data.categoryName)}}
                         key={sIndex}
                       >
                         <View style={style.imageContainer}>
@@ -146,12 +146,12 @@ export class HomeMenuList extends React.Component {
         ))
   }
 
-  goToList(id, index, isNoService) {
+  goToList(id, index, isNoService, categoryName) {
     if (isNoService)
-      navigationStore.dispatch(navigateToRouteAction('IndustryListScreen', {listId: id}));
+      navigationStore.dispatch(navigateToRouteAction('IndustryListScreen', {listId: id, categoryName: categoryName}));
 
     else
-      navigationStore.dispatch(navigateToRouteAction('ListScreen', {listId: id, initIndex: index}));
+      navigationStore.dispatch(navigateToRouteAction('ListScreen', {listId: id, initIndex: index, categoryName: categoryName}));
   }
 }
 
