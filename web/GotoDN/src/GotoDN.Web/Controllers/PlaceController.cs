@@ -234,7 +234,7 @@ namespace GotoDN.Web.Controllers
             {
                 var search = request.Search.ToLower().Trim();
                 var searchInt = 0;
-                var canParse = int.TryParse(search,out searchInt);
+                var canParse = int.TryParse(search, out searchInt);
 
                 searchQuery = searchQuery.Where(x => (x.City != null && x.City.ToLower().Contains(search))
                 || (x.District != null && x.District.ToLower().Contains(search))
@@ -437,6 +437,56 @@ namespace GotoDN.Web.Controllers
             return response;
         }
 
+        [HttpGet, Route("gdn-search-place")]
+        [AllowAnonymous]
+        public List<AppSearchPlaceModel> GdnSearchPlace(string search)
+        {
+            var language = LanguageEnums.English;
+            var query = this.HTRepository.PlaceRepository.GetAll();
+            query = query.Include("PlaceLanguages")
+                .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages")
+                .Include(x => x.City).Include(x => x.District);
+            var searchQuery = query.Where(t => t.PlaceLanguages.Any(l => l.Language == language))
+                .Select(q => new AppSearchPlaceModel
+                {
+                    Id = q.Id,
+                    Title = q.PlaceLanguages.FirstOrDefault(t => t.Language == language).Title,
+                    CategoryName = q.Category.CategoryLanguages.FirstOrDefault(t => t.Language == language).Title,
+                    ServiceName = q.HTServiceId != null ? q.HTService.HTServiceLanguages.FirstOrDefault(t => t.Language == language).Title : "",
+                    IsCategorySlider = q.IsCategorySlider,
+                    IsHomeSlider = q.IsHomeSlider,
+                    IsEvent = q.Category.IsEvent,
+                    City = q.City.Name,
+                    District = q.District.Name,
+                    Description = q.PlaceLanguages.FirstOrDefault(t => t.Language == language).Description,
+                    StartDate = q.CreatedDate,
+                    EndDate = q.EndDate,
+                    Address = q.Address,
+                    CoverImage = Mappers.Mapper.ToModel(q.PlaceLanguages.FirstOrDefault(t => t.Language == language).Image),
+                    Phone = q.Phone,
+                    OpenTime = q.OpenTime != null ? q.OpenTime.Value.ToString("MM:hh") : "",
+                    CloseTme = q.CloseTime != null ? q.OpenTime.Value.ToString("MM:hh") : "",
+                    CreateDate = q.CreatedDate
+                });
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                search = search.ToLower().Trim();
+                var searchInt = 0;
+                var canParse = int.TryParse(search, out searchInt);
+
+                searchQuery = searchQuery.Where(x => (x.City != null && x.City.ToLower().Contains(search))
+                || (x.District != null && x.District.ToLower().Contains(search))
+                || (x.Address != null && x.Address.ToLower().Contains(search))
+                || (x.Title != null && x.Title.ToLower().Contains(search))
+                || (x.CategoryName != null && x.CategoryName.ToLower().Contains(search))
+                || (x.ServiceName != null && x.ServiceName.ToLower().Contains(search))
+                );
+            }
+            var searchRs = searchQuery.OrderByDescending(t => t.IsEvent).ThenByDescending(t => t.IsHomeSlider).ThenByDescending(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Take(30).ToList();
+            return searchRs;
+        }
+
         [HttpGet, Route("get-place-by-id")]
         [AllowAnonymous]
         public PlaceModel GetPlaceById(int id)
@@ -457,7 +507,7 @@ namespace GotoDN.Web.Controllers
                 });
 
             return model;
-        } 
+        }
 
         [HttpPost, Route("save-imported-place")]
         [AllowAnonymous]
@@ -614,7 +664,7 @@ namespace GotoDN.Web.Controllers
                 .FirstOrDefault(x => x.Language == LanguageEnums.English);
             if (enPlaceLanguage == null) return null;
             foreach (var entity in model.PlaceLanguages)
-            { 
+            {
                 if (entity.Id == enPlaceLanguage.Id) continue;
                 entity.Title = TranslateHelper.TranslateText(enPlaceLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
                 entity.Description = TranslateHelper.TranslateText(enPlaceLanguage.Description, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
@@ -665,13 +715,13 @@ namespace GotoDN.Web.Controllers
                 .Include(x => x.Place).Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image")
                 .Where(x => x.Language == LanguageEnums.English && x.Place.City.Id == entity.City.Id && x.Place.Id != id)
                 .OrderBy(x => x.CreatedDate).Take(5).ToList();
-            
-            foreach(var item in nearBy)
+
+            foreach (var item in nearBy)
             {
                 result.Add(AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(item));
             }
 
-            foreach(var item in result)
+            foreach (var item in result)
             {
                 item.Place = AutoMapper.Mapper.Map<Place, PlaceModel>(nearBy.Where(x => x.PlaceId == item.PlaceId).FirstOrDefault().Place);
             }

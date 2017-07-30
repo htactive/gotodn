@@ -92,4 +92,26 @@ namespace GotoDN.Web.Models
         public bool? IsEvent { get; set; }
         public float? Rating { get; set; }
     }
+
+    public class AppSearchPlaceModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string CategoryName { get; set; }
+        public string ServiceName { get; set; }
+        public bool? IsCategorySlider { get; set; }
+        public bool? IsHomeSlider { get; set; }
+        public bool? IsEvent { get; set; }
+        public string City { get; set; }
+        public string District { get; set; }
+        public string Description { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string Address { get; set; }
+        public ImageModel CoverImage { get; set; }
+        public string Phone { get; set; }
+        public string OpenTime { get; set; }
+        public string CloseTme { get; set; }
+        public DateTime? CreateDate { get; set; }
+    }
 }

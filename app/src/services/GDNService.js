@@ -1,6 +1,6 @@
 import {ServiceBase} from './ServiceBase';
 import {timeout, MenuListData} from '../common/DummyData';
-import {Helper,LanguageEnums} from '../common/constain';
+import {Helper,LanguageEnums, IconName} from '../common/constain';
 class GDNService extends ServiceBase {
   host = "http://192.168.1.113:50915/";
 
@@ -99,6 +99,26 @@ class GDNService extends ServiceBase {
           categoryName: enLanguage ? enLanguage.Title : '',
           categoryIcon: enLanguage && enLanguage.Icon ? enLanguage.Icon.Url : null,
           isNoService: !t.HTServices || t.HTServices.length == 0,
+        }
+      });
+      return rs;
+    }
+  }
+
+  async searchAllPlace(search) {
+
+    let url = this.host + "place/gdn-search-place?search=" + search;
+    let result = await super.executeFetch(url);
+    if (result) {
+
+      let rs = result.map(t => {
+        return {
+          id: t.Id,
+          heroImage: t.CoverImage ? t.CoverImage.Url : Helper.ImageUrl,
+          title: t.Title,
+          address: t.Address + ', ' + t.District + ', ' + t.City,
+          phone: t.Phone,
+          phoeneIcon:  IconName.Telephone,
         }
       });
       return rs;

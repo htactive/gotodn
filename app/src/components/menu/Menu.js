@@ -194,7 +194,8 @@ export class Menu extends React.Component {
 
   toggleSearchBar(toggle) {
     this.setState({
-      showSearchBar: toggle
+      showSearchBar: toggle,
+      searchValue:''
     });
   }
 

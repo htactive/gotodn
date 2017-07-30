@@ -3,6 +3,9 @@ import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity, Im
 import {Title, Icon, Picker, Drawer, Input, Item} from 'native-base';
 import {StyleBase, style} from '../../styles/style';
 import {MenuType, viewportHeight, MenuListItemData, Helper, viewportWidth} from '../../common/constain';
+import {GDNServiceInstance} from '../../services/GDNService';
+import styles from '../../styles/slider-css';
+import {Spinner}  from 'native-base';
 
 export class MenuSearch extends React.Component {
   state = {
@@ -21,27 +24,24 @@ export class MenuSearch extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.search != this.props.search) {
+      this.setState({
+        data: null
+      });
       this.filterData(nextProps.search);
     }
   }
 
-  filterData(search) {
-    if (search == '')
-      this.setState({
-        data: MenuListItemData
-      });
-    else {
-      this.setState({
-        data: MenuListItemData
-          .filter(t => Helper.stripDiacritics(t.title.toLowerCase()).indexOf(Helper.stripDiacritics(search.toLowerCase())) != -1)
-      });
-    }
+  async filterData(search) {
+    let result = await GDNServiceInstance.searchAllPlace(search);
+    this.setState({
+      data: result
+    });
   }
 
   render() {
     return (
       <ScrollView style={{alignSelf: 'stretch'}}>
-        {this.state.data && this.state.data.map((d, index) =>
+        {this.state.data ? this.state.data.map((d, index) =>
           <TouchableOpacity key={index}
                             onPress={() => this.props.onSearchSelected && this.props.onSearchSelected(d)}
                             style={[style.detailInfoItem, { paddingVertical: 15, paddingHorizontal: 10},
@@ -78,7 +78,9 @@ export class MenuSearch extends React.Component {
               </View>
             </View>
           </TouchableOpacity>
-        )}
+        ) : <View style={[styles.container, style.centralizedContent]}>
+            <Spinner color={StyleBase.header_color}/>
+          </View>}
       </ScrollView>
     );
   }

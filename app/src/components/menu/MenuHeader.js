@@ -19,6 +19,10 @@ export class MenuHeader extends React.Component {
     this.changeMenu(this.props.type || MenuType.HomeScreen)
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.searchTimeout);
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.type != this.props.type)
       this.changeMenu(nextProps.type || MenuType.HomeScreen)
@@ -99,7 +103,7 @@ export class MenuHeader extends React.Component {
       </Row>);
   }
 
-  renderHeader(){
+  renderHeader() {
     return (
       <Row>
         <Col size={1} style={style.centralizedContent}>
@@ -110,7 +114,6 @@ export class MenuHeader extends React.Component {
                           this.props.onLogoClicked();
                       }}>
                 <Image style={[style.iconImg ,{tintColor:'#ffffff', marginRight: 10}]} source={AppIcon.AppLogo}/>
-
               </TouchableOpacity>
             </View>
           )}
@@ -134,7 +137,6 @@ export class MenuHeader extends React.Component {
           <View style={style.menuRight}>
             <TouchableOpacity onPress={() => this.toggleSearchBar(true)}>
               <Image style={[style.iconImg ,{tintColor:'#fff'}]} source={AppIcon.Search}/>
-
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.openDraw()}>
               <Image style={[style.iconImg ,{tintColor:'#fff', marginLeft: 15}]} source={AppIcon.Menu}/>
@@ -169,6 +171,7 @@ export class MenuHeader extends React.Component {
 
   toggleSearchBar(toggle) {
     this.setState({
+      searchBarValue: '',
       showSearchBar: toggle
     });
     this.props.onToggleSearchBar && this.props.onToggleSearchBar(toggle);
@@ -189,8 +192,14 @@ export class MenuHeader extends React.Component {
     }
   }
 
+  searchTimeout = null;
+
   handleChanged(text) {
-    this.setState({searchBarValue: text})
-    this.props.onSearchChanged && this.props.onSearchChanged(text);
+    this.setState({searchBarValue: text});
+    if (this.searchTimeout)
+      clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.props.onSearchChanged && this.props.onSearchChanged(text);
+    }, 500);
   }
 }
