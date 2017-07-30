@@ -74,9 +74,9 @@ export class ReactMap extends React.Component<thisProps, thisState> {
 
     async checkIsLocation() {
         let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
-            message: "GPS đang tắt, bật GPS?",
-            ok: "BẬT",
-            cancel: "KHÔNG"
+            message: "GPS IS OFF, TURN ON GPS?",
+            ok: "YES",
+            cancel: "NO"
         }).catch(error => error);
 
         return check === "enabled";
@@ -135,8 +135,8 @@ export class ReactMap extends React.Component<thisProps, thisState> {
                         }>
                             <Text numberOfLines={1}
                                   style={{fontFamily: StyleBase.sp_regular, fontSize: 12, color: '#039be5'}}>
-                                {this.state.waitingForLocation && ("Chờ Vị Trí...")}
-                                {this.state.gpsError && ("Không Tìm Thấy...")}
+                                {this.state.waitingForLocation && ("WAITING GPS...")}
+                                {this.state.gpsError && ("NOT FOUND...")}
                             </Text>
                         </TouchableOpacity>
                     </View>

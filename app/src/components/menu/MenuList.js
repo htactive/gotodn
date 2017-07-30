@@ -51,7 +51,7 @@ export class MenuList extends React.Component {
                         {/*});*/}
                         {/*this.props.onAboutUsClicked();*/}
                       {/*}}/>*/}
-        <MenuListItem itemText='Ngôn ngữ' system itemIcon={AppIcon.Language} onItemClicked={() => {
+        <MenuListItem itemText='Language' system itemIcon={AppIcon.Language} onItemClicked={() => {
           this.props.onLanguageClicked();
         }}/>
       </ScrollView>

@@ -92,20 +92,20 @@ export class DetailScreen extends React.Component {
                       <View style={style.detailOverlay}>
 
                         <DetailMapTextItem leftText={data.address} leftIcon={data.addressIcon}
-                                            rightText={"CHỈ ĐƯỜNG"} rightIcon={AppIcon.Direction}
+                                            rightText={"DIRECTION"} rightIcon={AppIcon.Direction}
                                            onMapItemClicked={()=>
                                              this.handleDirection(data.address, this.state.destCoord)}
                         />
                         <DetailMapTextItem leftText={data.phone} leftIcon={data.phoeneIcon}
-                                           rightText={"GỌI"} rightIcon={AppIcon.Calling}
+                                           rightText={"CALL"} rightIcon={AppIcon.Calling}
                                            onMapItemClicked={()=> this.handleCalling(data.phone)}
                         />
                         <DetailMapTextItem leftText={data.website} leftIcon={data.websiteIcon}
-                                           rightText={"LIÊN KẾT"} rightIcon={AppIcon.Link}
+                                           rightText={"LINK"} rightIcon={AppIcon.Link}
                                            onMapItemClicked={()=> this.handleLink(data.website)}
                         />
                         <DetailMapTextItem lastItem leftText={data.address} leftIcon={data.addressIcon}
-                                           rightText={"ĐANG MỞ"}
+                                           rightText={"OPEN"}
                                            onMapItemClicked={()=> {}}
                         />
                       </View>

@@ -94,7 +94,7 @@ export class IndustryListScreen extends React.Component {
     alignItems: 'center',}}>
                 <Icon active name='ios-search-outline' style={{color:'#8e8e93', fontSize:25}}/>
                 <Input value={this.state.searchValue}
-                       placeholder={'Tìm kiếm ' }
+                       placeholder={'Search ' }
                        placeholderTextColor='#8e8e93'
                        style={{color: '#263238', height: 40,
                              fontFamily: StyleBase.sp_regular,

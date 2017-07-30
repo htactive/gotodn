@@ -11,7 +11,7 @@ export class DetailFactory extends React.Component {
     return (
       <View style={style.detailInfoContainer}>
         <View style={style.nearPlaceTitle}>
-          <Text style={style.nearPlaceTitleText}>DANH SÁCH NHÀ MÁY</Text>
+          <Text style={style.nearPlaceTitleText}>FACTORIES</Text>
         </View>
         {this.props.factories && this.props.factories.map((d, index) =>
           <View key={index} style={[style.detailInfoItem, { paddingVertical: 10, paddingLeft: 0}]}>

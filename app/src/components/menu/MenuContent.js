@@ -32,7 +32,7 @@ export class MenuContent extends React.Component {
         </View>
         <View style={{flex: 90}}>
           <MenuList {...props}/>
-          <PickerModal tilte="Chọn ngôn ngữ"
+          <PickerModal tilte="Choose Language"
                        visible={this.state.showPicker}
                        onCloseModal={() => { this.setState({showPicker: false}) }}
                        selectedItem={language}

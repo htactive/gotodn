@@ -73,7 +73,7 @@ export class MenuHeader extends React.Component {
                              borderColor: '#fff',}}>
             <Icon active name='ios-search-outline' style={{color:'#8e8e93', fontSize:25}}/>
             <Input value={this.state.searchBarValue}
-                   placeholder='Tìm kiếm'
+                   placeholder='Search'
                    placeholderTextColor='#8e8e93'
                    style={{color: '#263238', height: 35,
                              fontFamily: StyleBase.sp_regular,

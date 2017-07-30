@@ -82,9 +82,9 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
 
   async checkIsLocation() {
     let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
-      message: "GPS đang tắt, bật GPS?",
-      ok: "BẬT",
-      cancel: "KHÔNG"
+      message: "GPS IS OFF, TURN ON GPS?",
+      ok: "YES",
+      cancel: "NO"
     }).catch(error => error);
 
     return check === "enabled";
@@ -181,7 +181,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
           }} style={
             {flexDirection: 'row', justifyContent: 'space-between'}
           }>
-            <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 18, color: '#fff'}}>CHỈ ĐƯỜNG</Text>
+            <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 18, color: '#fff'}}>DIRECTION</Text>
             <Image style={[{resizeMode: 'cover', width: 30, height: 30,}, {tintColor: '#fff'}]}
                    source={AppIcon.Direction}/>
           </TouchableOpacity>
@@ -198,8 +198,8 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
               {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}
             }>
               <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 12, color: '#039be5'}}>
-                {this.state.waitingForLocation && ("Chờ Vị Trí...")}
-                {this.state.gpsError && ("Không Tìm Thấy...")}
+                {this.state.waitingForLocation && ("Waiting GPS...")}
+                {this.state.gpsError && ("Not found...")}
               </Text>
             </TouchableOpacity>
           </View>
