@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Alert, StyleSheet, TouchableOpacity, View, Text} from 'react-native';
 import {Icon} from 'native-base';
-import {viewportWidth, viewportHeight, platform} from '../../common/constain';
+import {viewportWidth, viewportHeight, platform, Helper} from '../../common/constain';
 import {StyleBase} from '../../styles/style';
 const MapView = require('react-native-maps');
 const {PROVIDER_GOOGLE} = MapView;
@@ -81,7 +81,17 @@ export class ReactMap extends React.Component<thisProps, thisState> {
       cancel: "NO"
     }).catch(error => error);
 
-    this.mapRef && this.mapRef.animateToRegion(region, 500);
+    return check === "enabled";
+  }
+
+  animateRegion(position) {
+    let region = {
+      latitude: position.coords.latitude - .003,
+      longitude: position.coords.longitude,
+      latitudeDelta: GPS_ZOOM,
+      longitudeDelta: GPS_ZOOM * (viewportWidth / viewportHeight)
+    };
+    this.mapRef.animateToRegion(region, 500);
   }
 
   render() {

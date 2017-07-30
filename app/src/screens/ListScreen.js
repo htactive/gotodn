@@ -64,9 +64,8 @@ export class ListScreen extends React.Component {
                activeTabStyle={{backgroundColor: '#29b6f6',borderBottomWidth: 3, borderBottomColor:StyleBase.header_color}}
                activeTextStyle={{color:'#fff', fontWeight: 'normal'}}
                heading={data.title}>
-            <ListDetail panResponderSlider={this._panResponderSlider}
-                        panResponder={this._panResponder}
-                        navigation={this.props.navigation} />
+            <ListDetail serviceId={data.id}
+            />
           </Tab>
         )}
       </Tabs>

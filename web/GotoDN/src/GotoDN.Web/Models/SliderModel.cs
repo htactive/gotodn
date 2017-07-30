@@ -12,5 +12,7 @@ namespace GotoDN.Web.Models
         public string SubTitle { get; set; }
         public string Url { get; set; }
         public DateTime? CreateDate { get; set; }
+        public bool? IsEvent { get; set; }
+        public bool? IsCategorySlider { get; set; }
     }
 }

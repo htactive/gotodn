@@ -59,6 +59,47 @@ class GDNService extends ServiceBase {
     return null;
   }
 
+  async getListSlider(serviceId) {
+    let url = this.host + "service/get-list-slider?serviceId="+ serviceId;
+    let result = await super.executeFetch(url);
+    if (result && result.length > 0) {
+      let slider = [];
+      for (let i = 0; i < result.length / 2; i++) {
+        slider.push({
+          title: result[i * 2 + 1] ? result[i * 2 + 1].Title : "",
+          subtitle: result[i * 2 + 1] ? result[i * 2 + 1].SubTitle : "",
+          image: result[i * 2 + 1] ? result[i * 2 + 1].Url : "https://image.ibb.co/dWMJtQ/ic_stay.png",
+          id: result[i * 2 + 1] ? result[i * 2 + 1].Id : 0,
+        });
+      }
+      return slider;
+    }
+    return null;
+  }
+
+  async getMenuListPlace(serviceId) {
+    let url = this.host + "service/get-list-data?serviceId=" + serviceId;
+    let result = await super.executeFetch(url);
+
+    if (result && result.length > 0) {
+      let data = [];
+      for (let i = 0; i < result.length; i++) {
+        let enLang = result[i].PlaceLanguages.filter(t => t.Language == LanguageEnums.English)[0];
+        if(enLang) {
+          data.push({
+            id: result[i] ? result[i].Id : 0,
+            heroImage: enLang.Image ? enLang.Image.Url : Helper.ImageUrl,
+            star: result[i].Rating || 0,
+            title: enLang.Title,
+            description: enLang.Description,
+          });
+        }
+      }
+      return data;
+    }
+    return null;
+  }
+
   async getPlaceById(Id: number) {
     let url = this.host + "place/app-get-place-by-id?id=" + Id;
     let result = await super.executeFetch(url);
@@ -164,7 +205,7 @@ class GDNService extends ServiceBase {
       data.categoryName = result.Name;
       data.categoryIcon = result.Icon;
       data.services = result.Items.map(x => {
-        return {heroImage: x ? x.Url : null, title: x ? x.Title : ""};
+        return {heroImage: x ? x.Url : null, title: x ? x.Title : "", id: x.Id};
       });
       return data;
     }

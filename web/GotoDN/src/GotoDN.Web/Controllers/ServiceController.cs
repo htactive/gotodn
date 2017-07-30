@@ -239,5 +239,51 @@ namespace GotoDN.Web.Controllers
 
             return result;
         }
+
+        [HttpGet, Route("get-list-slider")]
+        [AllowAnonymous]
+        public List<SliderModel> GetListSlider(int? serviceId)
+        {
+            var currentLanguage = LanguageEnums.English;
+            var result = new List<SliderModel>();
+            var today = DateTimeHelper.GetDateTimeNow();
+
+            var eventPlaces = this.HTRepository.PlaceRepository.GetAll().
+                Where(x => x.HTServiceId.HasValue && x.HTServiceId == serviceId && (
+                (x.Category != null && x.Category.IsEvent.HasValue && x.Category.IsEvent.Value && x.StartDate <= today && x.EndDate > today) ||
+                (x.IsCategorySlider.HasValue && x.IsCategorySlider.Value)))
+                .Include("PlaceLanguages.Image").ToList();
+            if (eventPlaces == null) return null;
+            result = eventPlaces.Select(x =>
+                new SliderModel()
+                {
+                    Id = x.Id,
+                    SubTitle = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Description,
+                    Title = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Title,
+                    Url = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Image != null ? x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Image.Url : Common.DefaultPhoto.ImageUrl,
+                    CreateDate = x.CreatedDate,
+                    IsEvent = x.Category != null ? x.Category.IsEvent : null,
+                    IsCategorySlider = x.IsCategorySlider,
+                }).ToList().OrderBy(t => t.IsEvent).ThenBy(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Take(20).ToList();
+
+            return result;
+        }
+
+        [HttpGet, Route("get-list-data")]
+        [AllowAnonymous]
+        public List<PlaceModel> GetCategoryData(int? serviceId)
+        {
+            var currentLanguage = LanguageEnums.English;
+
+            var result = new List<MenuListModel>();
+            var places = this.HTRepository.PlaceRepository.GetAll()
+                .Include("PlaceLanguages.Image")
+                .Where(t => t.PlaceLanguages.Any(l => l.Language == currentLanguage) && t.HTServiceId.HasValue && t.HTServiceId == serviceId)
+                .OrderByDescending(t => t.CreatedDate).Take(100);
+
+            var placeModels = places.Select(t => AutoMapper.Mapper.Map<Place, PlaceModel>(t)).ToList();
+            
+            return placeModels;
+        }
     }
 }

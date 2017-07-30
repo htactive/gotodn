@@ -20,12 +20,16 @@ export class ListSlider extends React.Component {
   //     slider: SlideData,
   //   })
   // }
-  componentDidMount() {
-    this.setState({
-      slider: SlideData,
-      isLoaded: true,
-    });
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.dataSource) {
+      this.setState({
+        slider: nextProps.dataSource,
+        isLoaded: true,
+      });
+    }
   }
+
 
   render() {
     return (

@@ -23,29 +23,39 @@ export class ListItemDetail extends React.Component {
     refreshing: false,
   };
 
-  componentDidMount() {
-    this.loadData();
+  componentWillReceiveProps(nextProps) {
+    this.loadData(nextProps.dataSource);
   }
 
-  loadData() {
-    let dataLeft = [], dataRight = [];
-    for (let i = 0; i < MenuListItemData.length; i++) {
-      let data = MenuListItemData[i];
-      if (i % 2 === 0) dataLeft.push(data);
-      else dataRight.push(data);
-    }
+  componentDidMount() {
+  }
 
-    setTimeout(() => {
+  loadData(listData) {
+    if(listData) {
+      let dataLeft = [], dataRight = [];
+      for (let i = 0; i < listData.length; i++) {
+        let data = listData[i];
+        if (i % 2 === 0) dataLeft.push(data);
+        else dataRight.push(data);
+      }
       this.setState({
         dataLeft: dataLeft,
         dataRight: dataRight,
         isLoaded: true,
         refreshing: false,
       });
-    }, 500);
+    } else {
+      setTimeout(() => {
+        this.setState({
+          isLoaded: true,
+          refreshing: false,
+        });
+      }, 1000);
+    }
   }
 
   renderStart(starScore) {
+
     let floorStar = Math.floor(starScore);
     let modStar = starScore - floorStar;
     let stars = [];
@@ -109,7 +119,7 @@ export class ListItemDetail extends React.Component {
                             source={{uri: data.heroImage}}
                             style={[style.menuItemImage, {height: (index % 2 === 0) ? largeImgHeight : smallImgHeight}]}
                           >
-                            {this.renderStart(data.star)}
+                            {data.star > 0 && this.renderStart(data.star)}
                           </Image>
                         </View>
                         <View
@@ -140,7 +150,7 @@ export class ListItemDetail extends React.Component {
                               source={{uri: data.heroImage}}
                               style={[style.menuItemImage, {height: (index % 2 !== 0) ? largeImgHeight : smallImgHeight}]}
                             >
-                              {this.renderStart(data.star)}
+                              {data.star > 0 && this.renderStart(data.star)}
                             </Image>
                           </View>
                           <View
@@ -162,7 +172,7 @@ export class ListItemDetail extends React.Component {
 
   onFresh() {
     this.setState({refreshing: true});
-    this.loadData();
+    this.loadData(this.props.dataSource);
   }
 
   goToDetail(id) {
