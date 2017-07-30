@@ -50,12 +50,12 @@ export class IndustryDetailScreen extends React.Component {
     let detailInfo = [];
 
     detailInfo.push({isMulti: true, dataInfo: [
-      {infoIcon: data.totalAreaIcon || '?', infoText: 'Tổng : ' + data.totalArea },
-      {infoIcon: data.vacantLandIcon || '?', infoText: 'Trống: ' +  data.vacantLand }
+      {infoIcon: data.totalAreaIcon || '?', infoText: 'Total : ' + data.totalArea },
+      {infoIcon: data.vacantLandIcon || '?', infoText: 'Free: ' +  data.vacantLand }
     ] });
     let factoryInfo = '';
     if((data && data.factoryList))
-      factoryInfo += 'Nhà máy: ' + data.factoryList.length ;
+      factoryInfo += 'Factory: ' + data.factoryList.length ;
     detailInfo.push({infoIcon: data.factoryIcon || '?', infoText: factoryInfo});
     let factories =data.factoryList;
     let destCoord = {
@@ -81,19 +81,19 @@ export class IndustryDetailScreen extends React.Component {
                     <View style={style.detailOverlay}>
 
                       <DetailMapTextItem leftText={data.address} leftIcon={data.addressIcon}
-                                         rightText={"CHỈ ĐƯỜNG"} rightIcon={AppIcon.Direction}
+                                         rightText={"DIRECTION"} rightIcon={AppIcon.Direction}
                                          onMapItemClicked={()=> this.handleDirection(data.address, MapHelper.getRandomDestination())}
                       />
                       <DetailMapTextItem leftText={data.phone} leftIcon={data.phoeneIcon}
-                                         rightText={"GỌI"} rightIcon={AppIcon.Calling}
+                                         rightText={"CALL"} rightIcon={AppIcon.Calling}
                                          onMapItemClicked={()=> this.handleCalling(data.phone)}
                       />
                       <DetailMapTextItem  leftText={data.fax} leftIcon={data.faxIcon}
-                                         rightText={""}
+                                         rightText={"FAX"}
                                          onMapItemClicked={()=> {}}
                       />
                       <DetailMapTextItem  leftText={data.website} leftIcon={data.websiteIcon}
-                                         rightText={"LIÊN KẾT"} rightIcon={AppIcon.Link}
+                                         rightText={"LINK"} rightIcon={AppIcon.Link}
                                          onMapItemClicked={()=> this.handleLink(data.website)}
                       />
 

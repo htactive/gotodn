@@ -324,7 +324,7 @@ namespace GotoDN.Web.Controllers
             var CategoryEntity = this.HTRepository.CategoryLanguageRepository.GetAll()
                 .Include(x => x.Icon).Include("Category.HTServices.HTServiceLanguages.Image")
                 .Where(x => x.CategoryId == Id && x.Language == LanguageEnums.English).FirstOrDefault();
-
+            if (CategoryEntity == null) return result;
 
             result.Id = CategoryEntity.CategoryId.Value;
             result.Icon = CategoryEntity.Icon != null ? CategoryEntity.Icon.Url : "";

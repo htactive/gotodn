@@ -76,21 +76,10 @@ export class ReactMap extends React.Component<thisProps, thisState> {
 
   async checkIsLocation() {
     let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
-      message: "GPS đang tắt, bật GPS?",
-      ok: "BẬT",
-      cancel: "KHÔNG"
+      message: "GPS IS OFF, TURN ON GPS?",
+      ok: "YES",
+      cancel: "NO"
     }).catch(error => error);
-
-    return check === "enabled";
-  }
-
-  animateRegion(position) {
-    let region = {
-      latitude: position.coords.latitude - .003,
-      longitude: position.coords.longitude,
-      latitudeDelta: GPS_ZOOM,
-      longitudeDelta: GPS_ZOOM * (viewportWidth / viewportHeight)
-    };
 
     this.mapRef && this.mapRef.animateToRegion(region, 500);
   }
@@ -138,8 +127,8 @@ export class ReactMap extends React.Component<thisProps, thisState> {
                         }>
               <Text numberOfLines={1}
                     style={{fontFamily: StyleBase.sp_regular, fontSize: 12, color: '#039be5'}}>
-                {this.state.waitingForLocation && ("Wating Location...")}
-                {this.state.gpsError && ("Can't Get Location...")}
+                {this.state.waitingForLocation && ("WAITING GPS...")}
+                {this.state.gpsError && ("NOT FOUND...")}
               </Text>
             </TouchableOpacity>
           </View>

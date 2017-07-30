@@ -61,7 +61,7 @@ export class HomeScreen extends React.Component {
   }
 
   render() {
-
+    debugger;
     return (
       <ScrollView
         refreshControl={
