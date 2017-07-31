@@ -114,24 +114,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
   }
 
   private async createPlace() {
-    let result = await PlaceServiceInstance.CreatePlace();
-    if (result) {
-      window['notice_create_success']();
-      let filter = this.state.GridFilter;
-      if (filter) {
-        filter.CurrentPage = 1;
-        filter.IsAsc = false;
-        filter.SortExpression = "Id";
-      }
-      this.getData(filter);
-      this.setState({
-        SelectedPlace: result,
-        SelectedLanguage: result.PlaceLanguages ? result.PlaceLanguages[0].Language : LanguageEnums.English,
-      })
-    }
-    else {
-      window['notice_error']();
-    }
+    browserHistory.push(AdminRoutePath.PlaceManagement + '/0');
   }
 
   private async updatePlace(model: PlaceModel) {
@@ -139,6 +122,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
     if (result) {
       window['notice_save_success']();
       this.getData(this.state.GridFilter);
+      browserHistory.push(AdminRoutePath.PlaceManagement);
     }
     else {
       window['notice_error']();

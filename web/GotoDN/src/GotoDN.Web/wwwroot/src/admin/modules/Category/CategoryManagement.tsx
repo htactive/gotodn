@@ -32,15 +32,11 @@ class CategoryManagement extends React.Component<{}, thisState> {
   private async createCategory() {
     let result = await CategoryServiceInstance.CreateCategory();
     if (result) {
-      window['notice_create_success']();
-      if (this.state.Categories) {
-        this.state.Categories.unshift(result);
-        this.setState({
-          SelectedCategory: result,
-          SelectedLanguage: result.CategoryLanguages ? result.CategoryLanguages[0].Language : LanguageEnums.English,
-        });
-        this.forceUpdate();
-      }
+      this.setState({
+        SelectedCategory: result,
+        SelectedLanguage: result.CategoryLanguages ? result.CategoryLanguages[0].Language : LanguageEnums.English,
+      });
+      this.forceUpdate();
     }
     else {
       window['notice_error']();
@@ -50,6 +46,10 @@ class CategoryManagement extends React.Component<{}, thisState> {
   private async updateCategory(model: CategoryModel) {
     let result = await CategoryServiceInstance.UpdateCategory(model);
     if (result) {
+      this.setState({
+        SelectedCategory: result,
+        Categories: await CategoryServiceInstance.GetAll()
+      });
       window['notice']('success-notice', 'Thành công', 'Đã lưu dữ liệu thành công.', 'fa fa-check-circle-o');
     }
   }
@@ -73,7 +73,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
         });
       }
       else {
-        window['notice_error']();
+        window['notice']('error-notice', 'Lỗi', 'Không thể xóa được bản ghi vì bản ghi được sử dụng trong hệ thống, bạn chỉ có thể xóa được bản ghi nếu nó không được sử dụng trong hệ thống.', 'glyphicon glyphicon-remove');
       }
     }
   }
@@ -154,6 +154,12 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                   ChangeSelectedLanguage={(language) => this.setState({
                                     SelectedLanguage: language
                                   })}
+                                  cancelCategory={() => {
+                                     this.setState({
+                                        SelectedLanguage: LanguageEnums.English,
+                                        SelectedCategory: null,
+                                     })
+                                   }}
                                   OnCategoryLanguageChange={(obj: CategoryLanguageModel) => {
                                     for (let i = 0; i < this.state.SelectedCategory.CategoryLanguages.length; i++) {
                                       if (this.state.SelectedCategory.CategoryLanguages[i].Language == obj.Language) {

@@ -49,56 +49,55 @@ namespace GotoDN.Web.Controllers
         public HTServiceModel CreateService()
         {
             var entity = new HTService();
+            entity.Id = 0;
             entity.CreatedDate = Common.DateTimeHelper.GetDateTimeNow();
             entity.UpdatedDate = Common.DateTimeHelper.GetDateTimeNow();
             entity.HTServiceLanguages = new List<HTServiceLanguage>()
             {
                 new HTServiceLanguage()
                 {
-                    Title = "Service Name",
+                    Title = "New Service",
                     Language = LanguageEnums.English,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 },
                 new HTServiceLanguage()
                 {
-                    Title = "",
+                    Title = "New Service",
                     Language = LanguageEnums.Vietnamese,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 },
                 new HTServiceLanguage()
                 {
-                    Title = "",
+                    Title = "New Service",
                     Language = LanguageEnums.France,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 },
                 new HTServiceLanguage()
                 {
-                    Title = "",
+                    Title = "New Service",
                     Language = LanguageEnums.Chinese,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 },
                 new HTServiceLanguage()
                 {
-                    Title = "",
+                    Title = "New Service",
                     Language = LanguageEnums.Japanese,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 },
                 new HTServiceLanguage()
                 {
-                    Title = "",
+                    Title = "New Service",
                     Language = LanguageEnums.Korean,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 }
             };
 
-            this.HTRepository.HTServiceRepository.Save(entity);
-            this.HTRepository.Commit();
             return AutoMapper.Mapper.Map<HTService, HTServiceModel>(entity);
         }
 
@@ -107,8 +106,9 @@ namespace GotoDN.Web.Controllers
         public bool DeleteService([FromBody]int Id)
         {
             var entity = this.HTRepository.HTServiceRepository.GetAll()
+                .Include(s => s.Places)
                 .FirstOrDefault(x => x.Id == Id);
-            if (entity == null) return false;
+            if (entity == null || (entity.Places != null && entity.Places.Count > 0)) return false;
             this.HTRepository.HTServiceRepository.Delete(entity);
             this.HTRepository.Commit();
             return true;
@@ -116,32 +116,50 @@ namespace GotoDN.Web.Controllers
 
         [HttpPost, Route("update-service")]
         [HTAuthorize]
-        public bool UpdateService([FromBody]HTServiceModel model)
+        public HTServiceModel UpdateService([FromBody]HTServiceModel model)
         {
-            if (model == null) return false;
+            if (model == null) return null;
             var entity = this.HTRepository.HTServiceRepository.GetAll()
                 .Include("HTServiceLanguages.Image")
-                .Include("HTServiceLanguages.Image")
+                .Include("HTServiceLanguages.Icon")
                 .FirstOrDefault(x => x.Id == model.Id);
-            if (entity == null) return false;
+            if (entity == null)
+            {
+                entity = new HTService();
+            };
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             entity.CategoryId = model.CategoryId;
 
-            foreach (var item in entity.HTServiceLanguages)
+            if (entity.HTServiceLanguages == null || entity.HTServiceLanguages.Count == 0)
             {
-                var en = model.HTServiceLanguages.FirstOrDefault(x => x.Id == item.Id);
-                if (en != null)
+                entity.HTServiceLanguages = model.HTServiceLanguages.Select(s => new HTServiceLanguage
                 {
-                    item.Title = en.Title;
-                    item.ImageId = en.Image != null ? en.Image.Id : (int?)null;
-                    item.IconId = en.Icon != null ? en.Icon.Id : (int?)null;
-                    item.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+                    Title = s.Title,
+                    ImageId = s.Image != null ? s.Image.Id : (int?)null,
+                    IconId = s.Icon != null ? s.Icon.Id : (int?)null,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    Language = s.Language
+                }).ToList();
+            }
+            else
+            {
+                foreach (var item in entity.HTServiceLanguages)
+                {
+                    var en = model.HTServiceLanguages.FirstOrDefault(x => x.Id == item.Id);
+                    if (en != null)
+                    {
+                        item.Title = en.Title;
+                        item.ImageId = en.Image != null ? en.Image.Id : (int?)null;
+                        item.IconId = en.Icon != null ? en.Icon.Id : (int?)null;
+                        item.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+                    }
                 }
             }
 
             this.HTRepository.HTServiceRepository.Save(entity);
             this.HTRepository.Commit();
-            return true;
+            if (model.Id == 0) model.Id = entity.Id;
+            return model;
         }
 
 
@@ -282,7 +300,7 @@ namespace GotoDN.Web.Controllers
                 .OrderByDescending(t => t.CreatedDate).Take(100);
 
             var placeModels = places.Select(t => AutoMapper.Mapper.Map<Place, PlaceModel>(t)).ToList();
-            
+
             return placeModels;
         }
     }

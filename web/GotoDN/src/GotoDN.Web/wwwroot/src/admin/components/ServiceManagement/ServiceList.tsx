@@ -11,6 +11,7 @@ interface thisProps {
   SelectedHTService: HTServiceModel,
   ChangeSelectedService: (model: HTServiceModel) => void,
   CreateHTService: () => void,
+  Categories: CategoryModel[]
 }
 interface thisState {
   Search?: string,
@@ -43,10 +44,11 @@ class HTServiceList extends React.Component<thisProps, thisState> {
     if (this.state.Services) {
       let services = this.state.Services.slice();
       groupServices = _.chain(services).groupBy('CategoryId').map((value, key) => {
+        let category = this.props.Categories.filter(c =>key != 'null' && c.Id == key)[0];
         return {
           Category: key,
           Services: value,
-          CategoryName: key != 'null' && value.length > 0 ? value[0].Category.CategoryLanguages.filter(c => c.Language == LanguageEnums.English)[0].Title : null
+          CategoryName: key != 'null' && category ? category.CategoryLanguages.filter(c => c.Language == LanguageEnums.English)[0].Title : ''
         }
       })
         .value();
@@ -62,6 +64,12 @@ class HTServiceList extends React.Component<thisProps, thisState> {
       <div className="col-lg-4">
         <h3>Danh sách dịch vụ</h3>
         <hr/>
+        <div className="form-group">
+          <button className="btn btn-primary"
+                  onClick={() => this.createHTService()}><i
+            className="fa fa-plus"/> Thêm dịch vụ
+          </button>
+        </div>
         <div className="form-group" style={{position: 'relative'}}>
           <input value={this.state.Search} onChange={(e) => this.handleSearch(e)} type="text" className="form-control"
                  placeholder="Tìm kiếm dịch vụ..."/>
@@ -78,13 +86,6 @@ class HTServiceList extends React.Component<thisProps, thisState> {
                 />
             ) : null}
         </ul>
-        <hr/>
-        <div className="form-group">
-          <button className="btn btn-primary"
-                  onClick={() => this.createHTService()}><i
-            className="fa fa-plus"/> Thêm dịch vụ
-          </button>
-        </div>
       </div>
     );
   }

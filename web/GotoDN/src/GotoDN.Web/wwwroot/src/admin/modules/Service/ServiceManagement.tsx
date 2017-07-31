@@ -42,15 +42,11 @@ class HTServiceManagement extends React.Component<{}, thisState> {
   private async createHTService() {
     let result = await HTServiceInstance.CreateHTService();
     if (result) {
-      window['notice_create_success']();
-      if (this.state.HTServices) {
-        this.state.HTServices.push(result);
-        this.setState({
-          SelectedHTService: result,
-          SelectedLanguage: result.HTServiceLanguages ? result.HTServiceLanguages[0].Language : LanguageEnums.English,
-        })
-        this.forceUpdate();
-      }
+      this.setState({
+        SelectedHTService: result,
+        SelectedLanguage: result.HTServiceLanguages ? result.HTServiceLanguages[0].Language : LanguageEnums.English,
+      });
+      this.forceUpdate();
     }
     else {
       window['notice_error']();
@@ -61,14 +57,15 @@ class HTServiceManagement extends React.Component<{}, thisState> {
 
     let result = await HTServiceInstance.UpdateHTService(this.state.SelectedHTService);
     if (result) {
-      let services = this.state.HTServices.slice();
-      let index = _.findIndex(services, (sv) => {
-        return sv.Id == this.state.SelectedHTService.Id
-      });
-      if (index)
-        services[index] = this.state.SelectedHTService;
+      // let services = this.state.HTServices.slice();
+      // let index = _.findIndex(services, (sv) => {
+      //   return sv.Id == this.state.SelectedHTService.Id
+      // });
+      // if (index)
+      //   services[index] = this.state.SelectedHTService;
       this.setState({
-        HTServices: services
+        SelectedHTService: result,
+        HTServices: await HTServiceInstance.GetAll()
       });
       window['notice_save_success']();
     }
@@ -96,7 +93,7 @@ class HTServiceManagement extends React.Component<{}, thisState> {
         });
       }
       else {
-        window['notice_error']();
+        window['notice']('error-notice', 'Lỗi', 'Không thể xóa được bản ghi vì bản ghi được sử dụng trong hệ thống, bạn chỉ có thể xóa được bản ghi nếu nó không được sử dụng trong hệ thống.', 'glyphicon glyphicon-remove');
       }
     }
   }
@@ -172,6 +169,7 @@ class HTServiceManagement extends React.Component<{}, thisState> {
                                    SelectedHTService: model,
                                    SelectedLanguage: LanguageEnums.English,
                                  })}
+                                 Categories={this.state.Categories || []}
                                  CreateHTService={() => this.createHTService()}
                   />
                   <HTServiceDetail SelectedHTService={this.state.SelectedHTService}
@@ -187,6 +185,12 @@ class HTServiceManagement extends React.Component<{}, thisState> {
                                        }
                                      }
                                      this.forceUpdate();
+                                   }}
+                                   cancelService={() => {
+                                     this.setState({
+                                        SelectedLanguage: LanguageEnums.English,
+                                        SelectedHTService: null,
+                                     })
                                    }}
                                    SaveHTService={() => this.updateHTService()}
                                    DeleteHTService={(Id: number) => this.deleteHTService(Id)}

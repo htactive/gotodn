@@ -45,6 +45,7 @@ namespace GotoDN.Web.Controllers
         public CategoryModel CreateCategory()
         {
             var entity = new Category();
+            entity.Id = 0;
             entity.CreatedDate = Common.DateTimeHelper.GetDateTimeNow();
             entity.UpdatedDate = Common.DateTimeHelper.GetDateTimeNow();
             entity.CategoryLanguages = new List<CategoryLanguage>()
@@ -58,43 +59,43 @@ namespace GotoDN.Web.Controllers
                 },
                 new CategoryLanguage()
                 {
-                    Title = "",
+                    Title = "New Category",
                     Language = LanguageEnums.Vietnamese,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 },
                 new CategoryLanguage()
                 {
-                    Title = "",
+                    Title = "New Category",
                     Language = LanguageEnums.France,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 },
                 new CategoryLanguage()
                 {
-                    Title = "",
+                    Title = "New Category",
                     Language = LanguageEnums.Chinese,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 },
                 new CategoryLanguage()
                 {
-                    Title = "",
+                    Title = "New Category",
                     Language = LanguageEnums.Korean,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 },
                 new CategoryLanguage()
                 {
-                    Title = "",
+                    Title = "New Category",
                     Language = LanguageEnums.Japanese,
                     UpdatedDate = DateTimeHelper.GetDateTimeNow(),
                     CreatedDate = DateTimeHelper.GetDateTimeNow(),
                 },
             };
 
-            this.HTRepository.CategoryRepository.Save(entity);
-            this.HTRepository.Commit();
+            //this.HTRepository.CategoryRepository.Save(entity);
+            //this.HTRepository.Commit();
             return AutoMapper.Mapper.Map<Category, CategoryModel>(entity);
         }
 
@@ -103,8 +104,13 @@ namespace GotoDN.Web.Controllers
         public bool DeleteCategory([FromBody]int Id)
         {
             var entity = this.HTRepository.CategoryRepository.GetAll()
+                .Include(c => c.HTServices)
+                .Include(c => c.Places)
                 .FirstOrDefault(x => x.Id == Id);
-            if (entity == null) return false;
+            if (entity == null ||
+                (entity.HTServices != null && entity.HTServices.Count > 0) ||
+                (entity.Places != null && entity.Places.Count > 0)
+                ) return false;
             this.HTRepository.CategoryRepository.Delete(entity);
             this.HTRepository.Commit();
             return true;
@@ -112,31 +118,49 @@ namespace GotoDN.Web.Controllers
 
         [HttpPost, Route("update-category")]
         [HTAuthorize]
-        public bool UpdateCategory([FromBody]CategoryModel model)
+        public CategoryModel UpdateCategory([FromBody]CategoryModel model)
         {
-            if (model == null) return false;
+            if (model == null) return null;
             var entity = this.HTRepository.CategoryRepository.GetAll()
                 .Include("CategoryLanguages.Image")
                 .Include("CategoryLanguages.Icon")
                 .FirstOrDefault(x => x.Id == model.Id);
-            if (entity == null) return false;
+            if (entity == null) {
+                entity = new Category();
+            };
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             entity.IsEvent = model.IsEvent;
-            foreach (var item in entity.CategoryLanguages)
+            if (entity.CategoryLanguages == null || entity.CategoryLanguages.Count == 0)
             {
-                var en = model.CategoryLanguages.FirstOrDefault(x => x.Id == item.Id);
-                if (en != null)
+                entity.CategoryLanguages = model.CategoryLanguages.Select(c => new CategoryLanguage
                 {
-                    item.Title = en.Title;
-                    item.ImageId = en.Image != null ? en.Image.Id : (int?)null;
-                    item.IconId = en.Icon != null ? en.Icon.Id : (int?)null;
-                    item.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+                    Title = c.Title,
+                    ImageId = c.Image != null ? c.Image.Id : (int?)null,
+                    IconId = c.Icon != null ? c.Icon.Id : (int?)null,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    Language = c.Language
+                }).ToList();
+            }
+            else
+            {
+                foreach (var item in entity.CategoryLanguages)
+                {
+                    var en = model.CategoryLanguages.FirstOrDefault(x => x.Id == item.Id);
+                    if (en != null)
+                    {
+                        item.Title = en.Title;
+                        item.ImageId = en.Image != null ? en.Image.Id : (int?)null;
+                        item.IconId = en.Icon != null ? en.Icon.Id : (int?)null;
+                        item.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+                        item.Language = en.Language;
+                    }
                 }
             }
 
             this.HTRepository.CategoryRepository.Save(entity);
             this.HTRepository.Commit();
-            return true;
+            if (model.Id == 0) model.Id = entity.Id;
+            return model;
         }
 
         [HttpPost, Route("add-language")]
@@ -244,7 +268,7 @@ namespace GotoDN.Web.Controllers
                     Id = x.Id,
                     SubTitle = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Description,
                     Title = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
-                    Url = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image != null ? x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image.Url : Common.DefaultPhoto.ImageUrl,                   
+                    Url = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image != null ? x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image.Url : Common.DefaultPhoto.ImageUrl,
                     CreateDate = x.CreatedDate,
                 }).ToList()).ToList();
 
@@ -285,7 +309,8 @@ namespace GotoDN.Web.Controllers
                 Name = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
                 Image = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
                 Icon = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon).Url : null,
-                Items = null})).ToList();
+                Items = null
+            })).ToList();
 
             result = result.OrderBy(x => x.Order).ToList();
             return result;

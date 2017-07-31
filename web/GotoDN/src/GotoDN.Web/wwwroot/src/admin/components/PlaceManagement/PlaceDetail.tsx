@@ -337,7 +337,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                           />
                         </div>
                         <div className="form-group col-sm-6 p0">
-                          <div className="btn-group dropdown col-sm-2 p0" style={{marginLeft: 5}}>
+                          <div className="btn-group dropdown p0" style={{marginLeft: 5}}>
                             <button className="btn btn-warning"
                                     onClick={() => {
                                       this.translateAllLanguage()
@@ -345,7 +345,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                             </button>
                           </div>
                           {this.props.SelectedPlace.PlaceLanguages && this.props.SelectedPlace.PlaceLanguages.length < 6 ?
-                            <div className="btn-group dropdown col-sm-2 p0" style={{marginLeft: 10}}>
+                            <div className="btn-group dropdown p0 ml10" style={{marginLeft: 10}}>
                               <button type="button" className="btn btn-success dropdown-toggle"
                                       data-toggle="dropdown" aria-expanded="false">
                                 Thêm ngôn ngữ
@@ -362,10 +362,12 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                                 )}
                               </ul>
                             </div> : null }
-                          <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
-                                  onClick={() => this.deletePlace()}><i
-                            className="fa fa-trash-o"/> Xóa
-                          </button>
+                          {this.props.SelectedPlace.Id != 0 ?
+                            <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
+                                    onClick={() => this.deletePlace()}><i
+                              className="fa fa-trash-o"/> Xóa
+                            </button> : null}
+
                           <button className="btn btn-primary pull-right"
                                   onClick={() => this.savePlace()}><i
                             className="fa fa-save"/> Lưu
@@ -377,8 +379,8 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                       </div>
                       <hr/>
                       {
-                        this.props.SelectedPlace.PlaceLanguages.map(x =>
-                          <li key={x.Id}
+                        this.props.SelectedPlace.PlaceLanguages.map((x, index) =>
+                          <li key={index}
                               className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
                             <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
                               {languages.filter(r => r.Language == x.Language)[0].Title}
@@ -396,9 +398,9 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                     </ul>
                     <div className="tab-content">
                       {
-                        this.props.SelectedPlace.PlaceLanguages.map(x => {
+                        this.props.SelectedPlace.PlaceLanguages.map((x, index) => {
                           return <PlaceLanguageDetail
-                            key={x.Id}
+                            key={index}
                             IsSelected={x.Language == this.props.SelectedLanguage}
                             PlaceLanguage={x}
                             EnPlaceLanguage={enPlaceLanguage}
@@ -481,10 +483,11 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                     </div> : null}
                   <div className="form-group">
 
-                    <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
-                            onClick={() => this.deletePlace()}><i
-                      className="fa fa-trash-o"/> Xóa
-                    </button>
+                    {this.props.SelectedPlace.Id != 0 ?
+                      <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
+                              onClick={() => this.deletePlace()}><i
+                        className="fa fa-trash-o"/> Xóa
+                      </button> : null}
                     <button className="btn btn-primary pull-right"
                             onClick={() => this.savePlace()}><i
                       className="fa fa-save"/> Lưu
@@ -523,7 +526,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
       return;
     }
     // if is valid, do submit here
-    console.log('congratulation! your form is valid, do submit now ' + this.props.SelectedPlace);
     this.props.SavePlace && this.props.SavePlace(this.props.SelectedPlace);
     this.close();
   }

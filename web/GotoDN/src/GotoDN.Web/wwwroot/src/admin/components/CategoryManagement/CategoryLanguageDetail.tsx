@@ -37,7 +37,7 @@ class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
             onFieldValueChange={(obj) => {
               this.props.OnObjectChange(obj)
             }}
-            Object={this.props.CategoryLanguage}
+            Object={this.props.CategoryLanguage || {}}
             onValidationChange={(isInvalid) => {
               this.props.CategoryLanguage['__#isInvalid#__'] = isInvalid
             }}

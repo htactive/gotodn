@@ -16,12 +16,13 @@ interface thisProps {
   DeleteCategoryLanguage: (Id: number) => void,
   ChangeEvent: (check: boolean) => void,
   OnTranslateAll?: (model: CategoryModel) => void,
+  cancelCategory: () => void,
 }
 
 class CategoryDetail extends React.Component<thisProps, {}> {
 
   render() {
-    let languages: { Language: LanguageEnums, Title: string }[] = [
+    let languages: {Language: LanguageEnums, Title: string}[] = [
       {Language: LanguageEnums.English, Title: 'Tiếng Anh'},
       {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
       {Language: LanguageEnums.France, Title: 'Tiếng Pháp'},
@@ -42,8 +43,8 @@ class CategoryDetail extends React.Component<thisProps, {}> {
             <div className="tabs mb20">
               <ul className="nav nav-tabs">
                 {
-                  this.props.SelectedCategory.CategoryLanguages.map(x =>
-                    <li key={x.Id}
+                  this.props.SelectedCategory.CategoryLanguages.map((x, index) =>
+                    <li key={index}
                         className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
                       <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
                         {languages.filter(r => r.Language == x.Language)[0].Title}
@@ -61,9 +62,9 @@ class CategoryDetail extends React.Component<thisProps, {}> {
               </ul>
               <div className="tab-content">
                 {
-                  this.props.SelectedCategory.CategoryLanguages.map(x => {
+                  this.props.SelectedCategory.CategoryLanguages.map((x, index) => {
                     return <CategoryLanguageDetail
-                      key={x.Id}
+                      key={index}
                       IsSelected={x.Language == this.props.SelectedLanguage}
                       CategoryLanguage={x}
                       EnCategoryLanguage={enCategoryLanguage}
@@ -90,10 +91,16 @@ class CategoryDetail extends React.Component<thisProps, {}> {
             </div>
             <hr className="col-lg-12 p0" style={{marginTop: 0}}/>
             <div className="form-group">
-              <button className="btn btn-danger pull-right"
-                      onClick={() => this.deleteCategory()}><i
-                className="fa fa-trash-o"/> Xóa
-              </button>
+              {this.props.SelectedCategory.Id != 0 ?
+                <button className="btn btn-danger pull-right"
+                        onClick={() => this.deleteCategory()}><i
+                  className="fa fa-trash-o"/> Xóa
+                </button> :
+                <button className="btn btn-default pull-right"
+                        onClick={() => this.cancelHTService()}><i
+                  className="fa fa-trash-o"/> Hủy
+                </button>
+              }
               <button className="btn btn-primary pull-right mr10 ml10"
                       onClick={() => this.saveCategory()}>Lưu
               </button>
@@ -158,7 +165,6 @@ class CategoryDetail extends React.Component<thisProps, {}> {
       return;
     }
     // if is valid, do submit here
-    console.log('congratulation! your form is valid, do submit now ' + this.props.SelectedCategory);
     this.props.SaveCategory && this.props.SaveCategory(this.props.SelectedCategory);
   }
 
@@ -181,6 +187,10 @@ class CategoryDetail extends React.Component<thisProps, {}> {
       }
     }
 
+  }
+
+  private cancelHTService() {
+    this.props.cancelCategory && this.props.cancelCategory();
   }
 }
 

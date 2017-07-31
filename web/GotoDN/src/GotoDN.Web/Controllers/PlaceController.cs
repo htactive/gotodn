@@ -118,7 +118,10 @@ namespace GotoDN.Web.Controllers
                 .Include("PlaceLanguages.Icon")
                 .Include("PlaceLanguages.PlaceImages.Image")
                 .FirstOrDefault(x => x.Id == model.Id);
-            if (entity == null) return false;
+            if (entity == null) {
+                entity = new Place();
+                entity.PlaceLanguages = model.PlaceLanguages.Select(pl => AutoMapper.Mapper.Map<PlaceLanguage>(pl)).ToList();
+            }
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             entity.Address = model.Address;
             entity.CityId = model.CityId;
@@ -491,6 +494,61 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public PlaceModel GetPlaceById(int id)
         {
+            if (id == 0)
+            {
+                var place = new Place();
+                place.Id = 0;
+                place.CreatedDate = Common.DateTimeHelper.GetDateTimeNow();
+                place.UpdatedDate = Common.DateTimeHelper.GetDateTimeNow();
+
+                place.PlaceLanguages = new List<PlaceLanguage>()
+                {
+                    new PlaceLanguage()
+                    {
+                        Title = "New Place",
+                        Language = LanguageEnums.English,
+                        UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                        CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                    },
+                    new PlaceLanguage()
+                    {
+                        Title = "New Place",
+                        Language = LanguageEnums.Vietnamese,
+                        UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                        CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                    },
+                    new PlaceLanguage()
+                    {
+                        Title = "New Place",
+                        Language = LanguageEnums.France,
+                        UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                        CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                    },
+                    new PlaceLanguage()
+                    {
+                        Title = "New Place",
+                        Language = LanguageEnums.Chinese,
+                        UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                        CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                    },
+                    new PlaceLanguage()
+                    {
+                        Title = "New Place",
+                        Language = LanguageEnums.Korean,
+                        UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                        CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                    },
+                    new PlaceLanguage()
+                    {
+                        Title = "New Place",
+                        Language = LanguageEnums.Japanese,
+                        UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                        CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                    }
+                };
+                var placeModel = AutoMapper.Mapper.Map<Place, PlaceModel>(place);
+                return placeModel;
+            }
             var query = this.HTRepository.PlaceRepository.GetAll();
             var entity = query.Include("PlaceLanguages.Image").Include("PlaceLanguages.PlaceImages.Image")
                 .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages")
@@ -713,7 +771,7 @@ namespace GotoDN.Web.Controllers
 
             var nearBy = this.HTRepository.PlaceLanguageRepository.GetAll()
                 .Include(x => x.Place).Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image")
-                .Where(x => x.Language == LanguageEnums.English && 
+                .Where(x => x.Language == LanguageEnums.English &&
                         x.Place.CityId.HasValue && entity.CityId.HasValue && x.Place.CityId == entity.CityId && x.Place.Id != id)
                 .OrderByDescending(x => x.CreatedDate).Take(5).ToList();
 

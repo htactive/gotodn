@@ -14,7 +14,7 @@ class CategoryService extends AdminServiceBase {
     return await super.executeFetchPost(url, null);
   }
 
-  async UpdateCategory(model: CategoryModel): Promise<boolean> {
+  async UpdateCategory(model: CategoryModel): Promise<CategoryModel> {
     let url = `${virtualPath}/category/update-category`;
     return await super.executeFetchPost(url, model);
   }

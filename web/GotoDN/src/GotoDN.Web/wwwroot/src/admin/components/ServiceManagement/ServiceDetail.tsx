@@ -18,6 +18,7 @@ interface thisProps {
   DeleteHTServiceLanguage: (Id: number) => void,
   Categories: CategoryModel[],
   ClickSlectCategory: (Id) => void,
+  cancelService: () => void,
 }
 
 class HTServiceDetail extends React.Component<thisProps, {}> {
@@ -52,8 +53,8 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
             <div className="tabs mb20">
               <ul className="nav nav-tabs">
                 {
-                  this.props.SelectedHTService.HTServiceLanguages.map(x =>
-                    <li key={x.Id}
+                  this.props.SelectedHTService.HTServiceLanguages.map((x, index) =>
+                    <li key={index}
                         className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
                       <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
                         {languages.filter(r => r.Language == x.Language)[0].Title}
@@ -72,9 +73,9 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
               </ul>
               <div className="tab-content">
                 {
-                  this.props.SelectedHTService.HTServiceLanguages.map(x => {
+                  this.props.SelectedHTService.HTServiceLanguages.map((x, index) => {
                     return <ServiceLanguageDetail
-                      key={x.Id}
+                      key={index}
                       IsSelected={x.Language == this.props.SelectedLanguage}
                       HTServiceLanguage={x}
                       EnHTServiceLanguage={enHTServiceLanguage}
@@ -98,10 +99,17 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
             </div>
             <hr className="col-lg-12 p0"/>
             <div className="form-group">
-              <button className="btn btn-danger pull-right"
-                      onClick={() => this.deleteHTService()}><i
-                className="fa fa-trash-o"/> Xóa
-              </button>
+              {this.props.SelectedHTService.Id != 0 ?
+                <button className="btn btn-danger pull-right"
+                        onClick={() => this.deleteHTService()}><i
+                  className="fa fa-trash-o"/> Xóa
+                </button> :
+                <button className="btn btn-default pull-right"
+                        onClick={() => this.cancelHTService()}><i
+                  className="fa fa-trash-o"/> Hủy
+                </button>
+              }
+
               <button className="btn btn-primary pull-right mr10 ml10"
                       onClick={() => this.saveHTService()}>Lưu
               </button>
@@ -187,6 +195,10 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
         });
       }
     }
+  }
+
+  private cancelHTService() {
+    this.props.cancelService && this.props.cancelService();
   }
 }
 

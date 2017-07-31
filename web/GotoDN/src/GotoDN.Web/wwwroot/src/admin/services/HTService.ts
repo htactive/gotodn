@@ -14,7 +14,7 @@ class HTService extends AdminServiceBase {
     return await super.executeFetchPost(url, null);
   }
 
-  async UpdateHTService(model: HTServiceModel): Promise<boolean> {
+  async UpdateHTService(model: HTServiceModel): Promise<HTServiceModel> {
     let url = `${virtualPath}/service/update-service`;
     return await super.executeFetchPost(url, model);
   }

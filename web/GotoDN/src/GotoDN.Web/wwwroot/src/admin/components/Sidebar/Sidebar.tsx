@@ -160,9 +160,11 @@ class Sidebar extends React.Component<any, thisState> {
   }
 
   private renderMenuItem(menuItem: LeftSideBarMenuItemModel) {
+    let isActive =(menuItem.LinkTo == AdminRoutePath.UserManagement && window.location.pathname == '/' ) ||
+      (window.location.pathname ? window.location.pathname.startsWith(menuItem.LinkTo) : false);
     return (
       <li key={menuItem.Text}>
-        <Link to={menuItem.LinkTo} activeClassName="active">
+        <Link to={menuItem.LinkTo} className={isActive ? 'active' : ''}>
           {menuItem.Icon ?
             <i className={`icon ${menuItem.Icon}`}/> : null}
           <span className="txt">{menuItem.Text}</span>

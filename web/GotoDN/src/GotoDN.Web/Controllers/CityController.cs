@@ -101,8 +101,12 @@ namespace GotoDN.Web.Controllers
         public bool DeleteCity([FromBody]int Id)
         {
             var entity = this.HTRepository.CityRepository.GetAll()
+                .Include(ct => ct.Districts)
+                .Include(ct => ct.Places)
                 .FirstOrDefault(x => x.Id == Id);
-            if (entity == null) return false;
+            if (entity == null || 
+                (entity.Districts != null && entity.Districts.Count > 0) || 
+                (entity.Places != null && entity.Places.Count > 0)) return false;
             this.HTRepository.CityRepository.Delete(entity);
             this.HTRepository.Commit();
             return true;
@@ -138,8 +142,9 @@ namespace GotoDN.Web.Controllers
         public bool DeleteDistrict([FromBody]int Id)
         {
             var entity = this.HTRepository.DistrictRepository.GetAll()
+                .Include(d => d.Places)
                 .FirstOrDefault(x => x.Id == Id);
-            if (entity == null) return false;
+            if (entity == null || (entity.Places != null && entity.Places.Count > 0)) return false;
 
             this.HTRepository.DistrictRepository.Delete(entity);
             this.HTRepository.Commit();
