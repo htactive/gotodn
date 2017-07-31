@@ -83,7 +83,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
-          Name: 'Xuất hiện trên Slider Category',
+          Name: 'Xuất hiện trên Slider Thư mục',
           FieldName: 'IsCategorySlider',
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.Toggle,
@@ -96,7 +96,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
-          Name: 'Xuất hiện trên Slider Trang chủ',
+          Name: 'Hiển thị trên Slider Trang chủ',
           FieldName: 'IsHomeSlider',
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.Toggle,
@@ -337,7 +337,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                           />
                         </div>
                         <div className="form-group col-sm-6 p0">
-                          <div className="btn-group dropdown col-sm-2 p0" style={{marginLeft: 5}}>
+                          <div className="btn-group dropdown col-sm-2" style={{marginLeft: 5}}>
                             <button className="btn btn-warning"
                                     onClick={() => {
                                       this.translateAllLanguage()
@@ -345,7 +345,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                             </button>
                           </div>
                           {this.props.SelectedPlace.PlaceLanguages && this.props.SelectedPlace.PlaceLanguages.length < 6 ?
-                            <div className="btn-group dropdown col-sm-2 p0" style={{marginLeft: 10}}>
+                            <div className="btn-group dropdown col-sm-2" style={{marginLeft: 10}}>
                               <button type="button" className="btn btn-success dropdown-toggle"
                                       data-toggle="dropdown" aria-expanded="false">
                                 Thêm ngôn ngữ
