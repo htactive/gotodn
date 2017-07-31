@@ -1338,7 +1338,7 @@ body.fixed-right-sidebar:not(.fixed-header) #right-sidebar.rstop {
   position: relative;
 }
 .page-sidebar .side-nav .nav > li ul.sub.show li a {
-  background-color: #1c2128;
+  background-color: #262d37;
   position: relative;
 }
 .page-sidebar .side-nav .nav > li ul.sub.show li a.expand:after {

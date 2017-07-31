@@ -83,7 +83,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
-          Name: 'Xuất hiện trên Slider Category',
+          Name: 'Hiển thị trên Slider Thư mục',
           FieldName: 'IsCategorySlider',
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.Toggle,
@@ -96,7 +96,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
-          Name: 'Xuất hiện trên Slider Trang chủ',
+          Name: 'Hiển thị trên Slider Trang chủ',
           FieldName: 'IsHomeSlider',
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.Toggle,

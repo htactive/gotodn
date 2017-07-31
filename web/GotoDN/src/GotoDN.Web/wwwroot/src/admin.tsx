@@ -34,7 +34,9 @@ ReactDOM.render(
       <Route path={`${AdminRoutePath.UserManagement}(/:id)`} component={UserManagement}/>
       <Route path={`${AdminRoutePath.CategoryManagement}(/:id)`} component={CategoryManagement}/>
       <Route path={`${AdminRoutePath.ServiceManagement}(/:id)`} component={HTServiceManagement}/>
-      <Route path={`${AdminRoutePath.PlaceManagement}(/:id)`} component={PlaceManagement}/>
+      <Route path={`${AdminRoutePath.PlaceManagement}`} component={PlaceManagement}>
+        <Route path={`${AdminRoutePath.PlaceManagement}(/:id)`} component={PlaceManagement}/>
+      </Route>
       <Route path={`${AdminRoutePath.CityManagement}(/:id)`} component={CityManagement}/>
       <Route path={`${AdminRoutePath.DistrictManagement}(/:id)`} component={DistrictManagement}/>
 
