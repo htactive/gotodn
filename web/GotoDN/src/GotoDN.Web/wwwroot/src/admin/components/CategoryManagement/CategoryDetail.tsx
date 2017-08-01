@@ -15,6 +15,7 @@ interface thisProps {
   AddCategoryLanguage: (lang: LanguageEnums) => void,
   DeleteCategoryLanguage: (Id: number) => void,
   ChangeEvent: (check: boolean) => void,
+  ChangeGovernment: (check: boolean) => void,
   OnTranslateAll?: (model: CategoryModel) => void,
   cancelCategory: () => void,
 }
@@ -77,13 +78,27 @@ class CategoryDetail extends React.Component<thisProps, {}> {
             </div>
             <div className="toggle-custom col-lg-12 p0">
               <label htmlFor="checkbox-toggle" style={{paddingTop: '2px', fontWeight: 'normal'}}
-                     className="col-lg-3 control-label">Là category sự kiện? &nbsp;&nbsp;</label>
+                     className="col-lg-3 control-label">Là danh mục Sự Kiện? &nbsp;&nbsp;</label>
               <div className="col-lg-9">
                 <label className="toggle " data-on="YES" data-off="NO">
                   <input type="checkbox" id="checkbox-toggle"
                          name="checkbox-toggle"
                          onChange={(e) => this.props.ChangeEvent(e.target.checked)}
                          checked={this.props.SelectedCategory.IsEvent || false}
+                  />
+                  <span className="button-radio"/>
+                </label>
+              </div>
+            </div>
+            <div className="toggle-custom col-lg-12 p0">
+              <label htmlFor="checkbox-toggle" style={{paddingTop: '2px', fontWeight: 'normal'}}
+                     className="col-lg-3 control-label">Là danh mục Chính Quyền? &nbsp;&nbsp;</label>
+              <div className="col-lg-9">
+                <label className="toggle " data-on="YES" data-off="NO">
+                  <input type="checkbox" id="checkbox-toggle"
+                         name="checkbox-toggle"
+                         onChange={(e) => this.props.ChangeGovernment(e.target.checked)}
+                         checked={this.props.SelectedCategory.IsGovernment || false}
                   />
                   <span className="button-radio"/>
                 </label>

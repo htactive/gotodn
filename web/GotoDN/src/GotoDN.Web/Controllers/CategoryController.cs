@@ -130,6 +130,7 @@ namespace GotoDN.Web.Controllers
             };
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             entity.IsEvent = model.IsEvent;
+            entity.IsGovernment = model.IsGovernment;
             if (entity.CategoryLanguages == null || entity.CategoryLanguages.Count == 0)
             {
                 entity.CategoryLanguages = model.CategoryLanguages.Select(c => new CategoryLanguage

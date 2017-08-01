@@ -38,23 +38,25 @@ class CityManagement extends React.Component<{}, thisState> {
   }
 
   private async createCity() {
-    let result = await CityServiceInstance.CreateCity();
-    if (result) {
-      window['notice_create_success']();
-      let filter = this.state.GridFilter;
-      if (filter) {
-        filter.CurrentPage = 1;
-        filter.IsAsc = false;
-        filter.SortExpression = "Id";
-      }
-      this.getData(filter);
-      this.setState({
-        SelectedCity: result,
-      })
-    }
-    else {
-      window['notice_error']();
-    }
+    this.setState({SelectedCity: {Id: 0, Name: '',}});
+    this.cityModal.show();
+    // let result = await CityServiceInstance.CreateCity();
+    // if (result) {
+    //   window['notice_create_success']();
+    //   let filter = this.state.GridFilter;
+    //   if (filter) {
+    //     filter.CurrentPage = 1;
+    //     filter.IsAsc = false;
+    //     filter.SortExpression = "Id";
+    //   }
+    //   this.getData(filter);
+    //   this.setState({
+    //     SelectedCity: result,
+    //   })
+    // }
+    // else {
+    //   window['notice_error']();
+    // }
   }
 
   private async updateCity(model: CityModel) {

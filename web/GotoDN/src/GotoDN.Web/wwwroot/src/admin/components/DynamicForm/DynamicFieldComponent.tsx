@@ -8,11 +8,12 @@ import {SingleImageUploadComponent} from "./SingleImageUploadComponent";
 import {RichTextEditorComponent} from "./RichTextEditorComponent";
 import {DateRangePicker} from "../../../commons/date-range-picker";
 import {MultiImageUploadComponent} from "./MultiImageUploadComponent";
-import {PlaceImageModel} from "../../../models/PlaceLanguageModel";
+import {PlaceImageModel, PlaceMoreInfoModel} from "../../../models/PlaceLanguageModel";
 
 import MaskedInput from 'react-maskedinput';
 import Rating = require('react-rating');
 import moment = require("moment");
+import {MoreInfoComponent} from "./MoreInfoComponent";
 
 interface thisProps {
   Field: DynamicFieldModel,
@@ -393,6 +394,12 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
       />;
     }
 
+    if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.C_MoreInfo) {
+      return <MoreInfoComponent Field={this.props.Field} Info={this.props.FieldValue.Value}
+                                onInfoChanged={(info: PlaceMoreInfoModel[]) => this.onInfoChanged(info)}
+      />;
+    }
+
     return this.renderTextBoxField();
   }
 
@@ -400,6 +407,12 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
     let fv: FieldValueModel = {...this.props.FieldValue};
     fv.Value = irv;
     fv.ValueNumber = 0;
+    this.props.onFieldValueChange(fv);
+  }
+
+  private onInfoChanged(info: PlaceMoreInfoModel[]) {
+    let fv: FieldValueModel = {...this.props.FieldValue};
+    fv.Value = info;
     this.props.onFieldValueChange(fv);
   }
 }

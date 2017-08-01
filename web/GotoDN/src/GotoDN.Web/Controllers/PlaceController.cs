@@ -117,11 +117,12 @@ namespace GotoDN.Web.Controllers
                 .Include("PlaceLanguages.Image")
                 .Include("PlaceLanguages.Icon")
                 .Include("PlaceLanguages.PlaceImages.Image")
+                .Include("PlaceLanguages.PlaceMoreInfo.Icon")
                 .FirstOrDefault(x => x.Id == model.Id);
             if (entity == null) {
                 entity = new Place();
-                entity.PlaceLanguages = model.PlaceLanguages.Select(pl => AutoMapper.Mapper.Map<PlaceLanguage>(pl)).ToList();
             }
+            
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             entity.Address = model.Address;
             entity.CityId = model.CityId;
@@ -141,23 +142,61 @@ namespace GotoDN.Web.Controllers
             entity.HTServiceId = model.HTServiceId;
             entity.CategoryId = model.CategoryId;
 
-            foreach (var item in entity.PlaceLanguages)
+            if (entity.PlaceLanguages == null || entity.PlaceLanguages.Count == 0)
             {
-                var en = model.PlaceLanguages.FirstOrDefault(x => x.Id == item.Id);
-                if (en != null)
+                entity.PlaceLanguages = model.PlaceLanguages.Select(p => new PlaceLanguage
                 {
-                    item.Title = en.Title;
-                    item.ImageId = en.Image != null ? en.Image.Id : (int?)null;
-                    item.IconId = en.Icon != null ? en.Icon.Id : (int?)null;
-                    item.Description = en.Description;
-                    if (item.PlaceImages == null) item.PlaceImages = new List<PlaceImage>();
-                    item.PlaceImages.Clear();
-                    item.PlaceImages.AddRange(en.PlaceImages.Take(10).Select(t => new PlaceImage
+                    Title = p.Title,
+                    ImageId = p.Image != null ? p.Image.Id : (int?)null,
+                    IconId = p.Icon != null ? p.Icon.Id : (int?)null,
+                    Description = p.Description,
+                    PlaceImages = p.PlaceImages != null ? p.PlaceImages.Take(10).Select(t => new PlaceImage
                     {
                         ImageId = t.ImageId,
-                        PlaceLangId = en.Id,
-                    }));
-                    item.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+                        PlaceLangId = p.Id,
+                    }).ToList() : null,
+                    PlaceMoreInfo = p.PlaceMoreInfo != null ? p.PlaceMoreInfo.Take(10).Select((t, index) => new PlaceMoreInfo
+                    {
+                        IconId = t.Icon != null ? t.Icon.Id : (int?)null,
+                        IsHalf = t.IsHalf,
+                        Name = t.Name,
+                        Value = t.Value,
+                        Order = index
+                    }).ToList() : null,
+                    UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                    Language = p.Language
+                }).ToList();
+            }
+            else
+            {
+                foreach (var item in entity.PlaceLanguages)
+                {
+                    var en = model.PlaceLanguages.FirstOrDefault(x => x.Id == item.Id);
+                    if (en != null)
+                    {
+                        item.Title = en.Title;
+                        item.ImageId = en.Image != null ? en.Image.Id : (int?)null;
+                        item.IconId = en.Icon != null ? en.Icon.Id : (int?)null;
+                        item.Description = en.Description;
+                        if (item.PlaceImages == null) item.PlaceImages = new List<PlaceImage>();
+                        item.PlaceImages.Clear();
+                        item.PlaceImages.AddRange(en.PlaceImages.Take(10).Select(t => new PlaceImage
+                        {
+                            ImageId = t.ImageId,
+                            PlaceLangId = en.Id,
+                        }));
+
+                        item.PlaceMoreInfo = en.PlaceMoreInfo.Take(10).Select((t, index) => new PlaceMoreInfo
+                        {
+                            Id = 0,
+                            IconId = t.Icon != null ? t.Icon.Id : (int?)null,
+                            IsHalf = t.IsHalf,
+                            Name = t.Name,
+                            Value = t.Value,
+                            Order = index
+                        }).ToList();
+                        item.UpdatedDate = DateTimeHelper.GetDateTimeNow();
+                    }
                 }
             }
 
@@ -550,10 +589,16 @@ namespace GotoDN.Web.Controllers
                 return placeModel;
             }
             var query = this.HTRepository.PlaceRepository.GetAll();
-            var entity = query.Include("PlaceLanguages.Image").Include("PlaceLanguages.PlaceImages.Image")
+            var entity = query.Include("PlaceLanguages.Image").Include("PlaceLanguages.PlaceImages.Image").Include("PlaceLanguages.PlaceMoreInfo.Icon")
                 .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages")
                 .Include(x => x.City).Include(x => x.District).FirstOrDefault(q => q.Id == id);
-
+            foreach (var lang in entity.PlaceLanguages)
+            {
+                if(lang != null)
+                {
+                    lang.PlaceMoreInfo = lang.PlaceMoreInfo.OrderBy(i => i.Order).ToList();
+                }
+            }
             var model = AutoMapper.Mapper.Map<Place, PlaceModel>(
                 entity, opt =>
                 {
@@ -693,6 +738,25 @@ namespace GotoDN.Web.Controllers
                     ImageId = t.Id
                 }).ToList();
                 this.HTRepository.PlaceImageRepository.Save(placeImgs);
+            }
+            if (!importPlace.AdditionalInfoError && importPlace.AdditionalInfo != null && importPlace.AdditionalInfo.Count > 0)
+            {
+                var moreInfo = placeLanguage.PlaceMoreInfo;
+
+                if (moreInfo != null)
+                {
+                    this.HTRepository.PlaceMoreInfoRepository.Delete(moreInfo);
+                }
+
+                moreInfo = importPlace.AdditionalInfo.Select((i, index) => new PlaceMoreInfo
+                {
+                    PlaceLangId = placeLanguage.Id,
+                    Name = i.Key,
+                    Value = i.Value,
+                    Order = index
+                }).ToList();
+
+                this.HTRepository.PlaceMoreInfoRepository.Save(moreInfo);
             }
         }
 

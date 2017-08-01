@@ -120,16 +120,16 @@ namespace GotoDN.Web.Controllers
             var entity = this.HTRepository.CityRepository.GetAll()
                 .Include(x => x.Districts)
                 .FirstOrDefault(x => x.Id == model.Id);
-            if (entity == null) return false;
+            if (entity == null) entity = new City();
             entity.Name = model.Name;
-            foreach (var item in entity.Districts)
-            {
-                var en = model.Districts.FirstOrDefault(x => x.Id == item.Id);
-                if (en != null)
-                {
-                    item.Name = en.Name;
-                }
-            }
+            //foreach (var item in entity.Districts)
+            //{
+            //    var en = model.Districts.FirstOrDefault(x => x.Id == item.Id);
+            //    if (en != null)
+            //    {
+            //        item.Name = en.Name;
+            //    }
+            //}
 
             this.HTRepository.CityRepository.Save(entity);
             this.HTRepository.Commit();

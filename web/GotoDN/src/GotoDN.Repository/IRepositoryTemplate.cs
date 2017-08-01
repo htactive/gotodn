@@ -70,4 +70,8 @@ namespace GotoDN.Repository
     public partial interface IPlaceImageRepository : IBaseRepository<PlaceImage>
     {
     }
+
+    public partial interface IPlaceMoreInfoRepository : IBaseRepository<PlaceMoreInfo>
+    {
+    }
 }

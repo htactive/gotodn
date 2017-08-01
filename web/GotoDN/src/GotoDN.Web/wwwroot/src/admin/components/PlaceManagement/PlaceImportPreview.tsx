@@ -109,6 +109,9 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
         <TableHeaderColumn dataField="Website" dataFormat={(cell, row) => this.websiteFormat(cell,row)} width='250'>
           Website
         </TableHeaderColumn>
+        <TableHeaderColumn dataFormat={(cell, row) => this.placeInfoFormat(cell,row)} width='300'>
+          Thông tin thêm
+        </TableHeaderColumn>
         <TableHeaderColumn dataFormat={(cell, row) => this.placeImagesFormat(cell,row)} width='300'>
           URL hình ảnh địa điểm
         </TableHeaderColumn>
@@ -250,13 +253,27 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
     )
   }
 
+  private placeInfoFormat(cell: any, row: any) {
+    return (
+      row.AdditionalInfoError ?
+        <span className="text-red">{"Thông tin thêm sai định dạng"}</span> :
+        <div>
+          {row.AdditionalInfo.map((info, id) =>
+            <div key={id}>
+              <span>{info.Key}: </span>
+              <span>{info.Value}</span>
+            </div>)}
+        </div>
+    )
+  }
+
   private placeImagesFormat(cell: any, row: any) {
     return (
       row.PlaceImageError ?
         <span className="text-red">{"Hình ảnh địa điểm sai định dạng"}</span> :
         <div>
           {row.PlaceImages.map((img, id) =>
-            <a className="cut-line-1" style={{width: 280, display: 'block'}}
+            <a key={id} className="cut-line-1" style={{width: 280, display: 'block'}}
                target="_blank"
                href={img}>{img}</a>)}
         </div>

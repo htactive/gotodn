@@ -223,4 +223,17 @@ namespace GotoDN.Repository
             return model.Id;
         }
 	}
+
+    public partial class PlaceMoreInfoRepository : BaseRepository<PlaceMoreInfo, GTDBEntities>, IPlaceMoreInfoRepository
+    {
+        public PlaceMoreInfoRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		protected override int GetKeyId(PlaceMoreInfo model)
+        {
+            return model.Id;
+        }
+	}
 }

@@ -180,6 +180,15 @@ namespace GotoDN.Repository
 				(_PlaceImageRepository = ServiceProvider.GetService<IPlaceImageRepository>());
 			}
 		}
+		private IPlaceMoreInfoRepository _PlaceMoreInfoRepository;
+        public IPlaceMoreInfoRepository PlaceMoreInfoRepository 
+		{ 
+			get
+			{
+				return _PlaceMoreInfoRepository ?? 
+				(_PlaceMoreInfoRepository = ServiceProvider.GetService<IPlaceMoreInfoRepository>());
+			}
+		}
 		#endregion
     }
 	
@@ -204,6 +213,7 @@ namespace GotoDN.Repository
 			services.AddScoped<ICityRepository, CityRepository>();
 			services.AddScoped<IDistrictRepository, DistrictRepository>();
 			services.AddScoped<IPlaceImageRepository, PlaceImageRepository>();
+			services.AddScoped<IPlaceMoreInfoRepository, PlaceMoreInfoRepository>();
 		}
     }
 }

@@ -177,6 +177,10 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                     this.state.SelectedCategory.IsEvent = check;
                                     this.forceUpdate();
                                   }}
+                                  ChangeGovernment={(check: boolean) => {
+                                    this.state.SelectedCategory.IsGovernment = check;
+                                    this.forceUpdate();
+                                  }}
                   />
                 </div>
               </div>

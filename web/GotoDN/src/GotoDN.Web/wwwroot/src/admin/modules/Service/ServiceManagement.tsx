@@ -33,8 +33,12 @@ class HTServiceManagement extends React.Component<{}, thisState> {
       });
     })();
     (async() => {
+      let cates = await CategoryServiceInstance.GetAll();
+      if(cates && cates.length > 0) {
+        cates = cates.filter(c => !c.IsGovernment);
+      }
       this.setState({
-        Categories: await CategoryServiceInstance.GetAll()
+        Categories: cates
       });
     })();
   }

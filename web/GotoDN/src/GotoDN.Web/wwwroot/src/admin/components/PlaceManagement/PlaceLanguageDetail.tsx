@@ -134,16 +134,16 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
         }
       };
 
-      let f_Icon: DynamicFieldModel = {
-        Priority: 4,
+      let f_MoreInfo: DynamicFieldModel = {
+        Priority: 5,
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
-          Name: 'Icon',
-          FieldName: 'Icon',
+          Name: 'Thông tin thêm',
+          FieldName: 'PlaceMoreInfo',
           PlaceHolder: '',
           FieldData: {},
-          Type: FieldStructureTypeEnums.SingleImage,
+          Type: FieldStructureTypeEnums.C_MoreInfo,
           ValidateRules: []
         }
       };
@@ -151,6 +151,7 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
       inforForm.DynamicFields.push(f_Description);
       inforForm.DynamicFields.push(f_Image);
       inforForm.DynamicFields.push(f_MultiImage);
+      inforForm.DynamicFields.push(f_MoreInfo);
       allForms.push(inforForm);
     }
     return allForms;

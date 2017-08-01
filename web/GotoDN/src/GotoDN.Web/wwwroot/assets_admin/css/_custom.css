@@ -49,6 +49,10 @@ a {
   float: left;
 }
 
+.image-upload-container.dn-icon-info {
+  width: auto;
+}
+
 .image-upload-element {
   float: left;
   width: 20%;
@@ -77,6 +81,13 @@ a {
   border: 0;
 }
 
+.dn-icon-info .image-upload-element {
+  float: left;
+  width: 36px;
+  padding: 0;
+  border: 0;
+}
+
 .dn-image .image-upload-element .image-preview,
 .dn-image-place .image-upload-element .image-preview
 {
@@ -84,6 +95,10 @@ a {
 }
 .dn-icon .image-upload-element .image-preview {
   height: 64px;
+}
+
+.dn-icon-info .image-upload-element .image-preview {
+  height: 36px;
 }
 
 .image-upload-container.single.small .image-upload-element {
@@ -116,6 +131,12 @@ a {
   height: 20px;
   border-radius: 50%;
   text-align: center;
+}
+
+.dn-icon-info .image-upload-element .image-preview .remove-image {
+  width: 12px;
+  height: 12px;
+  font-size: 9px;
 }
 
 .image-upload-element .image-preview {

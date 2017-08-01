@@ -53,8 +53,25 @@ namespace GotoDN.Web.Models
 
         public List<PlaceImageModel> PlaceImages { get; set; }
 
+        public List<PlaceMoreInfoModel> PlaceMoreInfo { get; set; }
+
         public PlaceModel Place { get; set; }
         public ImageModel Image { get; set; }
+        public ImageModel Icon { get; set; }
+    }
+
+    public class PlaceMoreInfoModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
+        public int? IconId { get; set; }
+        public bool? IsHalf { get; set; }
+        public int? Order { get; set; }
+
+        public int PlaceLangId { get; set; }
+
+        public PlaceLanguageModel PlaceLanguage { get; set; }
         public ImageModel Icon { get; set; }
     }
 
