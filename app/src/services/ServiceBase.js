@@ -1,10 +1,16 @@
 import * as React from 'react';
+import {appStore} from '../stores/AppStore';
 
 export class ServiceBase {
 
   async  executeFetch(url) {
     try {
+      let appState = appStore.getState();
       let result = await fetch(url, {
+        headers: {
+          'lang': appState.language,
+          'city': appState.city,
+        },
         method: 'GET',
         /**
          * make a fetch request with credentials such as cookies
@@ -22,12 +28,14 @@ export class ServiceBase {
 
   async executeFetchPost(url, data) {
     try {
-
+      let appState = appStore.getState();
       let result = await await fetch(url,
         {
           headers: {
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'lang': appState.language,
+            'city': appState.city,
           },
           method: 'POST',
           credentials: 'include',

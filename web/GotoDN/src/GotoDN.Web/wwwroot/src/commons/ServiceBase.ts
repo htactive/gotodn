@@ -10,7 +10,7 @@ export class ServiceBase {
       }
       let result = await fetch(url, {
         headers: {
-          'auth': localStorage.getItem("user_token") + ""
+          'auth': localStorage.getItem("user_token") + "",
         },
         method: 'GET',
         /**

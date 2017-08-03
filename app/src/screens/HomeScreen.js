@@ -1,11 +1,13 @@
 import React from 'react';
 import {ToastAndroid, ScrollView, RefreshControl} from 'react-native';
+import {Text} from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {HomeMenuList} from '../components/home/HomeMenuList';
 import {viewportHeight} from '../common/constain';
 import HomeSlider from '../components/home/HomeSlider';
 import {NavigationActions} from 'react-navigation';
 import {navigationStore, navigateAction} from '../stores/NavigationStore';
+import {appStore} from '../stores/AppStore';
 import {GDNServiceInstance} from '../services/GDNService';
 
 export class HomeScreen extends React.Component {
@@ -17,6 +19,7 @@ export class HomeScreen extends React.Component {
     menuListLoad: false,
     refreshing: false,
   };
+  unSubscribe;
 
   componentWillMount() {
     navigationStore.subscribe(() => {
@@ -29,11 +32,18 @@ export class HomeScreen extends React.Component {
         this.props.navigation.dispatch(navigateAction);
       }
     });
-    this.setState({showSlider: true});
+    this.unSubscribe = appStore.subscribe(() => {
+      this.onFresh();
+    });
+    this.setState({showSlider: false});
   }
 
   componentDidMount() {
     this.loadHomeData();
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
   }
 
   loadHomeData() {
@@ -48,9 +58,7 @@ export class HomeScreen extends React.Component {
     })();
     (async () => {
       let sliderData = await GDNServiceInstance.getHomeSlider();
-      if(!sliderData || sliderData.length == 0) {
-        this.setState({showSlider: false});
-      }
+      this.setState({showSlider: (sliderData != null && sliderData.length > 0)});
       this.setState({sliderData, sliderLoaded: true});
       if(this.state.menuListLoad) {
         this.setState({
@@ -72,8 +80,8 @@ export class HomeScreen extends React.Component {
         <Grid>
           {this.state.showSlider ? <Row style={{ height: viewportHeight*.38 }}>
             <HomeSlider dataSource={this.state.sliderData} title="Must See"/>
-          </Row> : null}
-          <Row >
+            </Row> : <Row><Text></Text></Row> }
+          <Row style={!this.state.showSlider ? {minHeight: viewportHeight} : {}}>
             <HomeMenuList dataSource={this.state.menuListData}  />
           </Row>
         </Grid>

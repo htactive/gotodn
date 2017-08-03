@@ -364,6 +364,10 @@ class PlaceManagement extends React.Component<{}, thisState> {
                        this.state.SelectedPlace.StartDate = e;
                        this.forceUpdate();
                      }}
+                     onGovernmentChanged={(value: boolean) => {
+                       this.state.SelectedPlace.IsDistrictGovernment = value;
+                       this.forceUpdate();
+                     }}
                      isShow={this.state.showDetail}
                      clickGoBack={() => {
                        browserHistory.push(AdminRoutePath.PlaceManagement);

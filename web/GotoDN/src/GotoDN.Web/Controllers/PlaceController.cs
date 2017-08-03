@@ -131,6 +131,7 @@ namespace GotoDN.Web.Controllers
             entity.EndDate = model.EndDate;
             entity.IsCategorySlider = model.IsCategorySlider;
             entity.IsHomeSlider = model.IsHomeSlider;
+            entity.IsDistrictGovernment = model.IsDistrictGovernment;
             entity.Latitude = model.Latitude;
             entity.Longitude = model.Longitude;
             entity.OpenTime = model.OpenTime;
@@ -483,12 +484,14 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public List<AppSearchPlaceModel> GdnSearchPlace(string search)
         {
-            var language = LanguageEnums.English;
+            var language = this.CurrentLanguage;
+            var city = this.CurrentCityId;
+
             var query = this.HTRepository.PlaceRepository.GetAll();
             query = query.Include("PlaceLanguages")
                 .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages")
                 .Include(x => x.City).Include(x => x.District);
-            var searchQuery = query.Where(t => t.PlaceLanguages.Any(l => l.Language == language))
+            var searchQuery = query.Where(t => t.PlaceLanguages.Any(l => l.Language == language) && t.CityId == city)
                 .Select(q => new AppSearchPlaceModel
                 {
                     Id = q.Id,
@@ -787,7 +790,7 @@ namespace GotoDN.Web.Controllers
             if (enPlaceLanguage == null) return null;
             foreach (var entity in model.PlaceLanguages)
             {
-                if (entity.Id == enPlaceLanguage.Id) continue;
+                if (entity.Language == enPlaceLanguage.Language) continue;
                 entity.Title = TranslateHelper.TranslateText(enPlaceLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
                 entity.Description = TranslateHelper.TranslateText(enPlaceLanguage.Description, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
                 entity.ImageId = enPlaceLanguage.ImageId;
@@ -827,6 +830,9 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public List<PlaceLanguageModel> GetNearByPlaceById(int id)
         {
+            var currentLang = this.CurrentLanguage;
+            var currentCityId = this.CurrentCityId;
+
             var result = new List<PlaceLanguageModel>();
 
             var entity = this.HTRepository.PlaceRepository.GetAll()

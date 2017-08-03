@@ -9,6 +9,8 @@ import {IndustryDetailScreen} from './IndustryDetailScreen';
 import { NavigationActions } from 'react-navigation';
 import {navigationStore, navigateToRouteAction} from '../stores/NavigationStore';
 import {GDNServiceInstance} from '../services/GDNService';
+import {appStore} from '../stores/AppStore';
+import {Menu} from '../components/menu/Menu';
 
 const imgHeight = Math.round((viewportWidth - 30) / 2);
 const textHeight = Math.round(viewportHeight / 3.3);
@@ -24,7 +26,7 @@ export class IndustryListScreen extends React.Component {
   };
 
   savedData;
-
+  unSubscribe;
   componentWillMount() {
     navigationStore.subscribe(() => {
       let navigationState = navigationStore.getState();
@@ -36,6 +38,13 @@ export class IndustryListScreen extends React.Component {
         this.props.navigation.dispatch(navigateAction);
       }
     });
+    this.unSubscribe = appStore.subscribe(() => {
+      this.onFresh();
+    });
+  }
+
+  componentWillUnmount(){
+    this.unSubscribe();
   }
 
   componentDidMount() {
@@ -45,8 +54,10 @@ export class IndustryListScreen extends React.Component {
   async loadData() {
     const { params } = this.props.navigation.state;
     let listId = (params && params.listId) || 0;
-    let result = await GDNServiceInstance.getCagegoryNoServiceById(listId);
-    if(result) {
+    let objectResult = await GDNServiceInstance.getCagegoryNoServiceById(listId);
+    if(objectResult && objectResult.data) {
+      Menu.instance.setTitle(objectResult.categoryName);
+      let result = objectResult.data;
       this.savedData = result;
       let dataLeft = [], dataRight = [];
       for (let i = 0; i < result.length; i++) {

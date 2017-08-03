@@ -3,11 +3,12 @@ import {PanResponder} from 'react-native';
 import {Tabs, Tab, Left, Thumbnail, Body, Button, Icon, TabHeading, Text, ScrollableTab} from 'native-base';
 import {viewportWidth, MenuListData, MenuType} from '../common/constain';
 import {ListDetail} from '../components/list/ListDetail';
-import {Menu} from '../components/menu/Menu'
+import {Menu} from '../components/menu/Menu';
 import {StyleBase} from '../styles/style';
 import { NavigationActions } from 'react-navigation';
 import {navigationStore, navigateAction} from '../stores/NavigationStore';
 import {GDNServiceInstance} from '../services/GDNService';
+import {appStore} from '../stores/AppStore';
 
 export class ListScreen extends React.Component {
   state = {
@@ -18,7 +19,7 @@ export class ListScreen extends React.Component {
 
   _panResponderSlider;
   _panResponder;
-
+  unSubscribe;
   componentWillMount() {
     navigationStore.subscribe(() => {
       let navigationState = navigationStore.getState();
@@ -30,13 +31,22 @@ export class ListScreen extends React.Component {
         this.props.navigation.dispatch(navigateAction);
       }
     });
+    this.unSubscribe = appStore.subscribe(() => {
+      this.loadData();
+    });
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.loadData();
+  }
+
+  async loadData() {
     const { params } = this.props.navigation.state;
     let listId = (params && params.listId) || 0;
+    let data = await GDNServiceInstance.getCategoryById(listId);
+    Menu.instance.setTitle(data.categoryName);
     this.setState({
-      listData: await GDNServiceInstance.getCategoryById(listId),
+      listData: data,
     });
   }
 

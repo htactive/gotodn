@@ -1,32 +1,47 @@
 import {ServiceBase} from './ServiceBase';
 import {timeout, MenuListData} from '../common/DummyData';
 import {Helper, LanguageEnums, IconName} from '../common/constain';
+import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
-  host = "http://gdn.htactive.com/";
+  host = "http://192.168.0.106:50915/";
 
   async getHomeSlider() {
     let url = this.host + "category/get-category-slider";
     let result = await super.executeFetch(url);
     if (result && result.length > 0) {
       let slider = [];
-      for (var i = 0; i < result.length / 2; i++) {
-        slider.push({
-          id: i,
-          data: [
-            {
-              title: result[i * 2] ? result[i * 2].Title : "",
-              subtitle: result[i * 2] ? result[i * 2].SubTitle : "",
-              image: result[i * 2] ? result[i * 2].Url : "https://image.ibb.co/dWMJtQ/ic_stay.png",
-              id: result[i * 2] ? result[i * 2].Id : 0,
-            },
-            {
-              title: result[i * 2 + 1] ? result[i * 2 + 1].Title : "",
-              subtitle: result[i * 2 + 1] ? result[i * 2 + 1].SubTitle : "",
-              image: result[i * 2 + 1] ? result[i * 2 + 1].Url : "https://image.ibb.co/dWMJtQ/ic_stay.png",
-              id: result[i * 2 + 1] ? result[i * 2 + 1].Id : 0,
-            }
-          ]
-        });
+      for (let i = 0; i < result.length / 2; i++) {
+        if(i * 2 + 1 < result.length) {
+          slider.push({
+            id: i,
+            data: [
+              {
+                title: result[i * 2] ? result[i * 2].Title : "",
+                subtitle: result[i * 2] ? result[i * 2].SubTitle : "",
+                image: result[i * 2] ? result[i * 2].Url : Helper.ImageUrl,
+                id: result[i * 2] ? result[i * 2].Id : 0,
+              },
+              {
+                title: result[i * 2 + 1] ? result[i * 2 + 1].Title : "",
+                subtitle: result[i * 2 + 1] ? result[i * 2 + 1].SubTitle : "",
+                image: result[i * 2 + 1] ? result[i * 2 + 1].Url : Helper.ImageUrl,
+                id: result[i * 2 + 1] ? result[i * 2 + 1].Id : 0,
+              }
+            ]
+          });
+        } else {
+          slider.push({
+            id: i,
+            data: [
+              {
+                title: result[i * 2] ? result[i * 2].Title : "",
+                subtitle: result[i * 2] ? result[i * 2].SubTitle : "",
+                image: result[i * 2] ? result[i * 2].Url : Helper.ImageUrl,
+                id: result[i * 2] ? result[i * 2].Id : 0,
+              },
+            ]
+          });
+        }
       }
       return slider;
     }
@@ -38,7 +53,7 @@ class GDNService extends ServiceBase {
     let result = await super.executeFetch(url);
     if (result && result.length > 0) {
       let data = [];
-      for (var i = 0; i < result.length; i++) {
+      for (let i = 0; i < result.length; i++) {
         data.push({
           id: result[i] ? result[i].Id : 0,
           categoryName: result[i] ? result[i].Name : "",
@@ -64,12 +79,12 @@ class GDNService extends ServiceBase {
     let result = await super.executeFetch(url);
     if (result && result.length > 0) {
       let slider = [];
-      for (let i = 0; i < result.length / 2; i++) {
+      for (let i = 0; i < result.length; i++) {
         slider.push({
-          title: result[i * 2 + 1] ? result[i * 2 + 1].Title : "",
-          subtitle: result[i * 2 + 1] ? result[i * 2 + 1].SubTitle : "",
-          image: result[i * 2 + 1] ? result[i * 2 + 1].Url : "https://image.ibb.co/dWMJtQ/ic_stay.png",
-          id: result[i * 2 + 1] ? result[i * 2 + 1].Id : 0,
+          title: result[i] ? result[i].Title : "",
+          subtitle: result[i] ? result[i].SubTitle : "",
+          image: result[i] ? result[i].Url : Helper.ImageUrl,
+          id: result[i] ? result[i].Id : 0,
         });
       }
       return slider;
@@ -83,8 +98,9 @@ class GDNService extends ServiceBase {
 
     if (result && result.length > 0) {
       let data = [];
+      let currentLanguage = appStore.getState().language || LanguageEnums.English;
       for (let i = 0; i < result.length; i++) {
-        let enLang = result[i].PlaceLanguages.filter(t => t.Language == LanguageEnums.English)[0];
+        let enLang = result[i].PlaceLanguages.filter(t => t.Language == currentLanguage)[0];
         if(enLang) {
           data.push({
             id: result[i] ? result[i].Id : 0,
@@ -135,8 +151,9 @@ class GDNService extends ServiceBase {
     let result = await super.executeFetch(url);
     if (result) {
       let rs = [];
+      let currentLanguage = appStore.getState().language || LanguageEnums.English;
       rs = result.map(t => {
-        let enLanguage = t.CategoryLanguages.filter(l => l.Language == LanguageEnums.English)[0];
+        let enLanguage = t.CategoryLanguages.filter(l => l.Language == currentLanguage)[0];
         return {
           id: t.Id,
           categoryName: enLanguage ? enLanguage.Title : '',
@@ -216,22 +233,38 @@ class GDNService extends ServiceBase {
     let url = this.host + "category/get-category-no-service-by-id?id=" + id;
     let result = await super.executeFetch(url);
     if (result) {
-
+      let objectData = {};
       let data = [];
-      data = result.Places.map((p) => {
-        let enPlace = p.PlaceLanguages.filter(l => l.Language = LanguageEnums.English)[0];
-        if (enPlace)
-          return {
-            id: p.Id,
-            heroImage: enPlace.Image ? enPlace.Image.Url : null,
-            title: enPlace.Title,
-            description: enPlace.Description,
-          }
+      let currentLanguage = appStore.getState().language || LanguageEnums.English;
+      let d = result.Places.filter((p) => {
+        let enPlace = p.PlaceLanguages.filter(l => l.Language == currentLanguage)[0];
+        return !!enPlace
+
+      });
+      data = d.map((p) => {
+        let enPlace = p.PlaceLanguages.filter(l => l.Language == currentLanguage)[0];
+        return {
+          id: p.Id,
+          heroImage: enPlace.Image ? enPlace.Image.Url : Helper.ImageUrl,
+          title: enPlace.Title,
+          description: enPlace.Description,
+        }
       });
 
-      return data;
+      let cateLang = result.CategoryLanguages.filter(l => l.Language == currentLanguage )[0];
+
+      objectData.id = result.Id;
+      objectData.categoryName = cateLang ? cateLang.Title : '';
+      objectData.data = data;
+
+      return objectData;
     }
     return null;
+  }
+
+  async getAllCity() {
+    let url = this.host + "city/get-all-city";
+    return await super.executeFetch(url);
   }
 }
 

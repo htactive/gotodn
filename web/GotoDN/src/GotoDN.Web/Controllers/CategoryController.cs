@@ -29,11 +29,16 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public List<CategoryModel> GetAll()
         {
+            var currentLanguage = LanguageEnums.Korean;
+
             var entities = this.HTRepository.CategoryRepository.GetAll()
                 .Include("CategoryLanguages.Image")
                 .Include("CategoryLanguages.Icon")
                 .Include(c => c.HTServices)
                 .Take(1000).OrderBy(t => t.Order).ToList();
+
+            var lang = this.CurrentLanguage;
+            var city = this.CurrentCityId;
 
             var models = entities.Select(x => AutoMapper.Mapper.Map<Category, CategoryModel>(x)).ToList();
 
@@ -125,7 +130,8 @@ namespace GotoDN.Web.Controllers
                 .Include("CategoryLanguages.Image")
                 .Include("CategoryLanguages.Icon")
                 .FirstOrDefault(x => x.Id == model.Id);
-            if (entity == null) {
+            if (entity == null)
+            {
                 entity = new Category();
             };
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
@@ -241,39 +247,34 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public List<SliderModel> GetCategorySlider()
         {
+            var currentLanguage = this.CurrentLanguage;
+            var currentCityId = this.CurrentCityId;
+
             var result = new List<SliderModel>();
             var today = DateTimeHelper.GetDateTimeNow();
 
-            var eventPlaces = this.HTRepository.PlaceRepository.GetAll().
-                Where(x => x.Category != null && x.Category.IsEvent.HasValue && x.Category.IsEvent.Value
-                && x.StartDate <= today && x.EndDate > today)
-                .Include("PlaceLanguages.Image").ToList();
+            var eventPlaces = this.HTRepository.PlaceRepository.GetAll()
+                .Where(x => x.CityId == currentCityId && (
+                (x.Category != null && x.Category.IsEvent.HasValue && x.Category.IsEvent.Value
+                && x.StartDate <= today.Date && x.EndDate > today.Date) ||
+                (x.IsCategorySlider.HasValue && x.IsCategorySlider.Value)) &&
+                x.PlaceLanguages.Any(p => p.Language == currentLanguage))
+                .Include("PlaceLanguages.Image").Include(p => p.Category).ToList();
 
-            result = result.Union(eventPlaces.Select(x =>
+            if (eventPlaces == null) return null;
+            result = eventPlaces.Select(x =>
                 new SliderModel()
                 {
                     Id = x.Id,
-                    SubTitle = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Description,
-                    Title = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
-                    Url = AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image) != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
+                    SubTitle = x.PlaceLanguages.Where(z => z.Language == currentLanguage).First().Description,
+                    Title = x.PlaceLanguages.Where(z => z.Language == currentLanguage).First().Title,
+                    Url = x.PlaceLanguages.Where(z => z.Language == currentLanguage).First().Image != null ?
+                        GetUrl(x.PlaceLanguages.Where(z => z.Language == currentLanguage).First().Image) : Common.DefaultPhoto.ImageUrl,
                     CreateDate = x.CreatedDate,
-                }).ToList()).ToList();
+                    IsEvent = x.Category != null ? x.Category.IsEvent : null,
+                    IsCategorySlider = x.IsCategorySlider,
+                }).ToList().OrderBy(t => t.IsEvent).ThenBy(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Take(20).ToList();
 
-            var Places = this.HTRepository.PlaceRepository.GetAll().
-                Where(x => x.IsHomeSlider.HasValue && x.IsHomeSlider.Value)
-                .Include("PlaceLanguages.Image").ToList();
-
-            result = result.Union(Places.Select(x =>
-                new SliderModel()
-                {
-                    Id = x.Id,
-                    SubTitle = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Description,
-                    Title = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
-                    Url = x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image != null ? x.PlaceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image.Url : Common.DefaultPhoto.ImageUrl,
-                    CreateDate = x.CreatedDate,
-                }).ToList()).ToList();
-
-            result = result.OrderByDescending(x => x.CreateDate).Take(20).ToList();
             return result;
         }
 
@@ -281,38 +282,39 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public List<MenuListModel> GetCategoryData()
         {
+            var currentLang = this.CurrentLanguage;
+
             var result = new List<MenuListModel>();
-            var CategoryEntity = this.HTRepository.CategoryRepository.GetAll()
-                .Include("HTServices.HTServiceLanguages.Image");
 
-            var CateService = CategoryEntity.Where(x => x.HTServices.Count > 0);
-            var CatePlace = CategoryEntity.Where(x => x.HTServices.Count == 0 && x.Places.Count > 0);
+            var category = this.HTRepository.CategoryRepository.GetAll()
+                .Include("CategoryLanguages.Image")
+                .Include("HTServices.HTServiceLanguages.Image")
+                .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang))
+                .ToList();
 
-            result = result.Union(CateService.Select(x =>
+            result = category.Select(x =>
                 new MenuListModel()
                 {
                     Id = x.Id,
                     Order = x.Order,
-                    Name = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
-                    Icon = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon).Url : null,
-                    Items = x.HTServices.Select(y => new MenuItemModel()
-                    {
-                        Title = y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
-                        Url = y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image != null ? AutoMapper.Mapper.Map<Image, ImageModel>(y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
-                    }).ToList(),
-                })).ToList();
-
-            result = result.Union(CatePlace.Select(x =>
-            new MenuListModel()
-            {
-                Id = x.Id,
-                Order = x.Order,
-                Name = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
-                Image = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
-                Icon = x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon != null ? AutoMapper.Mapper.Map<Image, ImageModel>(x.CategoryLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Icon).Url : null,
-                Items = null
-            })).ToList();
-
+                    Name = x.CategoryLanguages.First(z => z.Language == currentLang).Title,
+                    Image = x.CategoryLanguages.First(z => z.Language == currentLang).Image != null ?
+                            GetUrl(x.CategoryLanguages.First(z => z.Language == currentLang).Image) : null,
+                    Icon = x.CategoryLanguages.First(z => z.Language == currentLang).Icon != null ?
+                            GetUrl(x.CategoryLanguages.First(z => z.Language == currentLang).Icon) : null,
+                    Items = x.HTServices.Count > 0 ?
+                        x.HTServices.Select(y => new MenuItemModel()
+                        {
+                            Id = y.Id,
+                            Title = x.CategoryLanguages.First(z => z.Language == currentLang) != null ?
+                                    x.CategoryLanguages.First(z => z.Language == currentLang).Title : "",
+                            Url = x.CategoryLanguages.First(z => z.Language == currentLang) != null &&
+                                    x.CategoryLanguages.First(z => z.Language == currentLang).Image != null ?
+                                    GetUrl(x.CategoryLanguages.First(z => z.Language == currentLang).Image) : null
+                        }).ToList()
+                      : null
+                }).Take(100).ToList();
+            
             result = result.OrderBy(x => x.Order).ToList();
             return result;
         }
@@ -346,20 +348,23 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public MenuListModel GetCategoryById(int Id)
         {
+            var currentLang = this.CurrentLanguage;
+            var city = this.CurrentCityId;
+
             var result = new MenuListModel();
             var CategoryEntity = this.HTRepository.CategoryLanguageRepository.GetAll()
                 .Include(x => x.Icon).Include("Category.HTServices.HTServiceLanguages.Image")
-                .Where(x => x.CategoryId == Id && x.Language == LanguageEnums.English).FirstOrDefault();
+                .FirstOrDefault(x => x.CategoryId == Id && x.Language == currentLang);
             if (CategoryEntity == null) return result;
 
             result.Id = CategoryEntity.CategoryId.Value;
-            result.Icon = CategoryEntity.Icon != null ? CategoryEntity.Icon.Url : "";
+            result.Icon = CategoryEntity.Icon != null ? GetUrl(CategoryEntity.Icon) : "";
             result.Name = CategoryEntity.Title;
             result.Items = CategoryEntity.Category.HTServices.Select(y => new MenuItemModel()
             {
                 Id = y.Id,
-                Title = y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Title,
-                Url = y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image != null ? AutoMapper.Mapper.Map<Image, ImageModel>(y.HTServiceLanguages.Where(z => z.Language == LanguageEnums.English).FirstOrDefault().Image).Url : Common.DefaultPhoto.ImageUrl,
+                Title = y.HTServiceLanguages.First(z => z.Language == currentLang).Title,
+                Url = y.HTServiceLanguages.First(z => z.Language == currentLang).Image != null ? GetUrl(y.HTServiceLanguages.Where(z => z.Language == currentLang).FirstOrDefault().Image) : Common.DefaultPhoto.ImageUrl,
             }).ToList();
 
             return result;
@@ -369,11 +374,16 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public CategoryModel GetCategoryNoServiceById(int id)
         {
+            var currentLang = this.CurrentLanguage;
             var category = this.HTRepository.CategoryRepository.GetAll()
                 .Include("Places.PlaceLanguages.Image")
-                .Where(x => x.Places.All(p => p.HTServiceId == null || p.HTServiceId == 0) && x.Id == id).FirstOrDefault();
+                .Include(c => c.CategoryLanguages)
+                .Where(x => x.Places.Any(p => p.PlaceLanguages.Any(l => l.Language == currentLang)) 
+                && x.Places.All(p => p.HTServiceId == null || p.HTServiceId == 0) && x.Id == id).FirstOrDefault();
             if (category == null) return null;
             return AutoMapper.Mapper.Map<CategoryModel>(category);
         }
+
+
     }
 }

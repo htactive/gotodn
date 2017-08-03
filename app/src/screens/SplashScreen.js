@@ -1,33 +1,58 @@
 import React from 'react';
-import {StyleSheet, Image, View, TouchableOpacity, NetInfo, Text} from 'react-native';
+import {StyleSheet, Image, View, TouchableOpacity, NetInfo, Text, AsyncStorage} from 'react-native';
 import {DNPageRoute, resetAction} from '../NavigationHelper';
 import {HomeScreen} from './HomeScreen';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {Menu} from '../components/menu/Menu'
-import {AppIcon, viewportWidth} from '../common/constain';
+import {AppIcon, viewportWidth, LanguageEnums, Helper} from '../common/constain';
 import {NavigationActions} from 'react-navigation';
 import {StyleBase} from '../styles/style';
+import {GDNServiceInstance} from '../services/GDNService';
+import {appStore, appSaveLanguage, appSaveCity} from '../stores/AppStore';
 
 export class SplashScreen extends React.Component {
 
   goNextDelay;
   handleNetInterval;
 
-  componentWillMount() {
+  async componentWillMount() {
 
     this.setState({
       hasConnection: false,
     });
 
-    Menu.instance.setNavigation(this.props.navigation);
-    Menu.instance.disableMenu();
+    // Menu.instance.setNavigation(this.props.navigation);
+    // Menu.instance.disableMenu();
+    this.initData();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     //this.handleNetInfo();
     this.handleNetInterval = setInterval(() => {
       this.handleNetInfo()
     }, 1000)
+  }
+
+  async initData() {
+
+    let langValue = await AsyncStorage.getItem(Helper.LanguageKey);
+
+    let cityValue = await AsyncStorage.getItem(Helper.CityKey);
+
+    let currentLang =langValue || LanguageEnums.English;
+
+    appStore.dispatch(appSaveLanguage(currentLang));
+
+    let selectedCityId = 0;
+    let result = await GDNServiceInstance.getAllCity();
+    if(result) {
+      let selectedCity = result.filter(t => Helper.stripDiacritics(t.Name).toLowerCase() == 'da nang' || Helper.stripDiacritics(t.Name).toLowerCase() == 'danang')[0];
+      selectedCityId = selectedCity ? selectedCity.Id : (result[0] ? result[0].Id : 0);
+    }
+    if(cityValue)
+      selectedCityId = cityValue;
+
+    appStore.dispatch(appSaveCity(selectedCityId));
   }
 
   handleNetInfo() {

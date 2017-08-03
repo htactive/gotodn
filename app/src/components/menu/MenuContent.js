@@ -1,18 +1,29 @@
 import React from 'react';
-import {View} from 'react-native';
+import {View, AsyncStorage} from 'react-native';
 import {style} from '../../styles/style';
 import {MenuTop} from './MenuTop';
 import {MenuList} from './MenuList';
 import {DNPageRoute, DNNavigationAction} from '../../NavigationHelper';
 import {ListScreen} from '../../screens/ListScreen'
-import {Language} from '../../common/constain';
+import {Language, Helper} from '../../common/constain';
 import {PickerModal} from '../common/PickerModal';
 import {IndustryListScreen} from '../../screens/IndustryListScreen';
 import { NavigationActions } from 'react-navigation';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
+import {appStore, appSaveLanguage} from '../../stores/AppStore'
 
 export class MenuContent extends React.Component {
   state = {selectedLang: 3, showPicker: false};
+
+  componentWillMount() {
+    appStore.subscribe(() => {
+      let appState = appStore.getState();
+      this.setState({
+        selectedLang: appState.language
+      });
+    });
+
+  }
 
   render() {
     let props = {
@@ -22,7 +33,7 @@ export class MenuContent extends React.Component {
       onLanguageClicked: () => this.languageUsClicked(),
     };
 
-    let language = Language.filter(l => l.Id == this.state.selectedLang)[0];
+    let language = Language.filter(l => l.Id == this.state.selectedLang)[0] || {};
 
     return (
       <View style={style.size1}>
@@ -37,7 +48,7 @@ export class MenuContent extends React.Component {
                        onCloseModal={() => { this.setState({showPicker: false}) }}
                        selectedItem={language}
                        dataSource={Language}
-                       onDataSelected={(d) => this.setState({selectedLang: 3, showPicker: false})}/>
+                       onDataSelected={(d) => this.languageChanged(d) }/>
         </View>
       </View>
 
@@ -75,5 +86,12 @@ export class MenuContent extends React.Component {
   languageUsClicked() {
     this.setState({showPicker: true});
     this.props.onCloseMenu && this.props.onCloseMenu();
+  }
+
+  async languageChanged(d) {
+
+    await AsyncStorage.setItem(Helper.LanguageKey, d.Id + '');
+    appStore.dispatch(appSaveLanguage(d.Id));
+    debugger;
   }
 }

@@ -4,7 +4,9 @@ import {View, PickerIOS, Platform, Text, TouchableOpacity} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {StyleBase} from '../../styles/style';
 import {CityDropdown} from '../common/CityDropdown';
-import {viewportWidth, viewportHeight} from '../../common/constain';
+import {GDNServiceInstance} from '../../services/GDNService';
+import {appStore} from '../../stores/AppStore';
+import {Helper} from '../../common/constain';
 
 const platform = Platform.OS;
 
@@ -34,12 +36,33 @@ export class LocationPicker extends React.Component {
     this.setState({
       selectedCity: 1
     });
+    // appStore.subscribe(() => {
+    //   let appState = appStore.getState();
+    //   this.setState({
+    //     selectedCity: appState.city
+    //   });
+    // });
   }
 
   componentDidMount() {
-    this.setState({
-      cities: CITIES
-    });
+    this.getData();
+  }
+
+  async getData() {
+    let result = await GDNServiceInstance.getAllCity();
+    if(result) {
+      let appState = appStore.getState();
+      this.setState({
+        cities: result,
+        selectedCity: appState.city
+      });
+    }
+    else {
+      this.setState({
+        cities: [],
+        selectedCity: 0
+      });
+    }
   }
 
   render() {
@@ -60,7 +83,7 @@ export class LocationPicker extends React.Component {
                        onCloseModal={() => { this.setState({showPicker: false}) }}
                        selectedItem={city}
                        dataSource={this.state.cities}
-                       onDataSelected={(d) => this.setState({selectedCity: d.Id, showPicker: false})}
+                       onDataSelected={(d) => this.cityChanged(d.Id)}
           />
         </Col>
       </Row>
@@ -69,7 +92,8 @@ export class LocationPicker extends React.Component {
 
   cityChanged(city) {
     this.setState({
-      selectedCity: city
+      selectedCity: city,
+      showPicker: false
     });
     if (this.props.onCityChanged)
       this.props.onCityChanged(city);

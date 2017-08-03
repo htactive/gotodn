@@ -7,6 +7,7 @@ import {ListItemDetail} from './ListItemDetail';
 import {ListSlider} from './ListSlider';
 import {viewportHeight} from '../../common/constain';
 import {GDNServiceInstance} from '../../services/GDNService';
+import {appStore} from '../../stores/AppStore';
 
 export class ListDetail extends React.Component {
   state = {
@@ -16,6 +17,18 @@ export class ListDetail extends React.Component {
     placeData: null,
     showSlider: true,
   };
+
+  unSubscribe;
+
+  componentWillMount() {
+    this.unSubscribe = appStore.subscribe(() => {
+      this.onFresh();
+    });
+  }
+
+  componentWillUnmount() {
+    this.unSubscribe();
+  }
 
   componentDidMount() {
     this.setState({

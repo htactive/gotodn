@@ -20,6 +20,7 @@ export interface PlaceModel {
   EndDate?: Date,
   IsCategorySlider?: boolean,
   IsHomeSlider?: boolean,
+  IsDistrictGovernment?: boolean,
   Latitude?: number,
   Longitude?: number,
   OpenTime?: Date,

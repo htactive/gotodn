@@ -638,13 +638,23 @@ export const IndustryData = [
   }
 ];
 
+
+export class LanguageEnums{
+  static English = 1;
+  static Vietnamese = 2;
+  static Chinese = 3;
+  static Japanese = 4;
+  static Korean = 5;
+  static France = 6;
+}
+
 export const Language = [
-  {Id: 1, Name: 'Vietnamese', Code: ''},
-  {Id: 2, Name: 'Chinese', Code: ''},
-  {Id: 3, Name: 'English', Code: ''},
-  {Id: 4, Name: 'France', Code: ''},
-  {Id: 5, Name: 'Japan', Code: ''},
-  {Id: 6, Name: 'Korea', Code: ''},
+  {Id: LanguageEnums.Vietnamese, Name: 'Tiếng Việt', Code: ''},
+  {Id: LanguageEnums.English, Name: 'English', Code: ''},
+  {Id: LanguageEnums.France, Name: 'French', Code: ''},
+  {Id: LanguageEnums.Chinese, Name: 'Chinese', Code: ''},
+  {Id: LanguageEnums.Japanese, Name: 'Japanese', Code: ''},
+  {Id: LanguageEnums.Korean, Name: 'Korean', Code: ''},
 ];
 
 export class MapHelper {
@@ -782,13 +792,7 @@ export class Helper {
   };
 
   static ImageUrl = "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg";
-}
 
-export class LanguageEnums{
-  static English = 1;
-  static Vietnamese = 2;
-  static Chinese = 3;
-  static Japanese = 4;
-  static Korean = 5;
-  static France = 6;
+  static LanguageKey = 'LanguageKey';
+  static CityKey = 'CityKey';
 }

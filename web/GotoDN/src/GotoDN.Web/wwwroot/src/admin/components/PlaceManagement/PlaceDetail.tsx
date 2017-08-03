@@ -36,6 +36,7 @@ interface thisProps {
   ClickSlectDistrict: (Id) => void,
   onStartDateChange: (e) => void,
   onEndDateChange: (e) => void,
+  onGovernmentChanged: (value: boolean) => void,
   isShow: boolean,
   clickGoBack: () => void,
 }
@@ -293,6 +294,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
     }
     let selectCategory = this.props.Categories.filter(x => x.Id == (this.props.SelectedPlace ? this.props.SelectedPlace.CategoryId : 0))[0];
     let IsEvent = selectCategory ? selectCategory.IsEvent : false;
+    let isDistrictGovernment = selectCategory ? selectCategory.IsGovernment : false;
     let firstLang = this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
 
     let enPlaceLanguage: PlaceLanguageModel = {Id: 0};
@@ -451,6 +453,31 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                       this.props.SelectedPlace['__#isInvalid#__'] = isInvalid
                     }}
                   />
+                  {isDistrictGovernment ? <div className="form-horizontal">
+                      <fieldset>
+                        <div className="toggle-custom col-lg-12 p0">
+                          <label htmlFor="checkbox-toggle" style={{paddingTop: '2px', fontWeight: 'normal'}}
+                                 className="col-lg-3 control-label">Trực thuộc Thành phố/Quận?</label>
+                          <div className="col-lg-9">
+                            <div className="radio-custom radio-inline" style={{marginTop: 3}}>
+                              <input type="radio" name="government"
+                                     onChange={() => this.props.onGovernmentChanged(false)}
+                                     checked={!this.props.SelectedPlace.IsDistrictGovernment}
+                                     id="city" />
+                                <label htmlFor="city">Thành phố</label>
+                            </div>
+                            <div className="radio-custom radio-inline" style={{marginTop: 3}}>
+                              <input type="radio" name="government"
+                                     onChange={() => this.props.onGovernmentChanged(true)}
+                                     checked={this.props.SelectedPlace.IsDistrictGovernment}
+                                     id="district" />
+                              <label htmlFor="district">Quận</label>
+                            </div>
+
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div> : null}
                   {IsEvent ? <div className="form-horizontal">
                       <fieldset>
                         <div className="form-group col-sm-12 p0">

@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using GotoDN.Web.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace GotoDN.Web.Controllers
 {
@@ -30,7 +31,7 @@ namespace GotoDN.Web.Controllers
         }
 
         protected ConfigurationHelper Configuration { get; set; }
-        
+
         protected static readonly string _awsAccessKey = "AKIAIYL5LVNRMSEDJJMA";
 
         protected static readonly string _awsSecretKey = "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";
@@ -44,6 +45,36 @@ namespace GotoDN.Web.Controllers
         }
 
         private UserModel currentUser;
+
+        protected LanguageEnums CurrentLanguage
+        {
+            get
+            {
+                var header = this.HttpContext.Request.Headers;
+                string lang = header["lang"];
+                int currentLang = (int)LanguageEnums.English;
+                if (!string.IsNullOrEmpty(lang))
+                {
+                    int.TryParse(lang, out currentLang);
+                }
+                return (LanguageEnums)currentLang;
+            }
+        }
+
+        protected int CurrentCityId
+        {
+            get
+            {
+                var header = this.HttpContext.Request.Headers;
+                string city = header["city"];
+                int currentCity = 0;
+                if (!string.IsNullOrEmpty(city))
+                {
+                    int.TryParse(city, out currentCity);
+                }
+                return currentCity;
+            }
+        }
 
         protected UserModel CurrentUser
         {
@@ -103,7 +134,7 @@ namespace GotoDN.Web.Controllers
                 return currentUser;
             }
         }
-        
+
         private async Task UploadImageStreamToAWSS3(string s3FileKey, System.IO.Stream stream)
         {
 
@@ -150,6 +181,13 @@ namespace GotoDN.Web.Controllers
                 template = template.Replace(token.Key, token.Value);
             }
             return template;
+        }
+
+        protected string GetUrl(Image entity)
+        {
+            if (entity == null) return null;
+            if (!string.IsNullOrEmpty(entity.Url)) return entity.Url;
+            return string.Format("https://s3-ap-southeast-1.amazonaws.com/dfwresource/{0}", entity.S3FileKey);
         }
     }
 }

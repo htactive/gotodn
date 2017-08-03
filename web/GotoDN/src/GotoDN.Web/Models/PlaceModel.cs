@@ -13,6 +13,7 @@ namespace GotoDN.Web.Models
         public DateTime? UpdatedDate { get; set; }
         public bool? IsCategorySlider { get; set; }
         public bool? IsHomeSlider { get; set; }
+        public bool? IsDistrictGovernment { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public float? Rating { get; set; }

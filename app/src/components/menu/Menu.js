@@ -1,15 +1,16 @@
 import React from 'react';
-import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity, NetInfo} from 'react-native';
+import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity, NetInfo, AsyncStorage} from 'react-native';
 import {Title, Icon, Picker, Drawer, Input, Item} from 'native-base';
 import {StyleBase} from '../../styles/style';
 import {MenuContent} from './MenuContent';
 
 import {MenuHeader} from './MenuHeader';
-import {MenuType, viewportHeight, viewportWidth} from '../../common/constain';
+import {MenuType, viewportHeight, viewportWidth, Helper} from '../../common/constain';
 import {MenuSearch} from './MenuSearch';
 import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
+import {appStore, appSaveCity} from '../../stores/AppStore';
 
 const drawerStyles = {
   drawer: {
@@ -71,7 +72,7 @@ export class Menu extends React.Component {
     acceptPan: true,
     tapToClose: true,
     side: 'right',
-    enableMenu: true,
+    enableMenu: false,
     showSearchBar: false,
     searchValue: '',
     menuType: MenuType.HomeScreen,
@@ -200,10 +201,13 @@ export class Menu extends React.Component {
     )
   }
 
-  cityChanged(city) {
+  async cityChanged(city) {
     this.setState({
       selectedCity: city
     });
+    await AsyncStorage.setItem(Helper.CityKey, city + '');
+    appStore.dispatch(appSaveCity(city));
+
   }
 
   closeMenu() {
