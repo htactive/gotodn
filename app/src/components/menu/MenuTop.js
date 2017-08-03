@@ -18,7 +18,7 @@ export class MenuTop extends React.Component {
         </View>
         <View style={{flex:2, justifyContent:'center',paddingTop: 10, alignItems: 'flex-end'}}>
           <TouchableOpacity onPress={() => this.closeMenu()} style={{alignSelf:'flex-end',paddingRight: 10}}>
-            <Image style={[style.iconImg, {tintColor: '#fff'}]} source={AppIcon.Menu}/>
+            <Image style={[style.iconImg, {tintColor: '#fff'}]} source={AppIcon.Menu || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}/>
           </TouchableOpacity>
         </View>
 

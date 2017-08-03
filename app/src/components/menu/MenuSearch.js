@@ -52,7 +52,7 @@ export class MenuSearch extends React.Component {
                             ]}>
             <View style={{flex: 25, justifyContent: 'center', alignItems: 'flex-start'}}>
               <Image style={{resizeMode: 'cover', width: (viewportWidth - 30) / 5, height: (viewportWidth - 30) / 5}}
-                     source={{uri: d.heroImage}}/>
+                     source={{uri: d.heroImage || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
             </View>
             <View style={{flex: 75}}>
               <View style={{flex: 3}}>
@@ -61,7 +61,7 @@ export class MenuSearch extends React.Component {
               <View style={{flex: 7, justifyContent:'space-between'}}>
                 <View style={{flexDirection:'row'}}>
                   <View style={{flex:1, justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={{uri: d.addressIcon || '?'}}/>
+                    <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={{uri: d.addressIcon || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
                   </View>
                   <View style={{flex:9,justifyContent: 'center', alignItems: 'flex-start'}}>
                     <Text numberOfLines={1} style={[style.menuSearchInfo, {paddingLeft: 5}]}>{d.address}</Text>
@@ -69,7 +69,7 @@ export class MenuSearch extends React.Component {
                 </View>
                 <View style={{flexDirection:'row'}}>
                   <View style={{flex:1, justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={{uri: d.phoeneIcon || '?'}}/>
+                    <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={{uri: d.phoeneIcon || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
                   </View>
                   <View style={{flex:9, justifyContent: 'center', alignItems: 'flex-start'}}>
                     <Text numberOfLines={1} style={[style.menuSearchInfo, {paddingLeft: 5}]}>{d.phone}</Text>

@@ -11,7 +11,7 @@ export class DetailMapTextItem extends React.Component {
         <View style={{flex: 50, flexDirection: 'row'}}>
           <View style={{flex:2, justifyContent: 'center', alignItems: 'flex-start'}}>
             {/*<Icon name={d.infoIcon} style={{color:'#263238', fontSize:35}}/>*/}
-            <Image style={style.iconImgXs} source={{uri: this.props.leftIcon || '?'}}/>
+            <Image style={style.iconImgXs} source={{uri: this.props.leftIcon || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
           </View>
           <View style={{flex:8, justifyContent: 'center', alignItems: 'flex-start'}}>
             <Text numberOfLines={2}
@@ -29,7 +29,7 @@ export class DetailMapTextItem extends React.Component {
           </View>
           <View style={{flex:2, justifyContent: 'center', alignItems: 'flex-start'}}>
             {/*<Icon name={d.infoIcon} style={{color:'#263238', fontSize:35}}/>*/}
-            <Image style={[style.iconImgXs, {tintColor: '#039be5'}]} source={this.props.rightIcon}/>
+            <Image style={[style.iconImgXs, {tintColor: '#039be5'}]} source={this.props.rightIcon || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}/>
           </View>
         </TouchableOpacity>
       </View>

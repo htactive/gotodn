@@ -21,7 +21,7 @@ export default class TopSliderItem extends React.Component {
             <View style={styles.imageContainer}>
               <View style={styles.imageInner}>
                 <Image
-                  source={{uri: image}}
+                  source={{uri: image || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}
                   style={[styles.image,{justifyContent:'flex-end'}]}
                 >
                   <View style={styles.textInnerList}>

@@ -20,7 +20,7 @@ export class DetailBanner extends React.Component {
                   if (this.props.onFavoriteClicked)
                     this.props.onFavoriteClicked()
                 } }>
-                    <Image style={[style.iconImgSm, {tintColor: '#039be5'}]} source={AppIcon.Favorite}/>
+                    <Image style={[style.iconImgSm, {tintColor: '#039be5'}]} source={AppIcon.Favorite || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}/>
                   </TouchableOpacity>
                 </View>
                 <View style={style.detailImageActionIcon}>
@@ -28,7 +28,7 @@ export class DetailBanner extends React.Component {
                   if (this.props.onSharedClicked)
                     this.props.onSharedClicked()
                 } }>
-                    <Image style={[style.iconImgSm, {tintColor: '#039be5'}]} source={AppIcon.Share}/>
+                    <Image style={[style.iconImgSm, {tintColor: '#039be5'}]} source={AppIcon.Share || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}/>
                   </TouchableOpacity>
                 </View>
               </View>

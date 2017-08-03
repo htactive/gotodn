@@ -147,7 +147,7 @@ export class IndustryListScreen extends React.Component {
                             <View
                               style={{flex: imgHeight/itemHeight}}>
                               <Image
-                                source={{uri: data.heroImage}}
+                                source={{uri: data.heroImage || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}
                                 style={[style.menuItemImage, {height: imgHeight}]}
                               />
                             </View>
@@ -176,7 +176,7 @@ export class IndustryListScreen extends React.Component {
                               <View
                                 style={{flex: imgHeight/itemHeight}}>
                                 <Image
-                                  source={{uri: data.heroImage}}
+                                  source={{uri: data.heroImage || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}
                                   style={[style.menuItemImage, {height: imgHeight}]}
                                 />
                               </View>

@@ -13,9 +13,9 @@ export class MenuListItem extends React.Component{
         <View style={[style.list_item, this.props.actived ? {backgroundColor: StyleBase.header_color}: {backgroundColor: '#01589d'}]}>
           <View style={{flex:2, alignItems: 'flex-start', justifyContent: 'center'}}>
             {this.props.system ? (
-                <Image style={[style.iconImgXs, {tintColor: '#fff'}]} source={this.props.itemIcon}/>
+                <Image style={[style.iconImgXs, {tintColor: '#fff'}]} source={this.props.itemIcon || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}/>
               ) : (
-                <Image style={[style.iconImgXs, {tintColor: '#fff'}]} source={{uri: this.props.itemIcon}}/>
+                <Image style={[style.iconImgXs, {tintColor: '#fff'}]} source={{uri: this.props.itemIcon || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
               )}
           </View>
           <View style={{flex:8, alignItems: 'flex-start', justifyContent: 'center'}}>

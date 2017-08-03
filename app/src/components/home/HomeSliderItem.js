@@ -21,7 +21,7 @@ export default class HomeSliderItem extends React.Component {
             >
               <View style={styles.imageInner}>
                 <Image
-                  source={{uri: d.image}}
+                  source={{uri: d.image || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}
                   style={[styles.image,{justifyContent:'flex-end'}]}
                 >
                   <View style={styles.textInner}>

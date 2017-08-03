@@ -18,7 +18,7 @@ export class DetailNearPlace extends React.Component {
             <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start'}}>
               <TouchableOpacity onPress={() => this.goPlace(d.id)}>
                 <Image style={{resizeMode: 'cover', width: (viewportWidth - 30) / 5, height: (viewportWidth - 30) / 5}}
-                       source={{uri: d.heroImage}}/>
+                       source={{uri: d.heroImage || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
               </TouchableOpacity>
             </View>
             <View style={{flex: 8, paddingLeft: 15}}>
@@ -30,7 +30,7 @@ export class DetailNearPlace extends React.Component {
               <View style={{flex: 7, justifyContent:'space-between'}}>
                 <View style={{flexDirection:'row'}}>
                   <View style={{flex:1, justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Image style={style.iconImgXxs} source={{uri: IconName.Location}}/>
+                    <Image style={style.iconImgXxs} source={{uri: IconName.Location || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
                   </View>
                   <View style={{flex:9,justifyContent: 'center', alignItems: 'flex-start'}}>
                     <Text numberOfLines={1} style={style.detailNearByInfo}>{d.address}</Text>
@@ -39,7 +39,7 @@ export class DetailNearPlace extends React.Component {
                 <View style={{flexDirection:'row'}}>
                   <View style={{flexDirection:'row',flex: 1}}>
                     <View style={{flex:2, justifyContent: 'center', alignItems: 'flex-start'}}>
-                      <Image style={style.iconImgXxs} source={{uri: IconName.Telephone}}/>
+                      <Image style={style.iconImgXxs} source={{uri: IconName.Telephone || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
                     </View>
                     <View style={{flex:8, justifyContent: 'center', alignItems: 'flex-start'}}>
                       <Text numberOfLines={1} style={style.detailNearByInfo}>{d.phone}</Text>
@@ -47,7 +47,7 @@ export class DetailNearPlace extends React.Component {
                   </View>
                   <View style={{flexDirection:'row',flex: 1}}>
                     <View style={{flex:2, justifyContent: 'center', alignItems: 'flex-start'}}>
-                      <Image style={style.iconImgXxs} source={{uri: IconName.Clock}}/>
+                      <Image style={style.iconImgXxs} source={{uri: IconName.Clock || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
                     </View>
                     <View style={{flex:8, justifyContent: 'center', alignItems: 'flex-start'}}>
                       <Text numberOfLines={1} style={style.detailNearByInfo}>{d.openHour}</Text>

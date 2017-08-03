@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -152,6 +151,7 @@
 		EB1345041F272B8A003CE696 /* commonColor.js in Resources */ = {isa = PBXBuildFile; fileRef = EB1344B21F272B8A003CE696 /* commonColor.js */; };
 		EB1345051F272B8A003CE696 /* material.js in Resources */ = {isa = PBXBuildFile; fileRef = EB1344B31F272B8A003CE696 /* material.js */; };
 		EB1345061F272B8A003CE696 /* platform.js in Resources */ = {isa = PBXBuildFile; fileRef = EB1344B41F272B8A003CE696 /* platform.js */; };
+		EF82BA520C6F449FA26EB30D /* SourceSansPro.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4C99F52FBF3B4DE09AFFDAC3 /* SourceSansPro.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -555,6 +555,7 @@
 		EB1344B41F272B8A003CE696 /* platform.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = platform.js; sourceTree = "<group>"; };
 		EB2C563B6A8D49C7B5B74AF8 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		F4DA1B8BFD754690939DF672 /* SourceSansPro-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SourceSansPro-ExtraLight.ttf"; path = "../assets/fonts/SourceSansPro-ExtraLight.ttf"; sourceTree = "<group>"; };
+		4C99F52FBF3B4DE09AFFDAC3 /* SourceSansPro.ttf */ = {isa = PBXFileReference; name = "SourceSansPro.ttf"; path = "../assets/fonts/SourceSansPro.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -818,6 +819,7 @@
 				EB2C563B6A8D49C7B5B74AF8 /* rubicon-icon-font.ttf */,
 				004E3F98D8FF4B979F03D398 /* SimpleLineIcons.ttf */,
 				837F0BAFC1224E92B1BF48C8 /* Zocial.ttf */,
+				4C99F52FBF3B4DE09AFFDAC3 /* SourceSansPro.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1488,6 +1490,7 @@
 				5A913C3858C5476E963246DA /* Zocial.ttf in Resources */,
 				EB1344C71F272B8A003CE696 /* ic-E&D.png in Resources */,
 				EB1344BE1F272B8A003CE696 /* SourceSansPro-Regular.ttf in Resources */,
+				EF82BA520C6F449FA26EB30D /* SourceSansPro.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

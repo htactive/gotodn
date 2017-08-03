@@ -14,14 +14,14 @@ export class DetailInfo extends React.Component {
               <View key={index} style={style.detailInfoItem}>
                 <View style={{flex:15, justifyContent: 'center', alignItems: 'flex-start'}}>
                   {/*<Icon name={d.infoIcon} style={{color:'#263238', fontSize:35}}/>*/}
-                  <Image style={style.iconImgXs} source={{uri: d.dataInfo[0].infoIcon}}/>
+                  <Image style={style.iconImgXs} source={{uri: d.dataInfo[0].infoIcon || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
                 </View>
                 <View style={{flex:35, justifyContent: 'center', alignItems: 'flex-start'}}>
                   <Text numberOfLines={2} style={style.detailInfoText}>{ d.dataInfo[0].infoText}</Text>
                 </View>
                 <View style={{flex:15, justifyContent: 'center', alignItems: 'flex-start'}}>
                   {/*<Icon name={d.infoIcon} style={{color:'#263238', fontSize:35}}/>*/}
-                  <Image style={style.iconImgXs} source={{uri: d.dataInfo[1].infoIcon}}/>
+                  <Image style={style.iconImgXs} source={{uri: d.dataInfo[1].infoIcon || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
                 </View>
                 <View style={{flex:35, justifyContent: 'center', alignItems: 'flex-start'}}>
                   <Text numberOfLines={2} style={style.detailInfoText}>{ d.dataInfo[1].infoText}</Text>
@@ -32,7 +32,7 @@ export class DetailInfo extends React.Component {
               <View key={index} style={style.detailInfoItem}>
                 <View style={{flex:15, justifyContent: 'center', alignItems: 'flex-start'}}>
                   {/*<Icon name={d.infoIcon} style={{color:'#263238', fontSize:35}}/>*/}
-                  <Image style={style.iconImgXs} source={{uri: d.infoIcon}}/>
+                  <Image style={style.iconImgXs} source={{uri: d.infoIcon || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
                 </View>
                 <View style={{flex:85, justifyContent: 'center', alignItems: 'flex-start'}}>
                   {d.isUrl ? (

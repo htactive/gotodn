@@ -116,7 +116,7 @@ export class ListItemDetail extends React.Component {
                         <View
                           style={{flex: (index % 2 === 0) ? largeImgHeight/largeItemHeight : smallImgHeight/smallItemHeight}}>
                           <Image
-                            source={{uri: data.heroImage}}
+                            source={{uri: data.heroImage || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}
                             style={[style.menuItemImage, {height: (index % 2 === 0) ? largeImgHeight : smallImgHeight}]}
                           >
                             {data.star > 0 && this.renderStart(data.star)}
@@ -147,7 +147,7 @@ export class ListItemDetail extends React.Component {
                           <View
                             style={{flex: (index % 2 !== 0) ? largeImgHeight/largeItemHeight : smallImgHeight/smallItemHeight}}>
                             <Image
-                              source={{uri: data.heroImage}}
+                              source={{uri: data.heroImage || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}
                               style={[style.menuItemImage, {height: (index % 2 !== 0) ? largeImgHeight : smallImgHeight}]}
                             >
                               {data.star > 0 && this.renderStart(data.star)}
