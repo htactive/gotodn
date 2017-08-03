@@ -27,10 +27,10 @@ export class SplashScreen extends React.Component {
   }
 
   async componentDidMount() {
-    //this.handleNetInfo();
-    this.handleNetInterval = setInterval(() => {
-      this.handleNetInfo()
-    }, 1000)
+    this.handleNetInfo();
+    // this.handleNetInterval = setInterval(() => {
+    //   this.handleNetInfo()
+    // }, 1000)
   }
 
   async initData() {
@@ -56,17 +56,23 @@ export class SplashScreen extends React.Component {
   }
 
   handleNetInfo() {
-    NetInfo.isConnected.fetch().then(
-      isConnected => {
-        if(isConnected) {
-          clearInterval(this.handleNetInterval);
+    NetInfo.addEventListener(
+      'change',
+      (value) => {
+        if (value == 'WIFI' || value == 'wifi' || value == 'MOBILE' || value == 'cell' || value == 'VPN') {
+          NetInfo.removeEventListener(
+            'change'
+          );
+          this.setState({hasConnection: true})
           this.goNextDelay = setTimeout(() => {
             this.goNext();
           }, 1000);
+        } else {
+          this.setState({hasConnection: false})
         }
-        this.setState({hasConnection: isConnected});
       }
     );
+
   }
 
   componentWillUnmount() {
