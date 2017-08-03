@@ -69,7 +69,7 @@ export class HomeMenuList extends React.Component {
                     style={style.menuItemHeader}
                   >
                     <Image style={[style.iconImgXs, {tintColor: '#12a1e7', marginBottom: 10, flex:2}]}
-                           source={{uri: data.categoryIcon || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
+                           source={{uri: data.categoryIcon || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}/>
                     <Text numberOfLines={1}
                           style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17, flex:8 }}>{data.categoryName}</Text>
                   </TouchableOpacity>
@@ -83,7 +83,7 @@ export class HomeMenuList extends React.Component {
                       <View style={style.imageContainer}>
                         <View style={style.imageInner}>
                           <Image
-                            source={{uri: service.heroImage || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}
+                            source={{uri: service.heroImage || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}
                             style={style.image}
                           >
                             {data.isNoService || (
@@ -110,7 +110,7 @@ export class HomeMenuList extends React.Component {
                       style={style.menuItemHeader}
                     >
                       <Image style={[style.iconImgXs, {tintColor: '#12a1e7', flex:2}]}
-                             source={{uri: data.categoryIcon || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
+                             source={{uri: data.categoryIcon || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}/>
                       <Text numberOfLines={1}
                             style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17,flex: 8 }}>{data.categoryName}</Text>
                     </TouchableOpacity>
@@ -124,7 +124,7 @@ export class HomeMenuList extends React.Component {
                         <View style={style.imageContainer}>
                           <View style={style.imageInner}>
                             <Image
-                              source={{uri: service.heroImage || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}
+                              source={{uri: service.heroImage || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}
                               style={style.image}
                             >
                               {data.isNoService || (

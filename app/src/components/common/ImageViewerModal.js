@@ -27,7 +27,7 @@ export class ImageViewerModal extends React.Component {
              transparent={true}
              onRequestClose={() => {if(this.props.onClose) this.props.onClose()}}>
         <ImageViewer
-          imageUrls={this.props.images || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}
+          imageUrls={this.props.images || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}
           index={this.props.selectedIndex}
           saveToLocalByLongPress={false}
         />

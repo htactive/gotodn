@@ -17,7 +17,7 @@ export class DetailImage extends React.Component {
           {this.props.images && this.props.images.map((img, index) =>
             <TouchableOpacity key={index} activeOpacity={.8} onPress={() => this.showImage(index)}
                               style={{paddingRight: index < this.props.images.length ? 10 : 0}}>
-              <Image style={style.detailImageItem} source={{uri: img.url || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}/>
+              <Image style={style.detailImageItem} source={{uri: img.url || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}/>
             </TouchableOpacity>
           )}
         </View>

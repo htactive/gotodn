@@ -183,7 +183,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
           }>
             <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 18, color: '#fff'}}>DIRECTION</Text>
             <Image style={[{resizeMode: 'cover', width: 30, height: 30,}, {tintColor: '#fff'}]}
-                   source={AppIcon.Direction || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}/>
+                   source={AppIcon.Direction || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}/>
           </TouchableOpacity>
         </View>
         {(this.state.waitingForLocation || this.state.gpsError ) && (

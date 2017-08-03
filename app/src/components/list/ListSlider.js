@@ -48,7 +48,7 @@ export class ListSlider extends React.Component {
                     <CardItem cardBody>
                       <View style={style.listSlider}>
                         <Image
-                          source={{uri: slide.image || "https://avatars3.githubusercontent.com/u/20336495?v=4&s=460"}}
+                          source={{uri: slide.image || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}
                           style={[style.imageListSlider]}
                         >
                           <View style={style.textInnerListSlider}>
