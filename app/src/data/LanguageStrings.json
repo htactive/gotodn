@@ -10,7 +10,9 @@
     "Nearby": "ĐỊA ĐIỂM LÂN CẬN",
     "Language": "Ngôn ngữ",
     "Search": "Tìm kiếm...",
-    "Cancel": "Hủy"
+    "Cancel": "Hủy",
+    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareSubject": "Goto Da Nang"
   },
   "en": {
     "NoDescription": "No Description",
@@ -23,7 +25,9 @@
     "Nearby": "NEARBY PLACES",
     "Language": "Language",
     "Search": "Search...",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareSubject": "Goto Da Nang"
   },
   "fr": {
     "NoDescription": "Pas de description",
@@ -36,7 +40,9 @@
     "Nearby": "LIEUX À PROXIMITÉ",
     "Language": "La langue",
     "Search": "Chercher",
-    "Cancel": "Annuler"
+    "Cancel": "Annuler",
+    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareSubject": "Goto Da Nang"
   },
   "zh": {
     "NoDescription": "没有说明",
@@ -49,7 +55,9 @@
     "Nearby": "邻近地方",
     "Language": "语言",
     "Search": "搜索",
-    "Cancel": "取消"
+    "Cancel": "取消",
+    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareSubject": "Goto Da Nang"
   },
   "ja": {
     "NoDescription": "説明なし",
@@ -62,7 +70,9 @@
     "Nearby": "近くの場所",
     "Language": "言語",
     "Search": "サーチ",
-    "Cancel": "キャンセル"
+    "Cancel": "キャンセル",
+    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareSubject": "Goto Da Nang"
   },
   "ko": {
     "NoDescription": "설명 없음",
@@ -75,6 +85,8 @@
     "Nearby": "가까운 장소",
     "Language": "언어",
     "Search": "수색",
-    "Cancel": "취소"
+    "Cancel": "취소",
+    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareSubject": "Goto Da Nang"
   }
 }
