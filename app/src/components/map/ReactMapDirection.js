@@ -43,7 +43,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
 
   componentDidMount() {
     if (this.state.destination == null) {
-        this.setState({gpsError: true});
+      this.setState({gpsError: true});
       return;
     }
     this.getCurrentPos();
@@ -121,6 +121,20 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
     )
   }
 
+  renderAlternativeMarker(id, coords, text, des) {
+    let thisCoords = coords[Math.floor(coords.length / 3)];
+    return (
+      <MapView.Marker
+        key={id}
+        coordinate={thisCoords}
+        title={text}
+        description={des}
+        image={require('../../../assets/icons/car.png')}
+        anchor={{x:0.5, y:0.5}}
+      />
+    )
+  }
+
   renderCallout() {
     // if(this.state.calloutIsRendered === true) return;
     // this.setState({calloutIsRendered: true});
@@ -149,14 +163,24 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
           {alternativeRoutes && alternativeRoutes.map((a, id) => {
             return a.steps && this.renderAlternativeRoute(id, a.steps)
           })}
+          {alternativeRoutes && alternativeRoutes.map((a, id) => {
+            return a.steps && this.renderAlternativeMarker(id, a.steps, a.distance.text, a.duration.text)
+          })}
           {mainRoute.steps && (
             <MapView.Polyline
               coordinates={mainRoute.steps}
               strokeWidth={4}
               strokeColor='#00b3fd'
               lineCap='butt'
-            />
-          )}
+            />) }
+          {mainRoute.steps
+          && (<MapView.Marker
+            coordinate={mainRoute.steps[Math.floor(mainRoute.steps.length / 2)]}
+            title={mainRoute.distance.text}
+            description={mainRoute.duration.text}
+            image={require('../../../assets/icons/car.png')}
+          />)
+          }
           {this.state.destination ? <MapView.Marker
             coordinate={this.state.destination}
           /> : null}
