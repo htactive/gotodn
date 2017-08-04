@@ -10,7 +10,13 @@
     "Nearby": "ĐỊA ĐIỂM LÂN CẬN",
     "Language": "Ngôn ngữ",
     "Search": "Tìm kiếm...",
-    "Cancel": "Hủy"
+    "Cancel": "Hủy",
+    "GPS": "GPS ĐÃ TẮT, BẬT GPS?",
+    "Denied": "GPS bị từ chối",
+    "Yes": "CÓ",
+    "No": "KHÔNG",
+    "Waiting": "Chờ GPS...",
+    "NotFound": "Không tìm thấy..."
   },
   "en": {
     "NoDescription": "No Description",
@@ -23,7 +29,13 @@
     "Nearby": "NEARBY PLACES",
     "Language": "Language",
     "Search": "Search...",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "GPS": "GPS IS OFF, TURN ON GPS?",
+    "Denied": "GPS Denied",
+    "Yes": "YES",
+    "No": "NO",
+    "Waiting": "Waiting GPS...",
+    "NotFound": "Not found..."
   },
   "fr": {
     "NoDescription": "Pas de description",
@@ -36,7 +48,13 @@
     "Nearby": "LIEUX À PROXIMITÉ",
     "Language": "La langue",
     "Search": "Chercher",
-    "Cancel": "Annuler"
+    "Cancel": "Annuler",
+    "GPS": "Le GPS est éteint, allumez le GPS?",
+    "Denied": "GPS refusé",
+    "Yes": "OUI",
+    "No": "NON",
+    "Waiting": "En attente de GPS ...",
+    "NotFound": "Pas trouvé..."
   },
   "zh": {
     "NoDescription": "没有说明",
@@ -49,7 +67,13 @@
     "Nearby": "邻近地方",
     "Language": "语言",
     "Search": "搜索",
-    "Cancel": "取消"
+    "Cancel": "取消",
+    "GPS": "GPS关机，打开GPS？",
+    "Denied": "GPS被拒绝",
+    "Yes": "是",
+    "No": "没有",
+    "Waiting": "等待GPS",
+    "NotFound": "未找到..."
   },
   "ja": {
     "NoDescription": "説明なし",
@@ -62,7 +86,13 @@
     "Nearby": "近くの場所",
     "Language": "言語",
     "Search": "サーチ",
-    "Cancel": "キャンセル"
+    "Cancel": "キャンセル",
+    "GPS": "GPSがオフで、GPSをオンにしますか？",
+    "Denied": "GPSが拒否された",
+    "Yes": "はい",
+    "No": "NO",
+    "Waiting": "待っているGPS ...",
+    "NotFound": "見つかりません..."
   },
   "ko": {
     "NoDescription": "설명 없음",
@@ -75,6 +105,12 @@
     "Nearby": "가까운 장소",
     "Language": "언어",
     "Search": "수색",
-    "Cancel": "취소"
+    "Cancel": "취소",
+    "GPS": "GPS가 꺼져 있습니다. GPS를 켭니다.",
+    "Denied": "GPS가 거부되었습니다.",
+    "Yes": "예",
+    "No": "아니",
+    "Waiting": "GPS 대기 중 ...",
+    "NotFound": "찾을 수 없음 ..."
   }
 }
