@@ -16,15 +16,16 @@
     "Yes": "CÓ",
     "No": "KHÔNG",
     "Waiting": "Chờ GPS...",
-    "NotFound": "Không tìm thấy..."
+    "NotFound": "Không tìm thấy...",
+    "NoAddress": "Không tìm thấy địa chỉ"
   },
   "en": {
     "NoDescription": "No Description",
     "NoTitle": "No Title",
-    "Direction": "Direction",
-    "Call": "Call",
-    "Link": "Link",
-    "Time": "Time",
+    "Direction": "DIRECTION",
+    "Call": "CALL",
+    "Link": "LINK",
+    "Time": "TIME",
     "MustSee": "Must See",
     "Nearby": "NEARBY PLACES",
     "Language": "Language",
@@ -35,12 +36,13 @@
     "Yes": "YES",
     "No": "NO",
     "Waiting": "Waiting GPS...",
-    "NotFound": "Not found..."
+    "NotFound": "Not found...",
+    "NoAddress": "Address not found"
   },
   "fr": {
     "NoDescription": "Pas de description",
     "NoTitle": "Pas de titre",
-    "Direction": "Direction",
+    "Direction": "DIRECTION",
     "Call": "APPEL",
     "Link": "LIEN",
     "Time": "TEMPS",
@@ -54,7 +56,8 @@
     "Yes": "OUI",
     "No": "NON",
     "Waiting": "En attente de GPS ...",
-    "NotFound": "Pas trouvé..."
+    "NotFound": "Pas trouvé...",
+    "NoAddress": "Adresse introuvable"
   },
   "zh": {
     "NoDescription": "没有说明",
@@ -73,7 +76,8 @@
     "Yes": "是",
     "No": "没有",
     "Waiting": "等待GPS",
-    "NotFound": "未找到..."
+    "NotFound": "未找到...",
+    "NoAddress": "找不到地址"
   },
   "ja": {
     "NoDescription": "説明なし",
@@ -92,7 +96,8 @@
     "Yes": "はい",
     "No": "NO",
     "Waiting": "待っているGPS ...",
-    "NotFound": "見つかりません..."
+    "NotFound": "見つかりません...",
+    "NoAddress": "アドレスが見つかりません"
   },
   "ko": {
     "NoDescription": "설명 없음",
@@ -111,6 +116,7 @@
     "Yes": "예",
     "No": "아니",
     "Waiting": "GPS 대기 중 ...",
-    "NotFound": "찾을 수 없음 ..."
+    "NotFound": "찾을 수 없음 ...",
+    "NoAddress": "주소를 찾을 수 없음"
   }
 }

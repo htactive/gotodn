@@ -157,7 +157,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
               lineCap='butt'
             />
           )}
-          {this.state.destination ? <MapView.Marker
+          {this.state.destination && this.state.destination.length > 0 ? <MapView.Marker
             coordinate={this.state.destination}
           /> : null}
 
@@ -182,7 +182,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
           }} style={
             {flexDirection: 'row', justifyContent: 'space-between'}
           }>
-            <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 18, color: '#fff'}}>DIRECTION</Text>
+            <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 18, color: '#fff'}}>{LStrings.Direction}</Text>
             <Image style={[{resizeMode: 'cover', width: 30, height: 30,}, {tintColor: '#fff'}]}
                    source={AppIcon.Direction || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}/>
           </TouchableOpacity>
