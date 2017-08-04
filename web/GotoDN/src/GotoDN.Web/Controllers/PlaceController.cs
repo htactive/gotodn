@@ -852,7 +852,12 @@ namespace GotoDN.Web.Controllers
 
             var lang = this.HTRepository.PlaceLanguageRepository.GetAll()
                 .Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image")
+                .Include("PlaceMoreInfo.Icon")
                 .FirstOrDefault(x => x.Language == currentLang && x.PlaceId == id);
+            if(lang.PlaceMoreInfo != null)
+            {
+                lang.PlaceMoreInfo = lang.PlaceMoreInfo.OrderBy(t => t.Order).ToList();
+            }
             model.PlaceLanguages.Add(AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(lang));
 
             return model;
@@ -875,7 +880,7 @@ namespace GotoDN.Web.Controllers
                 .Include(x => x.Place).Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image")
                 .Where(x => x.Language == currentLang &&
                         x.Place.CityId.HasValue && entity.CityId.HasValue && x.Place.CityId == entity.CityId && x.Place.Id != id)
-                .OrderByDescending(x => x.CreatedDate).Take(5).ToList();
+                .OrderBy(x => x.Place.DistrictId == entity.DistrictId).ThenBy(x => x.Place.District.Name).ThenByDescending(x => x.CreatedDate).Take(5).ToList();
 
             foreach (var item in nearBy)
             {

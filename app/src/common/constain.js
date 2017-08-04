@@ -795,4 +795,6 @@ export class Helper {
 
   static LanguageKey = 'LanguageKey';
   static CityKey = 'CityKey';
+  static FavoriteKey = 'FavoriteKey';
+  static SeparateKey = '||';
 }

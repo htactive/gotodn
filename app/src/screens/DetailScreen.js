@@ -1,7 +1,7 @@
 import React from 'react';
-import {View, Image, TouchableOpacity, ScrollView, Text, Alert} from 'react-native';
+import {View, Image, TouchableOpacity, ScrollView, Text, AsyncStorage, Alert} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
-import {MenuListItemData, MenuType, AppIcon, IconName} from '../common/constain';
+import {MenuListItemData, MenuType, AppIcon, IconName, Helper} from '../common/constain';
 import {Icon, Spinner} from 'native-base';
 import {DetailBanner} from '../components/detail/DetailBanner';
 import {style, StyleBase} from '../styles/style';
@@ -25,7 +25,8 @@ import {LStrings} from '../common/LocalizedStrings';
 
 export class DetailScreen extends React.Component {
   state = {
-    dataDetail: {}
+    dataDetail: {},
+    isFavorite: false,
   };
 
   unSubscribe;
@@ -61,6 +62,7 @@ export class DetailScreen extends React.Component {
     let itemId = (params && params.itemId) || 0;
     this.getDetailData(itemId);
     this.getNearByData(itemId);
+    this.checkFavorite(itemId);
   }
 
   async getDetailData(id) {
@@ -91,22 +93,22 @@ export class DetailScreen extends React.Component {
 
     return (
       !!data.id ? (
-        <Grid>
-          <Col>
-            <ScrollView>
-              <Row size={1}>
-                <DetailBanner
-                  coverImg={data.heroImage}
-                  onSharedClicked={() => this.shareDetail(data.id)}
-                  onFavoriteClicked={() => this.likeDetail(data.id)}/>
-              </Row>
-              <Row size={2}>
-                <View style={style.detailContent}>
-                  <DetailImage images={data.images}/>
-                  <DetailText title={data.title || LStrings.NoTitle}
-                              description={data.description || LStrings.NoDescription}/>
-                  <View style={style.detailMap}>
-                    <ReactMap />
+          <Grid>
+            <Col>
+              <ScrollView>
+                <Row size={1}>
+                  <DetailBanner
+                    isFavorite={this.state.isFavorite}
+                    coverImg={data.heroImage}
+                    onSharedClicked={() => this.shareDetail(data.id)}
+                    onFavoriteClicked={() => this.likeDetail(data.id)}/>
+                </Row>
+                <Row size={2}>
+                  <View style={style.detailContent}>
+                    <DetailImage images={data.images}/>
+                    <DetailText title={data.title || LStrings.NoTitle} description={data.description || LStrings.NoDescription}/>
+                    <View style={style.detailMap}>
+                      <ReactMap />
 
                     <View style={style.detailOverlay}>
 
@@ -130,6 +132,9 @@ export class DetailScreen extends React.Component {
                                          }}
                       />
                     </View>
+                   
+                    <DetailInfo detailInfo={data.moreinfo}/>
+                    <DetailNearPlace nearByPlaces={this.state.detailNearBy || []} onNearByClicked={(id) => this.goToPlace(id)}/>
                   </View>
                   <DetailNearPlace nearByPlaces={this.state.detailNearBy || []}
                                    onNearByClicked={(id) => this.goToPlace(id)}/>
@@ -148,8 +153,25 @@ export class DetailScreen extends React.Component {
 
   }
 
-  likeDetail(id) {
+  async likeDetail(id) {
+    let fPlaceIdValue = await AsyncStorage.getItem(Helper.FavoriteKey);
+    if(fPlaceIdValue) {
+      let fPlaceIds = fPlaceIdValue.split(Helper.SeparateKey);
+      let favoriteId = fPlaceIds ? fPlaceIds.indexOf(id + '') : -1;
+      if(favoriteId > -1) {
+        fPlaceIds.splice(favoriteId, 1);
+      } else {
+        fPlaceIds.push(id);
+      }
+      fPlaceIdValue = fPlaceIds.join(Helper.SeparateKey);
+    } else {
+      let fPlaceIds = [];
+      fPlaceIds.push(id);
+      fPlaceIdValue = fPlaceIds.join(Helper.SeparateKey);
+    }
 
+    await AsyncStorage.setItem(Helper.FavoriteKey, fPlaceIdValue);
+    this.checkFavorite(id);
   }
 
   goToPlace(id) {
@@ -182,5 +204,27 @@ export class DetailScreen extends React.Component {
       }
     }
     return '';
+  }
+
+  async checkFavorite(itemId) {
+
+    let fPlaceIdValue = await AsyncStorage.getItem(Helper.FavoriteKey);
+    if (fPlaceIdValue) {
+      let fPlaceIds = fPlaceIdValue.split(Helper.SeparateKey);
+      let favoriteId = fPlaceIds ? fPlaceIds.indexOf(itemId + '') : -1;
+      if(favoriteId > -1) {
+        this.setState({
+          isFavorite: true,
+        });
+      } else {
+        this.setState({
+          isFavorite: false,
+        });
+      }
+    } else {
+      this.setState({
+        isFavorite: false,
+      });
+    }
   }
 }

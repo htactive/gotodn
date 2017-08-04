@@ -2,7 +2,7 @@ import React from 'react';
 import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity, Image} from 'react-native';
 import {Title, Icon, Picker, Drawer, Input, Item} from 'native-base';
 import {StyleBase, style} from '../../styles/style';
-import {MenuType, viewportHeight, MenuListItemData, Helper, viewportWidth} from '../../common/constain';
+import {MenuType, viewportHeight, MenuListItemData, Helper, viewportWidth, AppIcon} from '../../common/constain';
 import {GDNServiceInstance} from '../../services/GDNService';
 import styles from '../../styles/slider-css';
 import {Spinner}  from 'native-base';
@@ -61,7 +61,7 @@ export class MenuSearch extends React.Component {
               <View style={{flex: 7, justifyContent:'space-between'}}>
                 <View style={{flexDirection:'row'}}>
                   <View style={{flex:1, justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={{uri: d.addressIcon || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}/>
+                    <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={AppIcon.Location}/>
                   </View>
                   <View style={{flex:9,justifyContent: 'center', alignItems: 'flex-start'}}>
                     <Text numberOfLines={1} style={[style.menuSearchInfo, {paddingLeft: 5}]}>{d.address}</Text>
@@ -69,7 +69,7 @@ export class MenuSearch extends React.Component {
                 </View>
                 <View style={{flexDirection:'row'}}>
                   <View style={{flex:1, justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={{uri: d.phoeneIcon || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}/>
+                    <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={AppIcon.Tel}/>
                   </View>
                   <View style={{flex:9, justifyContent: 'center', alignItems: 'flex-start'}}>
                     <Text numberOfLines={1} style={[style.menuSearchInfo, {paddingLeft: 5}]}>{d.phone}</Text>
