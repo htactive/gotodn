@@ -7,7 +7,7 @@ import {CustomCallout} from './CustomCallout';
 import {StyleBase, style} from '../../styles/style';
 const MapView = require('react-native-maps');
 const {PROVIDER_GOOGLE} = MapView;
-import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
+import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 
 interface thisProps {
 }

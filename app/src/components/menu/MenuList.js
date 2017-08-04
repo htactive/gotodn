@@ -6,6 +6,7 @@ import {Icon}  from 'native-base';
 import {MenuListData, AppIcon} from '../../common/constain';
 import {GDNServiceInstance} from '../../services/GDNService';
 import {appStore} from '../../stores/AppStore';
+import {LStrings} from '../../common/LocalizedStrings';
 
 export class MenuList extends React.Component {
   state = {menuData: [], activeIndex: -1, isHelpActived: false, isAboutActived: false};
@@ -72,7 +73,7 @@ export class MenuList extends React.Component {
                         {/*});*/}
                         {/*this.props.onAboutUsClicked();*/}
                       {/*}}/>*/}
-        <MenuListItem itemText='Language' system itemIcon={AppIcon.Language} onItemClicked={() => {
+        <MenuListItem itemText={LStrings.Language} system itemIcon={AppIcon.Language} onItemClicked={() => {
           this.props.onLanguageClicked();
         }}/>
       </ScrollView>

@@ -3,6 +3,7 @@ import {View, Image, TouchableOpacity, Text, Linking} from 'react-native';
 import {Icon} from 'native-base';
 import {style} from '../../styles/style';
 import {viewportWidth, IconName} from '../../common/constain';
+import {LStrings} from '../../common/LocalizedStrings';
 
 export class DetailNearPlace extends React.Component {
 
@@ -11,7 +12,7 @@ export class DetailNearPlace extends React.Component {
     return (
       <View style={style.detailInfoContainer}>
         <View style={style.nearPlaceTitle}>
-          <Text style={style.nearPlaceTitleText}>NEARBY PLACES</Text>
+          <Text style={style.nearPlaceTitleText}>{LStrings.Nearby}</Text>
         </View>
         {this.props.nearByPlaces && this.props.nearByPlaces.map((d, index) =>
           <View key={index} style={[style.detailInfoItem, { paddingVertical: 10, paddingLeft: 0}]}>

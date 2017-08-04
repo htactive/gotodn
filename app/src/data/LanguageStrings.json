@@ -5,7 +5,12 @@
     "Direction": "CHỈ ĐƯỜNG",
     "Call": "GỌI",
     "Link": "LIÊN KẾT",
-    "Time": "THỜI GIAN"
+    "Time": "THỜI GIAN",
+    "MustSee": "Nổi bật",
+    "Nearby": "ĐỊA ĐIỂM LÂN CẬN",
+    "Language": "Ngôn ngữ",
+    "Search": "Tìm kiếm...",
+    "Cancel": "Hủy"
   },
   "en": {
     "NoDescription": "No Description",
@@ -13,7 +18,12 @@
     "Direction": "Direction",
     "Call": "Call",
     "Link": "Link",
-    "Time": "Time"
+    "Time": "Time",
+    "MustSee": "Must See",
+    "Nearby": "NEARBY PLACES",
+    "Language": "Language",
+    "Search": "Search...",
+    "Cancel": "Cancel"
   },
   "fr": {
     "NoDescription": "Pas de description",
@@ -21,7 +31,12 @@
     "Direction": "Direction",
     "Call": "APPEL",
     "Link": "LIEN",
-    "Time": "TEMPS"
+    "Time": "TEMPS",
+    "MustSee": "À voir",
+    "Nearby": "LIEUX À PROXIMITÉ",
+    "Language": "La langue",
+    "Search": "Chercher",
+    "Cancel": "Annuler"
   },
   "zh": {
     "NoDescription": "没有说明",
@@ -29,7 +44,12 @@
     "Direction": "方向",
     "Call": "呼叫",
     "Link": "链接",
-    "Time": "时间"
+    "Time": "时间",
+    "MustSee": "必看",
+    "Nearby": "邻近地方",
+    "Language": "语言",
+    "Search": "搜索",
+    "Cancel": "取消"
   },
   "ja": {
     "NoDescription": "説明なし",
@@ -37,7 +57,12 @@
     "Direction": "方向",
     "Call": "コール",
     "Link": "リンク",
-    "Time": "時間"
+    "Time": "時間",
+    "MustSee": "必見",
+    "Nearby": "近くの場所",
+    "Language": "言語",
+    "Search": "サーチ",
+    "Cancel": "キャンセル"
   },
   "ko": {
     "NoDescription": "설명 없음",
@@ -45,6 +70,11 @@
     "Direction": "방향",
     "Call": "요구",
     "Link": "링크",
-    "Time": "시각"
+    "Time": "시각",
+    "MustSee": "볼 수 있어야합니다",
+    "Nearby": "가까운 장소",
+    "Language": "언어",
+    "Search": "수색",
+    "Cancel": "취소"
   }
 }

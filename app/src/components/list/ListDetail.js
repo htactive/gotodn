@@ -8,6 +8,7 @@ import {ListSlider} from './ListSlider';
 import {viewportHeight} from '../../common/constain';
 import {GDNServiceInstance} from '../../services/GDNService';
 import {appStore} from '../../stores/AppStore';
+import {LStrings} from '../../common/LocalizedStrings';
 
 export class ListDetail extends React.Component {
   state = {
@@ -82,7 +83,7 @@ export class ListDetail extends React.Component {
       >
         <Grid>
           {this.state.showSlider ? <Row style={{ height: viewportHeight*.4 }}>
-              <ListSlider navigation={this.props.navigation} dataSource={this.state.sliderData} title="Must See"/>
+              <ListSlider navigation={this.props.navigation} dataSource={this.state.sliderData} title={LStrings.MustSee}/>
             </Row> : <Row style={{ height: 0 }}>
 
             </Row>}

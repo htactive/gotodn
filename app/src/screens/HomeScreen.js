@@ -10,6 +10,7 @@ import {navigationStore, navigateAction} from '../stores/NavigationStore';
 import {appStore} from '../stores/AppStore';
 import {GDNServiceInstance} from '../services/GDNService';
 import {Menu} from '../components/menu/Menu';
+import {LStrings} from '../common/LocalizedStrings';
 
 export class HomeScreen extends React.Component {
 
@@ -81,7 +82,7 @@ export class HomeScreen extends React.Component {
       >
         <Grid>
           {this.state.showSlider ? <Row style={{ height: viewportHeight*.38 }}>
-            <HomeSlider dataSource={this.state.sliderData} title="Must See"/>
+            <HomeSlider dataSource={this.state.sliderData} title={LStrings.MustSee}/>
             </Row> : <Row><Text></Text></Row> }
           <Row style={!this.state.showSlider ? {minHeight: viewportHeight} : {}}>
             <HomeMenuList dataSource={this.state.menuListData}  />
