@@ -3,7 +3,7 @@ import {timeout, MenuListData} from '../common/DummyData';
 import {Helper, LanguageEnums, IconName} from '../common/constain';
 import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
-  host = "http://gdn.htactive.com/";
+  host = "http://192.168.1.6:50915/";
 
   async getHomeSlider() {
     let url = this.host + "category/get-category-slider";
@@ -141,7 +141,38 @@ class GDNService extends ServiceBase {
           url: x.Image.Url,
         };
       }) : null;
-      
+      data.moreinfo =[];
+      if(lang && lang.PlaceMoreInfo) {
+        for (let i = 0; i < lang.PlaceMoreInfo.length; i++) {
+          let placeInfo = lang.PlaceMoreInfo[i];
+          let info = {};
+          if(placeInfo.IsHalf) {
+            info.isMulti = true;
+            if(i < lang.PlaceMoreInfo.length - 1 && lang.PlaceMoreInfo[i + 1].IsHalf) {
+              let placeInfo1 = lang.PlaceMoreInfo[i + 1];
+              info.dataInfo = [{
+                infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
+                infoText: placeInfo.Name + ' : ' + placeInfo.Value,
+              },{
+                infoIcon: placeInfo1.Icon ? placeInfo1.Icon.Url : null,
+                infoText: placeInfo1.Name + ' : ' + placeInfo1.Value,
+              }];
+              i++;
+            } else {
+              info.dataInfo = [{
+                infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
+                infoText: placeInfo.Name + ' : ' + placeInfo.Value,
+              },null];
+            }
+          } else {
+            info = {
+              infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
+              infoText: placeInfo.Name + ' : ' + placeInfo.Value,
+            }
+          }
+          data.moreinfo.push(info);
+        }
+      }
 
       return data;
     }
@@ -245,6 +276,7 @@ class GDNService extends ServiceBase {
           heroImage: enPlace.Image ? enPlace.Image.Url : Helper.ImageUrl,
           title: enPlace.Title,
           description: enPlace.Description,
+          isDistrictGovernment: p.IsDistrictGovernment,
         }
       });
 
@@ -253,6 +285,7 @@ class GDNService extends ServiceBase {
       objectData.id = result.Id;
       objectData.categoryName = cateLang ? cateLang.Title : '';
       objectData.data = data;
+      objectData.isGovernment = result.IsGovernment;
 
       return objectData;
     }
