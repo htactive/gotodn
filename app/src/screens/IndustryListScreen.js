@@ -11,6 +11,7 @@ import {navigationStore, navigateToRouteAction} from '../stores/NavigationStore'
 import {GDNServiceInstance} from '../services/GDNService';
 import {appStore} from '../stores/AppStore';
 import {Menu} from '../components/menu/Menu';
+import {LStrings} from '../common/LocalizedStrings';
 
 const imgHeight = Math.round((viewportWidth - 30) / 2);
 const textHeight = Math.round(viewportHeight / 3.3);
@@ -120,7 +121,7 @@ export class IndustryListScreen extends React.Component {
     alignItems: 'center',}}>
                 <Icon active name='ios-search-outline' style={{color:'#8e8e93', fontSize:25}}/>
                 <Input value={this.state.searchValue}
-                       placeholder={'Search...' }
+                       placeholder={LStrings.Search}
                        placeholderTextColor='#8e8e93'
                        style={{color: '#263238', height: 40,
                              fontFamily: StyleBase.sp_regular,

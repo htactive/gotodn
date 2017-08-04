@@ -8,7 +8,7 @@ import {Spinner}  from 'native-base';
 import {viewportWidth, AppIcon, platform} from '../../common/constain';
 import {style, StyleBase} from '../../styles/style';
 
-const slideWidth = wp(80);
+const slideWidth = wp(85);
 const itemWidth = slideWidth + wp(1);
 
 export default class HomeSlider extends React.Component {

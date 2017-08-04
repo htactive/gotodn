@@ -11,6 +11,7 @@ import {IndustryListScreen} from '../../screens/IndustryListScreen';
 import { NavigationActions } from 'react-navigation';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 import {appStore, appSaveLanguage} from '../../stores/AppStore'
+import {changeAppLanguage} from '../../common/LocalizedStrings';
 
 export class MenuContent extends React.Component {
   state = {selectedLang: 3, showPicker: false};
@@ -90,8 +91,8 @@ export class MenuContent extends React.Component {
 
   async languageChanged(d) {
 
+    changeAppLanguage(d.Id);
     await AsyncStorage.setItem(Helper.LanguageKey, d.Id + '');
     appStore.dispatch(appSaveLanguage(d.Id));
-    debugger;
   }
 }

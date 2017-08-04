@@ -98,7 +98,7 @@ class GDNService extends ServiceBase {
 
     if (result && result.length > 0) {
       let data = [];
-      let currentLanguage = appStore.getState().language || LanguageEnums.English;
+      let currentLanguage = appStore.getState().language;
       for (let i = 0; i < result.length; i++) {
         let enLang = result[i].PlaceLanguages.filter(t => t.Language == currentLanguage)[0];
         if(enLang) {
@@ -120,11 +120,13 @@ class GDNService extends ServiceBase {
     let url = this.host + "place/app-get-place-by-id?id=" + Id;
     let result = await super.executeFetch(url);
     if (result) {
+      let currentLanguage = appStore.getState().language;
+      let lang = result.PlaceLanguages.filter(l => l.Language == currentLanguage)[0];
       let data = {};
       data.id = result.Id;
-      data.heroImage = result.PlaceLanguages[0].Image ? result.PlaceLanguages[0].Image.Url : Helper.ImageUrl;
-      data.title = result.PlaceLanguages[0].Title;
-      data.description = result.PlaceLanguages[0].Description;
+      data.heroImage = lang && lang.Image ? lang.Image.Url : Helper.ImageUrl;
+      data.title = lang ? lang.Title : null;
+      data.description = lang ? lang.Description : null;
       data.star = result.Rating;
       data.address = result.Address;
       data.phone = result.Phone;
@@ -133,12 +135,44 @@ class GDNService extends ServiceBase {
       data.close = result.CloseTime;
       data.city = result.City ? result.City.Name : "";
       data.district = result.District ? result.District.Name : "";
-      data.images = result.PlaceLanguages[0].PlaceImages.map(x => {
+      data.images = lang && lang.PlaceImages ? lang.PlaceImages.map(x => {
         return {
           id: x.Id,
           url: x.Image.Url,
         };
-      })
+      }) : null;
+      data.moreinfo =[];
+      if(lang && lang.PlaceMoreInfo) {
+        for (let i = 0; i < lang.PlaceMoreInfo.length; i++) {
+          let placeInfo = lang.PlaceMoreInfo[i];
+          let info = {};
+          if(placeInfo.IsHalf) {
+            info.isMulti = true;
+            if(i < lang.PlaceMoreInfo.length - 1 && lang.PlaceMoreInfo[i + 1].IsHalf) {
+              let placeInfo1 = lang.PlaceMoreInfo[i + 1];
+              info.dataInfo = [{
+                infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
+                infoText: placeInfo.Name + ' : ' + placeInfo.Value,
+              },{
+                infoIcon: placeInfo1.Icon ? placeInfo1.Icon.Url : null,
+                infoText: placeInfo1.Name + ' : ' + placeInfo1.Value,
+              }];
+              i++;
+            } else {
+              info.dataInfo = [{
+                infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
+                infoText: placeInfo.Name + ' : ' + placeInfo.Value,
+              },null];
+            }
+          } else {
+            info = {
+              infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
+              infoText: placeInfo.Name + ' : ' + placeInfo.Value,
+            }
+          }
+          data.moreinfo.push(info);
+        }
+      }
 
       return data;
     }
@@ -151,7 +185,7 @@ class GDNService extends ServiceBase {
     let result = await super.executeFetch(url);
     if (result) {
       let rs = [];
-      let currentLanguage = appStore.getState().language || LanguageEnums.English;
+      let currentLanguage = appStore.getState().language;
       rs = result.map(t => {
         let enLanguage = t.CategoryLanguages.filter(l => l.Language == currentLanguage)[0];
         return {
@@ -190,22 +224,16 @@ class GDNService extends ServiceBase {
     let result = await super.executeFetch(url);
     if (result && result.length > 0) {
       let data = [];
-      for (var i = 0; i < result.length; i++) {
+      for (let i = 0; i < result.length; i++) {
         data.push({
-          id: result[i] ? result[i].Id : 0,
-          heroImage: result[i].Image ? result[i].Image.Url : Helper.ImageUrl,
+          id: result[i] ? result[i].PlaceId : 0,
+          heroImage: result[i] && result[i].Image ? result[i].Image.Url : Helper.ImageUrl,
           title: result[i] ? result[i].Title : "",
-          description: result[i].Description,
+          description: result[i] ? result[i].Description : "",
           star: result[i].Place.Rating,
           address: result[i].Place.Address,
           phone: result[i].Place.Phone,
           website: result[i].Place.Website,
-          images: result[i].PlaceImages.map(x => {
-            return {
-              id: x.Id,
-              url: x.Image.Url,
-            };
-          })
         });
       }
       return data;
@@ -235,7 +263,7 @@ class GDNService extends ServiceBase {
     if (result) {
       let objectData = {};
       let data = [];
-      let currentLanguage = appStore.getState().language || LanguageEnums.English;
+      let currentLanguage = appStore.getState().language;
       let d = result.Places.filter((p) => {
         let enPlace = p.PlaceLanguages.filter(l => l.Language == currentLanguage)[0];
         return !!enPlace
@@ -248,6 +276,7 @@ class GDNService extends ServiceBase {
           heroImage: enPlace.Image ? enPlace.Image.Url : Helper.ImageUrl,
           title: enPlace.Title,
           description: enPlace.Description,
+          isDistrictGovernment: p.IsDistrictGovernment,
         }
       });
 
@@ -256,6 +285,7 @@ class GDNService extends ServiceBase {
       objectData.id = result.Id;
       objectData.categoryName = cateLang ? cateLang.Title : '';
       objectData.data = data;
+      objectData.isGovernment = result.IsGovernment;
 
       return objectData;
     }

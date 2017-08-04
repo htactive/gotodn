@@ -288,6 +288,7 @@ namespace GotoDN.Web.Controllers
 
             var category = this.HTRepository.CategoryRepository.GetAll()
                 .Include("CategoryLanguages.Image")
+                .Include("CategoryLanguages.Icon")
                 .Include("HTServices.HTServiceLanguages.Image")
                 .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang))
                 .ToList();

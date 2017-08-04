@@ -5,6 +5,7 @@ import {Col, Row, Grid} from 'react-native-easy-grid';
 import {LocationPicker} from '../common/LocationPicker';
 import {MenuType, AppIcon} from '../../common/constain';
 import {style, StyleBase} from '../../styles/style';
+import {LStrings} from '../../common/LocalizedStrings';
 
 export class MenuHeader extends React.Component {
   state = {
@@ -73,7 +74,7 @@ export class MenuHeader extends React.Component {
                              borderColor: '#fff',}}>
             <Icon active name='ios-search-outline' style={{color:'#8e8e93', fontSize:25}}/>
             <Input value={this.state.searchBarValue}
-                   placeholder='Search Places...'
+                   placeholder={LStrings.Search}
                    placeholderTextColor='#8e8e93'
                    style={{color: '#263238', height: 35,
                              fontFamily: StyleBase.sp_regular,
@@ -96,7 +97,7 @@ export class MenuHeader extends React.Component {
                              fontFamily: StyleBase.sp_regular,
                              fontSize: 18,
                       }}>
-              Cancel
+              {LStrings.Cancel}
             </Text>
           </TouchableOpacity>
         </Col>

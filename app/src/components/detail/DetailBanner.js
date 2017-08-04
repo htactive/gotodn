@@ -20,7 +20,7 @@ export class DetailBanner extends React.Component {
                   if (this.props.onFavoriteClicked)
                     this.props.onFavoriteClicked()
                 } }>
-                    <Image style={[style.iconImgSm, {tintColor: '#039be5'}]} source={AppIcon.Favorite || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}/>
+                    <Image style={[style.iconImgSm, this.props.isFavorite ? {tintColor: '#E52B50'} : {tintColor: '#039be5'}]} source={AppIcon.Favorite || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}/>
                   </TouchableOpacity>
                 </View>
                 <View style={style.detailImageActionIcon}>
