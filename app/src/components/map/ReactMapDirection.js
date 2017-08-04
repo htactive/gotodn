@@ -8,6 +8,7 @@ import {StyleBase, style} from '../../styles/style';
 const MapView = require('react-native-maps');
 const {PROVIDER_GOOGLE} = MapView;
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
+import {LStrings} from '../../common/LocalizedStrings';
 
 interface thisProps {
 }
@@ -74,7 +75,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
         navigator.geolocation.clearWatch(this.watchId);
         this.setState({
           waitingForLocation: false,
-          gpsError: {message: "GPS Denied"}
+          gpsError: {message: LStrings.Denied}
         });
       }
     }, 20000);
@@ -82,9 +83,9 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
 
   async checkIsLocation() {
     let check = await LocationServicesDialogBox.checkLocationServicesIsEnabled({
-      message: "GPS IS OFF, TURN ON GPS?",
-      ok: "YES",
-      cancel: "NO"
+      message: LStrings.GPS,
+      ok: LStrings.Yes,
+      cancel: LStrings.No
     }).catch(error => error);
 
     return check === "enabled";
@@ -181,7 +182,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
           }} style={
             {flexDirection: 'row', justifyContent: 'space-between'}
           }>
-            <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 18, color: '#fff'}}>DIRECTION</Text>
+            <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 18, color: '#fff'}}>{LStrings.Direction}</Text>
             <Image style={[{resizeMode: 'cover', width: 30, height: 30,}, {tintColor: '#fff'}]}
                    source={AppIcon.Direction || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}/>
           </TouchableOpacity>
@@ -198,8 +199,8 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
               {flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}
             }>
               <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 12, color: '#039be5'}}>
-                {this.state.waitingForLocation && ("Waiting GPS...")}
-                {this.state.gpsError && ("Not found...")}
+                {this.state.waitingForLocation && LStrings.Waiting}
+                {this.state.gpsError && LStrings.NotFound}
               </Text>
             </TouchableOpacity>
           </View>

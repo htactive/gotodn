@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Image, TouchableOpacity, ScrollView, Text, AsyncStorage, Clipboard} from 'react-native';
+import {View, Image, TouchableOpacity, ScrollView, Text, AsyncStorage, Alert, Clipboard} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {MenuListItemData, platform, AppIcon, IconName, Helper} from '../common/constain';
 import {Icon, Spinner} from 'native-base';
@@ -103,7 +103,7 @@ export class DetailScreen extends React.Component {
 
     let shareOptions = {
       message: LStrings.ShareDescription + '\n',
-      url: platform  === 'ios' ? "https://www.apple.com/itunes/" :  "https://play.google.com/store/apps/details?id=com.gotodn",
+      url: platform === 'ios' ? "https://www.apple.com/itunes/" : "https://play.google.com/store/apps/details?id=com.gotodn",
       subject: LStrings.ShareSubject //  for email
     };
 
@@ -129,21 +129,22 @@ export class DetailScreen extends React.Component {
                       <View style={style.detailOverlay}>
                         <DetailMapTextItem leftText={data.address} leftIcon={AppIcon.Location}
                                            rightText={LStrings.Direction} rightIcon={AppIcon.Direction}
-                                           onMapItemClicked={()=>
-                                             this.handleDirection(data.address, this.state.destCoord)}
+                                           onMapItemClicked={() =>
+                                           this.handleDirection(data.address, this.state.destCoord)}
                         />
                         <DetailMapTextItem leftText={data.phone} leftIcon={AppIcon.Tel}
                                            rightText={LStrings.Call} rightIcon={AppIcon.Calling}
-                                           onMapItemClicked={()=> this.handleCalling(data.phone)}
+                                           onMapItemClicked={() => this.handleCalling(data.phone)}
                         />
                         <DetailMapTextItem leftText={data.website} leftIcon={AppIcon.Web}
                                            rightText={LStrings.Link} rightIcon={AppIcon.Link}
-                                           onMapItemClicked={()=> this.handleLink(data.website)}
+                                           onMapItemClicked={() => this.handleLink(data.website)}
                         />
                         <DetailMapTextItem lastItem leftText={this.renderHour(data.open, data.close)}
                                            leftIcon={AppIcon.Time}
                                            rightText={LStrings.Time}
-                                           onMapItemClicked={()=> {}}
+                                           onMapItemClicked={() => {
+                                         }}
                         />
                       </View>
                     </View>
@@ -255,7 +256,10 @@ export class DetailScreen extends React.Component {
   }
 
   handleDirection(address, coord) {
-    navigationStore.dispatch(navigateToRouteAction('ReactMapDirection', {coordinate: coord}));
+    if (coord && coord.latitude && coord.longitude)
+      navigationStore.dispatch(navigateToRouteAction('ReactMapDirection', {coordinate: coord}));
+    else
+      Alert.alert(LStrings.NoAddress);
   }
 
   handleCalling(tel) {
