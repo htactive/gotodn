@@ -18,7 +18,7 @@
     "Waiting": "Chờ GPS...",
     "NotFound": "Không tìm thấy...",
     "NoAddress": "Không tìm thấy địa chỉ",
-    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareDescription": "Goto Đà Nẵng có nhiều thông tin hữu ích về Đà Nẵng và các huyện/thành phố khác. \nTải xuống ứng dụng tuyệt vời này tại:",
     "ShareSubject": "Goto Da Nang"
   },
   "en": {
@@ -40,7 +40,7 @@
     "Waiting": "Waiting GPS...",
     "NotFound": "Not found...",
     "NoAddress": "Address not found",
-    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareDescription": "Goto Da Nang contains many useful information about Da Nang and another districts/cities. \nDownload this awesome app at:",
     "ShareSubject": "Goto Da Nang"
   },
   "fr": {
@@ -62,7 +62,7 @@
     "Waiting": "En attente de GPS ...",
     "NotFound": "Pas trouvé...",
     "NoAddress": "Adresse introuvable",
-    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareDescription": "Goto Da Nang contient de nombreuses informations utiles sur Da Nang et d'autres districts/villes. \nDownload this awesome application à:",
     "ShareSubject": "Goto Da Nang"
   },
   "zh": {
@@ -84,7 +84,7 @@
     "Waiting": "等待GPS",
     "NotFound": "未找到...",
     "NoAddress": "找不到地址",
-    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareDescription": "Goto Da Nang包含有关岘港和其他地区/城市的许多有用信息。 \n下载这个真棒应用程序：",
     "ShareSubject": "Goto Da Nang"
   },
   "ja": {
@@ -106,7 +106,7 @@
     "Waiting": "待っているGPS ...",
     "NotFound": "見つかりません...",
     "NoAddress": "アドレスが見つかりません",
-    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareDescription": "Goto Da Nangには、ダナンと他の地区/都市に関する多くの有益な情報が含まれています。 \nこの素晴らしいアプリをダウンロードする：",
     "ShareSubject": "Goto Da Nang"
   },
   "ko": {
@@ -128,7 +128,7 @@
     "Waiting": "GPS 대기 중 ...",
     "NotFound": "찾을 수 없음 ...",
     "NoAddress": "주소를 찾을 수 없음",
-    "ShareDescription": "Goto Da Nang contain many useful information about Da Nang and another city. \nDownload this awesome app at:",
+    "ShareDescription": "Goto Da Nang에는 다낭과 다른 지구 / 도시에 대한 유용한 정보가 많이 있습니다. \n다음 위치에서 멋진 앱을 다운로드하십시오.",
     "ShareSubject": "Goto Da Nang"
   }
 }
