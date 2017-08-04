@@ -93,22 +93,23 @@ export class DetailScreen extends React.Component {
 
     return (
       !!data.id ? (
-          <Grid>
-            <Col>
-              <ScrollView>
-                <Row size={1}>
-                  <DetailBanner
-                    isFavorite={this.state.isFavorite}
-                    coverImg={data.heroImage}
-                    onSharedClicked={() => this.shareDetail(data.id)}
-                    onFavoriteClicked={() => this.likeDetail(data.id)}/>
-                </Row>
-                <Row size={2}>
-                  <View style={style.detailContent}>
-                    <DetailImage images={data.images}/>
-                    <DetailText title={data.title || LStrings.NoTitle} description={data.description || LStrings.NoDescription}/>
-                    <View style={style.detailMap}>
-                      <ReactMap />
+        <Grid>
+          <Col>
+            <ScrollView>
+              <Row size={1}>
+                <DetailBanner
+                  isFavorite={this.state.isFavorite}
+                  coverImg={data.heroImage}
+                  onSharedClicked={() => this.shareDetail(data.id)}
+                  onFavoriteClicked={() => this.likeDetail(data.id)}/>
+              </Row>
+              <Row size={2}>
+                <View style={style.detailContent}>
+                  <DetailImage images={data.images}/>
+                  <DetailText title={data.title || LStrings.NoTitle}
+                              description={data.description || LStrings.NoDescription}/>
+                  <View style={style.detailMap}>
+                    <ReactMap />
 
                     <View style={style.detailOverlay}>
 
@@ -132,10 +133,9 @@ export class DetailScreen extends React.Component {
                                          }}
                       />
                     </View>
-                   
-                    <DetailInfo detailInfo={data.moreinfo}/>
-                    <DetailNearPlace nearByPlaces={this.state.detailNearBy || []} onNearByClicked={(id) => this.goToPlace(id)}/>
+
                   </View>
+                  <DetailInfo detailInfo={data.moreinfo}/>
                   <DetailNearPlace nearByPlaces={this.state.detailNearBy || []}
                                    onNearByClicked={(id) => this.goToPlace(id)}/>
                 </View>
@@ -155,10 +155,10 @@ export class DetailScreen extends React.Component {
 
   async likeDetail(id) {
     let fPlaceIdValue = await AsyncStorage.getItem(Helper.FavoriteKey);
-    if(fPlaceIdValue) {
+    if (fPlaceIdValue) {
       let fPlaceIds = fPlaceIdValue.split(Helper.SeparateKey);
       let favoriteId = fPlaceIds ? fPlaceIds.indexOf(id + '') : -1;
-      if(favoriteId > -1) {
+      if (favoriteId > -1) {
         fPlaceIds.splice(favoriteId, 1);
       } else {
         fPlaceIds.push(id);
@@ -179,7 +179,7 @@ export class DetailScreen extends React.Component {
   }
 
   handleDirection(address, coord) {
-    if (coord && coord.length > 0)
+    if (coord && coord.latitude && coord.longitude)
       navigationStore.dispatch(navigateToRouteAction('ReactMapDirection', {coordinate: coord}));
     else
       Alert.alert(LStrings.NoAddress);
@@ -212,7 +212,7 @@ export class DetailScreen extends React.Component {
     if (fPlaceIdValue) {
       let fPlaceIds = fPlaceIdValue.split(Helper.SeparateKey);
       let favoriteId = fPlaceIds ? fPlaceIds.indexOf(itemId + '') : -1;
-      if(favoriteId > -1) {
+      if (favoriteId > -1) {
         this.setState({
           isFavorite: true,
         });

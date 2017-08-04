@@ -157,7 +157,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
               lineCap='butt'
             />
           )}
-          {this.state.destination && this.state.destination.length > 0 ? <MapView.Marker
+          {this.state.destination ? <MapView.Marker
             coordinate={this.state.destination}
           /> : null}
 
