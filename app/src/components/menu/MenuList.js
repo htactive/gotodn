@@ -5,11 +5,32 @@ import {style} from '../../styles/style';
 import {Icon}  from 'native-base';
 import {MenuListData, AppIcon} from '../../common/constain';
 import {GDNServiceInstance} from '../../services/GDNService';
+import {appStore} from '../../stores/AppStore';
 
 export class MenuList extends React.Component {
   state = {menuData: [], activeIndex: -1, isHelpActived: false, isAboutActived: false};
 
+  unSubscribe;
+  componentWillMount() {
+    this.unSubscribe = appStore.subscribe(() => {
+      this.loadData();
+    });
+  }
+
   componentDidMount() {
+    (async () => {
+      let menuData = await GDNServiceInstance.getMenuData();
+      this.setState({
+        menuData: menuData
+      });
+    })();
+  }
+
+  componentWillUnmount() {
+    this.unSubscribe();
+  }
+
+  loadData() {
     (async () => {
       let menuData = await GDNServiceInstance.getMenuData();
       this.setState({

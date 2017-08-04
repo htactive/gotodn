@@ -119,10 +119,11 @@ namespace GotoDN.Web.Controllers
                 .Include("PlaceLanguages.PlaceImages.Image")
                 .Include("PlaceLanguages.PlaceMoreInfo.Icon")
                 .FirstOrDefault(x => x.Id == model.Id);
-            if (entity == null) {
+            if (entity == null)
+            {
                 entity = new Place();
             }
-            
+
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             entity.Address = model.Address;
             entity.CityId = model.CityId;
@@ -496,8 +497,10 @@ namespace GotoDN.Web.Controllers
                 {
                     Id = q.Id,
                     Title = q.PlaceLanguages.FirstOrDefault(t => t.Language == language).Title,
-                    CategoryName = q.Category.CategoryLanguages.FirstOrDefault(t => t.Language == language).Title,
-                    ServiceName = q.HTServiceId != null ? q.HTService.HTServiceLanguages.FirstOrDefault(t => t.Language == language).Title : "",
+                    CategoryName = q.Category.CategoryLanguages.First(t => t.Language == language) != null ?
+                                q.Category.CategoryLanguages.First(t => t.Language == language).Title : "",
+                    ServiceName = q.HTServiceId != null && q.HTService.HTServiceLanguages.First(t => t.Language == language) != null ?
+                                q.HTService.HTServiceLanguages.First(t => t.Language == language).Title : "",
                     IsCategorySlider = q.IsCategorySlider,
                     IsHomeSlider = q.IsHomeSlider,
                     IsEvent = q.Category.IsEvent,
@@ -597,7 +600,7 @@ namespace GotoDN.Web.Controllers
                 .Include(x => x.City).Include(x => x.District).FirstOrDefault(q => q.Id == id);
             foreach (var lang in entity.PlaceLanguages)
             {
-                if(lang != null)
+                if (lang != null)
                 {
                     lang.PlaceMoreInfo = lang.PlaceMoreInfo.OrderBy(i => i.Order).ToList();
                 }
@@ -777,6 +780,19 @@ namespace GotoDN.Web.Controllers
             entity.ImageId = enPlaceLanguage.ImageId;
             entity.Image = enPlaceLanguage.Image;
             entity.PlaceImages = enPlaceLanguage.PlaceImages;
+            if (enPlaceLanguage.PlaceMoreInfo != null)
+            {
+                entity.PlaceMoreInfo.Clear();
+                entity.PlaceMoreInfo.AddRange(enPlaceLanguage.PlaceMoreInfo.Select(t => new PlaceMoreInfoModel
+                {
+                    Name = TranslateHelper.TranslateText(t.Name, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English)),
+                    Value = TranslateHelper.TranslateText(t.Value, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English)),
+                    IconId = t.IconId,
+                    Icon = t.Icon,
+                    IsHalf = t.IsHalf,
+                    Order = t.Order,
+                }).ToList());
+            }
             return entity;
         }
 
@@ -796,6 +812,19 @@ namespace GotoDN.Web.Controllers
                 entity.ImageId = enPlaceLanguage.ImageId;
                 entity.Image = enPlaceLanguage.Image;
                 entity.PlaceImages = enPlaceLanguage.PlaceImages;
+                if (enPlaceLanguage.PlaceMoreInfo != null)
+                {
+                    entity.PlaceMoreInfo.Clear();
+                    entity.PlaceMoreInfo.AddRange(enPlaceLanguage.PlaceMoreInfo.Select(t => new PlaceMoreInfoModel
+                    {
+                        Name = TranslateHelper.TranslateText(t.Name, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English)),
+                        Value = TranslateHelper.TranslateText(t.Value, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English)),
+                        IconId = t.IconId,
+                        Icon = t.Icon,
+                        IsHalf = t.IsHalf,
+                        Order = t.Order,
+                    }).ToList());
+                }
             }
             return model;
         }
@@ -813,6 +842,9 @@ namespace GotoDN.Web.Controllers
         [AllowAnonymous]
         public PlaceModel AppGetPlaceById(int id)
         {
+            var currentLang = this.CurrentLanguage;
+            var currentCity = this.CurrentCityId;
+
             var entity = this.HTRepository.PlaceRepository.GetAll()
                 .Include(x => x.City).Include(x => x.District).FirstOrDefault(x => x.Id == id);
             if (entity == null) return null;
@@ -820,7 +852,7 @@ namespace GotoDN.Web.Controllers
 
             var lang = this.HTRepository.PlaceLanguageRepository.GetAll()
                 .Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image")
-                .Where(x => x.Language == LanguageEnums.English && x.PlaceId == id).FirstOrDefault();
+                .FirstOrDefault(x => x.Language == currentLang && x.PlaceId == id);
             model.PlaceLanguages.Add(AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(lang));
 
             return model;
@@ -841,7 +873,7 @@ namespace GotoDN.Web.Controllers
 
             var nearBy = this.HTRepository.PlaceLanguageRepository.GetAll()
                 .Include(x => x.Place).Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image")
-                .Where(x => x.Language == LanguageEnums.English &&
+                .Where(x => x.Language == currentLang &&
                         x.Place.CityId.HasValue && entity.CityId.HasValue && x.Place.CityId == entity.CityId && x.Place.Id != id)
                 .OrderByDescending(x => x.CreatedDate).Take(5).ToList();
 

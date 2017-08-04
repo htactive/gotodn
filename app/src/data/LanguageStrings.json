@@ -1,0 +1,50 @@
+{
+  "vi": {
+    "NoDescription": "Không có mô tả",
+    "NoTitle": "Không tiêu đề",
+    "Direction": "CHỈ ĐƯỜNG",
+    "Call": "GỌI",
+    "Link": "LIÊN KẾT",
+    "Time": "THỜI GIAN"
+  },
+  "en": {
+    "NoDescription": "No Description",
+    "NoTitle": "No Title",
+    "Direction": "Direction",
+    "Call": "Call",
+    "Link": "Link",
+    "Time": "Time"
+  },
+  "fr": {
+    "NoDescription": "Pas de description",
+    "NoTitle": "Pas de titre",
+    "Direction": "Direction",
+    "Call": "APPEL",
+    "Link": "LIEN",
+    "Time": "TEMPS"
+  },
+  "zh": {
+    "NoDescription": "没有说明",
+    "NoTitle": "无题",
+    "Direction": "方向",
+    "Call": "呼叫",
+    "Link": "链接",
+    "Time": "时间"
+  },
+  "ja": {
+    "NoDescription": "説明なし",
+    "NoTitle": "タイトルなし",
+    "Direction": "方向",
+    "Call": "コール",
+    "Link": "リンク",
+    "Time": "時間"
+  },
+  "ko": {
+    "NoDescription": "설명 없음",
+    "NoTitle": "제목 없음",
+    "Direction": "방향",
+    "Call": "요구",
+    "Link": "링크",
+    "Time": "시각"
+  }
+}

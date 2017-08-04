@@ -1,11 +1,10 @@
 import React from 'react';
 import {View, Image, TouchableOpacity, ScrollView, Text} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
-
 import {MenuListItemData, MenuType, AppIcon, IconName} from '../common/constain';
-import {Icon} from 'native-base';
+import {Icon, Spinner} from 'native-base';
 import {DetailBanner} from '../components/detail/DetailBanner';
-import {style} from '../styles/style';
+import {style, StyleBase} from '../styles/style';
 import {DetailText} from '../components/detail/DetailText';
 import {DetailInfo} from '../components/detail/DetailInfo';
 import {DetailImage} from '../components/detail/DetailImage';
@@ -21,11 +20,15 @@ import Communications from 'react-native-communications';
 import {GDNServiceInstance} from '../services/GDNService';
 import {GoogleAPIServiceInstance} from '../services/GoogleAPIService';
 import moment from 'moment';
+import {appStore} from '../stores/AppStore';
+import {LStrings} from '../common/LocalizedStrings';
 
 export class DetailScreen extends React.Component {
   state = {
     dataDetail: {}
   };
+
+  unSubscribe;
 
   componentWillMount() {
     navigationStore.subscribe(() => {
@@ -38,6 +41,19 @@ export class DetailScreen extends React.Component {
         this.props.navigation.dispatch(navigateAction);
       }
     });
+    this.unSubscribe = appStore.subscribe(() => {
+      const {params} = this.props.navigation.state;
+      let itemId = (params && params.itemId) || 0;
+      this.setState({
+        dataDetail: {},
+      });
+      this.getDetailData(itemId);
+      this.getNearByData(itemId);
+    });
+  }
+
+  componentWillUnmount() {
+    this.unSubscribe();
   }
 
   componentDidMount() {
@@ -74,7 +90,7 @@ export class DetailScreen extends React.Component {
     //let detailNearBy = MenuListItemData.filter(t => t.id != data.id);
 
     return (
-      data ? (
+      !!data.id ? (
           <Grid>
             <Col>
               <ScrollView>
@@ -87,27 +103,27 @@ export class DetailScreen extends React.Component {
                 <Row size={2}>
                   <View style={style.detailContent}>
                     <DetailImage images={data.images}/>
-                    <DetailText title={data.title || 'No Title'} description={data.description || 'No Description'}/>
+                    <DetailText title={data.title || LStrings.NoTitle} description={data.description || LStrings.NoDescription}/>
                     <View style={style.detailMap}>
                       <ReactMap />
 
                       <View style={style.detailOverlay}>
 
-                        <DetailMapTextItem leftText={data.address} leftIcon={IconName.Location}
-                                            rightText={"DIRECTION"} rightIcon={AppIcon.Direction}
+                        <DetailMapTextItem leftText={data.address} leftIcon={AppIcon.Location}
+                                            rightText={LStrings.Direction} rightIcon={AppIcon.Direction}
                                            onMapItemClicked={()=>
                                              this.handleDirection(data.address, this.state.destCoord)}
                         />
-                        <DetailMapTextItem leftText={data.phone} leftIcon={IconName.Telephone}
-                                           rightText={"CALL"} rightIcon={AppIcon.Calling}
+                        <DetailMapTextItem leftText={data.phone} leftIcon={AppIcon.Tel}
+                                           rightText={LStrings.Call} rightIcon={AppIcon.Calling}
                                            onMapItemClicked={()=> this.handleCalling(data.phone)}
                         />
-                        <DetailMapTextItem leftText={data.website} leftIcon={IconName.Web}
-                                           rightText={"LINK"} rightIcon={AppIcon.Link}
+                        <DetailMapTextItem leftText={data.website} leftIcon={AppIcon.Web}
+                                           rightText={LStrings.Link} rightIcon={AppIcon.Link}
                                            onMapItemClicked={()=> this.handleLink(data.website)}
                         />
-                        <DetailMapTextItem lastItem leftText={this.renderHour(data.open, data.close)} leftIcon={IconName.Clock}
-                                           rightText={"TIME"}
+                        <DetailMapTextItem lastItem leftText={this.renderHour(data.open, data.close)} leftIcon={AppIcon.Time}
+                                           rightText={LStrings.Time}
                                            onMapItemClicked={()=> {}}
                         />
                       </View>
@@ -117,7 +133,10 @@ export class DetailScreen extends React.Component {
                 </Row>
               </ScrollView>
             </Col>
-          </Grid>) : null
+          </Grid>) :
+        <View style={[style.container,style.centralizedContent, {paddingTop: 10,}]}>
+          <Spinner color={StyleBase.header_color}/>
+        </View>
     )
   }
 

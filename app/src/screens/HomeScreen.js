@@ -9,6 +9,7 @@ import {NavigationActions} from 'react-navigation';
 import {navigationStore, navigateAction} from '../stores/NavigationStore';
 import {appStore} from '../stores/AppStore';
 import {GDNServiceInstance} from '../services/GDNService';
+import {Menu} from '../components/menu/Menu';
 
 export class HomeScreen extends React.Component {
 
@@ -36,6 +37,7 @@ export class HomeScreen extends React.Component {
       this.onFresh();
     });
     this.setState({showSlider: false});
+    Menu.instance.setNavigation(this.props.navigation);
   }
 
   componentDidMount() {

@@ -9,6 +9,7 @@ import {NavigationActions} from 'react-navigation';
 import {StyleBase} from '../styles/style';
 import {GDNServiceInstance} from '../services/GDNService';
 import {appStore, appSaveLanguage, appSaveCity} from '../stores/AppStore';
+import {changeAppLanguage} from '../common/LocalizedStrings';
 
 export class SplashScreen extends React.Component {
 
@@ -39,9 +40,11 @@ export class SplashScreen extends React.Component {
 
     let cityValue = await AsyncStorage.getItem(Helper.CityKey);
 
-    let currentLang =langValue || LanguageEnums.English;
+    let currentLang =langValue ? parseInt(langValue) : LanguageEnums.English;
 
     appStore.dispatch(appSaveLanguage(currentLang));
+
+    changeAppLanguage(currentLang);
 
     let selectedCityId = 0;
     let result = await GDNServiceInstance.getAllCity();
