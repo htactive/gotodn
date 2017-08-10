@@ -97,7 +97,7 @@ export const DNNavigatorOptions = {
           params = transProps.scene.route.params;
           listId = (params && params.listId) || 0;
           title = (params && params.categoryName) || '';
-          Menu.instance.setTitle(title);
+          Menu.instance.setTitle("");
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.ListScreen);
           break;
@@ -106,7 +106,7 @@ export const DNNavigatorOptions = {
           params = transProps.scene.route.params;
           listId = (params && params.listId) || 0;
           title = (params && params.categoryName) || '';
-          Menu.instance.setTitle(title);
+          Menu.instance.setTitle("");
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.ListScreen);
           break;
