@@ -3,7 +3,7 @@ import {timeout, MenuListData} from '../common/DummyData';
 import {Helper, LanguageEnums, IconName} from '../common/constain';
 import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
-  host = "http://192.168.1.8:50915/";
+  host = "http://gdn.htactive.com/";
 
   async getHomeSlider() {
     let url = this.host + "category/get-category-slider";
