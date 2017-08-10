@@ -211,7 +211,7 @@ export const style = StyleSheet.create({
   },
   menuItemTextContain: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'flex-start',
     paddingHorizontal: 3,
     opacity: 0.8,
@@ -434,6 +434,7 @@ export const style = StyleSheet.create({
     color: '#263238',
     fontSize: 18,
     fontFamily: StyleBase.sp_semibold,
+    paddingVertical: 14,
   },
   industryItemSubTitle: {
     color: '#263238',
