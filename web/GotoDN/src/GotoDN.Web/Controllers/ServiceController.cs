@@ -292,16 +292,18 @@ namespace GotoDN.Web.Controllers
 
         [HttpGet, Route("get-list-data")]
         [AllowAnonymous]
-        public List<PlaceModel> GetCategoryData(int? serviceId)
+        public List<PlaceModel> GetCategoryData(int? serviceId, int? index)
         {
             var currentLanguage = this.CurrentLanguage;
             var currentCityId = this.CurrentCityId;
+            var currentId = index ?? 0;
+            var itemsPerIndex = 50;
 
             var result = new List<MenuListModel>();
             var places = this.HTRepository.PlaceRepository.GetAll()
                 .Include("PlaceLanguages.Image")
                 .Where(t => t.CityId == currentCityId && t.PlaceLanguages.Any(l => l.Language == currentLanguage) && t.HTServiceId.HasValue && t.HTServiceId == serviceId)
-                .OrderByDescending(t => t.CreatedDate).Take(100);
+                .OrderByDescending(t => t.CreatedDate).Skip(currentId * itemsPerIndex).Take(itemsPerIndex);
 
             var placeModels = places.Select(t => AutoMapper.Mapper.Map<Place, PlaceModel>(t)).ToList();
 

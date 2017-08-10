@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, RefreshControl} from 'react-native';
+import {ScrollView, RefreshControl, Dimensions} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import TopSlider from '../slider/TopSlider';
 import {SlideType} from '../../common/constain';
@@ -17,6 +17,8 @@ export class ListDetail extends React.Component {
     sliderData: null,
     placeData: null,
     showSlider: true,
+    loadingMore: false,
+    currentIndex: 0,
   };
 
   unSubscribe;
@@ -49,7 +51,7 @@ export class ListDetail extends React.Component {
 
   loadData(serviceId) {
     (async() => {
-      let menuListData = await GDNServiceInstance.getMenuListPlace(serviceId);
+      let menuListData = await GDNServiceInstance.getMenuListPlace(serviceId, 0);
       this.setState({menuListData, menuListLoad: true});
       if (this.state.sliderLoaded) {
         this.setState({
@@ -78,8 +80,10 @@ export class ListDetail extends React.Component {
         refreshControl={
               <RefreshControl
             refreshing={this.state.refreshing}
-            onRefresh={() => this.onFresh()} />
+            onRefresh={() => this.onFresh()}
+            />
             }
+        //onScroll={(e) => {this.handleScrollBottom(e)}}
       >
         <Grid>
           {this.state.showSlider ? <Row style={{ height: viewportHeight*.4 }}>
@@ -99,4 +103,38 @@ export class ListDetail extends React.Component {
     this.setState({refreshing: true});
     this.loadData(this.props.serviceId);
   }
+
+  loadMoreTimeout;
+
+  // handleScrollBottom(e) {
+  //   if (!this.state.loadingMore) {
+  //     if (this.loadMoreTimeout)
+  //       clearTimeout(this.loadMoreTimeout);
+  //     let windowHeight = Dimensions.get('window').height * this.state.showSlider ? .5 : .9,
+  //       height = e.nativeEvent.contentSize.height,
+  //       offset = e.nativeEvent.contentOffset.y;
+  //     if (windowHeight + offset >= height && !this.state.keyboardShow) {
+  //       this.loadMoreTimeout = setTimeout(() => {
+  //         this.setState({
+  //           loadingMore: true,
+  //         });
+  //         (async() => {
+  //           let nextId = this.state.currentIndex + 1;
+  //           let result = await GDNServiceInstance.searchAllPlace(this.props.search, nextId);
+  //           this.setState({
+  //             loadingMore: false,
+  //           });
+  //           let oldData = this.state.data ? this.state.data.slice() : [];
+  //           if (result) {
+  //             let newData = oldData.concat(result);
+  //             this.setState({
+  //               data: newData,
+  //               currentIndex: nextId,
+  //             });
+  //           }
+  //         })();
+  //       }, 500);
+  //     }
+  //   }
+  // }
 }

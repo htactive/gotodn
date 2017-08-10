@@ -483,16 +483,17 @@ namespace GotoDN.Web.Controllers
 
         [HttpGet, Route("gdn-search-place")]
         [AllowAnonymous]
-        public List<AppSearchPlaceModel> GdnSearchPlace(string search)
+        public List<AppSearchPlaceModel> GdnSearchPlace(string search, int? index)
         {
             var language = this.CurrentLanguage;
             var city = this.CurrentCityId;
-
+            var currentId = index ?? 0;
+            var itemsPerIndex = 30;
             var query = this.HTRepository.PlaceRepository.GetAll();
-            query = query.Include("PlaceLanguages")
+            var queryRs = query.Include("PlaceLanguages.Image")
                 .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages")
-                .Include(x => x.City).Include(x => x.District);
-            var searchQuery = query.Where(t => t.PlaceLanguages.Any(l => l.Language == language) && t.CityId == city)
+                .Include(x => x.City).Include(x => x.District).ToList();
+            var searchQuery = queryRs.Where(t => t.PlaceLanguages.Any(l => l.Language == language) && t.CityId == city)
                 .Select(q => new AppSearchPlaceModel
                 {
                     Id = q.Id,
@@ -531,7 +532,7 @@ namespace GotoDN.Web.Controllers
                 || (x.ServiceName != null && x.ServiceName.ToLower().Contains(search))
                 );
             }
-            var searchRs = searchQuery.OrderByDescending(t => t.IsEvent).ThenByDescending(t => t.IsHomeSlider).ThenByDescending(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Take(30).ToList();
+            var searchRs = searchQuery.OrderByDescending(t => t.IsEvent).ThenByDescending(t => t.IsHomeSlider).ThenByDescending(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
             return searchRs;
         }
 

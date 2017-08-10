@@ -480,6 +480,15 @@ export const style = StyleSheet.create({
     resizeMode: 'cover',
     width: 10,
     height: 10,
+  },
+  loadingMore: {
+    position: 'absolute',
+    left: 0,
+    bottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,.3)',
+    width: viewportWidth
   }
 });
 

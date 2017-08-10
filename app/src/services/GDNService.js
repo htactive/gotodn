@@ -3,7 +3,7 @@ import {timeout, MenuListData} from '../common/DummyData';
 import {Helper, LanguageEnums, IconName} from '../common/constain';
 import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
-  host = "http://gdn.htactive.com/";
+  host = "http://192.168.1.8:50915/";
 
   async getHomeSlider() {
     let url = this.host + "category/get-category-slider";
@@ -92,8 +92,8 @@ class GDNService extends ServiceBase {
     return null;
   }
 
-  async getMenuListPlace(serviceId) {
-    let url = this.host + "service/get-list-data?serviceId=" + serviceId;
+  async getMenuListPlace(serviceId, index) {
+    let url = this.host + "service/get-list-data?serviceId=" + serviceId + "&index=" + index;
     let result = await super.executeFetch(url);
 
     if (result && result.length > 0) {
@@ -199,9 +199,9 @@ class GDNService extends ServiceBase {
     }
   }
 
-  async searchAllPlace(search) {
+  async searchAllPlace(search, index) {
 
-    let url = this.host + "place/gdn-search-place?search=" + search;
+    let url = this.host + "place/gdn-search-place?search=" + search + "&index=" + index;
     let result = await super.executeFetch(url);
     if (result) {
 
