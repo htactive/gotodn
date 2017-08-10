@@ -143,7 +143,7 @@ export class MenuSearch extends React.Component {
       let windowHeight = Dimensions.get('window').height * .9,
         height = this.itemHeight ? (this.itemHeight * 30 * (this.state.currentIndex + 1)) : 0;
         offset = e.nativeEvent.contentOffset.y;
-      if (height > 0 && windowHeight + offset >= height*.6 && !this.state.keyboardShow) {
+      if (height > 0 && windowHeight + offset >= height*.6) {
         this.loadMoreTimeout = setTimeout(() => {
           this.setState({
             loadingMore: true,
