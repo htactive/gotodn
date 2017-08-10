@@ -37,7 +37,7 @@ export class HomeScreen extends React.Component {
     this.unSubscribe = appStore.subscribe(() => {
       this.onFresh();
     });
-    this.setState({showSlider: false});
+    this.setState({showSlider: true});
     Menu.instance.setNavigation(this.props.navigation);
   }
 
