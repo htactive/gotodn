@@ -307,11 +307,11 @@ namespace GotoDN.Web.Controllers
                         x.HTServices.Select(y => new MenuItemModel()
                         {
                             Id = y.Id,
-                            Title = x.CategoryLanguages.First(z => z.Language == currentLang) != null ?
-                                    x.CategoryLanguages.First(z => z.Language == currentLang).Title : "",
-                            Url = x.CategoryLanguages.First(z => z.Language == currentLang) != null &&
-                                    x.CategoryLanguages.First(z => z.Language == currentLang).Image != null ?
-                                    GetUrl(x.CategoryLanguages.First(z => z.Language == currentLang).Image) : null
+                            Title = y.HTServiceLanguages.First(z => z.Language == currentLang) != null ?
+                                    y.HTServiceLanguages.First(z => z.Language == currentLang).Title : "",
+                            Url = y.HTServiceLanguages.First(z => z.Language == currentLang) != null &&
+                                    y.HTServiceLanguages.First(z => z.Language == currentLang).Image != null ?
+                                    GetUrl(y.HTServiceLanguages.First(z => z.Language == currentLang).Image) : null
                         }).ToList()
                       : null
                 }).Take(100).ToList();
