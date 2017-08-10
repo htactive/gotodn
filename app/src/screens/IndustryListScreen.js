@@ -37,6 +37,9 @@ export class IndustryListScreen extends React.Component {
           params: navigationState.params
         });
         this.props.navigation.dispatch(navigateAction);
+        if(this.unSubscribe) {
+          this.unSubscribe();
+        }
       }
     });
     this.unSubscribe = appStore.subscribe(() => {

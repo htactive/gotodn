@@ -17,13 +17,6 @@ export class MenuContent extends React.Component {
   state = {selectedLang: 3, showPicker: false};
 
   componentWillMount() {
-    appStore.subscribe(() => {
-      let appState = appStore.getState();
-      this.setState({
-        selectedLang: appState.language
-      });
-    });
-
   }
 
   render() {
@@ -91,6 +84,9 @@ export class MenuContent extends React.Component {
 
   async languageChanged(d) {
 
+    this.setState({
+      selectedLang: d.Id
+    });
     changeAppLanguage(d.Id);
     Menu.instance.setTitle("");
     await AsyncStorage.setItem(Helper.LanguageKey, d.Id + '');
