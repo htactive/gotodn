@@ -1751,6 +1751,7 @@
 			baseConfigurationReference = 998686C512F0314EFEEEA461 /* Pods-gotoDN.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = 444G2CXT5K;
@@ -1771,7 +1772,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = gotoDN;
+				PRODUCT_BUNDLE_IDENTIFIER = com.htactive.gotodn;
 				PRODUCT_NAME = gotoDN;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1782,6 +1783,7 @@
 			baseConfigurationReference = 4EFF787C37CEB168A670146E /* Pods-gotoDN.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 444G2CXT5K;
 				HEADER_SEARCH_PATHS = (
@@ -1801,7 +1803,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = gotoDN;
+				PRODUCT_BUNDLE_IDENTIFIER = com.htactive.gotodn;
 				PRODUCT_NAME = gotoDN;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
