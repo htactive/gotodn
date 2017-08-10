@@ -273,7 +273,7 @@ namespace GotoDN.Web.Controllers
                     CreateDate = x.CreatedDate,
                     IsEvent = x.Category != null ? x.Category.IsEvent : null,
                     IsCategorySlider = x.IsCategorySlider,
-                }).ToList().OrderBy(t => t.IsEvent).ThenBy(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Take(20).ToList();
+                }).ToList().OrderByDescending(t => t.IsEvent).ThenBy(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Take(20).ToList();
 
             return result;
         }
