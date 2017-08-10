@@ -490,7 +490,7 @@ namespace GotoDN.Web.Controllers
             var currentId = index ?? 0;
             var itemsPerIndex = 30;
             var query = this.HTRepository.PlaceRepository.GetAll();
-            var queryRs = query.Include("PlaceLanguages.Image")
+            var queryRs = query.Include("PlaceLanguages.Image").Where(x => x.Category != null)
                 .Include("Category.CategoryLanguages").Include("HTService.HTServiceLanguages")
                 .Include(x => x.City).Include(x => x.District).ToList();
             var searchQuery = queryRs.Where(t => t.PlaceLanguages.Any(l => l.Language == language) && t.CityId == city)

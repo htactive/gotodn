@@ -209,9 +209,9 @@ class GDNService extends ServiceBase {
         return {
           id: t.Id,
           heroImage: t.CoverImage ? t.CoverImage.Url : Helper.ImageUrl,
-          title: t.Title,
-          address: t.Address + ', ' + t.District + ', ' + t.City,
-          phone: t.Phone,
+          title: t.Title || "",
+          address: t.Address || "" + ', ' + t.District || "" + ', ' + t.City || "",
+          phone: t.Phone || "",
           phoeneIcon: IconName.Telephone,
         }
       });
