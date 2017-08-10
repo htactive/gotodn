@@ -266,10 +266,10 @@ namespace GotoDN.Web.Controllers
                 new SliderModel()
                 {
                     Id = x.Id,
-                    SubTitle = x.PlaceLanguages.Where(z => z.Language == currentLanguage).First().Description,
-                    Title = x.PlaceLanguages.Where(z => z.Language == currentLanguage).First().Title,
-                    Url = x.PlaceLanguages.Where(z => z.Language == currentLanguage).First().Image != null ?
-                        GetUrl(x.PlaceLanguages.Where(z => z.Language == currentLanguage).First().Image) : Common.DefaultPhoto.ImageUrl,
+                    SubTitle = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Description,
+                    Title = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Title,
+                    Url = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Image != null ?
+                        GetUrl(x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Image) : Common.DefaultPhoto.ImageUrl,
                     CreateDate = x.CreatedDate,
                     IsEvent = x.Category != null ? x.Category.IsEvent : null,
                     IsCategorySlider = x.IsCategorySlider,
@@ -298,20 +298,20 @@ namespace GotoDN.Web.Controllers
                 {
                     Id = x.Id,
                     Order = x.Order,
-                    Name = x.CategoryLanguages.First(z => z.Language == currentLang).Title,
-                    Image = x.CategoryLanguages.First(z => z.Language == currentLang).Image != null ?
-                            GetUrl(x.CategoryLanguages.First(z => z.Language == currentLang).Image) : null,
-                    Icon = x.CategoryLanguages.First(z => z.Language == currentLang).Icon != null ?
-                            GetUrl(x.CategoryLanguages.First(z => z.Language == currentLang).Icon) : null,
+                    Name = x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Title,
+                    Image = x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Image != null ?
+                            GetUrl(x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Image) : null,
+                    Icon = x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Icon != null ?
+                            GetUrl(x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Icon) : null,
                     Items = x.HTServices.Count > 0 ?
                         x.HTServices.Select(y => new MenuItemModel()
                         {
                             Id = y.Id,
-                            Title = y.HTServiceLanguages.First(z => z.Language == currentLang) != null ?
-                                    y.HTServiceLanguages.First(z => z.Language == currentLang).Title : "",
-                            Url = y.HTServiceLanguages.First(z => z.Language == currentLang) != null &&
-                                    y.HTServiceLanguages.First(z => z.Language == currentLang).Image != null ?
-                                    GetUrl(y.HTServiceLanguages.First(z => z.Language == currentLang).Image) : null
+                            Title = y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang) != null ?
+                                    y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Title : "",
+                            Url = y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang) != null &&
+                                    y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Image != null ?
+                                    GetUrl(y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Image) : null
                         }).ToList()
                       : null
                 }).Take(100).ToList();
@@ -364,8 +364,8 @@ namespace GotoDN.Web.Controllers
             result.Items = CategoryEntity.Category.HTServices.Select(y => new MenuItemModel()
             {
                 Id = y.Id,
-                Title = y.HTServiceLanguages.First(z => z.Language == currentLang).Title,
-                Url = y.HTServiceLanguages.First(z => z.Language == currentLang).Image != null ? GetUrl(y.HTServiceLanguages.Where(z => z.Language == currentLang).FirstOrDefault().Image) : Common.DefaultPhoto.ImageUrl,
+                Title = y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Title,
+                Url = y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Image != null ? GetUrl(y.HTServiceLanguages.Where(z => z.Language == currentLang).FirstOrDefault().Image) : Common.DefaultPhoto.ImageUrl,
             }).ToList();
 
             return result;

@@ -497,10 +497,10 @@ namespace GotoDN.Web.Controllers
                 {
                     Id = q.Id,
                     Title = q.PlaceLanguages.FirstOrDefault(t => t.Language == language).Title,
-                    CategoryName = q.Category.CategoryLanguages.First(t => t.Language == language) != null ?
-                                q.Category.CategoryLanguages.First(t => t.Language == language).Title : "",
-                    ServiceName = q.HTServiceId != null && q.HTService.HTServiceLanguages.First(t => t.Language == language) != null ?
-                                q.HTService.HTServiceLanguages.First(t => t.Language == language).Title : "",
+                    CategoryName = q.Category.CategoryLanguages.FirstOrDefault(t => t.Language == language) != null ?
+                                q.Category.CategoryLanguages.FirstOrDefault(t => t.Language == language).Title : "",
+                    ServiceName = q.HTServiceId != null && q.HTService.HTServiceLanguages.FirstOrDefault(t => t.Language == language) != null ?
+                                q.HTService.HTServiceLanguages.FirstOrDefault(t => t.Language == language).Title : "",
                     IsCategorySlider = q.IsCategorySlider,
                     IsHomeSlider = q.IsHomeSlider,
                     IsEvent = q.Category.IsEvent,

@@ -40,6 +40,10 @@ export class ListScreen extends React.Component {
     this.loadData();
   }
 
+  componentWillUnmount() {
+    this.unSubscribe();
+  }
+
   async loadData() {
     const { params } = this.props.navigation.state;
     let listId = (params && params.listId) || 0;
