@@ -92,7 +92,10 @@ export class ReactMap extends React.Component<thisProps, thisState> {
       latitudeDelta: GPS_ZOOM,
       longitudeDelta: GPS_ZOOM * (viewportWidth / viewportHeight)
     };
-    this.mapRef.animateToRegion(region, 500);
+    if(this.mapRef)
+    {
+      this.mapRef.animateToRegion(region, 500);
+    }
   }
 
   render() {
