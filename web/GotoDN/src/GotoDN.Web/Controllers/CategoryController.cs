@@ -235,10 +235,6 @@ namespace GotoDN.Web.Controllers
             foreach (var entity in model.CategoryLanguages)
             {
                 entity.Title = TranslateHelper.TranslateText(enCateLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
-                entity.ImageId = enCateLanguage.ImageId;
-                entity.Image = enCateLanguage.Image;
-                entity.IconId = enCateLanguage.IconId;
-                entity.Icon = enCateLanguage.Icon;
             }
             return model;
         }

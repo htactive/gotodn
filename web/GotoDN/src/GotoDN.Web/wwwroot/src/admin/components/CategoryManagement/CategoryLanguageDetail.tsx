@@ -86,53 +86,10 @@ class CategoryLanguageDetail extends React.Component<thisProps, thisState> {
         }
       };
 
-      let f_Image: DynamicFieldModel = {
-        Priority: 2,
-        LabelClass: 'col-lg-3',
-        InputClass: 'col-lg-9',
-        FieldStructure: {
-          Name: 'Ảnh đại diện',
-          FieldName: 'Image',
-          PlaceHolder: '',
-          FieldData: {
-            CssClass: 'dn-image',
-            Type: 'Image',
-          },
-          Type: FieldStructureTypeEnums.SingleImage,
-          ValidateRules: [
-          ]
-        }
-      };
-
-      let f_Icon: DynamicFieldModel = {
-        Priority: 3,
-        LabelClass: 'col-lg-3',
-        InputClass: 'col-lg-9',
-        FieldStructure: {
-          Name: 'Icon',
-          FieldName: 'Icon',
-          PlaceHolder: '',
-          FieldData: {
-            CssClass: 'dn-icon',
-            Type: 'Icon',
-          },
-          Type: FieldStructureTypeEnums.SingleImage,
-          ValidateRules: []
-        }
-      };
       inforForm.DynamicFields.push(f_Title);
-      inforForm.DynamicFields.push(f_Image);
-      inforForm.DynamicFields.push(f_Icon);
       allForms.push(inforForm);
     }
     return allForms;
-  }
-
-  private saveCategory() {
-    if (this.editingForm.isFormValid()) {
-
-    }
-    this.forceUpdate();
   }
 
   private async translateCategory() {

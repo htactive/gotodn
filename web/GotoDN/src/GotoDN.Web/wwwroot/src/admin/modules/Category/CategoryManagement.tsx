@@ -44,6 +44,16 @@ class CategoryManagement extends React.Component<{}, thisState> {
   }
 
   private async updateCategory(model: CategoryModel) {
+    let eng = model.CategoryLanguages.filter(x => x.Language == LanguageEnums.English)[0];
+    let icon = eng.Icon;
+    let img = eng.Image;
+    model.CategoryLanguages.map( x => {
+      if(x && x.Language != LanguageEnums.English)
+      {
+        x.Icon = icon;
+        x.Image = img;
+      }
+    });
     let result = await CategoryServiceInstance.UpdateCategory(model);
     if (result) {
       this.setState({
