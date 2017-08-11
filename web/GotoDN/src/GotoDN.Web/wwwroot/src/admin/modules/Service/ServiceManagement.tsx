@@ -58,15 +58,19 @@ class HTServiceManagement extends React.Component<{}, thisState> {
   }
 
   private async updateHTService() {
+    let eng = this.state.SelectedHTService.HTServiceLanguages.filter(x => x.Language == LanguageEnums.English)[0];
+    let icon = eng.Icon;
+    let img = eng.Image;
+    this.state.SelectedHTService.HTServiceLanguages.map( x => {
+      if(x && x.Language != LanguageEnums.English)
+      {
+        x.Icon = icon;
+        x.Image = img;
+      }
+    });
 
     let result = await HTServiceInstance.UpdateHTService(this.state.SelectedHTService);
     if (result) {
-      // let services = this.state.HTServices.slice();
-      // let index = _.findIndex(services, (sv) => {
-      //   return sv.Id == this.state.SelectedHTService.Id
-      // });
-      // if (index)
-      //   services[index] = this.state.SelectedHTService;
       this.setState({
         SelectedHTService: result,
         HTServices: await HTServiceInstance.GetAll()

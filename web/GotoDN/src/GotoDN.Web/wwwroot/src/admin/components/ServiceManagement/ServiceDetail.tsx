@@ -7,6 +7,10 @@ import {ComboBox, ReactSelectModel} from "../ComboBox/ComboBox";
 import {CategoryModel} from "../../../models/CategoryModel";
 import {MessageBox, MessageBoxType, MessageBoxButtons, MessageBoxResult} from "../../../commons/message-box";
 import {HTServiceInstance} from "../../services/HTService";
+import {DynamicFormModel} from "../../../models/dynamic-form-model";
+import {DynamicFieldModel} from "../../../models/dynamic-field-model";
+import {FieldStructureTypeEnums} from "../../../models/field-structure-model";
+import {DynamicPanelComponent} from "../DynamicForm/DynamicPanelComponent";
 interface thisProps {
   SelectedHTService: HTServiceModel,
   SelectedLanguage: LanguageEnums,
@@ -22,7 +26,56 @@ interface thisProps {
 }
 
 class HTServiceDetail extends React.Component<thisProps, {}> {
+  private getFormStructure(): DynamicFormModel[] {
+    let allForms: DynamicFormModel[] = [];
+    {
+      let inforForm: DynamicFormModel = {
+        Icon: 'fa fa-info',
+        Priority: 1,
+        Title: '',
+        BlankPanel: true,
+        DynamicFields: []
+      };
 
+      let f_Image: DynamicFieldModel = {
+        Priority: 2,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Image',
+          FieldName: 'Image',
+          PlaceHolder: '',
+          FieldData: {
+            CssClass: 'dn-image',
+            Type: 'Image',
+          },
+          Type: FieldStructureTypeEnums.SingleImage,
+          ValidateRules: []
+        }
+      };
+
+      let f_Icon: DynamicFieldModel = {
+        Priority: 3,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Icon',
+          FieldName: 'Icon',
+          PlaceHolder: '',
+          FieldData: {
+            CssClass: 'dn-icon',
+            Type: 'Icon',
+          },
+          Type: FieldStructureTypeEnums.SingleImage,
+          ValidateRules: []
+        }
+      };
+      inforForm.DynamicFields.push(f_Image);
+      inforForm.DynamicFields.push(f_Icon);
+      allForms.push(inforForm);
+    }
+    return allForms;
+  }
   render() {
     let languages: { Language: LanguageEnums, Title: string }[] = [
       {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
@@ -85,6 +138,16 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
                   })
                 }
               </div>
+            </div>
+            <div className="toggle-custom col-lg-12 p0">
+              <DynamicPanelComponent
+                FormStructure={this.getFormStructure()}
+                onFieldValueChange={(obj) => {
+                  this.props.OnHTServiceLanguageChange(obj)
+                }}
+                Object={this.props.SelectedHTService.HTServiceLanguages
+                  .filter(x => x.Language == LanguageEnums.English)[0] || {}}
+              />
             </div>
             <div className="toggle-custom col-lg-12 p0">
               <div style={{paddingTop: '5px', fontWeight: 'normal'}} className="col-lg-3 control-label">Danh mục</div>

@@ -228,10 +228,6 @@ namespace GotoDN.Web.Controllers
             foreach (var entity in model.HTServiceLanguages)
             {
                 entity.Title = TranslateHelper.TranslateText(enServiceLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
-                entity.ImageId = enServiceLanguage.ImageId;
-                entity.Image = enServiceLanguage.Image;
-                entity.IconId = enServiceLanguage.IconId;
-                entity.Icon = enServiceLanguage.Icon;
             }
             return model;
         }
