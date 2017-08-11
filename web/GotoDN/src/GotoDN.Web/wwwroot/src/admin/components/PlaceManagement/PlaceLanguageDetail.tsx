@@ -100,40 +100,6 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
         }
       };
 
-      let f_Image: DynamicFieldModel = {
-        Priority: 3,
-        LabelClass: 'col-lg-3',
-        InputClass: 'col-lg-9',
-        FieldStructure: {
-          Name: 'Ảnh đại diện',
-          FieldName: 'Image',
-          PlaceHolder: '',
-          FieldData: {
-            CssClass: 'dn-image-place',
-            Type: 'Image',
-          },
-          Type: FieldStructureTypeEnums.SingleImage,
-          ValidateRules: []
-        }
-      };
-
-      let f_MultiImage: DynamicFieldModel = {
-        Priority: 4,
-        LabelClass: 'col-lg-3',
-        InputClass: 'col-lg-9',
-        FieldStructure: {
-          Name: 'Ảnh địa điểm',
-          FieldName: 'PlaceImages',
-          PlaceHolder: '',
-          FieldData: {
-            CssClass: 'dn-m-image-place',
-            Type: 'Image',
-          },
-          Type: FieldStructureTypeEnums.C_ImagesUpload,
-          ValidateRules: []
-        }
-      };
-
       let f_MoreInfo: DynamicFieldModel = {
         Priority: 5,
         LabelClass: 'col-lg-3',
@@ -149,19 +115,10 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
       };
       inforForm.DynamicFields.push(f_Title);
       inforForm.DynamicFields.push(f_Description);
-      inforForm.DynamicFields.push(f_Image);
-      inforForm.DynamicFields.push(f_MultiImage);
       inforForm.DynamicFields.push(f_MoreInfo);
       allForms.push(inforForm);
     }
     return allForms;
-  }
-
-  private savePlace() {
-    if (this.editingForm.isFormValid()) {
-
-    }
-    this.forceUpdate();
   }
 
   private async translateCategory() {

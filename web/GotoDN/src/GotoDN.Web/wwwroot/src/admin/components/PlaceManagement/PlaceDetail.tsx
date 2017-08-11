@@ -69,6 +69,59 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
     }
   }
 
+  private getImageFormStructure(): DynamicFormModel[] {
+    let allForms: DynamicFormModel[] = [];
+    {
+      let inforForm: DynamicFormModel = {
+        Icon: 'fa fa-info',
+        Priority: 1,
+        Title: '',
+        BlankPanel: true,
+        DynamicFields: []
+      };
+
+
+      let f_Image: DynamicFieldModel = {
+        Priority: 3,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Ảnh đại diện',
+          FieldName: 'Image',
+          PlaceHolder: '',
+          FieldData: {
+            CssClass: 'dn-image-place',
+            Type: 'Image',
+          },
+          Type: FieldStructureTypeEnums.SingleImage,
+          ValidateRules: []
+        }
+      };
+
+      let f_MultiImage: DynamicFieldModel = {
+        Priority: 4,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Ảnh địa điểm',
+          FieldName: 'PlaceImages',
+          PlaceHolder: '',
+          FieldData: {
+            CssClass: 'dn-m-image-place',
+            Type: 'Image',
+          },
+          Type: FieldStructureTypeEnums.C_ImagesUpload,
+          ValidateRules: []
+        }
+      };
+
+      inforForm.DynamicFields.push(f_Image);
+      inforForm.DynamicFields.push(f_MultiImage);
+      allForms.push(inforForm);
+    }
+    return allForms;
+  }
+
   private getFormStructure(): DynamicFormModel[] {
     let allForms: DynamicFormModel[] = [];
     {
@@ -416,6 +469,16 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                   <hr/>
                   <div className="form-horizontal">
                     <fieldset>
+                      <div className="form-group col-sm-12 p0">
+                        <DynamicPanelComponent
+                          FormStructure={this.getImageFormStructure()}
+                          onFieldValueChange={(obj) => {
+                            this.props.OnPlaceLanguageChange(obj)
+                          }}
+                          Object={this.props.SelectedPlace.PlaceLanguages
+                            .filter(x => x.Language == LanguageEnums.English)[0] || {}}
+                        />
+                      </div>
                       <div className="form-group col-sm-12 p0">
                         <label className="col-sm-3 control-label">Tỉnh thành</label>
                         <div className="col-sm-9">

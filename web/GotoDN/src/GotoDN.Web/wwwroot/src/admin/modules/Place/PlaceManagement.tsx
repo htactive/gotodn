@@ -118,6 +118,16 @@ class PlaceManagement extends React.Component<{}, thisState> {
   }
 
   private async updatePlace(model: PlaceModel) {
+    let eng = model.PlaceLanguages.filter(x => x.Language == LanguageEnums.English)[0];
+    let icon = eng.Icon;
+    let img = eng.Image;
+    model.PlaceLanguages.map( x => {
+      if(x && x.Language != LanguageEnums.English)
+      {
+        x.Icon = icon;
+        x.Image = img;
+      }
+    });
     let result = await PlaceServiceInstance.UpdatePlace(model);
     if (result) {
       window['notice_save_success']();

@@ -810,9 +810,6 @@ namespace GotoDN.Web.Controllers
                 if (entity.Language == enPlaceLanguage.Language) continue;
                 entity.Title = TranslateHelper.TranslateText(enPlaceLanguage.Title, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
                 entity.Description = TranslateHelper.TranslateText(enPlaceLanguage.Description, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English));
-                entity.ImageId = enPlaceLanguage.ImageId;
-                entity.Image = enPlaceLanguage.Image;
-                entity.PlaceImages = enPlaceLanguage.PlaceImages;
                 if (enPlaceLanguage.PlaceMoreInfo != null)
                 {
                     entity.PlaceMoreInfo.Clear();
@@ -820,8 +817,6 @@ namespace GotoDN.Web.Controllers
                     {
                         Name = TranslateHelper.TranslateText(t.Name, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English)),
                         Value = TranslateHelper.TranslateText(t.Value, TranslateHelper.GetLanguageCode(entity.Language ?? LanguageEnums.English)),
-                        IconId = t.IconId,
-                        Icon = t.Icon,
                         IsHalf = t.IsHalf,
                         Order = t.Order,
                     }).ToList());
