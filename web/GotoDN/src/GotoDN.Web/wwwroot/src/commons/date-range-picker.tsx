@@ -1,6 +1,7 @@
 import * as React from 'react';
 import DatePicker from 'react-datepicker';
 import * as moment from 'moment';
+import {TimeHelper} from "./constant";
 
 interface thisProps {
   Date?: any,
@@ -23,7 +24,9 @@ export class DateRangePicker extends React.Component<thisProps, thisState> {
             selected={date}
             locale="vi-vn"
             className="form-control input-sm start-date"
-            onChange={(value) => this.props.onDateChanged(value)}
+            onChange={(value) => {
+              this.props.onDateChanged(TimeHelper.convertToDay(value._d));
+            }}
             forceShowMonthNavigation={true}
             todayButton={"Ngày hiện tại"}
             dateFormat={DATE_FORMAT}
