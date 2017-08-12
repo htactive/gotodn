@@ -184,7 +184,37 @@ namespace GotoDN.Web.Controllers
             this.HTRepository.HTServiceRepository.Save(CatEntity);
             this.HTRepository.Commit();
 
-            return AutoMapper.Mapper.Map<HTServiceLanguage, HTServiceLanguageModel>(LangEntity); ;
+            return AutoMapper.Mapper.Map<HTServiceLanguage, HTServiceLanguageModel>(LangEntity);
+        }
+
+        [HttpPost, Route("add-all-language")]
+        [HTAuthorize]
+        public HTServiceModel AddAllLanguage([FromBody]int Id)
+        {
+            var HTServiceEntity = this.HTRepository.HTServiceRepository.GetAll()
+                .Include(x => x.HTServiceLanguages)
+                .FirstOrDefault(x => x.Id == Id);
+
+            if (HTServiceEntity == null) return null;
+
+            foreach (var lang in LanguageArrays.GetLanguageArray())
+            {
+                if (!HTServiceEntity.HTServiceLanguages.Any(x => x.Language == (LanguageEnums)lang))
+                {
+                    HTServiceEntity.HTServiceLanguages.Add(new HTServiceLanguage()
+                    {
+                        Language = (LanguageEnums)lang,
+                        HTServiceId = Id,
+                        Title = "",
+                        UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                        CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                    });
+                }
+            }
+            this.HTRepository.HTServiceRepository.Save(HTServiceEntity);
+            this.HTRepository.Commit();
+
+            return AutoMapper.Mapper.Map<HTService, HTServiceModel>(HTServiceEntity);
         }
 
         [HttpPost, Route("delete-language")]

@@ -132,6 +132,10 @@
         "claim": "Service_W"
       },
       {
+        "name": "AddAllLanguage",
+        "claim": "Service_W"
+      },
+      {
         "name": "DeleteLanguage",
         "claim": "Service_W"
       }

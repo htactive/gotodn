@@ -215,7 +215,8 @@ export enum LanguageEnums{
   Chinese = 3,
   Japanese = 4,
   Korean = 5,
-  France = 6
+  France = 6,
+  All = 7,
 }
 
 export const Languages: { Language: LanguageEnums, Title: string }[] = [

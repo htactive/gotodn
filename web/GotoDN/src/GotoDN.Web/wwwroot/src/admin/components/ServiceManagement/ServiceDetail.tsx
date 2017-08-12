@@ -84,6 +84,7 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
       {Language: LanguageEnums.Chinese, Title: 'Tiếng Trung'},
       {Language: LanguageEnums.Japanese, Title: 'Tiếng Nhật'},
       {Language: LanguageEnums.Korean, Title: 'Tiếng Hàn'},
+      {Language: LanguageEnums.All, Title: 'Tất cả'},
     ];
     let Categories: ReactSelectModel[] = [];
     if (this.props.Categories && this.props.Categories.length > 0) {

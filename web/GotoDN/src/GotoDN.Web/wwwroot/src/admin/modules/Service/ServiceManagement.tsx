@@ -16,6 +16,7 @@ interface thisState {
   SelectedHTService?: HTServiceModel,
   SelectedLanguage?: LanguageEnums
 }
+
 class HTServiceManagement extends React.Component<{}, thisState> {
   state: thisState = {
     SelectedLanguage: LanguageEnums.English,
@@ -27,14 +28,14 @@ class HTServiceManagement extends React.Component<{}, thisState> {
   }
 
   componentDidMount() {
-    (async() => {
+    (async () => {
       this.setState({
         HTServices: await HTServiceInstance.GetAll()
       });
     })();
-    (async() => {
+    (async () => {
       let cates = await CategoryServiceInstance.GetAll();
-      if(cates && cates.length > 0) {
+      if (cates && cates.length > 0) {
         cates = cates.filter(c => !c.IsGovernment);
       }
       this.setState({
@@ -61,9 +62,8 @@ class HTServiceManagement extends React.Component<{}, thisState> {
     let eng = this.state.SelectedHTService.HTServiceLanguages.filter(x => x.Language == LanguageEnums.English)[0];
     let icon = eng.Icon;
     let img = eng.Image;
-    this.state.SelectedHTService.HTServiceLanguages.map( x => {
-      if(x && x.Language != LanguageEnums.English)
-      {
+    this.state.SelectedHTService.HTServiceLanguages.map(x => {
+      if (x && x.Language != LanguageEnums.English) {
         x.Icon = icon;
         x.Image = img;
       }
@@ -107,23 +107,34 @@ class HTServiceManagement extends React.Component<{}, thisState> {
   }
 
   private async addHTServiceLanguage(lang: LanguageEnums) {
-    let HTServiceLanguage: HTServiceLanguageModel = {
-      Id: 0,
-      Title: "",
-      HTServiceId: this.state.SelectedHTService.Id,
-      Language: lang,
-    };
-
-    let result = await HTServiceInstance.AddLanguage(HTServiceLanguage);
-    if (result) {
-      window['notice_create_success']();
-      this.state.SelectedHTService.HTServiceLanguages.push(result);
-      this.setState({
-        SelectedLanguage: lang,
-      });
+    if (lang == LanguageEnums.All) {
+      let result = await HTServiceInstance.AddAllLanguage(this.state.SelectedHTService.Id);
+      if (result) {
+        window['notice_create_success']();
+        this.setState({SelectedHTService: result});
+      }
+      else {
+        window['notice_error']();
+      }
     }
     else {
-      window['notice_error']();
+      let HTServiceLanguage: HTServiceLanguageModel = {
+        Id: 0,
+        Title: "",
+        HTServiceId: this.state.SelectedHTService.Id,
+        Language: lang,
+      };
+      let result = await HTServiceInstance.AddLanguage(HTServiceLanguage);
+      if (result) {
+        window['notice_create_success']();
+        this.state.SelectedHTService.HTServiceLanguages.push(result);
+        this.setState({
+          SelectedLanguage: lang,
+        });
+      }
+      else {
+        window['notice_error']();
+      }
     }
   }
 
@@ -196,8 +207,8 @@ class HTServiceManagement extends React.Component<{}, thisState> {
                                    }}
                                    cancelService={() => {
                                      this.setState({
-                                        SelectedLanguage: LanguageEnums.English,
-                                        SelectedHTService: null,
+                                       SelectedLanguage: LanguageEnums.English,
+                                       SelectedHTService: null,
                                      })
                                    }}
                                    SaveHTService={() => this.updateHTService()}
