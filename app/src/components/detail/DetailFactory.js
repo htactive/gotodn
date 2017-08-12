@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Image, TouchableOpacity, Text, Linking} from 'react-native';
 import {Icon} from 'native-base';
 import {style} from '../../styles/style';
-import {viewportWidth, IconName} from '../../common/constain';
+import {viewportWidth, AppIcon, Helper} from '../../common/constain';
 
 export class DetailFactory extends React.Component {
 
@@ -24,7 +24,7 @@ export class DetailFactory extends React.Component {
                 borderColor: '#263238',
                 borderRadius:2,
               }}
-                     source={{uri: d.url || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}/>
+                     source={{uri: d.url || Helper.ImageUrl}}/>
             </View>
             <View style={{flex: 75, paddingLeft: 15}}>
               <View style={{flex: 1}}>
@@ -35,7 +35,7 @@ export class DetailFactory extends React.Component {
                 <View style={{flexDirection:'row'}}>
                   <View style={{flexDirection:'row',flex: 1}}>
                     <View style={{flex:2, justifyContent: 'center', alignItems: 'flex-start'}}>
-                      <Image style={style.iconImgXs} source={{uri: IconName.Telephone || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}/>
+                      <Image style={style.iconImgXs} source={AppIcon.Tel}/>
                      {/* <Icon name={d.phoeneIcon || 'ios-sad-outline'} style={{color:'#263238', fontSize:25}}/>*/}
                     </View>
                     <View style={{flex:8, justifyContent: 'center', alignItems: 'flex-start'}}>
@@ -44,7 +44,7 @@ export class DetailFactory extends React.Component {
                   </View>
                   <View style={{flexDirection:'row',flex: 1}}>
                     <View style={{flex:2, justifyContent: 'center', alignItems: 'flex-start'}}>
-                      <Image style={style.iconImgXs} source={{uri: IconName.Fax || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}/>
+                      <Image style={style.iconImgXs} source={AppIcon.Fax}/>
                     </View>
                     <View style={{flex:8, justifyContent: 'center', alignItems: 'flex-start'}}>
                       <Text numberOfLines={1} style={[style.detailNearByInfo]}>{d.fax}</Text>

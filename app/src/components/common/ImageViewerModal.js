@@ -2,6 +2,7 @@ import React from 'react';
 import {Modal, View, TouchableOpacity} from 'react-native';
 import {Icon, Button}  from 'native-base';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import {Helper} from '../../common/constain';
 
 export class ImageViewerModal extends React.Component {
   state = {
@@ -27,7 +28,7 @@ export class ImageViewerModal extends React.Component {
              transparent={true}
              onRequestClose={() => {if(this.props.onClose) this.props.onClose()}}>
         <ImageViewer
-          imageUrls={this.props.images || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}
+          imageUrls={this.props.images || Helper.ImageUrl}
           index={this.props.selectedIndex}
           saveToLocalByLongPress={false}
         />

@@ -286,12 +286,14 @@ namespace GotoDN.Web.Controllers
 
         [HttpGet, Route("get-list-slider")]
         [AllowAnonymous]
-        public List<SliderModel> GetListSlider(int? serviceId)
+        public List<SliderModel> GetListSlider(int? serviceId, int? index)
         {
             var currentLanguage = this.CurrentLanguage;
             var currentCity = this.CurrentCityId;
             var result = new List<SliderModel>();
             var today = DateTimeHelper.GetDateTimeNow();
+            var currentId = index ?? 0;
+            var itemsPerIndex = 20;
 
             var eventPlaces = this.HTRepository.PlaceRepository.GetAll().
                 Where(x => x.CityId == currentCity && x.HTServiceId.HasValue && x.HTServiceId == serviceId && (
@@ -310,8 +312,9 @@ namespace GotoDN.Web.Controllers
                         GetUrl(x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Image) : Common.DefaultPhoto.ImageUrl,
                     CreateDate = x.CreatedDate,
                     IsEvent = x.Category != null ? x.Category.IsEvent : null,
+                    Star = x.Rating,
                     IsCategorySlider = x.IsCategorySlider,
-                }).ToList().OrderBy(t => t.IsEvent).ThenBy(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Take(20).ToList();
+                }).ToList().OrderByDescending(t => t.IsEvent).ThenByDescending(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
 
             return result;
         }
@@ -323,7 +326,7 @@ namespace GotoDN.Web.Controllers
             var currentLanguage = this.CurrentLanguage;
             var currentCityId = this.CurrentCityId;
             var currentId = index ?? 0;
-            var itemsPerIndex = 50;
+            var itemsPerIndex = 30;
 
             var result = new List<MenuListModel>();
             var places = this.HTRepository.PlaceRepository.GetAll()

@@ -14,7 +14,7 @@ import {changeAppLanguage} from '../common/LocalizedStrings';
 export class SplashScreen extends React.Component {
 
   goNextDelay;
-  handleNetInterval;
+  //handleNetInterval;
 
   async componentWillMount() {
 
@@ -22,16 +22,11 @@ export class SplashScreen extends React.Component {
       hasConnection: false,
     });
 
-    // Menu.instance.setNavigation(this.props.navigation);
-    // Menu.instance.disableMenu();
     this.initData();
   }
 
   async componentDidMount() {
     this.handleNetInfo();
-    // this.handleNetInterval = setInterval(() => {
-    //   this.handleNetInfo()
-    // }, 1000)
   }
 
   async initData() {
@@ -79,7 +74,7 @@ export class SplashScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    clearInterval(this.handleNetInterval);
+    // clearInterval(this.handleNetInterval);
   }
 
   _navigateTo = (routeName) => {

@@ -95,7 +95,7 @@ export class MenuSearch extends React.Component {
                 <View style={{flex: 25, justifyContent: 'center', alignItems: 'flex-start'}}>
                   <Image
                     style={{resizeMode: 'cover', width: (viewportWidth - 30) / 5, height: (viewportWidth - 30) / 5}}
-                    source={{uri: d.heroImage || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}/>
+                    source={{uri: d.heroImage || Helper.ImageUrl}}/>
                 </View>
                 <View style={{flex: 75}}>
                   <View style={{flex: 3}}>

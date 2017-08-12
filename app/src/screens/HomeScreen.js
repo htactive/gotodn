@@ -46,24 +46,25 @@ export class HomeScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.unsubscribe();
+    if (typeof this.unSubscribe === "function")
+      this.unSubscribe();
   }
 
   loadHomeData() {
-    (async () => {
+    (async() => {
       let menuListData = await GDNServiceInstance.getHomeMenuList();
       this.setState({menuListData, menuListLoad: true});
-      if(this.state.sliderLoaded) {
+      if (this.state.sliderLoaded) {
         this.setState({
           refreshing: false
         });
       }
     })();
-    (async () => {
+    (async() => {
       let sliderData = await GDNServiceInstance.getHomeSlider();
       this.setState({showSlider: (sliderData != null && sliderData.length > 0)});
       this.setState({sliderData, sliderLoaded: true});
-      if(this.state.menuListLoad) {
+      if (this.state.menuListLoad) {
         this.setState({
           refreshing: false
         });
@@ -82,10 +83,10 @@ export class HomeScreen extends React.Component {
       >
         <Grid>
           {this.state.showSlider ? <Row style={{ height: viewportHeight*.38 }}>
-            <HomeSlider dataSource={this.state.sliderData} title={LStrings.MustSee}/>
+              <HomeSlider dataSource={this.state.sliderData} title={LStrings.MustSee}/>
             </Row> : <Row><Text></Text></Row> }
           <Row style={!this.state.showSlider ? {minHeight: viewportHeight} : {}}>
-            <HomeMenuList dataSource={this.state.menuListData}  />
+            <HomeMenuList dataSource={this.state.menuListData}/>
           </Row>
         </Grid>
       </ScrollView>

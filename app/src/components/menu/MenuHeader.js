@@ -114,7 +114,7 @@ export class MenuHeader extends React.Component {
                         if(this.props.onLogoClicked)
                           this.props.onLogoClicked();
                       }}>
-                <Image style={[style.iconImg ,{tintColor:'#ffffff', marginRight: 10}]} source={AppIcon.AppLogo || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}/>
+                <Image style={[style.iconImg ,{tintColor:'#ffffff', marginRight: 10}]} source={AppIcon.AppLogo}/>
               </TouchableOpacity>
             </View>
           )}
@@ -137,10 +137,10 @@ export class MenuHeader extends React.Component {
           )}
           <View style={style.menuRight}>
             <TouchableOpacity onPress={() => this.toggleSearchBar(true)}>
-              <Image style={[style.iconImg ,{tintColor:'#fff'}]} source={AppIcon.Search || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}/>
+              <Image style={[style.iconImg ,{tintColor:'#fff'}]} source={AppIcon.Search}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.openDraw()}>
-              <Image style={[style.iconImg ,{tintColor:'#fff', marginLeft: 15}]} source={AppIcon.Menu || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}/>
+              <Image style={[style.iconImg ,{tintColor:'#fff', marginLeft: 15}]} source={AppIcon.Menu}/>
             </TouchableOpacity>
           </View>
           <View style={[style.centralizedContent, ]}>

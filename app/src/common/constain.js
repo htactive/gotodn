@@ -33,6 +33,8 @@ export const IconName = {
   CIndustry: 'https://image.ibb.co/cKpSnk/ic_industry.png',
   CSeedo: 'https://image.ibb.co/hqRjYQ/ic_S_D.png',
   CStay: 'https://image.ibb.co/dWMJtQ/ic_stay.png',
+
+  NoIcon: 'https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_9b3775fd-90ca-4d35-8a96-c1fceaa9b334.png',
 };
 
 export const AppIcon = {
@@ -59,6 +61,7 @@ export const AppIcon = {
   VacantLand: require('../../assets/icons/ic-vacant-land.png'),
   Tel: require('../../assets/icons/ic-tel.png'),
   Calling: require('../../assets/icons/ic-calling.png'),
+  Fax: require('../../assets/icons/ic-fax.png'),
 };
 
 export const SlideData = [
@@ -792,6 +795,7 @@ export class Helper {
   };
 
   static ImageUrl = "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg";
+  static IconUrl = "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_6105178d-8189-46d8-b446-f7fdb5860523.png";
 
   static LanguageKey = 'LanguageKey';
   static CityKey = 'CityKey';

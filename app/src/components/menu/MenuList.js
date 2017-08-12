@@ -28,7 +28,8 @@ export class MenuList extends React.Component {
   }
 
   componentWillUnmount() {
-    this.unSubscribe();
+    if (typeof this.unSubscribe === "function")
+      this.unSubscribe();
   }
 
   loadData() {

@@ -29,7 +29,7 @@ export class DetailMapTextItem extends React.Component {
           </View>
           <View style={{flex:2, justifyContent: 'center', alignItems: 'flex-start'}}>
             {/*<Icon name={d.infoIcon} style={{color:'#263238', fontSize:35}}/>*/}
-            {this.props.rightIcon && <Image style={[style.iconImgXs, {tintColor: '#039be5'}]} source={this.props.rightIcon || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}/>}
+            {this.props.rightIcon && <Image style={[style.iconImgXs, {tintColor: '#039be5'}]} source={this.props.rightIcon}/>}
 
           </View>
         </TouchableOpacity>

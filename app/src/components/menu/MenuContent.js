@@ -17,6 +17,12 @@ export class MenuContent extends React.Component {
   state = {selectedLang: 3, showPicker: false};
 
   componentWillMount() {
+    appStore.subscribe(() => {
+      let appState = appStore.getState();
+      this.setState({
+        selectedLang: appState.language
+      });
+    });
   }
 
   render() {

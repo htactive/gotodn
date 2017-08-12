@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Image, TouchableOpacity, ScrollView, Text, AsyncStorage, Alert, Clipboard} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
-import {MenuListItemData, platform, AppIcon, IconName, Helper} from '../common/constain';
+import {MenuListItemData, platform, AppIcon, Helper} from '../common/constain';
 import {Icon, Spinner} from 'native-base';
 import {DetailBanner} from '../components/detail/DetailBanner';
 import {style, StyleBase} from '../styles/style';
@@ -56,7 +56,8 @@ export class DetailScreen extends React.Component {
   }
 
   componentWillUnmount() {
-    this.unSubscribe();
+    if (typeof this.unSubscribe === "function")
+      this.unSubscribe();
   }
 
   componentDidMount() {

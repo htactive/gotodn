@@ -14,5 +14,6 @@ namespace GotoDN.Web.Models
         public DateTime? CreateDate { get; set; }
         public bool? IsEvent { get; set; }
         public bool? IsCategorySlider { get; set; }
+        public float? Star { get; set; }
     }
 }

@@ -6,6 +6,7 @@ import {style} from "../../styles/style";
 import {ListScreen} from '../../screens/ListScreen'
 import {IndustryListScreen} from '../../screens/IndustryListScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
+import {Helper} from '../../common/constain';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 const menuItemHeight = Math.round(viewportHeight / 6);
@@ -69,7 +70,7 @@ export class HomeMenuList extends React.Component {
                     style={style.menuItemHeader}
                   >
                     <Image style={[style.iconImgXs, {tintColor: '#12a1e7', marginBottom: 10, flex:2}]}
-                           source={{uri: data.categoryIcon || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}/>
+                           source={{uri: data.categoryIcon || Helper.IconUrl}}/>
                     <Text numberOfLines={1}
                           style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17, flex:8 }}>{data.categoryName}</Text>
                   </TouchableOpacity>
@@ -83,7 +84,7 @@ export class HomeMenuList extends React.Component {
                       <View style={style.imageContainer}>
                         <View style={style.imageInner}>
                           <Image
-                            source={{uri: service.heroImage || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}
+                            source={{uri: service.heroImage || Helper.IconUrl}}
                             style={style.image}
                           >
                             {data.isNoService || (
@@ -110,7 +111,7 @@ export class HomeMenuList extends React.Component {
                       style={style.menuItemHeader}
                     >
                       <Image style={[style.iconImgXs, {tintColor: '#12a1e7', flex:2}]}
-                             source={{uri: data.categoryIcon || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}/>
+                             source={{uri: data.categoryIcon || Helper.IconUrl}}/>
                       <Text numberOfLines={1}
                             style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17,flex: 8 }}>{data.categoryName}</Text>
                     </TouchableOpacity>
@@ -124,7 +125,7 @@ export class HomeMenuList extends React.Component {
                         <View style={style.imageContainer}>
                           <View style={style.imageInner}>
                             <Image
-                              source={{uri: service.heroImage || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}
+                              source={{uri: service.heroImage || Helper.IconUrl}}
                               style={style.image}
                             >
                               {data.isNoService || (

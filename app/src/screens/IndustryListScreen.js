@@ -24,10 +24,13 @@ export class IndustryListScreen extends React.Component {
     dataRight: [],
     refreshing: false,
     searchValue: '',
+    loadingMore: false,
+    currentIndex: 0,
   };
 
   savedData;
   unSubscribe;
+  itemHeight = 0;
   componentWillMount() {
     navigationStore.subscribe(() => {
       let navigationState = navigationStore.getState();
@@ -37,9 +40,6 @@ export class IndustryListScreen extends React.Component {
           params: navigationState.params
         });
         this.props.navigation.dispatch(navigateAction);
-        if(this.unSubscribe) {
-          this.unSubscribe();
-        }
       }
     });
     this.unSubscribe = appStore.subscribe(() => {
@@ -48,7 +48,8 @@ export class IndustryListScreen extends React.Component {
   }
 
   componentWillUnmount(){
-    this.unSubscribe();
+    if (typeof this.unSubscribe === "function")
+      this.unSubscribe();
   }
 
   componentDidMount() {
@@ -162,7 +163,7 @@ export class IndustryListScreen extends React.Component {
                             <View
                               style={{flex: imgHeight/itemHeight}}>
                               <Image
-                                source={{uri: data.heroImage || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}
+                                source={{uri: data.heroImage || Helper.ImageUrl}}
                                 style={[style.menuItemImage, {height: imgHeight}]}
                               />
                             </View>
@@ -191,7 +192,7 @@ export class IndustryListScreen extends React.Component {
                               <View
                                 style={{flex: imgHeight/itemHeight}}>
                                 <Image
-                                  source={{uri: data.heroImage || "https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_8323f5ac-fad6-4c2d-a1ca-2276af4a4a99.jpg"}}
+                                  source={{uri: data.heroImage || Helper.ImageUrl}}
                                   style={[style.menuItemImage, {height: imgHeight}]}
                                 />
                               </View>

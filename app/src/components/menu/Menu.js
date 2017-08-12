@@ -11,6 +11,7 @@ import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 import {appStore, appSaveCity} from '../../stores/AppStore';
+import {NavigationActions} from 'react-navigation';
 
 const drawerStyles = {
   drawer: {
@@ -231,7 +232,13 @@ export class Menu extends React.Component {
   }
 
   logoClicked() {
-    navigationStore.dispatch(navigateToRouteAction('HomeScreen'));
+    let routeName = 'HomeScreen';
+    const actionToDispatch = NavigationActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({routeName})]
+    });
+
+    this.navigation.dispatch(actionToDispatch);
   }
 
   goBack() {

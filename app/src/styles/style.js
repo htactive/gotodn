@@ -149,18 +149,19 @@ export const style = StyleSheet.create({
   imageListSlider: {
     resizeMode: 'cover',
     justifyContent: 'flex-end',
-    width: (viewportWidth - 30 ) / 3,
-    height: slideHeight - 2,
+    flex: 1,
+    width: viewportWidth / 2.5,
+    height: viewportHeight * 0.34 - 10,
   },
   textInnerListSlider: {
-    height: slideHeight / (Platform.OS === 'ios' ? 3 : 3.5),
+    height: 35,
   },
   textListSlider: {
     flex: 1,
-    justifyContent: 'flex-start',
-    paddingHorizontal: 5,
-    paddingVertical: 5,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    paddingBottom: 3,
+    backgroundColor: 'rgba(255, 255, 255, .8)',
   },
   titleListSlider: {
     color: '#263238',
@@ -223,6 +224,15 @@ export const style = StyleSheet.create({
     flex: 3,
   },
   menuItemStar: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    paddingBottom: 5,
+    paddingRight: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0)'
+  },
+  sliderItemStar: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-end',
@@ -334,13 +344,18 @@ export const style = StyleSheet.create({
     marginHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'flex-start',
+    flex:1,
   },
   listSlider: {
-    width: (viewportWidth - 35 ) / 3
+    width: viewportWidth * .6 - 10,
+    flex:1 ,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height:  viewportHeight * 0.34 - 10,
   },
   listSliderTitle: {
     color: '#039be5',
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: StyleBase.sp_light,
   },
   slideContainer: {
@@ -478,8 +493,8 @@ export const style = StyleSheet.create({
   },
   iconImgTini: {
     resizeMode: 'cover',
-    width: 10,
-    height: 10,
+    width: 7,
+    height: 7,
   },
   loadingMore: {
     position: 'absolute',

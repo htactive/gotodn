@@ -1,9 +1,9 @@
 import {ServiceBase} from './ServiceBase';
 import {timeout, MenuListData} from '../common/DummyData';
-import {Helper, LanguageEnums, IconName} from '../common/constain';
+import {Helper, LanguageEnums} from '../common/constain';
 import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
-  host = "http://gdn.htactive.com/";
+  host = "http://192.168.0.107:50915/";
 
   async getHomeSlider() {
     let url = this.host + "category/get-category-slider";
@@ -74,8 +74,8 @@ class GDNService extends ServiceBase {
     return null;
   }
 
-  async getListSlider(serviceId) {
-    let url = this.host + "service/get-list-slider?serviceId="+ serviceId;
+  async getListSlider(serviceId, index) {
+    let url = this.host + "service/get-list-slider?serviceId="+ serviceId+ "&index=" + index;
     let result = await super.executeFetch(url);
     if (result && result.length > 0) {
       let slider = [];
@@ -85,6 +85,7 @@ class GDNService extends ServiceBase {
           subtitle: result[i] ? result[i].SubTitle : "",
           image: result[i] ? result[i].Url : Helper.ImageUrl,
           id: result[i] ? result[i].Id : 0,
+          star: result[i] ? result[i].Star : null,
         });
       }
       return slider;
@@ -212,7 +213,6 @@ class GDNService extends ServiceBase {
           title: t.Title || "",
           address: t.Address || "" + ', ' + t.District || "" + ', ' + t.City || "",
           phone: t.Phone || "",
-          phoeneIcon: IconName.Telephone,
         }
       });
       return rs;
