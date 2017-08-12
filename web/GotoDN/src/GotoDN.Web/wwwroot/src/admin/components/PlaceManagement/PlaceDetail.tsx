@@ -308,6 +308,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
       {Language: LanguageEnums.Chinese, Title: 'Tiếng Trung'},
       {Language: LanguageEnums.Japanese, Title: 'Tiếng Nhật'},
       {Language: LanguageEnums.Korean, Title: 'Tiếng Hàn'},
+      {Language: LanguageEnums.All, Title: 'Tất cả'},
     ];
 
     let Categories: ReactSelectModel[] = [];

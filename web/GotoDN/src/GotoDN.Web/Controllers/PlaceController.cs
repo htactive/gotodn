@@ -231,6 +231,36 @@ namespace GotoDN.Web.Controllers
             return AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(LangEntity);
         }
 
+        [HttpPost, Route("add-all-language")]
+        [HTAuthorize]
+        public PlaceModel AddAllLanguage([FromBody]int Id)
+        {
+            var PlaceEntity = this.HTRepository.PlaceRepository.GetAll()
+                .Include(x => x.PlaceLanguages)
+                .FirstOrDefault(x => x.Id == Id);
+
+            if (PlaceEntity == null) return null;
+
+            foreach (var lang in LanguageArrays.GetLanguageArray())
+            {
+                if (!PlaceEntity.PlaceLanguages.Any(x => x.Language == (LanguageEnums)lang))
+                {
+                    PlaceEntity.PlaceLanguages.Add(new PlaceLanguage()
+                    {
+                        Language = (LanguageEnums)lang,
+                        PlaceId = Id,
+                        Title = "",
+                        UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                        CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                    });
+                }
+            }
+            this.HTRepository.PlaceRepository.Save(PlaceEntity);
+            this.HTRepository.Commit();
+
+            return AutoMapper.Mapper.Map<Place, PlaceModel>(PlaceEntity);
+        }
+
         [HttpPost, Route("delete-language")]
         [HTAuthorize]
         public bool DeleteLanguage([FromBody]int Id)

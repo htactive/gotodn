@@ -174,23 +174,35 @@ class PlaceManagement extends React.Component<{}, thisState> {
   }
 
   private async addPlaceLanguage(lang: LanguageEnums) {
-    let PlaceLanguage: PlaceLanguageModel = {
-      Id: 0,
-      Title: "",
-      PlaceId: this.state.SelectedPlace.Id,
-      Language: lang,
-    };
-
-    let result = await PlaceServiceInstance.AddLanguage(PlaceLanguage);
-    if (result) {
-      window['notice_create_success']();
-      this.state.SelectedPlace.PlaceLanguages.push(result);
-      this.setState({
-        SelectedLanguage: lang,
-      });
+    if(lang == LanguageEnums.All) {
+      let result = await PlaceServiceInstance.AddAllLanguage(this.state.SelectedPlace.Id);
+      if (result) {
+        window['notice_create_success']();
+        this.setState({SelectedPlace: result});
+      }
+      else {
+        window['notice_error']();
+      }
     }
     else {
-      window['notice_error']();
+      let PlaceLanguage: PlaceLanguageModel = {
+        Id: 0,
+        Title: "",
+        PlaceId: this.state.SelectedPlace.Id,
+        Language: lang,
+      };
+
+      let result = await PlaceServiceInstance.AddLanguage(PlaceLanguage);
+      if (result) {
+        window['notice_create_success']();
+        this.state.SelectedPlace.PlaceLanguages.push(result);
+        this.setState({
+          SelectedLanguage: lang,
+        });
+      }
+      else {
+        window['notice_error']();
+      }
     }
   }
 

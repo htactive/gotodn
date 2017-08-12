@@ -111,6 +111,10 @@
         "claim": "Place_W"
       },
       {
+        "name": "AddAllLanguage",
+        "claim": "Place_W"
+      },
+      {
         "name": "DeleteLanguage",
         "claim": "Place_W"
       }
