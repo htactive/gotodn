@@ -29,6 +29,11 @@ class CategoryService extends AdminServiceBase {
     return await super.executeFetchPost(url, model);
   }
 
+  async AddAllLanguage(Id: number): Promise<CategoryModel> {
+    let url = `${virtualPath}/category/add-all-language`;
+    return await super.executeFetchPost(url, Id);
+  }
+
   async DeleteLanguage(Id: number): Promise<boolean> {
     let url = `${virtualPath}/category/delete-language`;
     return await super.executeFetchPost(url, Id);

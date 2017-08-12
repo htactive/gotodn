@@ -194,6 +194,36 @@ namespace GotoDN.Web.Controllers
             return AutoMapper.Mapper.Map<CategoryLanguage, CategoryLanguageModel>(LangEntity);
         }
 
+        [HttpPost, Route("add-all-language")]
+        [HTAuthorize]
+        public CategoryModel AddAllLanguage([FromBody]int Id)
+        {
+            var CategoryEntity = this.HTRepository.CategoryRepository.GetAll()
+                .Include(x => x.CategoryLanguages)
+                .FirstOrDefault(x => x.Id == Id);
+
+            if (CategoryEntity == null) return null;
+
+            foreach (var lang in LanguageArrays.GetLanguageArray())
+            {
+                if (!CategoryEntity.CategoryLanguages.Any(x => x.Language == (LanguageEnums)lang))
+                {
+                    CategoryEntity.CategoryLanguages.Add(new CategoryLanguage()
+                    {
+                        Language = (LanguageEnums)lang,
+                        CategoryId = Id,
+                        Title = "",
+                        UpdatedDate = DateTimeHelper.GetDateTimeNow(),
+                        CreatedDate = DateTimeHelper.GetDateTimeNow(),
+                    });
+                }
+            }
+            this.HTRepository.CategoryRepository.Save(CategoryEntity);
+            this.HTRepository.Commit();
+
+            return AutoMapper.Mapper.Map<Category, CategoryModel>(CategoryEntity);
+        }
+
         [HttpPost, Route("delete-language")]
         [HTAuthorize]
         public bool DeleteLanguage([FromBody]int Id)

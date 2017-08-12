@@ -82,6 +82,10 @@
         "claim": "Category_W"
       },
       {
+        "name": "AddAllLanguage",
+        "claim": "Category_W"
+      },
+      {
         "name": "DeleteLanguage",
         "claim": "Category_W"
       }

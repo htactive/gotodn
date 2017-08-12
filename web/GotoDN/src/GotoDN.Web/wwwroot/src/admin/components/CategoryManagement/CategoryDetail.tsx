@@ -84,6 +84,7 @@ class CategoryDetail extends React.Component<thisProps, {}> {
       {Language: LanguageEnums.Chinese, Title: 'Tiếng Trung'},
       {Language: LanguageEnums.Japanese, Title: 'Tiếng Nhật'},
       {Language: LanguageEnums.Korean, Title: 'Tiếng Hàn'},
+      {Language: LanguageEnums.All, Title: 'Tất cả'},
     ];
 
     let enCategoryLanguage: CategoryLanguageModel = {Id: 0};

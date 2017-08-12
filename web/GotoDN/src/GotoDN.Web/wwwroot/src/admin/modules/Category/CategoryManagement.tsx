@@ -89,23 +89,35 @@ class CategoryManagement extends React.Component<{}, thisState> {
   }
 
   private async addCategoryLanguage(lang: LanguageEnums) {
-    let categoryLanguage: CategoryLanguageModel = {
-      Id: 0,
-      Title: "",
-      CategoryId: this.state.SelectedCategory.Id,
-      Language: lang,
-    };
-
-    let result = await CategoryServiceInstance.AddLanguage(categoryLanguage);
-    if (result) {
-      window['notice_create_success']();
-      this.state.SelectedCategory.CategoryLanguages.push(result);
-      this.setState({
-        SelectedLanguage: lang,
-      });
+    if(lang == LanguageEnums.All) {
+      let result = await CategoryServiceInstance.AddAllLanguage(this.state.SelectedCategory.Id);
+      if (result) {
+        window['notice_create_success']();
+        this.setState({SelectedCategory: result});
+      }
+      else {
+        window['notice_error']();
+      }
     }
     else {
-      window['notice_error']();
+      let categoryLanguage: CategoryLanguageModel = {
+        Id: 0,
+        Title: "",
+        CategoryId: this.state.SelectedCategory.Id,
+        Language: lang,
+      };
+
+      let result = await CategoryServiceInstance.AddLanguage(categoryLanguage);
+      if (result) {
+        window['notice_create_success']();
+        this.state.SelectedCategory.CategoryLanguages.push(result);
+        this.setState({
+          SelectedLanguage: lang,
+        });
+      }
+      else {
+        window['notice_error']();
+      }
     }
   }
 
