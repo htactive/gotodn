@@ -162,8 +162,7 @@ export class ListSlider extends React.Component {
       let windowWidth = Dimensions.get('window').width,
         width = sliderW * 20 * (this.props.currentIndex + 1),
         offset = e.nativeEvent.contentOffset.x;
-      console.log((windowWidth + offset) + ' - ' + width);
-      if (width > 0 && windowWidth + offset >= width) {
+      if (width > 0 && windowWidth + offset >= width*.7 ) {
         let nextId = this.props.currentIndex + 1;
         if(this.props.onLoadMore)
           this.props.onLoadMore(nextId);

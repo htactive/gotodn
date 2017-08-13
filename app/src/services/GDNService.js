@@ -3,7 +3,7 @@ import {timeout, MenuListData} from '../common/DummyData';
 import {Helper, LanguageEnums} from '../common/constain';
 import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
-  host = "http://192.168.0.107:50915/";
+  host = "http://192.168.0.102:50915/";
 
   async getHomeSlider() {
     let url = this.host + "category/get-category-slider";
@@ -51,7 +51,7 @@ class GDNService extends ServiceBase {
   async getHomeMenuList() {
     let url = this.host + "category/get-category-data";
     let result = await super.executeFetch(url);
-    if (result && result.length > 0) {
+    if (result) {
       let data = [];
       for (let i = 0; i < result.length; i++) {
         data.push({
@@ -182,7 +182,7 @@ class GDNService extends ServiceBase {
 
   async getMenuData() {
 
-    let url = this.host + "category/get-all";
+    let url = this.host + "category/app-menu-get-all";
     let result = await super.executeFetch(url);
     if (result) {
       let rs = [];
@@ -257,8 +257,8 @@ class GDNService extends ServiceBase {
     return null;
   }
 
-  async getCagegoryNoServiceById(id) {
-    let url = this.host + "category/get-category-no-service-by-id?id=" + id;
+  async getCagegoryNoServiceById(id, index) {
+    let url = this.host + "category/get-category-no-service-by-id?id=" + id+ "&index=" + index;
     let result = await super.executeFetch(url);
     if (result) {
       let objectData = {};

@@ -231,6 +231,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
   private ClickSlectCategory(Id: any) {
     this.state.SelectedPlace.CategoryId = Id;
+    this.state.SelectedPlace.HTServiceId = null;
     this.setState({HTServices: this.state.HTServicesBackup.filter(x => x.CategoryId == Id)});
   }
 

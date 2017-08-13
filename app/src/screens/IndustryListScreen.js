@@ -30,7 +30,6 @@ export class IndustryListScreen extends React.Component {
 
   savedData;
   unSubscribe;
-  itemHeight = 0;
   componentWillMount() {
     navigationStore.subscribe(() => {
       let navigationState = navigationStore.getState();
@@ -57,9 +56,12 @@ export class IndustryListScreen extends React.Component {
   }
 
   async loadData() {
+    this.setState({
+      currentIndex: 0,
+    });
     const { params } = this.props.navigation.state;
     let listId = (params && params.listId) || 0;
-    let objectResult = await GDNServiceInstance.getCagegoryNoServiceById(listId);
+    let objectResult = await GDNServiceInstance.getCagegoryNoServiceById(listId, this.state.currentIndex);
     if(objectResult && objectResult.data) {
       Menu.instance.setTitle(objectResult.categoryName);
       let result = objectResult.data;
@@ -104,6 +106,8 @@ export class IndustryListScreen extends React.Component {
       dataRight: dataRight,
       isLoaded: true,
       refreshing: false,
+      loadingMore: false,
+      currentIndex: 0,
     });
   }
 
@@ -147,7 +151,9 @@ export class IndustryListScreen extends React.Component {
               <RefreshControl
             refreshing={this.state.refreshing}
             onRefresh={() => this.onFresh()} />
+
             }
+                onScroll={(e) => {this.handleScrollBottom(e)}}
               >
                 <View style={[style.container, {paddingTop: 10}]}>
                   <View style={[style.containerHalf, {marginLeft:10, marginRight:5}]}>
@@ -209,6 +215,10 @@ export class IndustryListScreen extends React.Component {
                       ) : (<View style={{alignSelf: 'stretch'}}/>)}
                   </View>
                 </View>
+                {this.savedData && this.state.loadingMore ?
+                  <View style={[style.loadingMore]}>
+                    <Spinner color={StyleBase.header_color}/>
+                  </View> : null}
               </ScrollView>
             </View>
           </View>
@@ -230,5 +240,52 @@ export class IndustryListScreen extends React.Component {
       searchValue: text,
     });
     this.searchData(text);
+  }
+
+  loadMoreTimeout;
+
+  handleScrollBottom(e) {
+    if (!this.state.loadingMore) {
+      if (this.loadMoreTimeout)
+        clearTimeout(this.loadMoreTimeout);
+      let windowHeight = Dimensions.get('window').height * .9,
+        height = itemHeight ? (itemHeight * 15 * (this.state.currentIndex + 1)) : 0;
+      offset = e.nativeEvent.contentOffset.y;
+      if (height > 0 && windowHeight + offset >= height * .7) {
+        this.loadMoreTimeout = setTimeout(() => {
+          this.setState({
+            loadingMore: true,
+          });
+          (async() => {
+            let nextId = this.state.currentIndex + 1;
+            const { params } = this.props.navigation.state;
+            let listId = (params && params.listId) || 0;
+            let result = await GDNServiceInstance.getCagegoryNoServiceById(listId, nextId);
+            this.setState({
+              loadingMore: false,
+            });
+            debugger;
+            let oldData = this.savedData ? this.savedData.slice() : [];
+            if (result && result.data) {
+              let newData = oldData.concat(result.data);
+              this.savedData = newData;
+              let dataLeft = [], dataRight = [];
+              for (let i = 0; i < newData.length; i++) {
+                let data = newData[i];
+                if (i % 2 === 0) dataLeft.push(data);
+                else dataRight.push(data);
+              }
+              this.setState({
+                dataLeft: dataLeft,
+                dataRight: dataRight,
+              });
+              this.setState({
+                currentIndex: nextId,
+              });
+            }
+          })();
+        }, 100);
+      }
+    }
   }
 }

@@ -45,6 +45,24 @@ namespace GotoDN.Web.Controllers
             return models;
         }
 
+        [HttpGet, Route("app-menu-get-all")]
+        [AllowAnonymous]
+        public List<CategoryModel> AppMenuGetAll()
+        {
+            var city = this.CurrentCityId;
+
+            var entities = this.HTRepository.CategoryRepository.GetAll()
+                .Include("CategoryLanguages.Image")
+                .Include("CategoryLanguages.Icon")
+                .Include(c => c.HTServices)
+                .Where(c => c.Places.Any(p => p.CityId == city))
+                .OrderBy(t => t.Order).ToList();
+
+            var models = entities.Select(x => AutoMapper.Mapper.Map<Category, CategoryModel>(x)).ToList();
+
+            return models;
+        }
+
         [HttpPost, Route("create-category")]
         [HTAuthorize]
         public CategoryModel CreateCategory()
@@ -309,6 +327,7 @@ namespace GotoDN.Web.Controllers
         public List<MenuListModel> GetCategoryData()
         {
             var currentLang = this.CurrentLanguage;
+            var currentCity = this.CurrentCityId;
 
             var result = new List<MenuListModel>();
 
@@ -316,7 +335,8 @@ namespace GotoDN.Web.Controllers
                 .Include("CategoryLanguages.Image")
                 .Include("CategoryLanguages.Icon")
                 .Include("HTServices.HTServiceLanguages.Image")
-                .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang))
+                .Include("HTServices.Places")
+                .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang) && c.Places.Any(p => p.CityId == currentCity))
                 .ToList();
 
             result = category.Select(x =>
@@ -330,7 +350,7 @@ namespace GotoDN.Web.Controllers
                     Icon = x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Icon != null ?
                             GetUrl(x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Icon) : null,
                     Items = x.HTServices.Count > 0 ?
-                        x.HTServices.Select(y => new MenuItemModel()
+                        x.HTServices.Where(s => s.Places.Any(p => p.CityId == currentCity)).Select(y => new MenuItemModel()
                         {
                             Id = y.Id,
                             Title = y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang) != null ?
@@ -340,7 +360,7 @@ namespace GotoDN.Web.Controllers
                                     GetUrl(y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Image) : null
                         }).ToList()
                       : null
-                }).Take(100).ToList();
+                }).ToList();
             
             result = result.OrderBy(x => x.Order).ToList();
             return result;
@@ -381,13 +401,14 @@ namespace GotoDN.Web.Controllers
             var result = new MenuListModel();
             var CategoryEntity = this.HTRepository.CategoryLanguageRepository.GetAll()
                 .Include(x => x.Icon).Include("Category.HTServices.HTServiceLanguages.Image")
+                .Include(x => x.Icon).Include("Category.HTServices.Places")
                 .FirstOrDefault(x => x.CategoryId == Id && x.Language == currentLang);
             if (CategoryEntity == null) return result;
 
             result.Id = CategoryEntity.CategoryId.Value;
             result.Icon = CategoryEntity.Icon != null ? GetUrl(CategoryEntity.Icon) : "";
             result.Name = CategoryEntity.Title;
-            result.Items = CategoryEntity.Category.HTServices.Select(y => new MenuItemModel()
+            result.Items = CategoryEntity.Category.HTServices.Where(s => s.Places.Any(p => p.CityId == city)).Select(y => new MenuItemModel()
             {
                 Id = y.Id,
                 Title = y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Title,
@@ -399,15 +420,23 @@ namespace GotoDN.Web.Controllers
 
         [HttpGet, Route("get-category-no-service-by-id")]
         [AllowAnonymous]
-        public CategoryModel GetCategoryNoServiceById(int id)
+        public CategoryModel GetCategoryNoServiceById(int id, int? index)
         {
             var currentLang = this.CurrentLanguage;
+            var currentCity = this.CurrentCityId;
+            var currentId = index ?? 0;
+            var itemsPerIndex = 30;
             var category = this.HTRepository.CategoryRepository.GetAll()
                 .Include("Places.PlaceLanguages.Image")
                 .Include(c => c.CategoryLanguages)
                 .Where(x => x.Places.Any(p => p.PlaceLanguages.Any(l => l.Language == currentLang)) 
                 && x.Places.All(p => p.HTServiceId == null || p.HTServiceId == 0) && x.Id == id).FirstOrDefault();
             if (category == null) return null;
+            if (category.Places != null)
+            {
+                category.Places = category.Places.Where(p => p.CityId == currentCity).OrderByDescending(p => p.CreatedDate)
+                                    .Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
+            }
             return AutoMapper.Mapper.Map<CategoryModel>(category);
         }
 
