@@ -162,7 +162,7 @@ export class TimeHelper {
 
   static convertToDay(time: Date): string {
     var d = moment(time, "YYYY-MM-DD HH:mm:ss");
-    var result = d.format("DD-MM-YYYY");
+    var result = d.format("MM-DD-YYYY");
     return result;
   }
 }

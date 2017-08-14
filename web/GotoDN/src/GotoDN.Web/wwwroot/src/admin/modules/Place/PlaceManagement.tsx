@@ -349,11 +349,11 @@ class PlaceManagement extends React.Component<{}, thisState> {
                                        filter={{type: 'SelectFilter', options: highlightSelecter}}
                                        dataFormat={(r, data) => this.bindHighlightData(data.IsEvent)} dataSort={true}>
                       Sự kiện</TableHeaderColumn>
-                    <TableHeaderColumn width="200" dataField="StartDate" dataAlign="center"
+                    <TableHeaderColumn width="220" dataField="StartDate" dataAlign="center"
                                        filter={{type: 'DateFilter'}}
                                        dataFormat={(r, data) => this.bindStartDateData(data)} dataSort={true}>
                       Ngày bắt đầu</TableHeaderColumn>
-                    <TableHeaderColumn width="200" dataField="EndDate" dataAlign="center"
+                    <TableHeaderColumn width="220" dataField="EndDate" dataAlign="center"
                                        filter={{type: 'DateFilter'}}
                                        dataFormat={(r, data) => this.bindEndDateData(data)} dataSort={true}>
                       Ngày kết thúc</TableHeaderColumn>
@@ -467,7 +467,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
   private bindHighlightData(data?: boolean) {
     return <div className="toggle-custom">
-      <label className="toggle" data-on="Có" data-off="Ko">
+      <label className="toggle" data-on="Yes" data-off="No">
         <input type="checkbox" id="checkbox-toggle"
                name="checkbox-toggle"
                checked={data || false}
