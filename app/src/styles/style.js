@@ -346,6 +346,13 @@ export const style = StyleSheet.create({
     alignItems: 'flex-start',
     flex:1,
   },
+  homeSlider: {
+    width: viewportWidth * .3 - 10,
+    flex:1 ,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height:  viewportHeight * 0.33,
+  },
   listSlider: {
     width: viewportWidth * .6 - 10,
     flex:1 ,

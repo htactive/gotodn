@@ -103,9 +103,16 @@ export class DetailScreen extends React.Component {
     //let detailNearBy = MenuListItemData.filter(t => t.id != data.id);
 
     let shareOptions = {
-      message: LStrings.ShareDescription + '\n',
-      url: platform === 'ios' ? "https://www.apple.com/itunes/" : "https://play.google.com/store/apps/details?id=com.gotodn",
-      subject: LStrings.ShareSubject //  for email
+      message: LStrings.ShareDescription + '\n\n' + ' - ' +
+      (data.title || LStrings.NoTitle) + '\n' + ' - ' +
+      (data.description || LStrings.NoDescription) + '\n' + ' - ' +
+      data.heroImage + '\n' + ' - ' +
+      data.address + ', ' + data.district + ', ' + data.city + '\n' + ' - ' +
+      data.phone + '\n' + ' - ' + data.website + '\n' + ' - ' +
+      this.renderHour(data.open, data.close) + '\n\n'
+      ,
+      url: data.heroImage,
+      subject: data.title || LStrings.NoTitle //  for email
     };
 
     return (
@@ -276,9 +283,9 @@ export class DetailScreen extends React.Component {
       return moment(open).format('HH:mm') + ' - ' + moment(close).format('HH:mm');
     } else {
       if (moment(open).isValid()) {
-        return 'from ' + moment(open).format('HH:mm');
+        return moment(open).format('HH:mm') + ' -';
       } else if (moment(close).isValid()) {
-        return 'to ' + moment(close).format('HH:mm');
+        return '- ' + moment(close).format('HH:mm');
       }
     }
     return '';

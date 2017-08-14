@@ -5,8 +5,8 @@ import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
   host = "http://192.168.0.102:50915/";
 
-  async getHomeSlider() {
-    let url = this.host + "category/get-category-slider";
+  async getHomeSlider(index) {
+    let url = this.host + "category/get-category-slider?index=" + index;
     let result = await super.executeFetch(url);
     if (result && result.length > 0) {
       let slider = [];

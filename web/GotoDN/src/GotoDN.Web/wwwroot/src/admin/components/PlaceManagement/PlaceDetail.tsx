@@ -25,7 +25,7 @@ interface thisProps {
   SavePlace: (model: PlaceModel) => void,
   DeletePlace: (Id: number) => void,
   AddPlaceLanguage: (lang: LanguageEnums) => void,
-  DeletePlaceLanguage: (Id: number) => void,
+  DeletePlaceLanguage: (x: PlaceLanguageModel) => void,
   Categories: CategoryModel[],
   HTServices: HTServiceModel[],
   ClickSlectCategory: (Id) => void,
@@ -444,7 +444,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                               &nbsp;
                               {x.Language == LanguageEnums.English ?
                                 null : <span onClick={() => this.props.DeletePlaceLanguage
-                                && this.props.DeletePlaceLanguage(x.Id)}
+                                && this.props.DeletePlaceLanguage(x)}
                                 >
                             <i className="fa fa-remove"/>
                           </span>}

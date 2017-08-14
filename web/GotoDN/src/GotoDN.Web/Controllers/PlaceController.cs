@@ -696,12 +696,12 @@ namespace GotoDN.Web.Controllers
                 placeEntity.Address = enImportPlace.Address;
                 var city = cityEntities.FirstOrDefault(c => c.Name.Trim().ToLower() == enImportPlace.City.Trim().ToLower());
                 placeEntity.CityId = city != null ? city.Id : (int?)null;
-                placeEntity.CloseTime = DateTime.Parse(enImportPlace.CloseTime);
+                placeEntity.CloseTime = DateTimeHelper.SafeParse(enImportPlace.CloseTime);
                 var district = dicstrictEntities.FirstOrDefault(d => d.Name.Trim().ToLower() == enImportPlace.District.Trim().ToLower());
                 placeEntity.DistrictId = district != null ? district.Id : (int?)null;
                 placeEntity.IsCategorySlider = enImportPlace.IsCategorySlider;
                 placeEntity.IsHomeSlider = enImportPlace.IsHomeSlider;
-                placeEntity.OpenTime = DateTime.Parse(enImportPlace.OpenTime);
+                placeEntity.OpenTime = DateTimeHelper.SafeParse(enImportPlace.OpenTime);
                 placeEntity.Phone = enImportPlace.Phone;
                 placeEntity.Fax = enImportPlace.Fax;
                 placeEntity.Website = enImportPlace.Website;

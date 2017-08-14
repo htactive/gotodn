@@ -289,14 +289,15 @@ namespace GotoDN.Web.Controllers
 
         [HttpGet, Route("get-category-slider")]
         [AllowAnonymous]
-        public List<SliderModel> GetCategorySlider()
+        public List<SliderModel> GetCategorySlider(int? index)
         {
             var currentLanguage = this.CurrentLanguage;
             var currentCityId = this.CurrentCityId;
 
             var result = new List<SliderModel>();
             var today = DateTimeHelper.GetDateTimeNow();
-
+            var currentId = index ?? 0;
+            var itemsPerIndex = 20;
             var eventPlaces = this.HTRepository.PlaceRepository.GetAll()
                 .Where(x => x.CityId == currentCityId && (
                 (x.Category != null && x.Category.IsEvent.HasValue && x.Category.IsEvent.Value
@@ -317,7 +318,7 @@ namespace GotoDN.Web.Controllers
                     CreateDate = x.CreatedDate,
                     IsEvent = x.Category != null ? x.Category.IsEvent : null,
                     IsCategorySlider = x.IsCategorySlider,
-                }).ToList().OrderByDescending(t => t.IsEvent).ThenBy(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Take(20).ToList();
+                }).ToList().OrderByDescending(t => t.IsEvent).ThenBy(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
 
             return result;
         }

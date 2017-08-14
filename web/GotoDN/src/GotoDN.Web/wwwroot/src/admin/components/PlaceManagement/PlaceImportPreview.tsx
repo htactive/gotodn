@@ -229,7 +229,7 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
   private timeFormat(cell: any, row: any) {
     return (
       !moment(cell).isValid() ?
-        <span>Sai định dạng ngày</span> :
+        <span></span> :
         <span>{moment(cell).format('HH:mm')}</span>
     )
   }

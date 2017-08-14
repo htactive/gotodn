@@ -123,7 +123,7 @@ namespace GotoDN.Web.Controllers
                             iPlace.PlaceName = workSheet.Cells[r, c++].Value.ToString();
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            var cate = workSheet.Cells[r, c++].Value.ToString();
+                            var cate = workSheet.Cells[r, c++].Value.ToStringNullSafe();
 
                             var currentCate = cateEntities
                                 .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English)
@@ -164,63 +164,63 @@ namespace GotoDN.Web.Controllers
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.Description = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.Description = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.CoverImage = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.CoverImage = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.IsHomeSlider = workSheet.Cells[r, c++].Value.ToString() == "Yes";
+                            iPlace.IsHomeSlider = workSheet.Cells[r, c++].Value.ToStringNullSafe() == "Yes";
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.IsCategorySlider = workSheet.Cells[r, c++].Value.ToString() == "Yes";
+                            iPlace.IsCategorySlider = workSheet.Cells[r, c++].Value.ToStringNullSafe() == "Yes";
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.City = workSheet.Cells[r, c].Value.ToString();
+                            iPlace.City = workSheet.Cells[r, c].Value.ToStringNullSafe();
                             if (!cityEntities.Any(t => t.Name.ToLower() == workSheet.Cells[r, c].Value.ToString().Trim().ToLower()))
                                 iPlace.CityNotExist = true;
                             c++;
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.District = workSheet.Cells[r, c].Value.ToString();
+                            iPlace.District = workSheet.Cells[r, c].Value.ToStringNullSafe();
                             if (!(dicstrictEntities.Any(t => t.Name.ToLower() == workSheet.Cells[r, c].Value.ToString().Trim().ToLower() && t.City.Name.ToLower() == iPlace.City.ToLower())))
                                 iPlace.DistrictNotExist = true;
                             c++;
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.Address = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.Address = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.Phone = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.Phone = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.Fax = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.Fax = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.OpenTime = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.OpenTime = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.CloseTime = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.CloseTime = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.Website = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.Website = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
                             try
                             {
-                                var additionalInfoValue = workSheet.Cells[r, c++].Value.ToString();
+                                var additionalInfoValue = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                                 iPlace.AdditionalInfo = additionalInfoValue.Split('\n').Select(t => new KeyValuePair<string, string>(t.Trim().Split(':').ToList()[0].Trim(), t.Trim().Split(':').ToList()[1].Trim())).ToList();
                             }
                             catch
@@ -233,7 +233,7 @@ namespace GotoDN.Web.Controllers
                         {
                             try
                             {
-                                var imagesValue = workSheet.Cells[r, c++].Value.ToString();
+                                var imagesValue = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                                 iPlace.PlaceImages = imagesValue.Split('\n').Select(t => t.Trim()).ToList();
                             }
                             catch

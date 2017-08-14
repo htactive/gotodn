@@ -2,7 +2,7 @@ import * as React from 'react';
 import {PlaceServiceInstance} from "../../services/PlaceService";
 import PlaceDetail from "../../components/PlaceManagement/PlaceDetail";
 import {PlaceModel} from "../../../models/PlaceModel";
-import {LanguageEnums, TimeHelper, AdminRoutePath} from "../../../commons/constant";
+import {LanguageEnums, TimeHelper, AdminRoutePath, Languages} from "../../../commons/constant";
 import {PlaceLanguageModel} from "../../../models/PlaceLanguageModel";
 import {CategoryModel} from "../../../models/CategoryModel";
 import {HTServiceModel} from "../../../models/HTServiceModel";
@@ -121,9 +121,8 @@ class PlaceManagement extends React.Component<{}, thisState> {
     let eng = model.PlaceLanguages.filter(x => x.Language == LanguageEnums.English)[0];
     let icon = eng.Icon;
     let img = eng.Image;
-    model.PlaceLanguages.map( x => {
-      if(x && x.Language != LanguageEnums.English)
-      {
+    model.PlaceLanguages.map(x => {
+      if (x && x.Language != LanguageEnums.English) {
         x.Icon = icon;
         x.Image = img;
       }
@@ -174,39 +173,60 @@ class PlaceManagement extends React.Component<{}, thisState> {
   }
 
   private async addPlaceLanguage(lang: LanguageEnums) {
-    if(lang == LanguageEnums.All) {
-      let result = await PlaceServiceInstance.AddAllLanguage(this.state.SelectedPlace.Id);
-      if (result) {
-        window['notice_create_success']();
-        this.setState({SelectedPlace: result});
-      }
-      else {
-        window['notice_error']();
+    if (lang == LanguageEnums.All) {
+      if (this.state.SelectedPlace && this.state.SelectedPlace.Id == 0) {
+        let remainingLangs = Languages.map(l => l.Language).filter(l => this.state.SelectedPlace.PlaceLanguages.map(pl => pl.Language).indexOf(l) === -1);
+        let placeLangs = this.state.SelectedPlace.PlaceLanguages ? this.state.SelectedPlace.PlaceLanguages.slice() : [];
+        for (let i = 0; i < remainingLangs.length; i++) {
+          let placeLang: PlaceLanguageModel = {
+            Id: 0,
+            Language: remainingLangs[i],
+            Title: 'New Place',
+          };
+          placeLangs.push(placeLang);
+        }
+        this.state.SelectedPlace.PlaceLanguages = placeLangs;
+        this.forceUpdate();
+      } else {
+        let result = await PlaceServiceInstance.AddAllLanguage(this.state.SelectedPlace.Id);
+        if (result) {
+          window['notice_create_success']();
+          this.setState({SelectedPlace: result});
+        }
+        else {
+          window['notice_error']();
+        }
       }
     }
     else {
       let PlaceLanguage: PlaceLanguageModel = {
         Id: 0,
-        Title: "",
+        Title: "New Place",
         PlaceId: this.state.SelectedPlace.Id,
         Language: lang,
       };
-
-      let result = await PlaceServiceInstance.AddLanguage(PlaceLanguage);
-      if (result) {
-        window['notice_create_success']();
-        this.state.SelectedPlace.PlaceLanguages.push(result);
+      if (this.state.SelectedPlace && this.state.SelectedPlace.Id == 0) {
+        this.state.SelectedPlace.PlaceLanguages.push(PlaceLanguage);
         this.setState({
           SelectedLanguage: lang,
         });
-      }
-      else {
-        window['notice_error']();
+      } else {
+        let result = await PlaceServiceInstance.AddLanguage(PlaceLanguage);
+        if (result) {
+          window['notice_create_success']();
+          this.state.SelectedPlace.PlaceLanguages.push(result);
+          this.setState({
+            SelectedLanguage: lang,
+          });
+        }
+        else {
+          window['notice_error']();
+        }
       }
     }
   }
 
-  private async deletePlaceLanguage(Id: number) {
+  private async deletePlaceLanguage(pl: PlaceLanguageModel) {
     if (await SweetAlerts.show({
         type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
@@ -215,16 +235,23 @@ class PlaceManagement extends React.Component<{}, thisState> {
         confirmButtonText: 'Đồng ý xóa',
         closeOnConfirm: true
       }) == SweetAlertResultEnums.Confirm) {
-      let result = await PlaceServiceInstance.DeleteLanguage(Id);
-      if (result) {
-        window['notice_delete_success']();
+      if (this.state.SelectedPlace && this.state.SelectedPlace.Id == 0) {
         this.state.SelectedPlace.PlaceLanguages = this.state.SelectedPlace.PlaceLanguages
-          .filter(x => x.Id != Id);
+          .filter(x => x.Language != pl.Language);
         this.setState({SelectedLanguage: LanguageEnums.English});
         this.forceUpdate();
-      }
-      else {
-        window['notice_error']();
+      } else {
+        let result = await PlaceServiceInstance.DeleteLanguage(pl.Id);
+        if (result) {
+          window['notice_delete_success']();
+          this.state.SelectedPlace.PlaceLanguages = this.state.SelectedPlace.PlaceLanguages
+            .filter(x => x.Id != pl.Id);
+          this.setState({SelectedLanguage: LanguageEnums.English});
+          this.forceUpdate();
+        }
+        else {
+          window['notice_error']();
+        }
       }
     }
   }
@@ -265,7 +292,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                       <i className="fa fa-upload"/> Nhập từ Excel
                     </button>
                     <a className="btn btn-success mr10" href="place/download-template-high-level"
-                            >
+                    >
                       <i className="fa fa-download"/> Download Template
                     </a>
                   </div>
@@ -308,12 +335,14 @@ class PlaceManagement extends React.Component<{}, thisState> {
                     <TableHeaderColumn width="120" dataField="HomeHighlight" dataAlign="center"
                                        filterFormatted formatExtraData={highlightSelecter}
                                        filter={{type: 'SelectFilter', options: highlightSelecter}}
-                                       dataFormat={(r, data) => this.bindHighlightData(data.IsHomeSlider)} dataSort={true}>
+                                       dataFormat={(r, data) => this.bindHighlightData(data.IsHomeSlider)}
+                                       dataSort={true}>
                       Nổi bật trang chủ</TableHeaderColumn>
                     <TableHeaderColumn width="120" dataField="CategoryHighlight" dataAlign="center"
                                        filterFormatted formatExtraData={highlightSelecter}
                                        filter={{type: 'SelectFilter', options: highlightSelecter}}
-                                       dataFormat={(r, data) => this.bindHighlightData(data.IsCategorySlider)} dataSort={true}>
+                                       dataFormat={(r, data) => this.bindHighlightData(data.IsCategorySlider)}
+                                       dataSort={true}>
                       Nổi bật thư mục</TableHeaderColumn>
                     <TableHeaderColumn width="120" dataField="IsEvent" dataAlign="center"
                                        filterFormatted formatExtraData={highlightSelecter}
@@ -358,7 +387,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                      SavePlace={(model) => this.updatePlace(model)}
                      DeletePlace={(Id: number) => this.deletePlace(Id)}
                      AddPlaceLanguage={(lang: LanguageEnums) => this.addPlaceLanguage(lang)}
-                     DeletePlaceLanguage={(Id: number) => this.deletePlaceLanguage(Id)}
+                     DeletePlaceLanguage={(pl: PlaceLanguageModel) => this.deletePlaceLanguage(pl)}
                      Categories={this.state.Categories || []}
                      HTServices={this.state.HTServices || []}
                      ClickSlectCategory={(Id) => this.ClickSlectCategory(Id)}
@@ -462,7 +491,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
   }
 
   private importExcelHL() {
-    if(this.btnImageFileInput) {
+    if (this.btnImageFileInput) {
       this.btnImageFileInput.value = null;
       this.btnImageFileInput.click();
     }
