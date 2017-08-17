@@ -44,7 +44,14 @@ export class HomeScreen extends React.Component {
   }
 
   componentDidMount() {
-    this.loadHomeData();
+    const {params} = this.props.navigation.state;
+    if (params) {
+      let menuListData = params.homeList;
+      let sliderData = params.homeSlider;
+      this.setState({menuListData, menuListLoad: true, sliderData, sliderLoaded: true});
+    } else {
+      this.loadHomeData();
+    }
   }
 
   componentWillUnmount() {

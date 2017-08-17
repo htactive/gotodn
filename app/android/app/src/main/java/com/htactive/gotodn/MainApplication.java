@@ -1,4 +1,4 @@
-package com.gotodn;
+package com.htactive.gotodn;
 
 import android.app.Application;
 

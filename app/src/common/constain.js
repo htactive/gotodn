@@ -105,7 +105,7 @@ export const SlideData = [
 
 export const MenuListData = [
   {
-    id:1,
+    id: 1,
     categoryName: 'Đồ Ăn Thức Uống',
     categoryIcon: IconName.CEatdrink,
     services: [
@@ -124,7 +124,7 @@ export const MenuListData = [
     ]
   },
   {
-    id:2,
+    id: 2,
     categoryName: 'Mua sắm',
     categoryIcon: IconName.CEvent,
     services: [
@@ -135,7 +135,7 @@ export const MenuListData = [
     ]
   },
   {
-    id:3,
+    id: 3,
     categoryName: 'Cộng đồng',
     categoryIcon: IconName.CSeedo,
     services: [
@@ -154,7 +154,7 @@ export const MenuListData = [
     ]
   },
   {
-    id:4,
+    id: 4,
     categoryName: 'Vui chơi',
     categoryIcon: IconName.CStay,
     services: [
@@ -169,7 +169,7 @@ export const MenuListData = [
     ]
   },
   {
-    id:5,
+    id: 5,
     categoryName: 'Khu công nghiệp',
     categoryIcon: IconName.CIndustry,
     isNoService: true,
@@ -188,16 +188,16 @@ export const MenuListItemData = [
     heroImage: 'https://goo.gl/rREKZ2',
     title: 'Cuộc thi Marathon Quốc tế Đà Nẵng',
     description: 'Cuộc thi là giải chạy Marathon chuyên nghiệp đầu tiên tại Việt Nam với đường chạy được ' +
-  'đo và cấp giấy chứng nhận của IAAF – AIMS (Hiệp hội Thể dục Quốc tế và Hiệp hội Marathon Quốc tế).' +
-  '\nXuất phát chạy với không khí cực kỳ sôi động của một cuộc thi marathon mang tầm quốc tế, bạn sẽ ' +
-  'còn được trải nghiệm cảnh vật dọc đường bờ biển của thành phố với cảnh vật của buổi sớm mai, ' +
-  'nghe những âm thanh và tận hưởng làn không khí trong lành qua mỗi bước chạy. ' +
-  'Hãy tham gia cuộc thi Marathon Quốc Tế Đà Nẵng để có trải nghiệm một trong những đường chạy marathon đẹp nhất của Đông Nam Á.',
+    'đo và cấp giấy chứng nhận của IAAF – AIMS (Hiệp hội Thể dục Quốc tế và Hiệp hội Marathon Quốc tế).' +
+    '\nXuất phát chạy với không khí cực kỳ sôi động của một cuộc thi marathon mang tầm quốc tế, bạn sẽ ' +
+    'còn được trải nghiệm cảnh vật dọc đường bờ biển của thành phố với cảnh vật của buổi sớm mai, ' +
+    'nghe những âm thanh và tận hưởng làn không khí trong lành qua mỗi bước chạy. ' +
+    'Hãy tham gia cuộc thi Marathon Quốc Tế Đà Nẵng để có trải nghiệm một trong những đường chạy marathon đẹp nhất của Đông Nam Á.',
     star: 4.5,
     address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
     addressIcon: IconName.Location,
     phone: '(84-125) 333 222',
-    phoeneIcon:  IconName.Telephone,
+    phoeneIcon: IconName.Telephone,
     fax: '(84-125) 3334 555',
     faxIcon: IconName.Fax,
     website: 'https://thongtindoanhnghiep.co/da-nang/quan-lien-chieu/khu-cong-nghiep-hoa-khanh',
@@ -240,7 +240,7 @@ export const MenuListItemData = [
     address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
     addressIcon: IconName.Location,
     phone: '(84-125) 333 222',
-    phoeneIcon:  IconName.Telephone,
+    phoeneIcon: IconName.Telephone,
     fax: '(84-125) 3334 555',
     faxIcon: IconName.Fax,
     website: 'https://thongtindoanhnghiep.co/da-nang/quan-lien-chieu/khu-cong-nghiep-hoa-khanh',
@@ -283,7 +283,7 @@ export const MenuListItemData = [
     address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
     addressIcon: IconName.Location,
     phone: '(84-125) 333 222',
-    phoeneIcon:  IconName.Telephone,
+    phoeneIcon: IconName.Telephone,
     fax: '(84-125) 3334 555',
     faxIcon: IconName.Fax,
     website: 'https://thongtindoanhnghiep.co/da-nang/quan-lien-chieu/khu-cong-nghiep-hoa-khanh',
@@ -326,7 +326,7 @@ export const MenuListItemData = [
     address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
     addressIcon: IconName.Location,
     phone: '(84-125) 333 222',
-    phoeneIcon:  IconName.Telephone,
+    phoeneIcon: IconName.Telephone,
     fax: '(84-125) 3334 555',
     faxIcon: IconName.Fax,
     website: 'https://thongtindoanhnghiep.co/da-nang/quan-lien-chieu/khu-cong-nghiep-hoa-khanh',
@@ -369,7 +369,7 @@ export const MenuListItemData = [
     address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
     addressIcon: IconName.Location,
     phone: '(84-125) 333 222',
-    phoeneIcon:  IconName.Telephone,
+    phoeneIcon: IconName.Telephone,
     fax: '(84-125) 3334 555',
     faxIcon: IconName.Fax,
     website: 'https://thongtindoanhnghiep.co/da-nang/quan-lien-chieu/khu-cong-nghiep-hoa-khanh',
@@ -431,7 +431,7 @@ export const MenuListItemData = [
     address: 'Dọc đường Hoàng Sa – Trường Sa, T.P Đà Nẵng',
     addressIcon: IconName.Location,
     phone: '(84-125) 333 222',
-    phoeneIcon:  IconName.Telephone,
+    phoeneIcon: IconName.Telephone,
     fax: '(84-125) 3334 555',
     faxIcon: IconName.Fax,
     website: 'https://thongtindoanhnghiep.co/da-nang/quan-lien-chieu/khu-cong-nghiep-hoa-khanh',
@@ -484,7 +484,7 @@ export const IndustryData = [
     websiteIcon: IconName.Web,
     totalArea: '1000 ha',
     totalAreaIcon: IconName.Area,
-    vacantLand:' 100 ha',
+    vacantLand: ' 100 ha',
     vacantLandIcon: IconName.Vacant,
     factoryIcon: IconName.Industry,
     factoryList: [
@@ -554,7 +554,7 @@ export const IndustryData = [
     websiteIcon: IconName.Web,
     totalArea: '1000 ha',
     totalAreaIcon: IconName.Area,
-    vacantLand:' 100 ha',
+    vacantLand: ' 100 ha',
     vacantLandIcon: IconName.Vacant,
     factoryIcon: IconName.Industry,
   },
@@ -574,7 +574,7 @@ export const IndustryData = [
     websiteIcon: IconName.Web,
     totalArea: '1000 ha',
     totalAreaIcon: IconName.Area,
-    vacantLand:' 100 ha',
+    vacantLand: ' 100 ha',
     vacantLandIcon: IconName.Vacant,
     factoryIcon: IconName.Industry,
   },
@@ -594,7 +594,7 @@ export const IndustryData = [
     websiteIcon: IconName.Web,
     totalArea: '1000 ha',
     totalAreaIcon: IconName.Area,
-    vacantLand:' 100 ha',
+    vacantLand: ' 100 ha',
     vacantLandIcon: IconName.Vacant,
     factoryIcon: IconName.Industry,
   },
@@ -614,7 +614,7 @@ export const IndustryData = [
     websiteIcon: IconName.Web,
     totalArea: '1000 ha',
     totalAreaIcon: IconName.Area,
-    vacantLand:' 100 ha',
+    vacantLand: ' 100 ha',
     vacantLandIcon: IconName.Vacant,
     factoryIcon: IconName.Industry,
   }
@@ -635,14 +635,14 @@ export const IndustryData = [
     websiteIcon: IconName.Web,
     totalArea: '1000 ha',
     totalAreaIcon: IconName.Area,
-    vacantLand:' 100 ha',
+    vacantLand: ' 100 ha',
     vacantLandIcon: IconName.Vacant,
     factoryIcon: IconName.Industry,
   }
 ];
 
 
-export class LanguageEnums{
+export class LanguageEnums {
   static English = 1;
   static Vietnamese = 2;
   static Chinese = 3;
@@ -721,8 +721,8 @@ export class MapHelper {
 
     const midX = (minX + maxX) / 2;
     const midY = (minY + maxY) / 2;
-    const deltaX = (maxX - minX) + (maxX - minX)*.5;
-    const deltaY = (maxY - minY) + (maxY - minY)*.5;
+    const deltaX = (maxX - minX) + (maxX - minX) * .4;
+    const deltaY = (maxY - minY) + (maxY - minY) * .4;
 
     return {
       latitude: midX,
@@ -801,4 +801,14 @@ export class Helper {
   static CityKey = 'CityKey';
   static FavoriteKey = 'FavoriteKey';
   static SeparateKey = '||';
+}
+
+export function Guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
 }

@@ -77,10 +77,10 @@ export class SplashScreen extends React.Component {
     // clearInterval(this.handleNetInterval);
   }
 
-  _navigateTo = (routeName) => {
+  _navigateTo = (routeName, params) => {
     const actionToDispatch = NavigationActions.reset({
       index: 0,
-      actions: [NavigationActions.navigate({routeName})]
+      actions: [NavigationActions.navigate({routeName, params})]
     });
 
     this.props.navigation.dispatch(actionToDispatch)
@@ -103,7 +103,7 @@ export class SplashScreen extends React.Component {
             {flexDirection: 'row', alignItems:'center', justifyContent: 'center'}
           }>
               <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 13, color:'#039be5'}}>
-                {this.state.hasConnection ? 'Connected' : 'Connecting...'}
+                {this.state.hasConnection ? 'Loading...' : 'Connecting...'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -112,8 +112,14 @@ export class SplashScreen extends React.Component {
     )
   }
 
-  goNext() {
-    this._navigateTo('HomeScreen');
+  async goNext() {
+    let menuListData = await GDNServiceInstance.getHomeMenuList();
+    let sliderData = await GDNServiceInstance.getHomeSlider(0);
+    let params = {
+      homeList: menuListData,
+      homeSlider: sliderData
+    };
+    this._navigateTo('HomeScreen', params);
   }
 
 }

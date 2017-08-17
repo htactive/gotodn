@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Alert, StyleSheet, TouchableOpacity, View, Text, Image} from 'react-native';
 import {Icon} from 'native-base';
-import {viewportWidth, viewportHeight, Helper, AppIcon, MapHelper, platform} from '../../common/constain';
+import {viewportWidth, viewportHeight, Helper, AppIcon, MapHelper, platform, Guid} from '../../common/constain';
 import {GoogleAPIServiceInstance} from '../../services/GoogleAPIService';
 import {CustomCallout} from './CustomCallout';
 import {StyleBase, style} from '../../styles/style';
@@ -27,6 +27,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
     routes: [],
     waitingForLocation: false,
     gpsError: null,
+    selectedRouteId: '',
   };
 
   marker;
@@ -52,6 +53,10 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
   componentWillUnmount() {
     clearTimeout(this.timeoutGPS);
     navigator.geolocation.clearWatch(this.watchId);
+  }
+
+  componentDidUpdate() {
+    this.showCallout();
   }
 
   async getCurrentPos() {
@@ -91,47 +96,49 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
     return check === "enabled";
   }
 
-  animateRegion(position) {
+  async animateRegion(position) {
     let currentPos = Helper.CloneObject(this.state.current);
     currentPos.latitude = position.coords.latitude;
     currentPos.longitude = position.coords.longitude;
     this.setState({
       current: currentPos
     });
-    let points = [];
-    points.push(Helper.CloneObject(this.state.destination));
-    points.push(currentPos);
-
-    this.getDirection(currentPos);
-
+    await this.getDirection(currentPos);
+    let points = this.state.routes ? this.state.routes[0].steps : [];
     let region = MapHelper.getRegionForCoordinates(points);
     // this.renderCallout();
     this.mapRef.animateToRegion(region, 500);
   }
 
   renderAlternativeRoute(id, coords) {
+    let lastRouteId = this.state.routes ? (this.state.routes.length - 1) : 0;
     return (
       <MapView.Polyline
         key={id}
         coordinates={coords}
-        strokeWidth={4}
-        strokeColor='#b0b0b0'
+        strokeWidth={6}
+        strokeColor={id == lastRouteId ? '#00b3fd' : '#b0b0b0'}
         lineCap='round'
+        onPress={() => this.changeRoute(id,true)}
       />
     )
   }
 
-  renderAlternativeMarker(id, coords, text, des) {
-    let thisCoords = coords[Math.floor(coords.length / 3)];
+  renderAlternativeMarker(id, coord, text, des) {
+    let routes = this.state.routes ? this.state.routes.slice() : [];
+    let index = routes.map((x) => {return x.id}).indexOf(id);
     return (
-      <MapView.Marker
-        key={id}
-        coordinate={thisCoords}
-        title={text}
-        description={des}
-        image={require('../../../assets/icons/car.png')}
-        anchor={{x:0.5, y:0.5}}
-      />
+      coord ?
+        <MapView.Marker
+          ref={(m) => this[`marker_${id}`] = m}
+          key={id}
+          coordinate={coord}
+          title={text}
+          description={des}
+          image={require('../../../assets/icons/marker.png')}
+          anchor={{x:0.0, y:0.0}}
+          onPress={() => this.changeRoute(index)}
+        /> : null
     )
   }
 
@@ -144,8 +151,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
   render() {
     let mainRoute = this.state.routes.length && this.state.routes.length > 0 ?
       this.state.routes[0] : {};
-    let alternativeRoutes = this.state.routes.length && this.state.routes.length > 0 ?
-      this.state.routes.slice(1) : [];
+    let routes = this.state.routes.length ? this.state.routes : [];
     return (
       <View style={{flex: 1}}>
         <MapView
@@ -159,32 +165,17 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
           loadingIndicatorColor='#666666'
           loadingBackgroundColor='#eeeeee'
           showsUserLocation
+          onRegionChangeComplete={() => this.showCallout()}
         >
-          {alternativeRoutes && alternativeRoutes.map((a, id) => {
+          {routes && routes.map((a, id) => {
             return a.steps && this.renderAlternativeRoute(id, a.steps)
           })}
-          {alternativeRoutes && alternativeRoutes.map((a, id) => {
-            return a.steps && this.renderAlternativeMarker(id, a.steps, a.distance.text, a.duration.text)
+          {routes && routes.map((a, id) => {
+            return a.steps && this.renderAlternativeMarker(a.id, a.markerCoord, a.distance.text, a.duration.text)
           })}
-          {mainRoute.steps && (
-            <MapView.Polyline
-              coordinates={mainRoute.steps}
-              strokeWidth={4}
-              strokeColor='#00b3fd'
-              lineCap='butt'
-            />) }
-          {mainRoute.steps
-          && (<MapView.Marker
-            coordinate={mainRoute.steps[Math.floor(mainRoute.steps.length / 2)]}
-            title={mainRoute.distance.text}
-            description={mainRoute.duration.text}
-            image={require('../../../assets/icons/car.png')}
-          />)
-          }
           {this.state.destination ? <MapView.Marker
-            coordinate={this.state.destination}
-          /> : null}
-
+              coordinate={this.state.destination}
+            /> : null}
         </MapView>
         <View style={{
           position: 'absolute', right: 10, top: 10,
@@ -243,11 +234,13 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
         if (route.legs && route.legs.length > 0) {
           let leg = route.legs[0];
           let tempR = {
+            id: Guid(),
             distance: leg.distance,
             duration: leg.duration,
             start_address: leg.start_address,
             end_address: leg.end_address,
             steps: [],
+            markerCoord: {},
           };
           tempR.steps.push(Helper.CloneObject(this.state.current));
           tempR.steps = tempR.steps.concat(leg.steps.map((s) => {
@@ -259,10 +252,51 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
           routesT.push(tempR);
         }
       }
-
+      let fRouteId = routesT.length > 0 ? routesT[0].id : '';
+      routesT.reverse();
+      for (let i = 0; i < routesT.length; i++) {
+        routesT[i].markerCoord = this.getMarkerCoord(routesT[i], routesT.slice());
+      }
       this.setState({
-        routes: routesT
+        routes: routesT,
+        selectedRouteId: fRouteId
       });
+    }
+  }
+
+  getMarkerCoord(route, routes) {
+    let id = route.id;
+    let coords = route.steps;
+    let index = routes.map((x) => {
+      return x.id
+    }).indexOf(id);
+    routes.splice(index, 1);
+    let filterC = [];
+    for (let i = 0; i < routes.length; i++) {
+      filterC = coords.filter(c => routes[i].steps.filter(s => s.latitude == c.latitude && s.longitude == c.longitude).length == 0);
+    }
+    return filterC.length > 0 ? filterC[Math.floor(filterC.length / 2)] : coords[Math.floor(coords.length / 2)];
+  }
+
+  changeRoute(id, animate) {
+    let routes = this.state.routes ? this.state.routes.slice() : [];
+    if (id < routes.length) {
+      let currentRoute = routes[id];
+      routes[id] = routes[routes.length - 1];
+      routes[routes.length - 1] = currentRoute;
+      this.setState({
+        routes: routes,
+        selectedRouteId: currentRoute.id,
+      });
+      if(animate && this.mapRef)
+        this.mapRef.animateToCoordinate(currentRoute.markerCoord, 500);
+    }
+  }
+
+  showCallout() {
+    let currentId = this.state.selectedRouteId;
+    if (this[`marker_${currentId}`]) {
+      this[`marker_${currentId}`].showCallout();
     }
   }
 }

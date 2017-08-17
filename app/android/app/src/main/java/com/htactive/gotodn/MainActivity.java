@@ -1,4 +1,4 @@
-package com.gotodn;
+package com.htactive.gotodn;
 
 import com.facebook.react.ReactActivity;
 
