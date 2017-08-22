@@ -12,7 +12,7 @@ import {GDNServiceInstance} from '../services/GDNService';
 import {appStore} from '../stores/AppStore';
 import {Menu} from '../components/menu/Menu';
 import {LStrings} from '../common/LocalizedStrings';
-import {commonStore, updateCategoryName} from '../stores/CommonStore';
+import {commonStore, updateCategoryName, CommonStoreActions} from '../stores/CommonStore';
 
 const imgHeight = Math.round((viewportWidth - 30) / 2);
 const textHeight = Math.round(viewportHeight / 3.3);
@@ -31,6 +31,7 @@ export class IndustryListScreen extends React.Component {
 
   savedData;
   unSubscribe;
+  unSubscribeCommon;
   componentWillMount() {
     navigationStore.subscribe(() => {
       let navigationState = navigationStore.getState();
@@ -40,10 +41,25 @@ export class IndustryListScreen extends React.Component {
           params: navigationState.params
         });
         this.props.navigation.dispatch(navigateAction);
+        if (navigationState.routeName == 'ListScreen' || navigationState.routeName == 'IndustryListScreen')
+          if (typeof this.unSubscribeCommon === "function")
+            this.unSubscribeCommon();
       }
     });
     this.unSubscribe = appStore.subscribe(() => {
       this.onFresh();
+    });
+
+    this.unSubscribeCommon = commonStore.subscribe(() => {
+      let commonState = commonStore.getState();
+      if (commonState.type == CommonStoreActions.UpdateCategoryName) {
+        let categories = commonState.categories;
+        if (categories[categories.length - 1]) {
+          Menu.instance.setTitle(categories[categories.length - 1].name);
+        } else {
+          Menu.instance.setTitle('');
+        }
+      }
     });
   }
 
@@ -64,7 +80,8 @@ export class IndustryListScreen extends React.Component {
     let listId = (params && params.listId) || 0;
     let objectResult = await GDNServiceInstance.getCagegoryNoServiceById(listId, this.state.currentIndex);
     if(objectResult && objectResult.data) {
-      Menu.instance.setTitle(objectResult.categoryName);
+      let categories = commonStore.getState().categories || [];
+
       this.saveCategory(listId, objectResult.categoryName);
       let result = objectResult.data;
       this.savedData = result;
