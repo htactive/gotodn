@@ -12,6 +12,7 @@ import {GDNServiceInstance} from '../services/GDNService';
 import {appStore} from '../stores/AppStore';
 import {Menu} from '../components/menu/Menu';
 import {LStrings} from '../common/LocalizedStrings';
+import {commonStore, updateCategoryName} from '../stores/CommonStore';
 
 const imgHeight = Math.round((viewportWidth - 30) / 2);
 const textHeight = Math.round(viewportHeight / 3.3);
@@ -64,6 +65,7 @@ export class IndustryListScreen extends React.Component {
     let objectResult = await GDNServiceInstance.getCagegoryNoServiceById(listId, this.state.currentIndex);
     if(objectResult && objectResult.data) {
       Menu.instance.setTitle(objectResult.categoryName);
+      this.saveCategory(listId, objectResult.categoryName);
       let result = objectResult.data;
       this.savedData = result;
       let dataLeft = [], dataRight = [];
@@ -88,6 +90,28 @@ export class IndustryListScreen extends React.Component {
       }, 1000)
     }
 
+  }
+
+  saveCategory(id, name) {
+    let categories = commonStore.getState().categories || [];
+    let categoryIndex = categories.map(c => {return c.id}).indexOf(id);
+    if(categoryIndex !== -1) {
+      categories[categoryIndex].name = name;
+    } else {
+      categories.push({id: id, name: name});
+    }
+    commonStore.dispatch(updateCategoryName(categories.slice()));
+  }
+
+  async deleteCategory() {
+    const { params } = this.props.navigation.state;
+    let id = (params && params.listId) || 0;
+    let categories = commonStore.getState().categories || [];
+    let removeIndex = categories.map(c => {return c.id}).indexOf(id);
+    if(removeIndex !== -1) {
+      categories.splice(removeIndex, 1);
+      commonStore.dispatch(updateCategoryName(categories.slice()));
+    }
   }
 
   searchData(searchValue) {

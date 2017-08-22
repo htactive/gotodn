@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity, NetInfo, AsyncStorage} from 'react-native';
+import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity, NetInfo, AsyncStorage, Platform, BackHandler, ToastAndroid} from 'react-native';
 import {Title, Icon, Picker, Drawer, Input, Item} from 'native-base';
 import {StyleBase} from '../../styles/style';
 import {MenuContent} from './MenuContent';
@@ -11,7 +11,9 @@ import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 import {appStore, appSaveCity} from '../../stores/AppStore';
+import {commonStore, toggleSearchBar, CommonStoreActions} from '../../stores/CommonStore';
 import {NavigationActions} from 'react-navigation';
+import {LStrings} from '../../common/LocalizedStrings';
 
 const drawerStyles = {
   drawer: {
@@ -87,6 +89,15 @@ export class Menu extends React.Component {
     this.drawer = {};
     this.setState({
       hasConnection: false,
+    });
+    commonStore.subscribe(() => {
+      let commonState = commonStore.getState();
+      if(commonState.type == CommonStoreActions.CloseSearchBar) {
+        this.setState({
+          showSearchBar: false,
+          searchValue: ''
+        });
+      }
     });
   }
 
@@ -246,6 +257,7 @@ export class Menu extends React.Component {
   }
 
   toggleSearchBar(toggle) {
+    commonStore.dispatch(toggleSearchBar(toggle));
     this.setState({
       showSearchBar: toggle,
       searchValue: ''

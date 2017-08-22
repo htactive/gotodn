@@ -4,6 +4,7 @@ import {Icon} from 'native-base';
 import {style} from '../../styles/style';
 import {viewportWidth, AppIcon, Helper} from '../../common/constain';
 import {LStrings} from '../../common/LocalizedStrings';
+import moment from 'moment';
 
 export class DetailNearPlace extends React.Component {
 
@@ -51,7 +52,7 @@ export class DetailNearPlace extends React.Component {
                       <Image style={style.iconImgXxs} source={AppIcon.Time}/>
                     </View>
                     <View style={{flex:8, justifyContent: 'center', alignItems: 'flex-start'}}>
-                      <Text numberOfLines={1} style={style.detailNearByInfo}>{d.openHour}</Text>
+                      <Text numberOfLines={1} style={style.detailNearByInfo}>{this.renderHour(d.open, d.close)}</Text>
                     </View>
                   </View>
                 </View>
@@ -66,5 +67,18 @@ export class DetailNearPlace extends React.Component {
   goPlace(id) {
     if(this.props.onNearByClicked)
       this.props.onNearByClicked(id);
+  }
+
+  renderHour(open, close) {
+    if (moment(open).isValid() && moment(close).isValid()) {
+      return moment(open).format('HH:mm') + ' - ' + moment(close).format('HH:mm');
+    } else {
+      if (moment(open).isValid()) {
+        return moment(open).format('HH:mm') + ' -';
+      } else if (moment(close).isValid()) {
+        return '- ' + moment(close).format('HH:mm');
+      }
+    }
+    return '';
   }
 }

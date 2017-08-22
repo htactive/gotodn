@@ -30,6 +30,7 @@ export class SplashScreen extends React.Component {
   }
 
   async initData() {
+    await AsyncStorage.setItem(Helper.CategoryKey, '');
 
     let langValue = await AsyncStorage.getItem(Helper.LanguageKey);
 

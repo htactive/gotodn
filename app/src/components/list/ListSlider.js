@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, Image, ScrollView, View, Text, PanResponder,Dimensions} from 'react-native';
+import {TouchableOpacity, Image, ScrollView, View, Text, PanResponder, Dimensions} from 'react-native';
 import {Icon, Card, CardItem, Spinner} from 'native-base';
 import {style, StyleBase} from '../../styles/style';
 import {SlideData, viewportWidth, AppIcon, viewportHeight, Helper} from '../../common/constain';
@@ -30,7 +30,7 @@ export class ListSlider extends React.Component {
         slider: nextProps.dataSource,
         isLoaded: true,
       });
-      if(nextProps.currentIndex == 0 && this.sliderScroll) {
+      if (nextProps.currentIndex == 0 && this.sliderScroll) {
         this.sliderScroll.scrollTo({x: 0, animated: false});
       }
     }
@@ -58,9 +58,13 @@ export class ListSlider extends React.Component {
     }
     return (
       <View style={style.sliderItemStar}>
-        {stars.map((t, key) => <Icon key={key}
-                                     style={{alignSelf: 'flex-end',color:  t == 1 ?  '#000' : '#fff', fontSize:20,width: 20, paddingHorizontal: 1}}
-                                     name='ios-star'/>)}
+        {stars.map((t, key) => t == 1 ?
+          <Icon key={key}
+                style={{alignSelf: 'flex-end',color: '#fced00', fontSize:20,width: 20, paddingHorizontal: 1}}
+                name='ios-star'/> :
+          <Icon key={key}
+                style={{alignSelf: 'flex-end',color: '#fced00', fontSize:20,width: 20, paddingHorizontal: 1}}
+                name='ios-star-outline'/>)}
       </View>
     );
   }
@@ -142,7 +146,7 @@ export class ListSlider extends React.Component {
 
   handleScroll(event) {
     let index = 0;
-    if(this.state.slider && this.state.slider.length > 0) {
+    if (this.state.slider && this.state.slider.length > 0) {
       let sliderSpaceW = viewportWidth * .6 - 10;
       let sliderW = ((this.sliderWidth - sliderSpaceW) / this.state.slider.length);
       index = Math.floor((event.nativeEvent.contentOffset.x + 10) / sliderW);
@@ -162,9 +166,9 @@ export class ListSlider extends React.Component {
       let windowWidth = Dimensions.get('window').width,
         width = sliderW * 20 * (this.props.currentIndex + 1),
         offset = e.nativeEvent.contentOffset.x;
-      if (width > 0 && windowWidth + offset >= width*.7 ) {
+      if (width > 0 && windowWidth + offset >= width * .7) {
         let nextId = this.props.currentIndex + 1;
-        if(this.props.onLoadMore)
+        if (this.props.onLoadMore)
           this.props.onLoadMore(nextId);
       }
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {BackHandler, ToastAndroid, Platform} from 'react-native';
+import {BackHandler, ToastAndroid, Platform, AsyncStorage} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import {SplashScreen} from './screens/SplashScreen';
 import {HomeScreen} from './screens/HomeScreen';
@@ -10,7 +10,11 @@ import {MenuType, MenuListData} from './common/constain';
 import {IndustryListScreen} from './screens/IndustryListScreen';
 import {IndustryDetailScreen} from './screens/IndustryDetailScreen';
 import {ReactMapDirection} from './components/map/ReactMapDirection';
+import {FavoriteScreen} from './screens/FavoriteScreen';
 import {NavigationActions} from 'react-navigation'
+import {Helper} from './common/constain';
+import {LStrings} from './common/LocalizedStrings';
+import {commonStore, closeSearchBar, scrollTopDetail, CommonStoreActions} from './stores/CommonStore';
 
 export function DNPageRoute(page) {
   let key = page.displayName || page['name'];
@@ -46,12 +50,23 @@ export const DNNavigatorConfig = {
   ReactMapDirection: {
     screen: ReactMapDirection
   },
+  FavoriteScreen: {
+    screen: FavoriteScreen
+  },
 };
+let categories = [];
+commonStore.subscribe(() => {
+  let commonState = commonStore.getState();
+  if(commonState.type == CommonStoreActions.UpdateCategoryName) {
+    categories = commonState.categories;
+  }
+});
+
 let confirmTimeout;
 export const DNNavigatorOptions = {
   initialRouteName: DNPageRoute(SplashScreen),
   headerMode: 'none',
-  onTransitionStart: (transProps) => {
+  onTransitionStart: async (transProps) => {
 
     if (transProps && transProps.scene && transProps.scene.route) {
 
@@ -60,31 +75,39 @@ export const DNNavigatorOptions = {
 
         BackHandler.removeEventListener('hardwareBackPress');
         BackHandler.addEventListener('hardwareBackPress', () => {
-          if (transProps.navigation.state.routes.length > 1) {
-            transProps.navigation.goBack();
-            existConfirmTime = 0;
+          let showSearchBar = commonStore.getState().showSearchBar;
+          if(showSearchBar) {
+            commonStore.dispatch(closeSearchBar());
+            return true;
+          } else {
+            if (transProps.navigation.state.routes.length > 1) {
+              transProps.navigation.goBack();
+              existConfirmTime = 0;
+              return true;
+            }
+            if (existConfirmTime < 2)
+              existConfirmTime += 1;
+            if (confirmTimeout) clearTimeout(confirmTimeout);
+            confirmTimeout = setTimeout(() => {
+              if (existConfirmTime > 0)
+                existConfirmTime -= 1;
+            }, 2000);
+            if (existConfirmTime >= 2) {
+              existConfirmTime = 0;
+              BackHandler.exitApp();
+              return false;
+            }
+            ToastAndroid.showWithGravity(LStrings.ExitTitle, 2000, ToastAndroid.BOTTOM);
             return true;
           }
-          if (existConfirmTime < 2)
-            existConfirmTime += 1;
-          if (confirmTimeout) clearTimeout(confirmTimeout);
-          confirmTimeout = setTimeout(() => {
-            if (existConfirmTime > 0)
-              existConfirmTime -= 1;
-          }, 2000);
-          if (existConfirmTime >= 2) {
-            existConfirmTime = 0;
-            BackHandler.exitApp();
-            return false;
-          }
-          ToastAndroid.showWithGravity('Nhấn BACK lần nữa để thoát', 2000, ToastAndroid.BOTTOM);
-          return true;
         });
       }
       let params;
       let listId = 0;
       let title = '';
-      let currentList = {};
+
+
+      let category ;
       switch (transProps.scene.route.routeName) {
         case propName(DNNavigatorConfig, DNNavigatorConfig.HomeScreen):
           Menu.instance.enableMenu();
@@ -96,8 +119,9 @@ export const DNNavigatorOptions = {
           Menu.instance.enableMenu();
           params = transProps.scene.route.params;
           listId = (params && params.listId) || 0;
-          title = (params && params.categoryName) || '';
-          Menu.instance.setTitle("");
+          category = categories.filter(c => c.id == listId)[0];
+          title = category ? category.name : '';
+          Menu.instance.setTitle(title);
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.ListScreen);
           break;
@@ -105,8 +129,9 @@ export const DNNavigatorOptions = {
           Menu.instance.enableMenu();
           params = transProps.scene.route.params;
           listId = (params && params.listId) || 0;
-          title = (params && params.categoryName) || '';
-          Menu.instance.setTitle("");
+          category = categories.filter(c => c.id == listId)[0];
+          title = category ? category.name : '';
+          Menu.instance.setTitle(title);
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.ListScreen);
           break;
@@ -116,6 +141,7 @@ export const DNNavigatorOptions = {
           Menu.instance.setTitle('');
           break;
         case propName(DNNavigatorConfig, DNNavigatorConfig.DetailScreen):
+          commonStore.dispatch(scrollTopDetail());
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.DetailScreen);
           Menu.instance.setTitle('');
@@ -124,6 +150,11 @@ export const DNNavigatorOptions = {
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.DetailScreen);
           Menu.instance.setTitle('');
+          break;
+        case propName(DNNavigatorConfig, DNNavigatorConfig.FavoriteScreen):
+          Menu.instance.enableMenu();
+          Menu.instance.setType(MenuType.ListScreen);
+          Menu.instance.setTitle(LStrings.FavoritePlace);
           break;
         case propName(DNNavigatorConfig, DNNavigatorConfig.SplashScreen):
           Menu.instance.disableMenu();

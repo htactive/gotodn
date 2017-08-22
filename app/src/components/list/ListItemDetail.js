@@ -76,9 +76,13 @@ export class ListItemDetail extends React.Component {
     }
     return (
       <View style={style.menuItemStar}>
-        {stars.map((t, key) => <Icon key={key}
-                                     style={{alignSelf: 'flex-end',color:  t == 1 ?  '#000' : '#fff', fontSize:20, paddingHorizontal: 1}}
-                                     name='ios-star'/>)}
+        {stars.map((t, key) => t == 1 ?
+          <Icon key={key}
+                style={{alignSelf: 'flex-end',color: '#fced00', fontSize:20,width: 20, paddingHorizontal: 1}}
+                name='ios-star'/> :
+          <Icon key={key}
+                style={{alignSelf: 'flex-end',color: '#fced00', fontSize:20,width: 20, paddingHorizontal: 1}}
+                name='ios-star-outline'/>)}
       </View>
     );
   }

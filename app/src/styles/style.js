@@ -118,7 +118,7 @@ export const style = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#679ac3'
   },
-  containerHalf: {
+    containerHalf: {
     flex: 1,
     alignItems: 'flex-start',
     flexDirection: 'column',
@@ -216,6 +216,7 @@ export const style = StyleSheet.create({
     alignItems: 'flex-start',
     paddingHorizontal: 3,
     opacity: 0.8,
+    paddingTop: 10,
   },
   menuItemImageInner: {
     flex: 7,
@@ -437,8 +438,11 @@ export const style = StyleSheet.create({
   },
   menuTitleText: {
     fontFamily: StyleBase.sp_regular,
-    fontSize: 18,
-    color: '#fff'
+    fontSize: 15,
+    color: '#fff',
+    width: viewportWidth/2,
+    paddingBottom:3,
+    textAlign: 'center',
   },
   menuSearchTitle: {
     color: '#263238',

@@ -3,7 +3,7 @@ import {appStore} from '../stores/AppStore';
 
 export class ServiceBase {
 
-  async  executeFetch(url) {
+  async  executeFetch(url, notJson) {
     try {
       let appState = appStore.getState();
       let result = await fetch(url, {
@@ -16,8 +16,13 @@ export class ServiceBase {
          * make a fetch request with credentials such as cookies
          */
       });
+
       if (result.ok) {
-        return await result.json();
+        if(notJson) {
+          return await result.text();
+        } else {
+          return await result.json();
+        }
       }
       return null;
     }

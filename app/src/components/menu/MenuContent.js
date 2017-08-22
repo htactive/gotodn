@@ -31,6 +31,7 @@ export class MenuContent extends React.Component {
       onHelpClicked: () => this.helpClicked(),
       onAboutUsClicked: () => this.aboutUsClicked(),
       onLanguageClicked: () => this.languageUsClicked(),
+      onFavoriteClicked: () => this.favoriteClicked(),
     };
 
     let language = Language.filter(l => l.Id == this.state.selectedLang)[0] || {};
@@ -94,8 +95,12 @@ export class MenuContent extends React.Component {
       selectedLang: d.Id
     });
     changeAppLanguage(d.Id);
-    Menu.instance.setTitle("");
     await AsyncStorage.setItem(Helper.LanguageKey, d.Id + '');
     appStore.dispatch(appSaveLanguage(d.Id));
+  }
+
+  favoriteClicked() {
+    this.props.onCloseMenu && this.props.onCloseMenu();
+    navigationStore.dispatch(navigateToRouteAction('FavoriteScreen'));
   }
 }

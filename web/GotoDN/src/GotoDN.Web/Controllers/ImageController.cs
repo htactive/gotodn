@@ -10,6 +10,7 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +20,19 @@ namespace GotoDN.Web.Controllers
     [Route("image")]
     public class ImageController : BaseController
     {
+        private static ImageCodecInfo jpegCodecInfo = null;
+        private static ImageCodecInfo JPEGCodecInfo
+        {
+            get
+            {
+                if (jpegCodecInfo == null)
+                {
+                    jpegCodecInfo = ImageCodecInfo.GetImageEncoders().ToList().Find(delegate (ImageCodecInfo codec) { return codec.FormatID == ImageFormat.Jpeg.Guid; });
+                }
+                return jpegCodecInfo;
+            }
+        }
+         
         public ImageController(HTRepository repository) : base(repository) { }
 
         [Route("upload-new-on-home-image"), HttpPost]
@@ -259,6 +273,30 @@ namespace GotoDN.Web.Controllers
             }).ToList();
 
             return placeGroup;
+        }
+
+        [Route("conver-url-to-base64"), HttpGet]
+        [AllowAnonymous]
+        public async Task<string> ConvertUrlToBase64(string url)
+        {
+            System.Net.WebRequest request = System.Net.WebRequest.Create(url);
+            System.Net.WebResponse response = await request.GetResponseAsync();
+            System.IO.Stream responseStream = response.GetResponseStream();
+            using (System.Drawing.Bitmap bitmap2 = new System.Drawing.Bitmap(responseStream))
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    EncoderParameters parameters = new EncoderParameters(1);
+
+                    parameters.Param[0] = new EncoderParameter(Encoder.Quality, 100);
+                    bitmap2.Save(m, JPEGCodecInfo, parameters);
+                    byte[] imageBytes = m.ToArray();
+
+                    // Convert byte[] to Base64 String
+                    string base64String = Convert.ToBase64String(imageBytes);
+                    return base64String;
+                }
+            }
         }
     }
 }

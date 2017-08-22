@@ -48,6 +48,7 @@ export class HomeScreen extends React.Component {
     if (params) {
       let menuListData = params.homeList;
       let sliderData = params.homeSlider;
+      this.setState({showSlider: (sliderData != null && sliderData.length > 0)});
       this.setState({menuListData, menuListLoad: true, sliderData, sliderLoaded: true});
     } else {
       this.loadHomeData();
@@ -95,7 +96,7 @@ export class HomeScreen extends React.Component {
       >
         <Grid>
           {this.state.showSlider ? <Row style={{ height: viewportHeight*.38 }}>
-              <HomeSlider dataSource={this.state.sliderData} title={LStrings.MustSee}
+              <HomeSlider dataSource={this.state.sliderData || []} title={LStrings.MustSee}
                           onLoadMore={(index) => this.loadMoreHomeSlider(index)}
                           loadingMore={this.state.loadingMore}
                           currentIndex={this.state.currentIndex}

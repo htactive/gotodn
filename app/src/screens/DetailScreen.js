@@ -21,6 +21,7 @@ import {GDNServiceInstance} from '../services/GDNService';
 import {GoogleAPIServiceInstance} from '../services/GoogleAPIService';
 import moment from 'moment';
 import {appStore} from '../stores/AppStore';
+import {commonStore, CommonStoreActions, reloadFavorite} from '../stores/CommonStore';
 import {LStrings} from '../common/LocalizedStrings';
 import Share, {ShareSheet, Button} from 'react-native-share';
 
@@ -29,9 +30,13 @@ export class DetailScreen extends React.Component {
     dataDetail: {},
     isFavorite: false,
     visible: false,
+    shareOptions: null,
   };
 
   unSubscribe;
+  unSubscribeCommon;
+  detailScroll;
+  base64Image;
 
   componentWillMount() {
     navigationStore.subscribe(() => {
@@ -53,11 +58,19 @@ export class DetailScreen extends React.Component {
       this.getDetailData(itemId);
       this.getNearByData(itemId);
     });
+    this.unSubscribeCommon = commonStore.subscribe(() => {
+      let commonState = commonStore.getState();
+      if(commonState.type == CommonStoreActions.ScrollTopDetail && this.detailScroll) {
+        this.detailScroll.scrollTo({x: 0, y: 0, animated: true})
+      }
+    });
   }
 
   componentWillUnmount() {
     if (typeof this.unSubscribe === "function")
       this.unSubscribe();
+    if (typeof this.unSubscribeCommon === "function")
+      this.unSubscribeCommon();
   }
 
   componentDidMount() {
@@ -69,12 +82,31 @@ export class DetailScreen extends React.Component {
   }
 
   async getDetailData(id) {
+
     let data = await GDNServiceInstance.getPlaceById(id);
     this.setState({
       dataDetail: data,
     });
     let coord = await GoogleAPIServiceInstance.getGPSByAddress(data.address, data.district, data.city);
     this.setState({destCoord: coord});
+    //let base64Image = await GDNServiceInstance.convertUrlToBase64(data.heroImage || Helper.ImageUrl);
+    let shareOptions = {
+      title:  data.title || LStrings.NoTitle,
+      message: LStrings.ShareDescription + '\n' +  ' - ' +
+      (data.title || LStrings.NoTitle) + '\n' + ' - ' +
+      (data.description || LStrings.NoDescription) + '\n' + ' - ' +
+      data.heroImage + '\n' + ' - ' +
+      data.address + ', ' + data.district + ', ' + data.city + '\n' + ' - ' +
+      data.phone + '\n' + ' - ' + data.website + '\n' + ' - ' +
+      this.renderHour(data.open, data.close) + '\n\n'
+      ,
+      url: data.heroImage,
+      subject: data.title || LStrings.NoTitle //  for email
+    };
+    this.setState({
+      shareOptions: shareOptions
+    });
+
   }
 
   async getNearByData(id) {
@@ -102,24 +134,13 @@ export class DetailScreen extends React.Component {
     detailInfo.push({infoIcon: data.openHourIcon || '?', infoText: data.openHour});
     //let detailNearBy = MenuListItemData.filter(t => t.id != data.id);
 
-    let shareOptions = {
-      message: LStrings.ShareDescription + '\n\n' + ' - ' +
-      (data.title || LStrings.NoTitle) + '\n' + ' - ' +
-      (data.description || LStrings.NoDescription) + '\n' + ' - ' +
-      data.heroImage + '\n' + ' - ' +
-      data.address + ', ' + data.district + ', ' + data.city + '\n' + ' - ' +
-      data.phone + '\n' + ' - ' + data.website + '\n' + ' - ' +
-      this.renderHour(data.open, data.close) + '\n\n'
-      ,
-      url: data.heroImage,
-      subject: data.title || LStrings.NoTitle //  for email
-    };
+    let shareOptions = Helper.CloneObject(this.state.shareOptions);
 
     return (
-      !!data.id ? (
+      !!data.id && shareOptions ? (
           <Grid>
             <Col>
-              <ScrollView>
+              <ScrollView ref={(scrollV) => this.detailScroll = scrollV}>
                 <Row size={1}>
                   <DetailBanner
                     isFavorite={this.state.isFavorite}
@@ -256,6 +277,7 @@ export class DetailScreen extends React.Component {
     }
 
     await AsyncStorage.setItem(Helper.FavoriteKey, fPlaceIdValue);
+    commonStore.dispatch(reloadFavorite());
     this.checkFavorite(id);
   }
 

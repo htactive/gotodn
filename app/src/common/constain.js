@@ -13,6 +13,7 @@ export const MenuType = {
   HomeScreen: 1,
   ListScreen: 2,
   DetailScreen: 3,
+  FavoriteScreen: 4,
 };
 
 export const IconName = {
@@ -800,6 +801,7 @@ export class Helper {
   static LanguageKey = 'LanguageKey';
   static CityKey = 'CityKey';
   static FavoriteKey = 'FavoriteKey';
+  static CategoryKey = 'CategoryArray';
   static SeparateKey = '||';
 }
 

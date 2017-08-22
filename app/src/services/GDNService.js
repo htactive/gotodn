@@ -3,7 +3,7 @@ import {timeout, MenuListData} from '../common/DummyData';
 import {Helper, LanguageEnums} from '../common/constain';
 import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
-  host = "http://192.168.14.102:50915/";
+  host = "http://192.168.1.4:50915/";
 
   async getHomeSlider(index) {
     let url = this.host + "category/get-category-slider?index=" + index;
@@ -189,10 +189,11 @@ class GDNService extends ServiceBase {
       let currentLanguage = appStore.getState().language;
       rs = result.map(t => {
         let enLanguage = t.CategoryLanguages.filter(l => l.Language == currentLanguage)[0];
+        let cateIcon = t.CategoryLanguages.filter(l => l.Language == LanguageEnums.English)[0];
         return {
           id: t.Id,
           categoryName: enLanguage ? enLanguage.Title : '',
-          categoryIcon: enLanguage && enLanguage.Icon ? enLanguage.Icon.Url : null,
+          categoryIcon: cateIcon.Icon ? cateIcon.Icon.Url : null,
           isNoService: !t.HTServices || t.HTServices.length == 0,
         }
       });
@@ -203,6 +204,25 @@ class GDNService extends ServiceBase {
   async searchAllPlace(search, index) {
 
     let url = this.host + "place/gdn-search-place?search=" + search + "&index=" + index;
+    let result = await super.executeFetch(url);
+    if (result) {
+
+      let rs = result.map(t => {
+        return {
+          id: t.Id,
+          heroImage: t.CoverImage ? t.CoverImage.Url : Helper.ImageUrl,
+          title: t.Title || "",
+          address: t.Address || "" + ', ' + t.District || "" + ', ' + t.City || "",
+          phone: t.Phone || "",
+        }
+      });
+      return rs;
+    }
+  }
+
+  async getFavoritePlaces(favoriteIdStr) {
+
+    let url = this.host + "place/gdn-get-favorite?favoriteIdStr=" + favoriteIdStr;
     let result = await super.executeFetch(url);
     if (result) {
 
@@ -231,6 +251,8 @@ class GDNService extends ServiceBase {
           title: result[i] ? result[i].Title : "",
           description: result[i] ? result[i].Description : "",
           star: result[i].Place.Rating,
+          open: result[i].Place.OpenTime,
+          close: result[i].Place.CloseTime,
           address: result[i].Place.Address,
           phone: result[i].Place.Phone,
           website: result[i].Place.Website,
@@ -295,6 +317,11 @@ class GDNService extends ServiceBase {
   async getAllCity() {
     let url = this.host + "city/get-all-city";
     return await super.executeFetch(url);
+  }
+
+  async convertUrlToBase64(imageUrl) {
+    let url = this.host + "image/conver-url-to-base64?url=" + imageUrl;
+    return await super.executeFetch(url, true);
   }
 }
 

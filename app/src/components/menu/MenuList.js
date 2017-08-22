@@ -74,6 +74,9 @@ export class MenuList extends React.Component {
                         {/*});*/}
                         {/*this.props.onAboutUsClicked();*/}
                       {/*}}/>*/}
+        <MenuListItem itemText={LStrings.FavoritePlace} system itemIcon={AppIcon.Favorite} onItemClicked={() => {
+          this.props.onFavoriteClicked();
+        }}/>
         <MenuListItem itemText={LStrings.Language} system itemIcon={AppIcon.Language} onItemClicked={() => {
           this.props.onLanguageClicked();
         }}/>

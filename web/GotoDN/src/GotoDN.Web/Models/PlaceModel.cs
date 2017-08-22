@@ -132,4 +132,15 @@ namespace GotoDN.Web.Models
         public string CloseTme { get; set; }
         public DateTime? CreateDate { get; set; }
     }
+
+    public class AppFavoritePlaceModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public ImageModel CoverImage { get; set; }
+        public string City { get; set; }
+        public string District { get; set; }
+        public string Address { get; set; }
+        public string Phone { get; set; }
+    }
 }

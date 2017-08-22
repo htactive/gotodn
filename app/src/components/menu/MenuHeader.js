@@ -3,9 +3,10 @@ import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity, Im
 import {Title, Icon, Picker, Drawer, Input, Item} from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {LocationPicker} from '../common/LocationPicker';
-import {MenuType, AppIcon} from '../../common/constain';
+import {MenuType, AppIcon, viewportHeight} from '../../common/constain';
 import {style, StyleBase} from '../../styles/style';
 import {LStrings} from '../../common/LocalizedStrings';
+import {AutoText} from '../../components/common/AutoText';
 
 export class MenuHeader extends React.Component {
   state = {
@@ -14,6 +15,7 @@ export class MenuHeader extends React.Component {
     showLogo: false,
     showBack: false,
     showPicker: false,
+    showTitle: false,
   };
 
   componentWillMount() {
@@ -39,6 +41,7 @@ export class MenuHeader extends React.Component {
           showLogo: true,
           showBack: false,
           showPicker: true,
+          showTitle: false
         });
         break;
       case MenuType.ListScreen:
@@ -46,6 +49,7 @@ export class MenuHeader extends React.Component {
           showLogo: true,
           showBack: false,
           showPicker: false,
+          showTitle: true
         });
         break;
       case MenuType.DetailScreen:
@@ -53,6 +57,7 @@ export class MenuHeader extends React.Component {
           showLogo: false,
           showBack: true,
           showPicker: false,
+          showTitle: false,
         });
         break;
       default:
@@ -60,6 +65,7 @@ export class MenuHeader extends React.Component {
           showLogo: true,
           showBack: false,
           showPicker: true,
+          showTitle: false,
         });
         break;
     }
@@ -74,6 +80,7 @@ export class MenuHeader extends React.Component {
                              borderColor: '#fff',}}>
             <Icon active name='ios-search-outline' style={{color:'#8e8e93', fontSize:25}}/>
             <Input value={this.state.searchBarValue}
+                   autoFocus
                    placeholder={LStrings.Search}
                    placeholderTextColor='#8e8e93'
                    style={{color: '#263238', height: 35,
@@ -143,11 +150,16 @@ export class MenuHeader extends React.Component {
               <Image style={[style.iconImg ,{tintColor:'#fff', marginLeft: 15}]} source={AppIcon.Menu}/>
             </TouchableOpacity>
           </View>
-          <View style={[style.centralizedContent, ]}>
-            <Text numberOfLines={1} style={style.menuTitleText}>
-              {this.props.menuTitle ? this.props.menuTitle.toUpperCase() : ''}
-            </Text>
-          </View>
+          {this.state.showTitle && (
+            <View style={[style.centralizedContent, ]}>
+              {/*<AutoText height={viewportHeight /25} numberOfLines={1}*/}
+                        {/*style={style.menuTitleText}>{this.props.menuTitle ? this.props.menuTitle.toUpperCase() : ''}</AutoText>*/}
+
+              <Text numberOfLines={1} style={style.menuTitleText}>
+                {this.props.menuTitle ? this.props.menuTitle.toUpperCase() : ''}
+              </Text>
+            </View>
+          )}
         </Col>
       </Row>
     )

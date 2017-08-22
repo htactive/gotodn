@@ -9,6 +9,7 @@ const MapView = require('react-native-maps');
 const {PROVIDER_GOOGLE} = MapView;
 import LocationServicesDialogBox from 'react-native-android-location-services-dialog-box';
 import {LStrings} from '../../common/LocalizedStrings';
+import {appStore} from '../../stores/AppStore';
 
 interface thisProps {
 }
@@ -36,10 +37,16 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
 
   timeoutGPS;
 
+  unSubscribe;
+
   componentWillMount() {
     const {params} = this.props.navigation.state;
     let destination = params.coordinate;
     this.setState({destination: destination});
+
+    this.unSubscribe = appStore.subscribe(() => {
+      this.forceUpdate();
+    });
   }
 
   componentDidMount() {
@@ -53,6 +60,8 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
   componentWillUnmount() {
     clearTimeout(this.timeoutGPS);
     navigator.geolocation.clearWatch(this.watchId);
+    if (typeof this.unSubscribe === "function")
+      this.unSubscribe();
   }
 
   componentDidUpdate() {

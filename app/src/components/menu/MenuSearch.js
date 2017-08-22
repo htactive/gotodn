@@ -39,7 +39,7 @@ export class MenuSearch extends React.Component {
   }
 
   componentDidMount() {
-    this.filterData('');
+    //this.filterData('');
   }
 
   componentWillUnmount() {
@@ -59,7 +59,8 @@ export class MenuSearch extends React.Component {
       this.setState({
         data: null
       });
-      this.filterData(nextProps.search);
+      if(nextProps.search && nextProps.search.trim() != '')
+        this.filterData(nextProps.search);
     }
   }
 
@@ -121,9 +122,9 @@ export class MenuSearch extends React.Component {
                   </View>
                 </View>
               </TouchableOpacity>
-            ) : <View style={[styles.container, style.centralizedContent, {backgroundColor: 'rgba(255,255,255,0)'}]}>
+            ) : this.props.search && this.props.search.trim() != '' ? <View style={[styles.container, style.centralizedContent, {backgroundColor: 'rgba(255,255,255,0)'}]}>
               <Spinner color={StyleBase.header_color}/>
-            </View>}
+            </View> : null}
           {this.state.data && this.state.loadingMore ?
             <View style={[style.loadingMore]}>
               <Spinner color={StyleBase.header_color}/>

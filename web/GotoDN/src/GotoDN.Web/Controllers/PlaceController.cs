@@ -566,6 +566,41 @@ namespace GotoDN.Web.Controllers
             return searchRs;
         }
 
+        [HttpGet, Route("gdn-get-favorite")]
+        [AllowAnonymous]
+        public List<AppFavoritePlaceModel> GdnGetFavorite(string favoriteIdStr)
+        {
+            var language = this.CurrentLanguage;
+            var city = this.CurrentCityId;
+
+            var favoriteIds = favoriteIdStr.Split(new string[] { "||" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var ids = new List<int>();
+            foreach (var idStr in favoriteIds)
+            {
+                var placeId = 0;
+                if(int.TryParse(idStr,out placeId))
+                {
+                    ids.Add(placeId);
+                }
+            }
+            var query = this.HTRepository.PlaceRepository.GetAll();
+            if (ids.Count == 0) return null;
+            var queryRs = query.Include("PlaceLanguages.Image").Include(x => x.City).Include(x => x.District)
+                .Where(x => ids.Contains(x.Id)).ToList();
+
+            var favoritePlaces = queryRs.Select(q => new AppFavoritePlaceModel
+            {
+                Id = q.Id,
+                Title = q.PlaceLanguages.FirstOrDefault(t => t.Language == language) != null ? q.PlaceLanguages.FirstOrDefault(t => t.Language == language).Title : "",
+                CoverImage = q.PlaceLanguages.FirstOrDefault(t => t.Language == language) != null ? Mappers.Mapper.ToModel(q.PlaceLanguages.FirstOrDefault(t => t.Language == language).Image) : null,
+                Address = q.Address,
+                District = q.District != null ? q.District.Name : null,
+                Phone = q.Phone,
+                City = q.City != null ? q.City.Name : null,
+            }).ToList();
+            return favoritePlaces;
+        }
+
         [HttpGet, Route("get-place-by-id")]
         [AllowAnonymous]
         public PlaceModel GetPlaceById(int id)

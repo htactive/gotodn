@@ -346,10 +346,10 @@ namespace GotoDN.Web.Controllers
                     Id = x.Id,
                     Order = x.Order,
                     Name = x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Title,
-                    Image = x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Image != null ?
-                            GetUrl(x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Image) : null,
-                    Icon = x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Icon != null ?
-                            GetUrl(x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Icon) : null,
+                    Image = x.CategoryLanguages.FirstOrDefault(z => z.Language == LanguageEnums.English).Image != null ?
+                            GetUrl(x.CategoryLanguages.FirstOrDefault(z => z.Language == LanguageEnums.English).Image) : null,
+                    Icon = x.CategoryLanguages.FirstOrDefault(z => z.Language == LanguageEnums.English).Icon != null ?
+                            GetUrl(x.CategoryLanguages.FirstOrDefault(z => z.Language == LanguageEnums.English).Icon) : null,
                     Items = x.HTServices.Count > 0 ?
                         x.HTServices.Where(s => s.Places.Any(p => p.CityId == currentCity)).Select(y => new MenuItemModel()
                         {

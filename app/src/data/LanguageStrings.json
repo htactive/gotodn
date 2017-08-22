@@ -19,7 +19,10 @@
     "NotFound": "Không tìm thấy...",
     "NoAddress": "Không tìm thấy địa chỉ",
     "ShareDescription": "Goto Đà Nẵng có nhiều thông tin hữu ích về Đà Nẵng và các huyện/thành phố khác.",
-    "ShareSubject": "Goto Da Nang"
+    "ShareSubject": "Goto Da Nang",
+    "ExitTitle": "Nhấn BACK lần nữa để thoát",
+    "NotExistFavorite": "Không có địa điểm yêu thích",
+    "FavoritePlace": "Địa điểm yêu thích"
   },
   "en": {
     "NoDescription": "No Description",
@@ -41,7 +44,10 @@
     "NotFound": "Not found...",
     "NoAddress": "Address not found",
     "ShareDescription": "Goto Da Nang contains many useful information about Da Nang and another districts/cities.",
-    "ShareSubject": "Goto Da Nang"
+    "ShareSubject": "Goto Da Nang",
+    "ExitTitle": "Press BACK again to exit",
+    "NotExistFavorite": "No Favorite Places",
+    "FavoritePlace": "Favorite Places"
   },
   "fr": {
     "NoDescription": "Pas de description",
@@ -63,7 +69,10 @@
     "NotFound": "Pas trouvé...",
     "NoAddress": "Adresse introuvable",
     "ShareDescription": "Goto Da Nang contient de nombreuses informations utiles sur Da Nang et d'autres districts/villes.",
-    "ShareSubject": "Goto Da Nang"
+    "ShareSubject": "Goto Da Nang",
+    "ExitTitle": "Appuyez à nouveau sur BACK pour quitter",
+    "NotExistFavorite": "Aucun lieu préféré",
+    "FavoritePlace": "Lieux préférés"
   },
   "zh": {
     "NoDescription": "没有说明",
@@ -85,7 +94,10 @@
     "NotFound": "未找到...",
     "NoAddress": "找不到地址",
     "ShareDescription": "Goto Da Nang包含有关岘港和其他地区/城市的许多有用信息。 ",
-    "ShareSubject": "Goto Da Nang"
+    "ShareSubject": "Goto Da Nang",
+    "ExitTitle": "再次按BACK退出",
+    "NotExistFavorite": "没有最喜欢的地方",
+    "FavoritePlace": "喜欢的地方"
   },
   "ja": {
     "NoDescription": "説明なし",
@@ -107,7 +119,10 @@
     "NotFound": "見つかりません...",
     "NoAddress": "アドレスが見つかりません",
     "ShareDescription": "Goto Da Nangには、ダナンと他の地区/都市に関する多くの有益な情報が含まれています。 ",
-    "ShareSubject": "Goto Da Nang"
+    "ShareSubject": "Goto Da Nang",
+    "ExitTitle": "終了するにはもう一度BACKを押してください",
+    "NotExistFavorite": "お気に入りの場所はありません",
+    "FavoritePlace": "お気に入りの場所"
   },
   "ko": {
     "NoDescription": "설명 없음",
@@ -129,6 +144,9 @@
     "NotFound": "찾을 수 없음 ...",
     "NoAddress": "주소를 찾을 수 없음",
     "ShareDescription": "Goto Da Nang에는 다낭과 다른 지구 / 도시에 대한 유용한 정보가 많이 있습니다. ",
-    "ShareSubject": "Goto Da Nang"
+    "ShareSubject": "Goto Da Nang",
+    "ExitTitle": "종료하려면 BACK을 다시 누릅니다.",
+    "NotExistFavorite": "좋아하는 장소 없음",
+    "FavoritePlace": "즐겨 찾는 곳"
   }
 }

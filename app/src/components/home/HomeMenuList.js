@@ -7,6 +7,7 @@ import {ListScreen} from '../../screens/ListScreen'
 import {IndustryListScreen} from '../../screens/IndustryListScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 import {Helper} from '../../common/constain';
+import {AutoText} from '../../components/common/AutoText';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 const menuItemHeight = Math.round(viewportHeight / 6);
@@ -71,8 +72,8 @@ export class HomeMenuList extends React.Component {
                   >
                     <Image style={[style.iconImgXs, {tintColor: '#12a1e7', marginBottom: 10, flex:2}]}
                            source={{uri: data.categoryIcon || Helper.IconUrl}}/>
-                    <Text numberOfLines={1}
-                          style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17, flex:8 }}>{data.categoryName}</Text>
+                    <AutoText height={viewportHeight / 25} numberOfLines={1}
+                          style={{alignSelf: 'center', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17, flex:8 }}>{data.categoryName}</AutoText>
                   </TouchableOpacity>
                   {data.services && data.services.map((service, sIndex) =>
                     <TouchableOpacity
@@ -112,8 +113,8 @@ export class HomeMenuList extends React.Component {
                     >
                       <Image style={[style.iconImgXs, {tintColor: '#12a1e7', flex:2}]}
                              source={{uri: data.categoryIcon || Helper.IconUrl}}/>
-                      <Text numberOfLines={1}
-                            style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17,flex: 8 }}>{data.categoryName}</Text>
+                      <AutoText height={viewportHeight / 25} numberOfLines={1}
+                                style={{alignSelf: 'center', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17, flex:8 }}>{data.categoryName}</AutoText>
                     </TouchableOpacity>
                     {data.services && data.services.map((service, sIndex) =>
                       <TouchableOpacity

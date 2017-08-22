@@ -282,7 +282,7 @@ export class PlaceImportPreview extends React.Component<thisProps, thisState> {
 
   private statusFormat(cell: any, row: any) {
     let hasError = row.CategoryNotExist || row.ServiceNotExist || row.CityNotExist || row.DistrictNotExist
-      || row.PlaceImageError;
+      || row.PlaceImageError || row.AdditionalInfoError;
     let statusIcon = hasError ? 'fa fa-times-circle-o' : 'fa fa-check-circle-o';
     return (<span style={hasError ? {color: 'red', fontSize: '26px'} : {color: 'green', fontSize: '26px'}}>
       <i className={statusIcon}  />

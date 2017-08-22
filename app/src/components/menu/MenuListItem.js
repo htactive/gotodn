@@ -11,7 +11,7 @@ export class MenuListItem extends React.Component{
     return (
       <TouchableOpacity
         onPress={() => this.props.onItemClicked() }>
-        <View style={[style.list_item, this.props.actived ? {backgroundColor: StyleBase.header_color}: {backgroundColor: '#01589d'}]}>
+        <View style={[style.list_item, {backgroundColor: '#01589d'}]}>
           <View style={{flex:2, alignItems: 'flex-start', justifyContent: 'center'}}>
             {this.props.system ? (
                 <Image style={[style.iconImgXs, {tintColor: '#fff'}]} source={this.props.itemIcon}/>
