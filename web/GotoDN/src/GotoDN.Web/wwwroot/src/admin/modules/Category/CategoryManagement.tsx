@@ -78,9 +78,13 @@ class CategoryManagement extends React.Component<{}, thisState> {
         window['notice_delete_success']();
         this.setState({
           Categories: this.state.Categories.filter(x => x.Id != Id),
-          SelectedCategory: null,
-          SelectedLanguage: null
         });
+        if(!this.state.SelectedCategory || this.state.SelectedCategory.Id == Id) {
+          this.setState({
+            SelectedCategory: null,
+            SelectedLanguage: null
+          });
+        }
       }
       else {
         window['notice']('error-notice', 'Lỗi', 'Không thể xóa được bản ghi vì bản ghi được sử dụng trong hệ thống, bạn chỉ có thể xóa được bản ghi nếu nó không được sử dụng trong hệ thống.', 'glyphicon glyphicon-remove');
@@ -121,7 +125,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
     }
   }
 
-  private async deleteCategoryLanguage(Id: number) {
+  private async deleteCategoryLanguage(Id: number) {debugger;
     if (await SweetAlerts.show({
         type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
@@ -169,6 +173,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                 OnChangeOrder={(models) => this.setState({
                                   Categories: models
                                 })}
+                                DeleteCategory={(Id: number) => this.deleteCategory(Id)}
                                 CreateCategory={() => this.createCategory()}
                   />
                   <CategoryDetail SelectedCategory={this.state.SelectedCategory}

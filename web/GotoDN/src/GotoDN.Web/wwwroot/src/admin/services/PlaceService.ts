@@ -26,6 +26,11 @@ class PlaceService extends AdminServiceBase {
     return await super.executeFetchPost(url, Id);
   }
 
+  async DeletePlaces(Ids: number[]): Promise<boolean> {
+    let url = `${virtualPath}/place/delete-places`;
+    return await super.executeFetchPost(url, Ids);
+  }
+
   async AddLanguage(model: PlaceLanguageModel): Promise<PlaceLanguageModel> {
     let url = `${virtualPath}/place/add-language`;
     return await super.executeFetchPost(url, model);

@@ -3,7 +3,7 @@ import {timeout, MenuListData} from '../common/DummyData';
 import {Helper, LanguageEnums} from '../common/constain';
 import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
-  host = "http://gdn.htactive.com/";
+  host = "http://192.168.14.178:50915/";
 
   async getHomeSlider(index) {
     let url = this.host + "category/get-category-slider?index=" + index;
@@ -253,7 +253,9 @@ class GDNService extends ServiceBase {
           star: result[i].Place.Rating,
           open: result[i].Place.OpenTime,
           close: result[i].Place.CloseTime,
-          address: result[i].Place.Address,
+          address: result[i].Place.Address + ', ' +
+          (result[i].Place.DistrictId ? result[i].Place.District.Name : '') + ', ' +
+          (result[i].Place.CityId ? result[i].Place.City.Name : ''),
           phone: result[i].Place.Phone,
           website: result[i].Place.Website,
         });

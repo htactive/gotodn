@@ -11,6 +11,10 @@ export class CityDropdown extends React.Component {
     selectedItem: 0,
   };
 
+  cityScr;
+
+  scrollIndex = 0;
+
   componentWillMount() {
     this.setState({
       visible: this.props.visible,
@@ -26,6 +30,7 @@ export class CityDropdown extends React.Component {
   }
 
   render() {
+    let data = this.props.dataSource || [];
     return (
 
       <Modal animationType={"fade"}
@@ -44,12 +49,47 @@ export class CityDropdown extends React.Component {
             justifyContent: 'flex-start',
             alignItems: 'flex-start',
             borderRadius: 15,
-            borderBottomWidth: 1,
-            borderBottomColor: '#696d70',
+
             maxHeight: 201,
           }}>
-            <ScrollView style={{alignSelf: 'stretch',}}>
-              {this.props.dataSource && this.props.dataSource.map((d, index) =>
+            <TouchableOpacity
+              style={[{
+                    width: viewportWidth / 2,
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'stretch',
+                    height: 40,
+                    padding: 10,
+                    borderTopLeftRadius: 15,
+                    borderTopRightRadius: 15,
+                  }]}
+              onPress={() => {
+                          this.setState({visible: false})
+                        }}
+            >
+              <View
+                style={{
+                        position: 'absolute', right: 5, top: 8,
+                        justifyContent: 'center', alignItems: 'center', zIndex: 99
+                      }}
+
+              >
+                <Icon name={'ios-arrow-up-outline'}
+                      style={{color: '#2a363c', fontSize: 25, paddingHorizontal: 15}}/>
+              </View>
+              <Text numberOfLines={1} style={{
+                        color: '#546e7a', fontFamily: StyleBase.sp_italic,
+                        position: 'absolute', left: 5, top: 10,
+                        fontSize: 15, paddingRight: 5
+                      }}>GOTO</Text>
+              <Text numberOfLines={1}
+                    style={{fontSize: 15, fontFamily: StyleBase.sp_regular, color: '#546e7a',}}>
+                {this.state.selectedItem && this.state.selectedItem.Name ? this.state.selectedItem.Name.toUpperCase() : ''}
+              </Text>
+            </TouchableOpacity>
+            <ScrollView style={{alignSelf: 'stretch',}} ref={(scr) => this.cityScr = scr}
+                        onScroll={(e) => {this.handleScrollBottom(e)}}>
+              {data.map((d, index) =>
                 <TouchableOpacity style={{}} key={index} onPress={() => {
                   this.changeData(d)
                 }}>
@@ -62,43 +102,28 @@ export class CityDropdown extends React.Component {
                     borderBottomWidth: 1,
                     borderBottomColor: '#b2b2b2',
                   },
-                    index == 0 && {borderTopLeftRadius: 15, borderTopRightRadius: 15},
+                    index == 0 ? {borderTopWidth: 1, borderTopColor: '#b2b2b2',} : {},
                     this.state.selectedItem && this.state.selectedItem.Id == d.Id ? {backgroundColor: '#eeeeee'} : {}]}>
                     <Text numberOfLines={1}
                           style={{fontSize: 15, fontFamily: StyleBase.sp_regular, color: '#546e7a',}}>
                       {d && d.Name && d.Name.toUpperCase()}
                     </Text>
-                    {index == 0 && (
-                      <TouchableOpacity style={{
-                        position: 'absolute', right: 5, top: 10,
-                        justifyContent: 'center', alignItems: 'center', zIndex: 99
-                      }}
-                                        onPress={() => {
-                                          this.setState({visible: false})
-                                        }}>
-                        <Icon name={'ios-arrow-up-outline'}
-                              style={{color: '#2a363c', fontSize: 20, paddingHorizontal: 15}}/>
-                      </TouchableOpacity>
-                    )}
-                    {index == 0 && (
-                      <Text numberOfLines={1} style={{
-                        color: '#546e7a', fontFamily: StyleBase.sp_italic,
-                        position: 'absolute', left: 5, top: 10,
-                        fontSize: 15, paddingRight: 5
-                      }}>GOTO</Text>
-                    )}
                   </View>
                 </TouchableOpacity>
               )}
             </ScrollView>
-            <View style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: 40,
-              alignSelf: 'stretch',
-            }}>
-            </View>
+            <TouchableOpacity
+              style={{ justifyContent: 'center', alignItems: 'center',alignSelf: 'stretch', }}
+              onPress={() => this.scrollToNextCity()}>
+              <View style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center', alignItems: 'center',
+                      height: 40,
+                    }}>
+                <Icon name={'ios-arrow-down-outline'}
+                      style={{color: '#2a363c', fontSize: 25, paddingHorizontal: 15}}/>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -113,5 +138,16 @@ export class CityDropdown extends React.Component {
     });
     if (this.props.onDataSelected)
       this.props.onDataSelected(d);
+  }
+
+  handleScrollBottom(e) {
+    let offset = e.nativeEvent.contentOffset.y;
+    this.scrollIndex = Math.round(offset / 40);
+  }
+
+  scrollToNextCity() {
+    if (this.props.dataSource && this.props.dataSource.length > (this.scrollIndex + 3)) {
+      this.cityScr.scrollTo({y: (this.scrollIndex + 1) * 40, animated: true})
+    }
   }
 }

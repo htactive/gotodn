@@ -7,10 +7,13 @@ interface thisProps {
   trClassName?: (d: any) => string,
   defaultSortName?: string,
   defaultSortOrder?: boolean,
-  onFilterRequest: (request: GetGridRequestModel) => void
+  onFilterRequest: (request: GetGridRequestModel) => void,
+  allowSelect?: boolean,
+  onRowSelected?: (selectedIds: any) => void,
 }
 
 class ReactTableSearchPanel extends React.Component<any, { search?: string }> {
+
   componentWillMount() {
     this.setState({
       search: '',
@@ -50,6 +53,8 @@ class ReactTableSearchPanel extends React.Component<any, { search?: string }> {
 }
 
 export class ReactTable extends React.Component<thisProps, {}> {
+  selectecRowId = [];
+
   componentWillMount() {
     this.setState({});
   }
@@ -64,7 +69,13 @@ export class ReactTable extends React.Component<thisProps, {}> {
 
   render() {
     if (!this.props.data) return null;
+    let selectRowProp = this.props.allowSelect ? {
+      mode: 'checkbox',
+      onSelect: (row, isSelected) =>  this.onRowSelect(row, isSelected),
+      onSelectAll: (isSelected, rows) =>  this.onRowSelectAll(isSelected, rows),
+    } : {};
     return (<BootstrapTable data={this.props.data.DataSource || []}
+                            selectRow={ selectRowProp }
                             keyField="Id"
                             trClassName={(d) => this.props.trClassName(d)}
                             remote={true}
@@ -143,6 +154,28 @@ export class ReactTable extends React.Component<thisProps, {}> {
 
   private sendRequest(request: GetGridRequestModel) {
     this.props.onFilterRequest(request);
+  }
+
+  private onRowSelect(row: any, isSelected: boolean) {
+    if(row && row.Id) {
+      if(isSelected) {
+        this.selectecRowId.push(row.Id);
+      } else {
+        let index = this.selectecRowId.indexOf(row.Id);
+        index > -1 && this.selectecRowId.splice(index, 1);
+      }
+      this.props.onRowSelected && this.props.onRowSelected(this.selectecRowId);
+    }
+  }
+
+  private onRowSelectAll(isSelected: boolean, rows: any) {
+    if(rows && rows.length > 0 && rows.filter(r => r.Id).length > 0) {
+      this.selectecRowId = [];
+      if (isSelected) {
+        this.selectecRowId = this.selectecRowId.concat(rows.map(r => r.Id));
+      }
+      this.props.onRowSelected && this.props.onRowSelected(this.selectecRowId);
+    }
   }
 }
 

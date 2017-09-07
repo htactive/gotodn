@@ -34,6 +34,7 @@ interface thisState {
   InvalidImportFileType?: boolean,
   ShowImportPreview?: boolean
   ImportData?: ImportPlaceGroupModel[],
+  SelectedRowIds?: number[],
 }
 class PlaceManagement extends React.Component<{}, thisState> {
   btnImageFileInput;
@@ -48,6 +49,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
     },
     ShowImportPreview: false,
     ImportData: [],
+    SelectedRowIds: [],
   };
 
   setState(state: thisState) {
@@ -283,11 +285,16 @@ class PlaceManagement extends React.Component<{}, thisState> {
               <div className="panel panel-default plain toggle panelMove">
                 <div className="panel-body place-body">
                   <div className="table-toolbar">
-                    <button className="btn btn-primary" type="button"
+                    <button className={`btn btn-danger`} type="button"
+                            disabled={this.state.SelectedRowIds.length == 0}
+                            onClick={() => this.deletePlaces()}>
+                      <i className="fa fa-trash"/>&nbsp;Xóa
+                    </button>
+                    <button className="btn btn-primary mr10 ml10" type="button"
                             onClick={() => this.createPlace()}>
                       <i className="fa fa-plus"/> Thêm địa điểm - Sự kiện
                     </button>
-                    <button className="btn btn-success mr10 ml10" type="button"
+                    <button className="btn btn-success mr10 " type="button"
                             onClick={() => this.importExcelHL()}>
                       <i className="fa fa-upload"/> Nhập từ Excel
                     </button>
@@ -306,6 +313,8 @@ class PlaceManagement extends React.Component<{}, thisState> {
                               trClassName={() => {
                                 return ""
                               }}
+                              allowSelect
+                              onRowSelected={(rows) => this.rowSelected(rows)}
                               defaultSortName={"Id"}
                               defaultSortOrder={false}
                               onFilterRequest={
@@ -532,6 +541,45 @@ class PlaceManagement extends React.Component<{}, thisState> {
         <i className="fa fa-trash" aria-hidden="true">Xóa</i>
       </button>
     </div>);
+  }
+
+  private rowSelected(rows: any) {
+    this.setState({SelectedRowIds: rows});
+  }
+
+  private async deletePlaces() {
+    if (await SweetAlerts.show({
+        type: SweetAlertTypeEnums.Warning,
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc muốn xóa nhiều Địa Điểm?',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        closeOnConfirm: true
+      }) == SweetAlertResultEnums.Confirm) {
+      let result = await PlaceServiceInstance.DeletePlaces(this.state.SelectedRowIds);
+      if (result) {
+        window['notice_delete_success']();
+        let filter = this.state.GridFilter;
+        if (filter) {
+          filter.CurrentPage = this.state.GridData
+          && this.state.GridData.DataSource
+          && this.state.GridData.DataSource.length <= 1
+            ? Math.max(filter.CurrentPage - 1, 1) : filter.CurrentPage
+          ;
+        }
+        this.getData(filter);
+
+        this.setState({
+          SelectedPlace: null,
+          SelectedLanguage: null,
+          SelectedRowIds: [],
+        });
+        browserHistory.push(AdminRoutePath.PlaceManagement);
+      }
+      else {
+        window['notice_error']();
+      }
+    }
   }
 }
 

@@ -803,6 +803,8 @@ export class Helper {
   static FavoriteKey = 'FavoriteKey';
   static CategoryKey = 'CategoryArray';
   static SeparateKey = '||';
+  static AdUnitId_Banner = __DEV__ ? 'ca-app-pub-3940256099942544/6300978111' : 'ca-app-pub-3765161663047815/4544274858';
+  static AdUnitId_FullScreen = __DEV__ ? 'ca-app-pub-3940256099942544/1033173712' : 'ca-app-pub-3765161663047815/7169851465';
 }
 
 export function Guid() {

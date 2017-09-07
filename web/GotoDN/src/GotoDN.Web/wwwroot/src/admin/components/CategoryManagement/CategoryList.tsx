@@ -11,6 +11,7 @@ interface thisProps {
   ChangeSelectedCategory: (model: CategoryModel) => void,
   OnChangeOrder: (models: CategoryModel[]) => void,
   CreateCategory: () => void,
+  DeleteCategory:(Id: number) => void,
 }
 interface thisState {
   Search?: string,
@@ -47,6 +48,7 @@ class CategoryList extends React.Component<thisProps, thisState> {
       return (
         <CategoryItem Model={value}
                       IsSelected={this.props.SelectedCategory && value.Id == this.props.SelectedCategory.Id}
+                      DeleteCategory={(Id: number) => this.props.DeleteCategory && this.props.DeleteCategory(Id)}
                       changeSelectedCategory={() => this.props.ChangeSelectedCategory(value)}
         />);
     });

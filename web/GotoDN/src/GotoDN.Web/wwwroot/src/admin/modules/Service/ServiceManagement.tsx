@@ -96,9 +96,13 @@ class HTServiceManagement extends React.Component<{}, thisState> {
         window['notice_delete_success']();
         this.setState({
           HTServices: this.state.HTServices.filter(x => x.Id != Id),
-          SelectedHTService: null,
-          SelectedLanguage: null
         });
+        if(!this.state.SelectedHTService || this.state.SelectedHTService.Id == Id) {
+          this.setState({
+            SelectedHTService: null,
+            SelectedLanguage: null
+          });
+        }
       }
       else {
         window['notice']('error-notice', 'Lỗi', 'Không thể xóa được bản ghi vì bản ghi được sử dụng trong hệ thống, bạn chỉ có thể xóa được bản ghi nếu nó không được sử dụng trong hệ thống.', 'glyphicon glyphicon-remove');
@@ -188,6 +192,7 @@ class HTServiceManagement extends React.Component<{}, thisState> {
                                    SelectedHTService: model,
                                    SelectedLanguage: LanguageEnums.English,
                                  })}
+                                 DeleteService={(Id: number) => this.deleteHTService(Id)}
                                  Categories={this.state.Categories || []}
                                  CreateHTService={() => this.createHTService()}
                   />

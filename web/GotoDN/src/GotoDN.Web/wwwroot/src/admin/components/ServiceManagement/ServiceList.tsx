@@ -11,7 +11,8 @@ interface thisProps {
   SelectedHTService: HTServiceModel,
   ChangeSelectedService: (model: HTServiceModel) => void,
   CreateHTService: () => void,
-  Categories: CategoryModel[]
+  Categories: CategoryModel[],
+  DeleteService:(Id: number) => void,
 }
 interface thisState {
   Search?: string,
@@ -48,7 +49,8 @@ class HTServiceList extends React.Component<thisProps, thisState> {
         return {
           Category: key,
           Services: value,
-          CategoryName: key != 'null' && category ? category.CategoryLanguages.filter(c => c.Language == LanguageEnums.English)[0].Title : ''
+          CategoryName: key != 'null' && category && category.CategoryLanguages.filter(c => c.Language == LanguageEnums.English)[0]
+            ? category.CategoryLanguages.filter(c => c.Language == LanguageEnums.English)[0].Title : ''
         }
       })
         .value();
@@ -82,6 +84,7 @@ class HTServiceList extends React.Component<thisProps, thisState> {
               gs.IsCategory ? <li key={id} className="list-group-item category-title">{gs.Title || " "}</li> :
                 <HTServiceItem key={id} Model={gs}
                                IsSelected={this.props.SelectedHTService && gs.Id == this.props.SelectedHTService.Id}
+                               DeleteService={(Id: number) => this.props.DeleteService && this.props.DeleteService(Id)}
                                changeSelectedHTService={() => this.props.ChangeSelectedService(gs)}
                 />
             ) : null}

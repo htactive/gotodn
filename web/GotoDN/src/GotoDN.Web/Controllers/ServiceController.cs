@@ -297,7 +297,6 @@ namespace GotoDN.Web.Controllers
 
             var eventPlaces = this.HTRepository.PlaceRepository.GetAll().
                 Where(x => x.CityId == currentCity && x.HTServiceId.HasValue && x.HTServiceId == serviceId && (
-                (x.Category != null && x.Category.IsEvent.HasValue && x.Category.IsEvent.Value && x.StartDate <= today.Date && x.EndDate > today.Date) ||
                 (x.IsCategorySlider.HasValue && x.IsCategorySlider.Value)) &&
                  x.PlaceLanguages.Any(p => p.Language == currentLanguage))
                 .Include("PlaceLanguages.Image").Include(p => p.Category).ToList();
@@ -311,10 +310,9 @@ namespace GotoDN.Web.Controllers
                     Url = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Image != null ?
                         GetUrl(x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Image) : Common.DefaultPhoto.ImageUrl,
                     CreateDate = x.CreatedDate,
-                    IsEvent = x.Category != null ? x.Category.IsEvent : null,
                     Star = x.Rating,
                     IsCategorySlider = x.IsCategorySlider,
-                }).ToList().OrderByDescending(t => t.IsEvent).ThenByDescending(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
+                }).ToList().OrderByDescending(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
 
             return result;
         }

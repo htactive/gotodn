@@ -103,6 +103,10 @@
         "claim": "Place_W"
       },
       {
+        "name": "DeletePlaces",
+        "claim": "Place_W"
+      },
+      {
         "name": "UpdatePlace",
         "claim": "Place_W"
       },

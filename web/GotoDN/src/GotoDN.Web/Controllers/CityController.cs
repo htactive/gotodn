@@ -27,7 +27,7 @@ namespace GotoDN.Web.Controllers
             var entities = this.HTRepository.CityRepository.GetAll()
                 .Take(1000).ToList();
 
-            var models = entities.Select(x => AutoMapper.Mapper.Map<City, CityModel>(x)).ToList();
+            var models = entities.Select(x => AutoMapper.Mapper.Map<City, CityModel>(x)).OrderBy(t => t.Name).ToList();
 
             return models;
         }

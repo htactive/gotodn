@@ -135,7 +135,7 @@ export class DetailScreen extends React.Component {
     //let detailNearBy = MenuListItemData.filter(t => t.id != data.id);
 
     let shareOptions = Helper.CloneObject(this.state.shareOptions);
-
+    let fullAddress = data.address + ', ' + data.district + ', ' + data.city;
     return (
       !!data.id && shareOptions ? (
           <Grid>
@@ -156,7 +156,7 @@ export class DetailScreen extends React.Component {
                     <View style={style.detailMap}>
                       <ReactMap />
                       <View style={style.detailOverlay}>
-                        <DetailMapTextItem leftText={data.address} leftIcon={AppIcon.Location}
+                        <DetailMapTextItem leftText={fullAddress} leftIcon={AppIcon.Location}
                                            rightText={LStrings.Direction} rightIcon={AppIcon.Direction}
                                            onMapItemClicked={() =>
                                            this.handleDirection(data.address, this.state.destCoord)}

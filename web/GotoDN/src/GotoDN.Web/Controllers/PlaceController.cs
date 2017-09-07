@@ -108,6 +108,18 @@ namespace GotoDN.Web.Controllers
             return true;
         }
 
+        [HttpPost, Route("delete-places")]
+        [HTAuthorize]
+        public bool DeletePlaces([FromBody]List<int> Ids)
+        {
+            var entities = this.HTRepository.PlaceRepository.GetAll()
+                .Where(x => Ids.Contains(x.Id));
+            if (entities == null) return false;
+            this.HTRepository.PlaceRepository.Delete(entities);
+            this.HTRepository.Commit();
+            return true;
+        }
+
         [HttpPost, Route("update-place")]
         [HTAuthorize]
         public bool UpdatePlace([FromBody]PlaceModel model)
