@@ -84,6 +84,7 @@ namespace GotoDN.Web
                 cf.CreateMap<PlaceMoreInfo, PlaceMoreInfoModel>().ForMember(x => x.PlaceLanguage, opt => opt.Ignore());
                 cf.CreateMap<PlaceImage, PlaceImageModel>();
                 cf.CreateMap<PlaceImageModel, PlaceImage>();
+                cf.CreateMap<GDNConfiguration, GDNConfigurationModel>();
 
                 cf.CreateMap<City, CityModel>().ForMember(x => x.Places, opt => opt.Ignore());
                 cf.CreateMap<District, DistrictModel>().ForMember(x => x.City, opt => opt.Ignore()).ForMember(x => x.Places, opt => opt.Ignore());

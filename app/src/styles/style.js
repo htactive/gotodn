@@ -144,10 +144,12 @@ export const style = StyleSheet.create({
   },
   image: {
     resizeMode: 'cover',
+    
     height: menuItemHeight
   },
   imageListSlider: {
     resizeMode: 'cover',
+     
     justifyContent: 'flex-end',
     flex: 1,
     width: viewportWidth / 2.5,
@@ -199,6 +201,7 @@ export const style = StyleSheet.create({
   },
   menuItemImage: {
     resizeMode: 'cover',
+     
   },
   menuItemTitle: {
     color: '#263238',
@@ -244,6 +247,7 @@ export const style = StyleSheet.create({
   },
   detailImage: {
     resizeMode: 'cover',
+     
     height: Math.round(viewportHeight / 3.3),
   },
   detailImageActionInner: {
@@ -371,6 +375,7 @@ export const style = StyleSheet.create({
   },
   detailImageItem: {
     resizeMode: 'cover',
+     
     width: (viewportWidth - 50) / 3,
     height: (viewportWidth - 50) / 3,
     borderRadius: 5,
@@ -468,44 +473,52 @@ export const style = StyleSheet.create({
     fontFamily: StyleBase.sp_regular,
   },
   iconImgXl: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 45,
     height: 45,
+     
   },
   iconImgLg: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 40,
     height: 40,
+     
   },
   iconImg: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 35,
     height: 35,
+     
   },
   iconImgSm: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 30,
     height: 30,
+     
   },
   iconImgXs: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 25,
     height: 25,
+     
   },
   iconImgXxs: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 20,
     height: 20,
+     
   },
   iconImgSmall: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 15,
     height: 15,
+     
   },
   iconImgTini: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 7,
     height: 7,
+     
   },
   loadingMore: {
     position: 'absolute',

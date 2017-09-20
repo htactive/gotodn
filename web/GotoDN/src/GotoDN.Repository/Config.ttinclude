@@ -20,6 +20,7 @@ new EntityMetadataRender(){Name = "City"},
 new EntityMetadataRender(){Name = "District"},
 new EntityMetadataRender(){Name = "PlaceImage"},
 new EntityMetadataRender(){Name = "PlaceMoreInfo"},
+new EntityMetadataRender(){Name = "GDNConfiguration"},
 };
 #>
 

@@ -9,7 +9,6 @@ import {NavigationActions} from 'react-navigation';
 import {navigationStore, navigateAction} from '../stores/NavigationStore';
 import {GDNServiceInstance} from '../services/GDNService';
 import {appStore} from '../stores/AppStore';
-import {commonStore, updateCategoryName, CommonStoreActions} from '../stores/CommonStore';
 
 export class ListScreen extends React.Component {
   state = {
@@ -30,26 +29,12 @@ export class ListScreen extends React.Component {
           params: navigationState.params
         });
         this.props.navigation.dispatch(navigateAction);
-        if (navigationState.routeName == 'ListScreen' || navigationState.routeName == 'IndustryListScreen')
-          if (typeof this.unSubscribeCommon === "function")
-            this.unSubscribeCommon();
       }
     });
     this.unSubscribe = appStore.subscribe(() => {
       this.loadData();
     });
 
-    this.unSubscribeCommon = commonStore.subscribe(() => {
-      let commonState = commonStore.getState();
-      if (commonState.type == CommonStoreActions.UpdateCategoryName) {
-        let categories = commonState.categories;
-        if (categories[categories.length - 1]) {
-          Menu.instance.setTitle(categories[categories.length - 1].name);
-        } else {
-          Menu.instance.setTitle('');
-        }
-      }
-    });
   }
 
   componentDidMount() {
@@ -67,36 +52,22 @@ export class ListScreen extends React.Component {
     const {params} = this.props.navigation.state;
     let listId = (params && params.listId) || 0;
     let data = await GDNServiceInstance.getCategoryById(listId);
-    this.saveCategory(listId, data.categoryName);
     this.setState({
       listData: data,
     });
   }
 
-  saveCategory(id, name) {
-    let categories = commonStore.getState().categories || [];
-    let categoryIndex = categories.map(c => {
-      return c.id
-    }).indexOf(id);
-    if (categoryIndex !== -1) {
-      categories[categoryIndex].name = name;
-    } else {
-      categories.push({id: id, name: name});
-    }
-    commonStore.dispatch(updateCategoryName(categories.slice()));
-  }
-
-  deleteCategory() {
-    const {params} = this.props.navigation.state;
-    let id = (params && params.listId) || 0;
-    let categories = commonStore.getState().categories || [];
-    let removeIndex = categories.map(c => {
-      return c.id
-    }).indexOf(id);
-    if (removeIndex !== -1) {
-      categories.splice(removeIndex, 1);
-      commonStore.dispatch(updateCategoryName(categories.slice()));
-    }
+  renderTabBar() {
+    return (
+      <ScrollableTab
+        tabsContainerStyle={{justifyContent:'center'}}
+        tabStyle={{backgroundColor:'#29b6f6',borderBottomWidth: 3, borderBottomColor:'#eeeeee'}}
+        textStyle={{color:'#556c7a', fontWeight: 'normal'}}
+        activeTabStyle={{backgroundColor: '#29b6f6'}}
+        activeTextStyle={{color:'#fff', fontWeight: 'normal'}}
+        underlineStyle={{backgroundColor: StyleBase.header_color}}
+      />
+    )
   }
 
   render() {
@@ -113,15 +84,16 @@ export class ListScreen extends React.Component {
       <Tabs initialPage={curTab || 0}
             locked
             onChangeTab={(page) => this.tabChanged(page)}
-            renderTabBar={()=> <ScrollableTab />}
+            renderTabBar={()=> this.renderTabBar()}
             style={{backgroundColor: '#29b6f6'}}
       >
         {this.state.listData.services.map((data, index) =>
           <Tab key={index}
                tabStyle={{backgroundColor:'#29b6f6',borderBottomWidth: 3, borderBottomColor:'#eeeeee'}}
                textStyle={{color:'#556c7a', fontWeight: 'normal'}}
-               activeTabStyle={{backgroundColor: '#29b6f6',borderBottomWidth: 3, borderBottomColor:StyleBase.header_color}}
+               activeTabStyle={{backgroundColor: '#29b6f6'}}
                activeTextStyle={{color:'#fff', fontWeight: 'normal'}}
+               underlineStyle={{backgroundColor: StyleBase.header_color}}
                heading={data.title}>
             <ListDetail serviceId={data.id}
             />

@@ -13,6 +13,7 @@ import {navigationStore, navigateToRouteAction} from '../../stores/NavigationSto
 import {appStore, appSaveCity} from '../../stores/AppStore';
 import {commonStore, toggleSearchBar, CommonStoreActions} from '../../stores/CommonStore';
 import {NavigationActions} from 'react-navigation';
+import {AdmobInterstitials} from '../../components/common/AdmobInterstitials';
 import {LStrings} from '../../common/LocalizedStrings';
 
 const drawerStyles = {
@@ -209,6 +210,7 @@ export class Menu extends React.Component {
             )}
           </View>
         </View>
+        <AdmobInterstitials />
       </Drawer>
     )
   }

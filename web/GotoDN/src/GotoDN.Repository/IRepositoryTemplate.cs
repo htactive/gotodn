@@ -74,4 +74,8 @@ namespace GotoDN.Repository
     public partial interface IPlaceMoreInfoRepository : IBaseRepository<PlaceMoreInfo>
     {
     }
+
+    public partial interface IGDNConfigurationRepository : IBaseRepository<GDNConfiguration>
+    {
+    }
 }

@@ -3,7 +3,7 @@ import {timeout, MenuListData} from '../common/DummyData';
 import {Helper, LanguageEnums} from '../common/constain';
 import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
-  host = "http://gdn.htactive.com/";
+  host = "http://192.168.14.135:50915/";
 
   async getHomeSlider(index) {
     let url = this.host + "category/get-category-slider?index=" + index;
@@ -174,7 +174,6 @@ class GDNService extends ServiceBase {
           data.moreinfo.push(info);
         }
       }
-
       return data;
     }
     return null;
@@ -250,14 +249,14 @@ class GDNService extends ServiceBase {
           heroImage: result[i] && result[i].Image ? result[i].Image.Url : Helper.ImageUrl,
           title: result[i] ? result[i].Title : "",
           description: result[i] ? result[i].Description : "",
-          star: result[i].Place.Rating,
-          open: result[i].Place.OpenTime,
-          close: result[i].Place.CloseTime,
-          address: result[i].Place.Address + ', ' +
-          (result[i].Place.DistrictId ? result[i].Place.District.Name : '') + ', ' +
-          (result[i].Place.CityId ? result[i].Place.City.Name : ''),
-          phone: result[i].Place.Phone,
-          website: result[i].Place.Website,
+          star: result[i] ? result[i].Place.Rating : null,
+          open: result[i] && result[i].Place.OpenTime,
+          close: result[i] && result[i].Place.CloseTime,
+          address: result[i] && result[i].Place.Address + ', ' +
+          (result[i].Place.District ? result[i].Place.District.Name : '') + ', ' +
+          (result[i].Place.City ? result[i].Place.City.Name : ''),
+          phone: result[i] && result[i].Place.Phone,
+          website: result[i] && result[i].Place.Website,
         });
       }
       return data;
@@ -279,6 +278,12 @@ class GDNService extends ServiceBase {
       return data;
     }
     return null;
+  }
+
+  async getCategoryNameById(Id) {
+    let url = this.host + "category/get-category-name-by-id?id=" + Id;
+    let result = await super.executeFetch(url, true);
+    return result;
   }
 
   async getCagegoryNoServiceById(id, index) {
@@ -324,6 +329,15 @@ class GDNService extends ServiceBase {
   async convertUrlToBase64(imageUrl) {
     let url = this.host + "image/conver-url-to-base64?url=" + imageUrl;
     return await super.executeFetch(url, true);
+  }
+
+  async getNumOfScreen() {
+    let url = this.host + "/configuration/get-configuration";
+    let result =  await super.executeFetch(url);
+    if(result) {
+      return result.NumOfScreenShowAd;
+    }
+    return 5;
   }
 }
 

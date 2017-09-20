@@ -7,6 +7,7 @@ export const CommonStoreActions = {
   ScrollTopDetail: "ScrollTopDetail",
   UpdateCategoryName: "UpdateCategoryName",
   ReloadFavorite: "ReloadFavorite",
+  ReloadData: "ReloadData",
 };
 
 
@@ -42,6 +43,11 @@ function commonReducer( thisState, action) {
     case CommonStoreActions.ReloadFavorite:
       newState = {
         type: CommonStoreActions.ReloadFavorite,
+      };
+      break;
+    case CommonStoreActions.ReloadData:
+      newState = {
+        type: CommonStoreActions.ReloadData,
       };
       break;
     case "@@redux/INIT":
@@ -81,6 +87,12 @@ export function updateCategoryName(data) {
 export function reloadFavorite() {
   return {
     type: CommonStoreActions.ReloadFavorite,
+  }
+}
+
+export function reloadData() {
+  return {
+    type: CommonStoreActions.ReloadData,
   }
 }
 

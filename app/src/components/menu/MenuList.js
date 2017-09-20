@@ -7,6 +7,7 @@ import {MenuListData, AppIcon} from '../../common/constain';
 import {GDNServiceInstance} from '../../services/GDNService';
 import {appStore} from '../../stores/AppStore';
 import {LStrings} from '../../common/LocalizedStrings';
+import {commonStore, CommonStoreActions} from '../../stores/CommonStore';
 
 export class MenuList extends React.Component {
   state = {menuData: [], activeIndex: -1, isHelpActived: false, isAboutActived: false};
@@ -15,6 +16,12 @@ export class MenuList extends React.Component {
   componentWillMount() {
     this.unSubscribe = appStore.subscribe(() => {
       this.loadData();
+    });
+    commonStore.subscribe(() => {
+      let commonState = commonStore.getState();
+      if(commonState.type == CommonStoreActions.ReloadData) {
+        this.loadData();
+      }
     });
   }
 

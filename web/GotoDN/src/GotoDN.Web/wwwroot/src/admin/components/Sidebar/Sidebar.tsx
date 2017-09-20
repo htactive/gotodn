@@ -39,7 +39,12 @@ const menus: LeftSideBarMenuItemModel[] = [
       Text: 'Quận huyện',
       LinkTo: AdminRoutePath.DistrictManagement,
     }],
-  }
+  },
+  {
+    Icon: 'fa fa-cogs',
+    Text: 'Cấu hình',
+    LinkTo: AdminRoutePath.ConfigurationManagement
+  },
 ];
 interface thisState {
   MenuItems?: LeftSideBarMenuItemModel[],

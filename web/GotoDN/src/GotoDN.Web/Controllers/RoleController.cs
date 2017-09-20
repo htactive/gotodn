@@ -91,6 +91,10 @@ namespace GotoDN.Web.Controllers
                 RoleTypeEnums.SuperAdmin,
                 RoleTypeEnums.Admin,
             });
+            this.AddClaimToRoles("GDNConfig_W", new List<RoleTypeEnums>() {
+                RoleTypeEnums.SuperAdmin,
+                RoleTypeEnums.Admin,
+            });
             this.HTRepository.Commit();
             return true;
         }

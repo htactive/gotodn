@@ -8,6 +8,7 @@ import HomeSlider from '../components/home/HomeSlider';
 import {NavigationActions} from 'react-navigation';
 import {navigationStore, navigateAction} from '../stores/NavigationStore';
 import {appStore} from '../stores/AppStore';
+import {commonStore,reloadData} from '../stores/CommonStore';
 import {GDNServiceInstance} from '../services/GDNService';
 import {Menu} from '../components/menu/Menu';
 import {LStrings} from '../common/LocalizedStrings';
@@ -113,6 +114,7 @@ export class HomeScreen extends React.Component {
   onFresh() {
     this.setState({sliderLoaded: false, menuListLoad: false, refreshing: true});
     this.loadHomeData();
+    commonStore.dispatch(reloadData());
   }
 
   async loadMoreHomeSlider(index) {

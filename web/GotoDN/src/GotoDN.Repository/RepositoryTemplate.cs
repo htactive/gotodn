@@ -236,4 +236,17 @@ namespace GotoDN.Repository
             return model.Id;
         }
 	}
+
+    public partial class GDNConfigurationRepository : BaseRepository<GDNConfiguration, GTDBEntities>, IGDNConfigurationRepository
+    {
+        public GDNConfigurationRepository(IBaseUnitOfWork<GTDBEntities> unitOfWork)
+            : base(unitOfWork)
+        {
+
+        }
+		protected override int GetKeyId(GDNConfiguration model)
+        {
+            return model.Id;
+        }
+	}
 }

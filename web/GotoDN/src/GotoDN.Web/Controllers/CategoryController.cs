@@ -420,6 +420,20 @@ namespace GotoDN.Web.Controllers
             return result;
         }
 
+        [HttpGet, Route("get-category-name-by-id")]
+        [AllowAnonymous]
+        public string GetCategoryNameById(int Id)
+        {
+            var currentLang = this.CurrentLanguage;
+            var city = this.CurrentCityId;
+
+            var result = new MenuListModel();
+            var entity = this.HTRepository.CategoryLanguageRepository.GetAll()
+                .FirstOrDefault(x => x.CategoryId == Id && x.Language == currentLang);
+            if (entity == null) return string.Empty;
+            return entity.Title ?? string.Empty;           
+        }
+
         [HttpGet, Route("get-category-no-service-by-id")]
         [AllowAnonymous]
         public CategoryModel GetCategoryNoServiceById(int id, int? index)

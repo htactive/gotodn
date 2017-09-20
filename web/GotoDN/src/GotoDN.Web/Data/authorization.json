@@ -152,5 +152,14 @@
         "claim": "Service_W"
       }
     ]
+  },
+  {
+    "controller": "GDNConfiguration",
+    "actions": [
+      {
+        "name": "SaveConfiguration",
+        "claim": "GDNConfig_W"
+      }
+    ]
   }
 ]

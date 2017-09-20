@@ -802,9 +802,11 @@ export class Helper {
   static CityKey = 'CityKey';
   static FavoriteKey = 'FavoriteKey';
   static CategoryKey = 'CategoryArray';
+  static AdsTimes = 'AdsTimes';
+  static CurrentCategoryId = 'CurrentCategoryId';
   static SeparateKey = '||';
-  static AdUnitId_Banner = __DEV__ ? 'ca-app-pub-3940256099942544/6300978111' : 'ca-app-pub-3765161663047815/4544274858';
-  static AdUnitId_FullScreen = __DEV__ ? 'ca-app-pub-3940256099942544/1033173712' : 'ca-app-pub-3765161663047815/7169851465';
+  static AdUnitId_Banner = __DEV__ ? 'ca-app-pub-3940256099942544/6300978111' : 'ca-app-pub-8440343014846849/2335511010';
+  static AdUnitId_FullScreen = __DEV__ ? 'ca-app-pub-3940256099942544/1033173712' : 'ca-app-pub-8440343014846849/3812244218';
 }
 
 export function Guid() {

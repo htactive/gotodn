@@ -13,6 +13,7 @@ import HTServiceManagement from "./admin/modules/Service/ServiceManagement";
 import PlaceManagement from "./admin/modules/Place/PlaceManagement";
 import CityManagement from "./admin/modules/City/CityManagement";
 import DistrictManagement from "./admin/modules/District/DistrictManagement";
+import {ConfigurationManagement} from "./admin/modules/Configuration/ConfigurationManagement";
 async function requireAuth(nextState, replace, next) {
   let currentUser = await UserServiceInstance.getMyProfile(() => {
   });
@@ -39,7 +40,7 @@ ReactDOM.render(
       </Route>
       <Route path={`${AdminRoutePath.CityManagement}(/:id)`} component={CityManagement}/>
       <Route path={`${AdminRoutePath.DistrictManagement}(/:id)`} component={DistrictManagement}/>
-
+      <Route path={`${AdminRoutePath.ConfigurationManagement}`} component={ConfigurationManagement}/>
     </Route>
     <Route path={AdminRoutePath.Login} component={Login}/>
   </Router>,

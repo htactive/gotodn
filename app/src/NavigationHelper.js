@@ -15,6 +15,9 @@ import {NavigationActions} from 'react-navigation'
 import {Helper} from './common/constain';
 import {LStrings} from './common/LocalizedStrings';
 import {commonStore, closeSearchBar, scrollTopDetail, CommonStoreActions} from './stores/CommonStore';
+import {AdmobInterstitials} from './components/common/AdmobInterstitials';
+import {appStore} from './stores/AppStore';
+import {GDNServiceInstance} from './services/GDNService';
 
 export function DNPageRoute(page) {
   let key = page.displayName || page['name'];
@@ -57,19 +60,43 @@ export const DNNavigatorConfig = {
 let categories = [];
 commonStore.subscribe(() => {
   let commonState = commonStore.getState();
-  if(commonState.type == CommonStoreActions.UpdateCategoryName) {
-    categories = commonState.categories;
+  if(commonState.type == CommonStoreActions.ReloadData) {
+    (async () => {
+      let numOfScreens = await GDNServiceInstance.getNumOfScreen();
+      await AsyncStorage.setItem(Helper.AdsTimes, numOfScreens + '');
+      transitionTime = 0;
+    })();
   }
 });
 
+appStore.subscribe(async () => {
+  let numOfScreens = await GDNServiceInstance.getNumOfScreen();
+  await AsyncStorage.setItem(Helper.AdsTimes, numOfScreens + '');
+  transitionTime = 0;
+});
+
 let confirmTimeout;
+let transitionTime = 0;
 export const DNNavigatorOptions = {
   initialRouteName: DNPageRoute(SplashScreen),
   headerMode: 'none',
-  onTransitionStart: async (transProps) => {
+  onTransitionStart: (transProps) => {
 
     if (transProps && transProps.scene && transProps.scene.route) {
 
+      //Show Interstitial Ads
+      if(transProps.scene.route.routeName != 'SplashScreen') {
+        transitionTime++;
+        (async () => {
+          let adsTime = await AsyncStorage.getItem(Helper.AdsTimes);
+          if(adsTime && transitionTime == parseInt(adsTime)) {
+            AdmobInterstitials.instance.showInterstitial();
+            transitionTime = 0;
+          }
+        })();
+      }
+
+      //Handle Back on Android
       if (Platform.OS === 'android') {
         let existConfirmTime = 0;
 
@@ -102,10 +129,10 @@ export const DNNavigatorOptions = {
           }
         });
       }
+
       let params;
       let listId = 0;
       let title = '';
-
 
       let category ;
       switch (transProps.scene.route.routeName) {
@@ -119,9 +146,12 @@ export const DNNavigatorOptions = {
           Menu.instance.enableMenu();
           params = transProps.scene.route.params;
           listId = (params && params.listId) || 0;
-          category = categories.filter(c => c.id == listId)[0];
-          title = category ? category.name : '';
-          Menu.instance.setTitle(title);
+          (async () => {
+            await AsyncStorage.setItem(Helper.CurrentCategoryId, listId + '');
+            title = await GDNServiceInstance.getCategoryNameById(listId);
+            Menu.instance.setTitle(title);
+          })();
+
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.ListScreen);
           break;
@@ -129,9 +159,12 @@ export const DNNavigatorOptions = {
           Menu.instance.enableMenu();
           params = transProps.scene.route.params;
           listId = (params && params.listId) || 0;
-          category = categories.filter(c => c.id == listId)[0];
-          title = category ? category.name : '';
-          Menu.instance.setTitle(title);
+          (async () => {
+            await AsyncStorage.setItem(Helper.CurrentCategoryId, listId + '');
+            title = await GDNServiceInstance.getCategoryNameById(listId);
+            Menu.instance.setTitle(title);
+          })();
+
           Menu.instance.enableMenu();
           Menu.instance.setType(MenuType.ListScreen);
           break;

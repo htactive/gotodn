@@ -11,6 +11,7 @@ import {GDNServiceInstance} from '../../services/GDNService';
 import {appStore} from '../../stores/AppStore';
 import {LStrings} from '../../common/LocalizedStrings';
 import {StyleBase, style} from '../../styles/style';
+import {commonStore,reloadData} from '../../stores/CommonStore';
 
 export class ListDetail extends React.Component {
   state = {
@@ -120,6 +121,7 @@ export class ListDetail extends React.Component {
   onFresh() {
     this.setState({refreshing: true});
     this.loadData(this.props.serviceId);
+    commonStore.dispatch(reloadData());
   }
 
   loadMoreTimeout;

@@ -13,6 +13,8 @@ import {navigationStore, navigateToRouteAction} from '../../stores/NavigationSto
 import {appStore, appSaveLanguage} from '../../stores/AppStore'
 import {changeAppLanguage} from '../../common/LocalizedStrings';
 import {Menu} from '../../components/menu/Menu';
+import {GDNServiceInstance} from '../../services/GDNService';
+
 export class MenuContent extends React.Component {
   state = {selectedLang: 3, showPicker: false};
 
@@ -96,7 +98,14 @@ export class MenuContent extends React.Component {
     });
     changeAppLanguage(d.Id);
     await AsyncStorage.setItem(Helper.LanguageKey, d.Id + '');
+
     appStore.dispatch(appSaveLanguage(d.Id));
+
+    let categoryId = await AsyncStorage.getItem(Helper.CurrentCategoryId);
+    if(categoryId) {
+      let title = await GDNServiceInstance.getCategoryNameById(categoryId);
+      Menu.instance.setTitle(title);
+    }
   }
 
   favoriteClicked() {

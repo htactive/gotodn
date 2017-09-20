@@ -145,10 +145,16 @@ android {
 
 dependencies {
     compile project(':react-native-vector-icons')
-    compile project(':react-native-maps')
+    compile(project(':react-native-maps')) {
+        exclude group: 'com.google.android.gms', module: 'play-services-base'
+        exclude group: 'com.google.android.gms', module: 'play-services-maps'
+    }
+    compile 'com.google.android.gms:play-services-base:11.0.4'
+    compile 'com.google.android.gms:play-services-maps:11.0.4'
     compile project(':react-native-android-location-services-dialog-box')
     compile project(':react-native-localization')
     compile project(':react-native-share')
+    compile project(':RNAdMob')
     compile fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleCompatible
     compile "com.android.support:appcompat-v7:23.0.1"

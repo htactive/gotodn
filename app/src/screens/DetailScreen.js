@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Image, TouchableOpacity, ScrollView, Text, AsyncStorage, Alert, Clipboard} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
-import {MenuListItemData, platform, AppIcon, Helper} from '../common/constain';
+import {viewportWidth, platform, AppIcon, Helper} from '../common/constain';
 import {Icon, Spinner} from 'native-base';
 import {DetailBanner} from '../components/detail/DetailBanner';
 import {style, StyleBase} from '../styles/style';
@@ -24,6 +24,7 @@ import {appStore} from '../stores/AppStore';
 import {commonStore, CommonStoreActions, reloadFavorite} from '../stores/CommonStore';
 import {LStrings} from '../common/LocalizedStrings';
 import Share, {ShareSheet, Button} from 'react-native-share';
+import {AdmobBanner} from '../components/common/AdmobBanner';
 
 export class DetailScreen extends React.Component {
   state = {
@@ -150,7 +151,7 @@ export class DetailScreen extends React.Component {
                 </Row>
                 <Row size={2}>
                   <View style={style.detailContent}>
-                    <DetailImage images={data.images}/>
+                    {data.images && data.images.length > 0 ? <DetailImage images={data.images}/> : null}
                     <DetailText title={data.title || LStrings.NoTitle}
                                 description={data.description || LStrings.NoDescription}/>
                     <View style={style.detailMap}>
@@ -180,9 +181,11 @@ export class DetailScreen extends React.Component {
                     <DetailInfo detailInfo={data.moreinfo}/>
                     <DetailNearPlace nearByPlaces={this.state.detailNearBy || []}
                                      onNearByClicked={(id) => this.goToPlace(id)}/>
+                    <View style={{flex: 1, width: viewportWidth, height: 60}}/>
                   </View>
                 </Row>
               </ScrollView>
+              <AdmobBanner bannerSize="fullBanner" />
               <ShareSheet visible={this.state.visible} onCancel={this.onCancel.bind(this)}>
                 <Button iconSrc={{ uri: TWITTER_ICON }}
                         onPress={()=>{

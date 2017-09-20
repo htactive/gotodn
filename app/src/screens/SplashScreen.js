@@ -30,6 +30,9 @@ export class SplashScreen extends React.Component {
   }
 
   async initData() {
+    let numOfScreens = await GDNServiceInstance.getNumOfScreen();
+    await AsyncStorage.setItem(Helper.AdsTimes, numOfScreens + '');
+
     await AsyncStorage.setItem(Helper.CategoryKey, '');
 
     let langValue = await AsyncStorage.getItem(Helper.LanguageKey);
