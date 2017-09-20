@@ -5,7 +5,7 @@ target 'gotoDN' do
 
 
   pod 'GoogleMaps'
-
+  pod 'Google-Mobile-Ads-SDK'
 
 
 end

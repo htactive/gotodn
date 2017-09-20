@@ -1,4 +1,5 @@
 PODS:
+  - Google-Mobile-Ads-SDK (7.23.0)
   - GoogleMaps (2.1.1):
     - GoogleMaps/Maps (= 2.1.1)
   - GoogleMaps/Base (2.1.1)
@@ -6,11 +7,13 @@ PODS:
     - GoogleMaps/Base
 
 DEPENDENCIES:
+  - Google-Mobile-Ads-SDK
   - GoogleMaps
 
 SPEC CHECKSUMS:
+  Google-Mobile-Ads-SDK: a43dc8efdb566c74d00ac6934c781de969348d80
   GoogleMaps: a5b5bbe47734e2443bde781a6aa64e69fdb6d785
 
-PODFILE CHECKSUM: df9db64e14822ec7399e15184e25b6a16e2a74a3
+PODFILE CHECKSUM: b3a86e7eee7308a9fb9b11d13f5cbd6511e44d9a
 
 COCOAPODS: 1.2.0
