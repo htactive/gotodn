@@ -338,6 +338,7 @@ namespace GotoDN.Web.Controllers
                 .Include("CategoryLanguages.Icon")
                 .Include("HTServices.HTServiceLanguages.Image")
                 .Include("HTServices.Places")
+                .Include("Places")
                 .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang) && c.Places.Any(p => p.CityId == currentCity))
                 .ToList();
 
@@ -351,7 +352,7 @@ namespace GotoDN.Web.Controllers
                             GetUrl(x.CategoryLanguages.FirstOrDefault(z => z.Language == LanguageEnums.English).Image) : null,
                     Icon = x.CategoryLanguages.FirstOrDefault(z => z.Language == LanguageEnums.English).Icon != null ?
                             GetUrl(x.CategoryLanguages.FirstOrDefault(z => z.Language == LanguageEnums.English).Icon) : null,
-                    Items = x.HTServices.Count > 0 ?
+                    Items = x.Places != null && x.Places.All(p => p.HTServiceId != null) ? (x.HTServices.Count > 0 ?
                         x.HTServices.Where(s => s.Places.Any(p => p.CityId == currentCity)).Select(y => new MenuItemModel()
                         {
                             Id = y.Id,
@@ -361,7 +362,7 @@ namespace GotoDN.Web.Controllers
                                     y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Image != null ?
                                     GetUrl(y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Image) : null
                         }).ToList()
-                      : null
+                      : null) : null
                 }).ToList();
             
             result = result.OrderBy(x => x.Order).ToList();
