@@ -193,7 +193,7 @@ class GDNService extends ServiceBase {
           id: t.Id,
           categoryName: enLanguage ? enLanguage.Title : '',
           categoryIcon: cateIcon.Icon ? cateIcon.Icon.Url : null,
-          isNoService: !t.HTServices || t.HTServices.length == 0,
+          isNoService: (t.Places && t.Places.filter(p => p.HTServiceId == null).length > 0) || (!t.HTServices || t.HTServices.length == 0),
         }
       });
       return rs;
@@ -252,7 +252,7 @@ class GDNService extends ServiceBase {
           star: result[i] ? result[i].Place.Rating : null,
           open: result[i] && result[i].Place.OpenTime,
           close: result[i] && result[i].Place.CloseTime,
-          address: result[i] && result[i].Place.Address + ', ' +
+          address: result[i] && (result[i].Place.Address || '') + ', ' +
           (result[i].Place.District ? result[i].Place.District.Name : '') + ', ' +
           (result[i].Place.City ? result[i].Place.City.Name : ''),
           phone: result[i] && result[i].Place.Phone,

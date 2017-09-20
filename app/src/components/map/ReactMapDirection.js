@@ -120,13 +120,14 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
   }
 
   renderAlternativeRoute(id, coords) {
-    let lastRouteId = this.state.routes ? (this.state.routes.length - 1) : 0;
+    let currentRouteId = this.state.selectedRouteId;
     return (
       <MapView.Polyline
         key={id}
         coordinates={coords}
         strokeWidth={6}
-        strokeColor={id == lastRouteId ? '#00b3fd' : '#b0b0b0'}
+        strokeColor={id == currentRouteId ? '#00b3fd' : '#b0b0b0'}
+        zIndex={id == currentRouteId ? 99 : 0}
         lineCap='round'
         onPress={() => this.changeRoute(id,true)}
       />
@@ -146,7 +147,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
           description={des}
           image={require('../../../assets/icons/marker.png')}
           anchor={{x:0.0, y:0.0}}
-          onPress={() => this.changeRoute(index)}
+          onPress={() => this.changeRoute(id)}
         /> : null
     )
   }
@@ -177,7 +178,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
           onRegionChangeComplete={() => this.showCallout()}
         >
           {routes && routes.map((a, id) => {
-            return a.steps && this.renderAlternativeRoute(id, a.steps)
+            return a.steps && this.renderAlternativeRoute(a.id, a.steps)
           })}
           {routes && routes.map((a, id) => {
             return a.steps && this.renderAlternativeMarker(a.id, a.markerCoord, a.distance.text, a.duration.text)
@@ -289,17 +290,12 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
 
   changeRoute(id, animate) {
     let routes = this.state.routes ? this.state.routes.slice() : [];
-    if (id < routes.length) {
-      let currentRoute = routes[id];
-      routes[id] = routes[routes.length - 1];
-      routes[routes.length - 1] = currentRoute;
-      this.setState({
-        routes: routes,
-        selectedRouteId: currentRoute.id,
-      });
-      if(animate && this.mapRef)
-        this.mapRef.animateToCoordinate(currentRoute.markerCoord, 500);
-    }
+    let currentRoute = routes.filter(r => r.id == id)[0];
+    this.setState({
+      selectedRouteId: id,
+    });
+    if(animate && this.mapRef)
+      this.mapRef.animateToCoordinate(currentRoute.markerCoord, 500);
   }
 
   showCallout() {

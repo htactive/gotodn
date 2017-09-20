@@ -55,6 +55,7 @@ namespace GotoDN.Web.Controllers
                 .Include("CategoryLanguages.Image")
                 .Include("CategoryLanguages.Icon")
                 .Include(c => c.HTServices)
+                .Include(c => c.Places)
                 .Where(c => c.Places.Any(p => p.CityId == city))
                 .OrderBy(t => t.Order).ToList();
 
@@ -447,11 +448,11 @@ namespace GotoDN.Web.Controllers
                 .Include("Places.PlaceLanguages.Image")
                 .Include(c => c.CategoryLanguages)
                 .Where(x => x.Places.Any(p => p.PlaceLanguages.Any(l => l.Language == currentLang)) 
-                && x.Places.All(p => p.HTServiceId == null || p.HTServiceId == 0) && x.Id == id).FirstOrDefault();
+                && x.Places.Any(p => p.HTServiceId == null || p.HTServiceId == 0) && x.Id == id).FirstOrDefault();
             if (category == null) return null;
             if (category.Places != null)
             {
-                category.Places = category.Places.Where(p => p.CityId == currentCity).OrderByDescending(p => p.CreatedDate)
+                category.Places = category.Places.Where(p => p.CityId == currentCity && p.HTServiceId == null).OrderByDescending(p => p.CreatedDate)
                                     .Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
             }
             return AutoMapper.Mapper.Map<CategoryModel>(category);
