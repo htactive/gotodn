@@ -123,6 +123,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
     let currentRouteId = this.state.selectedRouteId;
     return (
       <MapView.Polyline
+        tappable
         key={id}
         coordinates={coords}
         strokeWidth={6}
@@ -140,6 +141,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
     return (
       coord ?
         <MapView.Marker
+          tappable
           ref={(m) => this[`marker_${id}`] = m}
           key={id}
           coordinate={coord}
