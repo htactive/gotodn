@@ -88,20 +88,21 @@ export class DetailScreen extends React.Component {
     this.setState({
       dataDetail: data,
     });
-    let coord = await GoogleAPIServiceInstance.getGPSByAddress(data.address, data.district, data.city);
-    this.setState({destCoord: coord});
+    (async () => {
+      let coord = await GoogleAPIServiceInstance.getGPSByAddress(data.address, data.district, data.city);
+      this.setState({destCoord: coord});
+    })();
     //let base64Image = await GDNServiceInstance.convertUrlToBase64(data.heroImage || Helper.ImageUrl);
     let shareOptions = {
       title:  data.title || LStrings.NoTitle,
-      message: LStrings.ShareDescription + '\n' +  ' - ' +
-      (data.title || LStrings.NoTitle) + '\n' + ' - ' +
-      (data.description || LStrings.NoDescription) + '\n' + ' - ' +
-      data.heroImage + '\n' + ' - ' +
-      data.address + ', ' + data.district + ', ' + data.city + '\n' + ' - ' +
-      data.phone + '\n' + ' - ' + data.website + '\n' + ' - ' +
-      this.renderHour(data.open, data.close) + '\n\n'
+      message: LStrings.ShareDescription + '\n\n' +
+      LStrings.PlaceName + ': ' + (data.title || LStrings.NoTitle) + '\n\n' +
+      LStrings.Description + ': ' + '\n' + (data.description || LStrings.NoDescription) + '\n\n' +
+      '- ' + LStrings.Address +  ': ' + Helper.getAndress(data.address, data.district) + '\n' +
+      '- ' + LStrings.Phone +  ': ' + data.phone + '\n' +
+      '- ' + LStrings.Website +  ': ' + data.website + '\n' +
+      '- ' + LStrings.WorkingTime +  ': ' + this.renderHour(data.open, data.close) + '\n\n'
       ,
-      url: data.heroImage,
       subject: data.title || LStrings.NoTitle //  for email
     };
     this.setState({
@@ -136,7 +137,8 @@ export class DetailScreen extends React.Component {
     //let detailNearBy = MenuListItemData.filter(t => t.id != data.id);
 
     let shareOptions = Helper.CloneObject(this.state.shareOptions);
-    let fullAddress = data.address + ', ' + data.district + ', ' + data.city;
+    let fullAddress = Helper.getAndress(data.address, data.district);
+
     return (
       !!data.id && shareOptions ? (
           <Grid>
@@ -149,8 +151,8 @@ export class DetailScreen extends React.Component {
                     onSharedClicked={() => this.shareDetail(data.id)}
                     onFavoriteClicked={() => this.likeDetail(data.id)}/>
                 </Row>
-                <Row size={2}>
-                  <View style={style.detailContent}>
+                <Row size={2} style={style.detailContent}>
+                  <View style={{width: viewportWidth - 30}}>
                     {data.images && data.images.length > 0 ? <DetailImage images={data.images}/> : null}
                     <DetailText title={data.title || LStrings.NoTitle}
                                 description={data.description || LStrings.NoDescription}/>

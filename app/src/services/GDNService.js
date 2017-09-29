@@ -124,54 +124,56 @@ class GDNService extends ServiceBase {
       let currentLanguage = appStore.getState().language;
       let lang = result.PlaceLanguages.filter(l => l.Language == currentLanguage)[0];
       let data = {};
-      data.id = result.Id;
-      data.heroImage = lang && lang.Image ? lang.Image.Url : Helper.ImageUrl;
-      data.title = lang ? lang.Title : null;
-      data.description = lang ? lang.Description : null;
-      data.star = result.Rating;
-      data.address = result.Address;
-      data.phone = result.Phone;
-      data.website = result.Website;
-      data.open = result.OpenTime;
-      data.close = result.CloseTime;
-      data.city = result.City ? result.City.Name : "";
-      data.district = result.District ? result.District.Name : "";
-      data.images = lang && lang.PlaceImages ? lang.PlaceImages.map(x => {
-        return {
-          id: x.Id,
-          url: x.Image.Url,
-        };
-      }) : null;
-      data.moreinfo =[];
-      if(lang && lang.PlaceMoreInfo) {
-        for (let i = 0; i < lang.PlaceMoreInfo.length; i++) {
-          let placeInfo = lang.PlaceMoreInfo[i];
-          let info = {};
-          if(placeInfo.IsHalf) {
-            info.isMulti = true;
-            if(i < lang.PlaceMoreInfo.length - 1 && lang.PlaceMoreInfo[i + 1].IsHalf) {
-              let placeInfo1 = lang.PlaceMoreInfo[i + 1];
-              info.dataInfo = [{
-                infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
-                infoText: placeInfo.Name + ' : ' + placeInfo.Value,
-              },{
-                infoIcon: placeInfo1.Icon ? placeInfo1.Icon.Url : null,
-                infoText: placeInfo1.Name + ' : ' + placeInfo1.Value,
-              }];
-              i++;
+      if(lang) {
+        data.id = result.Id;
+        data.heroImage = lang.Image ? lang.Image.Url : Helper.ImageUrl;
+        data.title = lang.Title || null;
+        data.description = lang.Description || null;
+        data.star = result.Rating;
+        data.address = result.Address;
+        data.phone = result.Phone;
+        data.website = result.Website;
+        data.open = result.OpenTime;
+        data.close = result.CloseTime;
+        data.city = result.City ? result.City.Name : "";
+        data.district = result.District ? result.District.Name : "";
+        data.images = lang.PlaceImages ? lang.PlaceImages.map(x => {
+            return {
+              id: x.Id,
+              url: x.Image.Url,
+            };
+          }) : null;
+        data.moreinfo = [];
+        if (lang.PlaceMoreInfo) {
+          for (let i = 0; i < lang.PlaceMoreInfo.length; i++) {
+            let placeInfo = lang.PlaceMoreInfo[i];
+            let info = {};
+            if (placeInfo.IsHalf) {
+              info.isMulti = true;
+              if (i < lang.PlaceMoreInfo.length - 1 && lang.PlaceMoreInfo[i + 1].IsHalf) {
+                let placeInfo1 = lang.PlaceMoreInfo[i + 1];
+                info.dataInfo = [{
+                  infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
+                  infoText: placeInfo.Name + ' : ' + placeInfo.Value,
+                }, {
+                  infoIcon: placeInfo1.Icon ? placeInfo1.Icon.Url : null,
+                  infoText: placeInfo1.Name + ' : ' + placeInfo1.Value,
+                }];
+                i++;
+              } else {
+                info.dataInfo = [{
+                  infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
+                  infoText: placeInfo.Name + ' : ' + placeInfo.Value,
+                }, null];
+              }
             } else {
-              info.dataInfo = [{
+              info = {
                 infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
                 infoText: placeInfo.Name + ' : ' + placeInfo.Value,
-              },null];
+              }
             }
-          } else {
-            info = {
-              infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
-              infoText: placeInfo.Name + ' : ' + placeInfo.Value,
-            }
+            data.moreinfo.push(info);
           }
-          data.moreinfo.push(info);
         }
       }
       return data;
@@ -206,16 +208,15 @@ class GDNService extends ServiceBase {
     let result = await super.executeFetch(url);
     if (result) {
 
-      let rs = result.map(t => {
+      return result.map(t => {
         return {
           id: t.Id,
           heroImage: t.CoverImage ? t.CoverImage.Url : Helper.ImageUrl,
           title: t.Title || "",
-          address: t.Address || "" + ', ' + t.District || "" + ', ' + t.City || "",
+          address: Helper.getAndress(t.Address, t.District),
           phone: t.Phone || "",
         }
       });
-      return rs;
     }
   }
 
@@ -244,20 +245,18 @@ class GDNService extends ServiceBase {
     if (result && result.length > 0) {
       let data = [];
       for (let i = 0; i < result.length; i++) {
-        data.push({
-          id: result[i] ? result[i].PlaceId : 0,
-          heroImage: result[i] && result[i].Image ? result[i].Image.Url : Helper.ImageUrl,
-          title: result[i] ? result[i].Title : "",
-          description: result[i] ? result[i].Description : "",
-          star: result[i] ? result[i].Place.Rating : null,
-          open: result[i] && result[i].Place.OpenTime,
-          close: result[i] && result[i].Place.CloseTime,
-          address: result[i] && (result[i].Place.Address || '') + ', ' +
-          (result[i].Place.District ? result[i].Place.District.Name : '') + ', ' +
-          (result[i].Place.City ? result[i].Place.City.Name : ''),
-          phone: result[i] && result[i].Place.Phone,
-          website: result[i] && result[i].Place.Website,
-        });
+        if(result[i]) {
+          data.push({
+            id: result[i].PlaceId || 0,
+            heroImage: result[i].Image ? result[i].Image.Url : Helper.ImageUrl,
+            title: result[i].Title || "",
+            description: result[i].Description || "",
+            open: result[i].Place.OpenTime,
+            close: result[i].Place.CloseTime,
+            address: Helper.getAndress(result[i].Place.Address, result[i].Place.District ? result[i].Place.District.Name : ''),
+            phone: result[i] && result[i].Place.Phone
+          });
+        }
       }
       return data;
     }
@@ -332,7 +331,7 @@ class GDNService extends ServiceBase {
   }
 
   async getNumOfScreen() {
-    let url = this.host + "/configuration/get-configuration";
+    let url = this.host + "configuration/get-configuration";
     let result =  await super.executeFetch(url);
     if(result) {
       return result.NumOfScreenShowAd;

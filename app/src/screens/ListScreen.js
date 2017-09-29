@@ -89,9 +89,9 @@ export class ListScreen extends React.Component {
       >
         {this.state.listData.services.map((data, index) =>
           <Tab key={index}
-               tabStyle={{backgroundColor:'#29b6f6',borderBottomWidth: 3, borderBottomColor:'#eeeeee'}}
+               tabStyle={{backgroundColor:'#29b6f6',borderBottomWidth: 3, borderBottomColor:'#eeeeee', minWidth: viewportWidth/(this.state.listData.services.length || 1)}}
                textStyle={{color:'#556c7a', fontWeight: 'normal'}}
-               activeTabStyle={{backgroundColor: '#29b6f6'}}
+               activeTabStyle={{backgroundColor: '#29b6f6', minWidth: viewportWidth/(this.state.listData.services.length || 1)}}
                activeTextStyle={{color:'#fff', fontWeight: 'normal'}}
                underlineStyle={{backgroundColor: StyleBase.header_color}}
                heading={data.title}>

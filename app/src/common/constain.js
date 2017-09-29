@@ -807,6 +807,22 @@ export class Helper {
   static SeparateKey = '||';
   static AdUnitId_Banner = __DEV__ ? 'ca-app-pub-3940256099942544/6300978111' : 'ca-app-pub-8440343014846849/2335511010';
   static AdUnitId_FullScreen = __DEV__ ? 'ca-app-pub-3940256099942544/1033173712' : 'ca-app-pub-8440343014846849/3812244218';
+
+  static getAndress() {
+    if(arguments.length == 0) return "";
+    if(arguments.length == 1) return arguments[0];
+    if(arguments.length == 2) {
+      return (arguments[0] || "") +  (arguments[0] && arguments[0].trim() != '' ? ', ' : '')
+            + (arguments[1] || "");
+    }
+    if(arguments.length == 3) {
+      return (arguments[0] || "") +  (arguments[0] && arguments[0].trim() != '' ? ', ' : '')
+        + (arguments[1] || "") +  (arguments[1] && arguments[1].trim() != '' ? ', ' : '')
+        + (arguments[2] || "");
+    }
+    return "";
+  }
+
 }
 
 export function Guid() {
@@ -815,6 +831,7 @@ export function Guid() {
       .toString(16)
       .substring(1);
   }
+
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 }

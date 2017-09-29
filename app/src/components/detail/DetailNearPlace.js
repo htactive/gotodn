@@ -16,31 +16,28 @@ export class DetailNearPlace extends React.Component {
           <Text style={style.nearPlaceTitleText}>{LStrings.Nearby}</Text>
         </View>
         {this.props.nearByPlaces && this.props.nearByPlaces.map((d, index) =>
-          <View key={index} style={[style.detailInfoItem, { paddingVertical: 10, paddingLeft: 0}]}>
-            <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start'}}>
-              <TouchableOpacity onPress={() => this.goPlace(d.id)}>
-                <Image style={{resizeMode: 'cover', width: (viewportWidth - 30) / 5, height: (viewportWidth - 30) / 5}}
-                       source={{uri: d.heroImage || Helper.ImageUrl}}/>
-              </TouchableOpacity>
+          <TouchableOpacity key={index} style={[style.detailInfoItem]}
+                            onPress={() => this.goPlace(d.id)}>
+            <View style={{width: (viewportWidth - 30) / 5, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+              <Image style={{resizeMode: 'cover', width: (viewportWidth - 30) / 5, height: (viewportWidth - 30) / 5}}
+                     source={{uri: d.heroImage || Helper.ImageUrl}}/>
             </View>
-            <View style={{flex: 8, paddingLeft: 15}}>
-              <View style={{flex: 3}}>
-                <TouchableOpacity onPress={() => this.goPlace(d.id)}>
-                  <Text numberOfLines={1} style={style.detailNearByTitle}>{d.title}</Text>
-                </TouchableOpacity>
+            <View style={{flex: 1, paddingLeft: 10}}>
+              <View style={{flex: 3, justifyContent:'flex-start'}}>
+                <Text numberOfLines={1} style={style.detailNearByTitle}>{d.title}</Text>
               </View>
               <View style={{flex: 7, justifyContent:'space-between'}}>
                 <View style={{flexDirection:'row'}}>
-                  <View style={{flex:1, justifyContent: 'center', alignItems: 'flex-start'}}>
+                  <View style={{width: 25, justifyContent: 'center', alignItems: 'flex-start'}}>
                     <Image style={style.iconImgXxs} source={AppIcon.Location}/>
                   </View>
                   <View style={{flex:9,justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Text numberOfLines={1} style={style.detailNearByInfo}>{d.address}</Text>
+                    <Text numberOfLines={2} style={style.detailNearByInfo}>{d.address}</Text>
                   </View>
                 </View>
                 <View style={{flexDirection:'row'}}>
                   <View style={{flexDirection:'row',flex: 1}}>
-                    <View style={{flex:2, justifyContent: 'center', alignItems: 'flex-start'}}>
+                    <View style={{width: 25, justifyContent: 'center', alignItems: 'flex-start'}}>
                       <Image style={style.iconImgXxs} source={AppIcon.Tel}/>
                     </View>
                     <View style={{flex:8, justifyContent: 'center', alignItems: 'flex-start'}}>
@@ -48,7 +45,7 @@ export class DetailNearPlace extends React.Component {
                     </View>
                   </View>
                   <View style={{flexDirection:'row',flex: 1}}>
-                    <View style={{flex:2, justifyContent: 'center', alignItems: 'flex-start'}}>
+                    <View style={{width: 25, justifyContent: 'center', alignItems: 'flex-start'}}>
                       <Image style={style.iconImgXxs} source={AppIcon.Time}/>
                     </View>
                     <View style={{flex:8, justifyContent: 'center', alignItems: 'flex-start'}}>
@@ -58,7 +55,7 @@ export class DetailNearPlace extends React.Component {
                 </View>
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       </View>
     )

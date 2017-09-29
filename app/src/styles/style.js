@@ -319,8 +319,7 @@ export const style = StyleSheet.create({
 
   detailInfoItem: {
     flexDirection: 'row',
-    paddingVertical: 15,
-    paddingLeft: 10,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#a6a6a6',
   },

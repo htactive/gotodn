@@ -59,7 +59,7 @@ export class MenuSearch extends React.Component {
       this.setState({
         data: null
       });
-      if(nextProps.search && nextProps.search.trim() != '')
+      if(nextProps.search && nextProps.search.trim() != '' && nextProps.search.trim().length >= 2)
         this.filterData(nextProps.search);
     }
   }
@@ -122,7 +122,7 @@ export class MenuSearch extends React.Component {
                   </View>
                 </View>
               </TouchableOpacity>
-            ) : this.props.search && this.props.search.trim() != '' ? <View style={[styles.container, style.centralizedContent, {backgroundColor: 'rgba(255,255,255,0)'}]}>
+            ) : this.props.search && this.props.search.trim() != '' && this.props.search.trim().length >= 2 ? <View style={[styles.container, style.centralizedContent, {backgroundColor: 'rgba(255,255,255,0)'}]}>
               <Spinner color={StyleBase.header_color}/>
             </View> : null}
           {this.state.data && this.state.loadingMore ?

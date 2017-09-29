@@ -9,7 +9,7 @@ export class AdmobInterstitials extends React.Component {
 
   componentWillMount() {
     AdmobInterstitials.instance = this;
-    AdMobInterstitial.setAdUnitID(Helper.AdUnitId_FullScreen);
+
     AdMobInterstitial.setTestDeviceID('');
   }
 

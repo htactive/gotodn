@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>LoanLogics</title>
+<meta http-equiv="Content-Type" content="text/html;" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<style type="text/css">.ExternalClass *{line-height:100%}sup{line-height:0;font-size:75%;vertical-align:5px}@media screen and (max-width:768px){#table-main,#table-title,#table-1,#table-2,#table-3,#table-1-inner,#table-2-inner,#table-subscribe-forward,#img-inner{width:100%!important}#table-1-border{border-right:none!important}#table-2-border{border-left:none!important}#table-inner{width:96%!important}#ll-banner-top{border-top:1px solid #41a6dd!important}.img_newsletter{width:100%!important}}@media screen and (max-width:372px){#img_blog{width:98%!important}}</style>
+<!--[if gte mso 9]>
+<style>sup{font-size:100%!important;vertical-align:0}</style>
+<![endif]-->
+</head>
+<body style="margin:0;padding:0;width:100%!important">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="center" valign="top">
+<table width="85%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td height="15" style="font-size:0;line-height:100%"></td>
+</tr>
+<tr>
+<td align="center" valign="top">
+<h2>{0}</h2>
+</td>
+</tr>
+<tr>
+<td height="15" style="font-size:0;line-height:100%"></td>
+</tr>
+<tr>
+<td align="center" valign="top">
+<img src="{1}" alt="{0}" style="display:block;border:0;max-width:100%"/>
+</td>
+</tr>
+<tr>
+<td height="15" style="font-size:0;line-height:100%"></td>
+</tr>
+<tr>
+<td align="left" valign="top">
+<p>
+{2}
+</p>
+</td>
+</tr>
+<tr>
+<td height="5" style="font-size:0;line-height:100%"></td>
+</tr>
+<tr>
+<td align="left" valign="top">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="left" valign="middle" width="50">
+<img src="https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_57c5e985-753c-434c-b80c-77728e46d5af.png" style="display:block;border:0" width="32" height="32" alt="Location" />
+</td>
+<td align="left" valign="middle">
+<p>{3}</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td align="left" valign="top">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="left" valign="middle" width="50">
+<img src="https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_a1a314a4-78e2-4c57-940f-6c2e8b695f47.png" style="display:block;border:0" width="32" height="32" alt="Phone" />
+</td>
+<td align="left" valign="middle">
+<p>{4}</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td align="left" valign="top">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="left" valign="middle" width="50">
+<img src="https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_ab4573a6-0288-4f2c-bd6f-8080164d2e98.png" style="display:block;border:0" width="32" height="32" alt="Website"/>
+</td>
+<td align="left" valign="middle">
+<p><a href="{5}" target="_blank">{5}</a></p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td align="left" valign="top">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="left" valign="middle" width="50">
+<img src="https://s3-ap-southeast-1.amazonaws.com/dfwresource/coms/img/coms_4692e18e-bb2f-48f8-8aeb-7aef2a0800d4.png" style="display:block;border:0" width="32" height="32" alt="Time"/>
+</td>
+<td align="left" valign="middle">
+<p>{6}</p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+<tr>
+<td height="50" style="font-size:0;line-height:100%"></td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
+</html>

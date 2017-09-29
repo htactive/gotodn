@@ -213,6 +213,6 @@ export class MenuHeader extends React.Component {
       clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => {
       this.props.onSearchChanged && this.props.onSearchChanged(text);
-    }, 1000);
+    }, 500);
   }
 }
