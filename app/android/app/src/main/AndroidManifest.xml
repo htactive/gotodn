@@ -20,6 +20,10 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCywwRaPWRhT1xRYsOk-Dw4PfC2uvbsaKQ"/>
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <provider android:authorities="com.facebook.app.FacebookContentProvider123906918331013"
+                  android:name="com.facebook.FacebookContentProvider"
+                  android:exported="true" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"

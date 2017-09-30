@@ -534,8 +534,8 @@ namespace GotoDN.Web.Controllers
             var placeQuery = this.HTRepository.PlaceLanguageRepository.GetAll()
                 .Include(pl => pl.Image)
                 .Include(pl => pl.Place)
-                .Include("Place.Category")
-                .Include("Place.HTService")
+                .Include("Place.Category.CategoryLanguages")
+                .Include("Place.HTService.HTServiceLanguages")
                 .Include("Place.City")
                 .Include("Place.District")
                 .Where(pl => pl.Language == language && pl.Place != null && pl.Place.CityId == city);
@@ -544,15 +544,19 @@ namespace GotoDN.Web.Controllers
 
             search = search.ToLower().Trim();
 
-            placeQuery = placeQuery.Where(pl => (pl.Place.City != null && pl.Place.City.Name.ToLower().Contains(search))
-            || (pl.Place.District != null && pl.Place.District.Name.ToLower().Contains(search))
-            || (pl.Place.Address != null && pl.Place.Address.ToLower().Contains(search))
-            || (pl.Title != null && pl.Title.ToLower().Contains(search))
-            || (pl.Place.Category != null && pl.Place.Category.CategoryLanguages.Any(cl => cl.Language == language && cl.Title.ToLower().Contains(search)))
-            || (pl.Place.HTService != null && pl.Place.HTService.HTServiceLanguages.Any(sl => sl.Language == language && sl.Title.ToLower().Contains(search)))
-            );
-
-            var placeResult = placeQuery
+            var placeResult = new List<AppSearchPlaceModel>();
+            if (language == LanguageEnums.Vietnamese)
+            {
+                var placeList = placeQuery.ToList();
+                search = search.StripDiacritics();
+                var placeListRs = placeList.Where(pl => (pl.Place.City != null && pl.Place.City.Name.ToLower().StripDiacritics().Contains(search))
+                || (pl.Place.District != null && pl.Place.District.Name.ToLower().StripDiacritics().Contains(search))
+                || (pl.Place.Address != null && pl.Place.Address.ToLower().StripDiacritics().Contains(search))
+                || (pl.Title != null && pl.Title.ToLower().StripDiacritics().Contains(search))
+                || (pl.Place.Category != null && pl.Place.Category.CategoryLanguages.Any(cl => cl.Language == language && cl.Title.ToLower().StripDiacritics().Contains(search)))
+                || (pl.Place.HTService != null && pl.Place.HTService.HTServiceLanguages.Any(sl => sl.Language == language && sl.Title.ToLower().StripDiacritics().Contains(search)))
+                );
+                placeResult = placeListRs
                 .OrderByDescending(p => p.Place.IsHomeSlider)
                 .ThenByDescending(p => p.Place.IsCategorySlider)
                 .ThenByDescending(p => p.Place.CreatedDate)
@@ -571,6 +575,36 @@ namespace GotoDN.Web.Controllers
                     Phone = p.Place.Phone,
                 })
                 .ToList();
+            }
+            else
+            {
+                placeQuery = placeQuery.Where(pl => (pl.Place.City != null && pl.Place.City.Name.ToLower().Contains(search))
+                || (pl.Place.District != null && pl.Place.District.Name.ToLower().Contains(search))
+                || (pl.Place.Address != null && pl.Place.Address.ToLower().Contains(search))
+                || (pl.Title != null && pl.Title.ToLower().Contains(search))
+                || (pl.Place.Category != null && pl.Place.Category.CategoryLanguages.Any(cl => cl.Language == language && cl.Title.ToLower().Contains(search)))
+                || (pl.Place.HTService != null && pl.Place.HTService.HTServiceLanguages.Any(sl => sl.Language == language && sl.Title.ToLower().Contains(search)))
+                );
+                placeResult = placeQuery
+                .OrderByDescending(p => p.Place.IsHomeSlider)
+                .ThenByDescending(p => p.Place.IsCategorySlider)
+                .ThenByDescending(p => p.Place.CreatedDate)
+                .Skip(currentId * itemsPerIndex).Take(itemsPerIndex)
+                .ToList()
+                .Select(p => new AppSearchPlaceModel
+                {
+                    Id = p.Place.Id,
+                    Title = p.Title ?? string.Empty,
+                    IsCategorySlider = p.Place.IsCategorySlider,
+                    IsHomeSlider = p.Place.IsHomeSlider,
+                    City = p.Place.City != null ? p.Place.City.Name : string.Empty,
+                    District = p.Place.District != null ? p.Place.District.Name : string.Empty,
+                    Address = p.Place.Address,
+                    CoverImage = Mappers.Mapper.ToModel(p.Image),
+                    Phone = p.Place.Phone,
+                })
+                .ToList();
+            }
             
             return placeResult;
         }

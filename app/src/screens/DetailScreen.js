@@ -25,6 +25,10 @@ import {commonStore, CommonStoreActions, reloadFavorite} from '../stores/CommonS
 import {LStrings} from '../common/LocalizedStrings';
 import Share, {ShareSheet, Button} from 'react-native-share';
 import {AdmobBanner} from '../components/common/AdmobBanner';
+const FBSDK = require('react-native-fbsdk');
+const {
+  ShareDialog,
+} = FBSDK;
 
 export class DetailScreen extends React.Component {
   state = {
@@ -32,6 +36,7 @@ export class DetailScreen extends React.Component {
     isFavorite: false,
     visible: false,
     shareOptions: null,
+    fbSshareContent: null
   };
 
   unSubscribe;
@@ -93,22 +98,50 @@ export class DetailScreen extends React.Component {
       this.setState({destCoord: coord});
     })();
     //let base64Image = await GDNServiceInstance.convertUrlToBase64(data.heroImage || Helper.ImageUrl);
-    let shareOptions = {
-      title:  data.title || LStrings.NoTitle,
-      message: LStrings.ShareDescription + '\n\n' +
-      LStrings.PlaceName + ': ' + (data.title || LStrings.NoTitle) + '\n\n' +
+    let shareMsg = LStrings.PlaceName + ': ' + (data.title || LStrings.NoTitle) + '\n\n' +
       LStrings.Description + ': ' + '\n' + (data.description || LStrings.NoDescription) + '\n\n' +
       '- ' + LStrings.Address +  ': ' + Helper.getAndress(data.address, data.district) + '\n' +
       '- ' + LStrings.Phone +  ': ' + data.phone + '\n' +
       '- ' + LStrings.Website +  ': ' + data.website + '\n' +
-      '- ' + LStrings.WorkingTime +  ': ' + this.renderHour(data.open, data.close) + '\n\n'
-      ,
-      subject: data.title || LStrings.NoTitle //  for email
+      '- ' + LStrings.WorkingTime +  ': ' + this.renderHour(data.open, data.close);
+
+    let shareOptions = {
+      title:  data.title || LStrings.NoTitle,
+      message: shareMsg ,
+      // url: data.heroImage || Helper.ImageUrl,
+      // type: "image/jpg",
+    };
+    let quoteMsg =
+      (data.title || LStrings.NoTitle) + ' - ' +
+      (data.description || LStrings.NoDescription);
+    let shareContent = {
+      contentType: 'link',
+      contentUrl: data.heroImage || Helper.ImageUrl,
+      contentDescription: shareMsg,
+      quote: quoteMsg
     };
     this.setState({
-      shareOptions: shareOptions
+      shareOptions: shareOptions,
+      fbSshareContent: shareContent
     });
 
+  }
+
+  // Share the link using the share dialog.
+  shareLinkWithShareDialog() {
+    ShareDialog.canShow(this.state.fbSshareContent).then(
+      (canShow) => {
+        if (canShow) {
+          return ShareDialog.show(this.state.fbSshareContent);
+        }
+      }
+    ).then(
+      (result) => {
+
+      },
+      (error) => {
+      }
+    );
   }
 
   async getNearByData(id) {
@@ -202,9 +235,7 @@ export class DetailScreen extends React.Component {
                         onPress={()=>{
                           this.onCancel();
                           setTimeout(() => {
-                            Share.shareSingle(Object.assign(shareOptions, {
-                              "social": "facebook"
-                            }));
+                            this.shareLinkWithShareDialog();
                           },300);
                         }}>Facebook</Button>
                 <Button iconSrc={{ uri: WHATSAPP_ICON }}
@@ -216,15 +247,6 @@ export class DetailScreen extends React.Component {
                             }));
                           },300);
                         }}>Whatsapp</Button>
-                <Button iconSrc={{ uri: GOOGLE_PLUS_ICON }}
-                        onPress={()=>{
-                          this.onCancel();
-                          setTimeout(() => {
-                            Share.shareSingle(Object.assign(shareOptions, {
-                              "social": "googleplus"
-                            }));
-                          },300);
-                        }}>Google +</Button>
                 <Button iconSrc={{ uri: EMAIL_ICON }}
                         onPress={()=>{
                           this.onCancel();

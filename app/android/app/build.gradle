@@ -155,6 +155,7 @@ dependencies {
     compile project(':react-native-localization')
     compile project(':react-native-share')
     compile project(':RNAdMob')
+    compile project(':react-native-fbsdk')
     compile fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleCompatible
     compile "com.android.support:appcompat-v7:23.0.1"

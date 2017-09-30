@@ -16,6 +16,7 @@
     "react-native-android-location-services-dialog-box": "^1.2.3",
     "react-native-communications": "^2.2.1",
     "react-native-easy-grid": "=0.1.14",
+    "react-native-fbsdk": "^0.6.1",
     "react-native-image-zoom-viewer": "^2.0.6",
     "react-native-localization": "^0.1.31",
     "react-native-maps": "^0.15.3",
@@ -27,7 +28,8 @@
   },
   "rnpm": {
     "assets": [
-      "./assets/fonts"
+      "./assets/fonts",
+      "./assets/icons"
     ]
   },
   "devDependencies": {
