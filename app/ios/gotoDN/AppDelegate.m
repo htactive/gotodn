@@ -13,11 +13,14 @@
 #import <React/RCTRootView.h>
 @import GoogleMaps;
 @import GoogleMobileAds;
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [[FBSDKApplicationDelegate sharedInstance] application:application
+                           didFinishLaunchingWithOptions:launchOptions];
   // Initialize Google Mobile Ads SDK
   // Sample AdMob app ID: ca-app-pub-3940256099942544~1458002511
   [GMSServices provideAPIKey:@"AIzaSyARWHr6uJrC-cVnlByXNeiIm-UGBFPUgiQ"];
@@ -38,5 +41,22 @@
   [self.window makeKeyAndVisible];
   return YES;
 }
+  
+  - (BOOL)application:(UIApplication *)application
+              openURL:(NSURL *)url
+              options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+    
+    BOOL handled = [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                                  openURL:url
+                                                        sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                                               annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
+                    ];
+    // Add any custom logic here.
+    return handled;
+  }
+  
+  - (void)applicationDidBecomeActive:(UIApplication *)application {
+    [FBSDKAppEvents activateApp];
+  }
 
 @end

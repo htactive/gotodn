@@ -23,7 +23,8 @@ import {commonStore, CommonStoreActions, reloadFavorite} from '../stores/CommonS
 import {LStrings} from '../common/LocalizedStrings';
 import Share, {ShareSheet, Button} from 'react-native-share';
 import {AdmobBanner} from '../components/common/AdmobBanner';
-const FBSDK = require('react-native-fbsdk');
+import * as FBSDK from 'react-native-fbsdk';
+
 const {
   ShareDialog,
 } = FBSDK;
@@ -109,15 +110,17 @@ export class DetailScreen extends React.Component {
   shareLinkWithShareDialog() {
     ShareDialog.canShow(this.state.fbSshareContent).then(
       (canShow) => {
+        debugger;
         if (canShow) {
           return ShareDialog.show(this.state.fbSshareContent);
         }
       }
     ).then(
       (result) => {
-
+        debugger;
       },
       (error) => {
+        debugger;
       }
     );
   }
