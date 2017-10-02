@@ -87,35 +87,35 @@ export class MenuSearch extends React.Component {
                                   this.itemHeight = height;
                                 }}
                                 onPress={() => this.props.onSearchSelected && this.props.onSearchSelected(d)}
-                                style={[style.detailInfoItem, { paddingVertical: 15, paddingHorizontal: 10},
+                                style={[style.detailInfoItem, { paddingHorizontal: 10},
                               this.state.selectedIndex == index ? {
                                 backgroundColor: '#b3e5fc'
                               } : {},
                               index == this.state.data.length && {borderBottomWidth: 0}
                             ]}>
-                <View style={{flex: 25, justifyContent: 'center', alignItems: 'flex-start'}}>
+                <View style={{width: (viewportWidth - 30) / 5, justifyContent: 'center', alignItems: 'flex-start'}}>
                   <Image
                     style={{resizeMode: 'cover', width: (viewportWidth - 30) / 5, height: (viewportWidth - 30) / 5}}
                     source={{uri: d.heroImage || Helper.ImageUrl}}/>
                 </View>
-                <View style={{flex: 75}}>
+                <View style={{flex: 1, paddingLeft: 10}}>
                   <View style={{flex: 3}}>
                     <Text numberOfLines={1} style={style.detailNearByTitle}>{d.title}</Text>
                   </View>
                   <View style={{flex: 7, justifyContent:'space-between'}}>
                     <View style={{flexDirection:'row'}}>
-                      <View style={{flex:1, justifyContent: 'center', alignItems: 'flex-start'}}>
+                      <View style={{width: 25, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
                         <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={AppIcon.Location}/>
                       </View>
-                      <View style={{flex:9,justifyContent: 'center', alignItems: 'flex-start'}}>
-                        <Text numberOfLines={1} style={[style.menuSearchInfo, {paddingLeft: 5}]}>{d.address}</Text>
+                      <View style={{flex:1,justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+                        <Text numberOfLines={2} style={[style.menuSearchInfo, {paddingLeft: 5}]}>{d.address}</Text>
                       </View>
                     </View>
                     <View style={{flexDirection:'row'}}>
-                      <View style={{flex:1, justifyContent: 'center', alignItems: 'flex-start'}}>
+                      <View style={{width: 25, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
                         <Image style={[style.iconImgXxs, {tintColor: '#263238'}]} source={AppIcon.Tel}/>
                       </View>
-                      <View style={{flex:9, justifyContent: 'center', alignItems: 'flex-start'}}>
+                      <View style={{flex:1, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
                         <Text numberOfLines={1} style={[style.menuSearchInfo, {paddingLeft: 5}]}>{d.phone}</Text>
                       </View>
                     </View>

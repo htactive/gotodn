@@ -28,10 +28,10 @@ export class DetailNearPlace extends React.Component {
               </View>
               <View style={{flex: 7, justifyContent:'space-between'}}>
                 <View style={{flexDirection:'row'}}>
-                  <View style={{width: 25, justifyContent: 'center', alignItems: 'flex-start'}}>
+                  <View style={{width: 25, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
                     <Image style={style.iconImgXxs} source={AppIcon.Location}/>
                   </View>
-                  <View style={{flex:9,justifyContent: 'center', alignItems: 'flex-start'}}>
+                  <View style={{flex:9,justifyContent: 'flex-start', alignItems: 'flex-start'}}>
                     <Text numberOfLines={2} style={style.detailNearByInfo}>{d.address}</Text>
                   </View>
                 </View>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Image, TouchableOpacity} from 'react-native';
-import {Icon} from 'native-base';
-import {style} from '../../styles/style';
+import {Icon, Spinner} from 'native-base';
+import {style, StyleBase} from '../../styles/style';
 import {AppIcon,Helper} from  '../../common/constain';
 
 export class DetailBanner extends React.Component {
@@ -20,7 +20,10 @@ export class DetailBanner extends React.Component {
                   if (this.props.onFavoriteClicked)
                     this.props.onFavoriteClicked()
                 } }>
-                    <Image style={[style.iconImgSm, this.props.isFavorite ? {tintColor: '#E52B50'} : {tintColor: '#039be5'}]} source={AppIcon.Favorite}/>
+                    {this.props.isFavorite != null ?
+                      <Image style={[style.iconImgSm, this.props.isFavorite ? {tintColor: '#E52B50'} : {tintColor: '#039be5'}]} source={AppIcon.Favorite}/>
+                      : <Spinner color={StyleBase.header_color}/>
+                    }
                   </TouchableOpacity>
                 </View>
                 <View style={style.detailImageActionIcon}>

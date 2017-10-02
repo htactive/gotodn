@@ -9,8 +9,6 @@ import {DetailText} from '../components/detail/DetailText';
 import {DetailInfo} from '../components/detail/DetailInfo';
 import {DetailImage} from '../components/detail/DetailImage';
 import {DetailNearPlace} from '../components/detail/DetailNearPlace';
-import {DNPageRoute} from '../NavigationHelper';
-import {Menu} from '../components/menu/Menu';
 import {ReactMap} from "../components/map/ReactMap";
 import {DetailMapTextItem} from '../components/detail/DetailMapTextItem';
 import {ReactMapDirection} from '../components/map/ReactMapDirection';
@@ -29,14 +27,17 @@ const FBSDK = require('react-native-fbsdk');
 const {
   ShareDialog,
 } = FBSDK;
+import RNFetchBlob from 'react-native-fetch-blob';
+const fs = RNFetchBlob.fs;
 
 export class DetailScreen extends React.Component {
   state = {
     dataDetail: {},
-    isFavorite: false,
+    isFavorite: null,
     visible: false,
     shareOptions: null,
-    fbSshareContent: null
+    fbSshareContent: null,
+    loadMap: false,
   };
 
   unSubscribe;
@@ -79,12 +80,12 @@ export class DetailScreen extends React.Component {
       this.unSubscribeCommon();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const {params} = this.props.navigation.state;
     let itemId = (params && params.itemId) || 0;
-    this.getDetailData(itemId);
-    this.getNearByData(itemId);
-    this.checkFavorite(itemId);
+    await this.getDetailData(itemId);
+    await this.getNearByData(itemId);
+    await this.checkFavorite(itemId);
   }
 
   async getDetailData(id) {
@@ -97,34 +98,11 @@ export class DetailScreen extends React.Component {
       let coord = await GoogleAPIServiceInstance.getGPSByAddress(data.address, data.district, data.city);
       this.setState({destCoord: coord});
     })();
-    //let base64Image = await GDNServiceInstance.convertUrlToBase64(data.heroImage || Helper.ImageUrl);
-    let shareMsg = LStrings.PlaceName + ': ' + (data.title || LStrings.NoTitle) + '\n\n' +
-      LStrings.Description + ': ' + '\n' + (data.description || LStrings.NoDescription) + '\n\n' +
-      '- ' + LStrings.Address +  ': ' + Helper.getAndress(data.address, data.district) + '\n' +
-      '- ' + LStrings.Phone +  ': ' + data.phone + '\n' +
-      '- ' + LStrings.Website +  ': ' + data.website + '\n' +
-      '- ' + LStrings.WorkingTime +  ': ' + this.renderHour(data.open, data.close);
 
-    let shareOptions = {
-      title:  data.title || LStrings.NoTitle,
-      message: shareMsg ,
-      // url: data.heroImage || Helper.ImageUrl,
-      // type: "image/jpg",
-    };
-    let quoteMsg =
-      (data.title || LStrings.NoTitle) + ' - ' +
-      (data.description || LStrings.NoDescription);
-    let shareContent = {
-      contentType: 'link',
-      contentUrl: data.heroImage || Helper.ImageUrl,
-      contentDescription: shareMsg,
-      quote: quoteMsg
-    };
-    this.setState({
-      shareOptions: shareOptions,
-      fbSshareContent: shareContent
-    });
-
+    this.getSharingData(data);
+    setTimeout(() => {
+      this.setState({loadMap: true});
+    }, 500);
   }
 
   // Share the link using the share dialog.
@@ -173,7 +151,7 @@ export class DetailScreen extends React.Component {
     let fullAddress = Helper.getAndress(data.address, data.district);
 
     return (
-      !!data.id && shareOptions ? (
+      !!data.id? (
           <Grid>
             <Col>
               <ScrollView ref={(scrollV) => this.detailScroll = scrollV}>
@@ -181,7 +159,7 @@ export class DetailScreen extends React.Component {
                   <DetailBanner
                     isFavorite={this.state.isFavorite}
                     coverImg={data.heroImage}
-                    onSharedClicked={() => this.shareDetail(data.id)}
+                    onSharedClicked={() => this.shareDetail(data)}
                     onFavoriteClicked={() => this.likeDetail(data.id)}/>
                 </Row>
                 <Row size={2} style={style.detailContent}>
@@ -190,7 +168,11 @@ export class DetailScreen extends React.Component {
                     <DetailText title={data.title || LStrings.NoTitle}
                                 description={data.description || LStrings.NoDescription}/>
                     <View style={style.detailMap}>
-                      <ReactMap />
+                      {this.state.loadMap ? <ReactMap /> :
+                        <View style={[style.centralizedContent]}>
+                          <Spinner color={StyleBase.header_color}/>
+                        </View>
+                      }
                       <View style={style.detailOverlay}>
                         <DetailMapTextItem leftText={fullAddress} leftIcon={AppIcon.Location}
                                            rightText={LStrings.Direction} rightIcon={AppIcon.Direction}
@@ -214,8 +196,12 @@ export class DetailScreen extends React.Component {
                       </View>
                     </View>
                     <DetailInfo detailInfo={data.moreinfo}/>
-                    <DetailNearPlace nearByPlaces={this.state.detailNearBy || []}
-                                     onNearByClicked={(id) => this.goToPlace(id)}/>
+                    {
+                      this.state.detailNearBy && this.state.loadMap ?
+                        <DetailNearPlace nearByPlaces={this.state.detailNearBy || []}
+                                         onNearByClicked={(id) => this.goToPlace(id)}/>
+                        : null
+                    }
                     <View style={{flex: 1, width: viewportWidth, height: 60}}/>
                   </View>
                 </Row>
@@ -282,11 +268,37 @@ export class DetailScreen extends React.Component {
     )
   }
 
-  shareDetail(id) {
-    this.onOpen();
+  shareDetail(data) {
+    if(!this.state.shareOptions.convertUrl) {
+      let imagePath = null;
+      let coverImgUrl = data.heroImage || Helper.ImageUrl;
+      RNFetchBlob
+        .config({
+          fileCache: true
+        })
+        .fetch('GET', coverImgUrl)
+        .then((resp) => {
+          imagePath = resp.path();
+          return resp.readFile('base64');
+        })
+        .then((base64Data) => {
+          this.state.shareOptions.url = "data:image/png;base64," + base64Data;
+          this.state.shareOptions.convertUrl = true;
+          this.onOpen();
+          return fs.unlink(imagePath);
+        })
+        .catch((errorMessage, statusCode) => {
+          this.onOpen();
+        });
+    } else {
+      this.onOpen();
+    }
   }
 
   async likeDetail(id) {
+    this.setState({
+      isFavorite: null,
+    });
     let fPlaceIdValue = await AsyncStorage.getItem(Helper.FavoriteKey);
     if (fPlaceIdValue) {
       let fPlaceIds = fPlaceIdValue.split(Helper.SeparateKey);
@@ -314,7 +326,7 @@ export class DetailScreen extends React.Component {
 
   handleDirection(address, coord) {
     if (coord && coord.latitude && coord.longitude)
-      navigationStore.dispatch(navigateToRouteAction('ReactMapDirection', {coordinate: coord}));
+      navigationStore.dispatch(navigateToRouteAction('ReactMapDirection', {coordinate: coord, address: address}));
     else
       Alert.alert(LStrings.NoAddress);
   }
@@ -360,6 +372,57 @@ export class DetailScreen extends React.Component {
         isFavorite: false,
       });
     }
+  }
+
+  getSharingData(data) {
+    let shareMsg = LStrings.PlaceName + ': ' + (data.title || LStrings.NoTitle) + '\n\n' +
+      LStrings.Description + ': ' + '\n' + (data.description || LStrings.NoDescription) + '\n\n' +
+      '- ' + LStrings.Address +  ': ' + Helper.getAndress(data.address, data.district) + '\n' +
+      '- ' + LStrings.Phone +  ': ' + data.phone + '\n' +
+      '- ' + LStrings.Website +  ': ' + data.website + '\n' +
+      '- ' + LStrings.WorkingTime +  ': ' + this.renderHour(data.open, data.close);
+
+    let shareOptions = {
+      title:  data.title || LStrings.NoTitle,
+      message: shareMsg ,
+      url: '',
+      type: "image/png",
+      convertUrl: false,
+    };
+    if(!this.state.shareOptions || !this.state.shareOptions.convertUrl) {
+      let imagePath = null;
+      let coverImgUrl = data.heroImage || Helper.ImageUrl;
+      RNFetchBlob
+        .config({
+          fileCache: true
+        })
+        .fetch('GET', coverImgUrl)
+        .then((resp) => {
+          imagePath = resp.path();
+          return resp.readFile('base64');
+        })
+        .then((base64Data) => {
+          this.state.shareOptions.url = "data:image/png;base64," + base64Data;
+          this.state.shareOptions.convertUrl = true;
+          return fs.unlink(imagePath);
+        })
+        .catch((errorMessage, statusCode) => {
+          this.onOpen();
+        });
+    }
+    let quoteMsg =
+      (data.title || LStrings.NoTitle) + ' - ' +
+      (data.description || LStrings.NoDescription);
+    let shareContent = {
+      contentType: 'link',
+      contentUrl: data.heroImage || Helper.ImageUrl,
+      contentDescription: shareMsg,
+      quote: quoteMsg
+    };
+    this.setState({
+      shareOptions: shareOptions,
+      fbSshareContent: shareContent
+    });
   }
 }
 

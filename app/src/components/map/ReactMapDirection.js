@@ -3,7 +3,7 @@ import {Alert, StyleSheet, TouchableOpacity, View, Text, Image} from 'react-nati
 import {Icon} from 'native-base';
 import {viewportWidth, viewportHeight, Helper, AppIcon, MapHelper, platform, Guid} from '../../common/constain';
 import {GoogleAPIServiceInstance} from '../../services/GoogleAPIService';
-import {CustomCallout} from './CustomCallout';
+import {CustomCallout} from '../common/CustomCallout';
 import {StyleBase, style} from '../../styles/style';
 const MapView = require('react-native-maps');
 const {PROVIDER_GOOGLE} = MapView;
@@ -29,6 +29,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
     waitingForLocation: false,
     gpsError: null,
     selectedRouteId: '',
+    address: '',
   };
 
   marker;
@@ -42,7 +43,7 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
   componentWillMount() {
     const {params} = this.props.navigation.state;
     let destination = params.coordinate;
-    this.setState({destination: destination});
+    this.setState({destination: destination, address: params.address});
 
     this.unSubscribe = appStore.subscribe(() => {
       this.forceUpdate();
@@ -265,7 +266,6 @@ export class ReactMapDirection extends React.Component<thisProps, thisState> {
         }
       }
       let fRouteId = routesT.length > 0 ? routesT[0].id : '';
-      routesT.reverse();
       for (let i = 0; i < routesT.length; i++) {
         routesT[i].markerCoord = this.getMarkerCoord(routesT[i], routesT.slice());
       }
