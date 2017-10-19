@@ -12,7 +12,7 @@ import {DetailNearPlace} from '../components/detail/DetailNearPlace';
 import {ReactMap} from "../components/map/ReactMap";
 import {DetailMapTextItem} from '../components/detail/DetailMapTextItem';
 import {ReactMapDirection} from '../components/map/ReactMapDirection';
-import {NavigationActions} from 'react-navigation';
+import {Menu} from '../components/menu/Menu';
 import {navigationStore, navigateToRouteAction} from '../stores/NavigationStore';
 import Communications from 'react-native-communications';
 import {GDNServiceInstance} from '../services/GDNService';
@@ -47,16 +47,6 @@ export class DetailScreen extends React.Component {
   base64Image;
 
   componentWillMount() {
-    navigationStore.subscribe(() => {
-      let navigationState = navigationStore.getState();
-      if (navigationState.routeName) {
-        const navigateAction = NavigationActions.navigate({
-          routeName: navigationState.routeName,
-          params: navigationState.params
-        });
-        this.props.navigation.dispatch(navigateAction);
-      }
-    });
     this.unSubscribe = appStore.subscribe(() => {
       const {params} = this.props.navigation.state;
       let itemId = (params && params.itemId) || 0;
@@ -98,6 +88,18 @@ export class DetailScreen extends React.Component {
     (async () => {
       let coord = await GoogleAPIServiceInstance.getGPSByAddress(data.address, data.district, data.city);
       this.setState({destCoord: coord});
+    })();
+
+    (async () => {
+      let placeImgs =  await GDNServiceInstance.getPlaceImagesById(id);
+      this.state.dataDetail.images = placeImgs || [];
+      this.forceUpdate();
+    })();
+
+    (async () => {
+      let placeInfo =  await GDNServiceInstance.getPlaceInfoById(id);
+      this.state.dataDetail.moreinfo = placeInfo || [];
+      this.forceUpdate();
     })();
 
     this.getSharingData(data);

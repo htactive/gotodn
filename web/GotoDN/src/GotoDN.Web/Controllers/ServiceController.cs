@@ -295,46 +295,66 @@ namespace GotoDN.Web.Controllers
             var currentId = index ?? 0;
             var itemsPerIndex = 20;
 
-            var eventPlaces = this.HTRepository.PlaceRepository.GetAll().
-                Where(x => x.CityId == currentCity && x.HTServiceId.HasValue && x.HTServiceId == serviceId && (
-                (x.IsCategorySlider.HasValue && x.IsCategorySlider.Value)) &&
-                 x.PlaceLanguages.Any(p => p.Language == currentLanguage))
-                .Include("PlaceLanguages.Image").Include(p => p.Category).ToList();
-            if (eventPlaces == null) return null;
-            result = eventPlaces.Select(x =>
-                new SliderModel()
-                {
-                    Id = x.Id,
-                    SubTitle = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Description,
-                    Title = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Title,
-                    Url = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Image != null ?
-                        GetUrl(x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Image) : Common.DefaultPhoto.ImageUrl,
-                    CreateDate = x.CreatedDate,
-                    Star = x.Rating,
-                    IsCategorySlider = x.IsCategorySlider,
-                }).ToList().OrderByDescending(t => t.IsCategorySlider).ThenByDescending(t => t.CreateDate).Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
+            var place = this.HTRepository.PlaceRepository.GetAll();
+            var placeLanguage = this.HTRepository.PlaceLanguageRepository.GetAll();
+            var image = this.HTRepository.ImageRepository.GetAll();
+
+            result = (from p in place
+                      join pl in placeLanguage on p.Id equals pl.PlaceId
+                      join img in image on pl.ImageId equals img.Id into imgs
+                      from img in imgs.DefaultIfEmpty()
+                      where pl.Language == currentLanguage && p.CityId == CurrentCityId &&
+                             p.HTServiceId == serviceId && p.IsCategorySlider == true
+                      orderby p.Id descending
+                      select new SliderModel()
+                      {
+                          Id = p.Id,
+                          SubTitle = pl.Description,
+                          Title = pl.Title,
+                          Url = img != null ? GetUrl(img) : Common.DefaultPhoto.ImageUrl,
+                          CreateDate = p.CreatedDate,
+                          Star = p.Rating,
+                          IsCategorySlider = p.IsCategorySlider,
+                      }
+                     )
+                     .Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
 
             return result;
         }
 
         [HttpGet, Route("get-list-data")]
         [AllowAnonymous]
-        public List<PlaceModel> GetCategoryData(int? serviceId, int? index)
+        public List<AppServicePlaceModel> GetCategoryData(int? serviceId, int? index)
         {
             var currentLanguage = this.CurrentLanguage;
             var currentCityId = this.CurrentCityId;
             var currentId = index ?? 0;
             var itemsPerIndex = 30;
 
-            var result = new List<MenuListModel>();
-            var places = this.HTRepository.PlaceRepository.GetAll()
-                .Include("PlaceLanguages.Image")
-                .Where(t => t.CityId == currentCityId && t.PlaceLanguages.Any(l => l.Language == currentLanguage) && t.HTServiceId.HasValue && t.HTServiceId == serviceId)
-                .OrderByDescending(t => t.CreatedDate).Skip(currentId * itemsPerIndex).Take(itemsPerIndex);
+            var place = this.HTRepository.PlaceRepository.GetAll();
+            var placeLanguage = this.HTRepository.PlaceLanguageRepository.GetAll();
+            var image = this.HTRepository.ImageRepository.GetAll();
 
-            var placeModels = places.Select(t => AutoMapper.Mapper.Map<Place, PlaceModel>(t)).ToList();
+            var result = new List<AppServicePlaceModel>();
 
-            return placeModels;
+            result = (from p in place
+                     join pl in placeLanguage on p.Id equals pl.PlaceId
+                     join img in image on pl.ImageId equals img.Id into imgs
+                     from img in imgs.DefaultIfEmpty()
+                     where p.CityId == currentCityId && pl.Language == currentLanguage &&
+                            p.HTServiceId == serviceId
+                     orderby p.Id descending
+                     select new AppServicePlaceModel()
+                     {
+                         Id = p.Id,
+                         ImageUrl = GetUrl(img),
+                         Star = p.Rating,
+                         Title = pl.Title,
+                         Description = pl.Description,
+                     })
+                     .Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
+
+            return result;
         }
     }
 }

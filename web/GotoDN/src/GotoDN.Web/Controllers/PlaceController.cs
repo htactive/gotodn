@@ -531,7 +531,15 @@ namespace GotoDN.Web.Controllers
             var city = this.CurrentCityId;
             var currentId = index ?? 0;
             var itemsPerIndex = 30;
-            var placeQuery = this.HTRepository.PlaceLanguageRepository.GetAll()
+
+            if (string.IsNullOrEmpty(search) || search.Trim().Length < 3) return null;
+
+            search = search.ToLower().Trim();
+
+            var placeResult = new List<AppSearchPlaceModel>();
+            if (language == LanguageEnums.Vietnamese)
+            {
+                var placeQuery = this.HTRepository.PlaceLanguageRepository.GetAll()
                 .Include(pl => pl.Image)
                 .Include(pl => pl.Place)
                 .Include("Place.Category.CategoryLanguages")
@@ -540,13 +548,6 @@ namespace GotoDN.Web.Controllers
                 .Include("Place.District")
                 .Where(pl => pl.Language == language && pl.Place != null && pl.Place.CityId == city);
 
-            if (string.IsNullOrEmpty(search) || search.Trim().Length < 2) return null;
-
-            search = search.ToLower().Trim();
-
-            var placeResult = new List<AppSearchPlaceModel>();
-            if (language == LanguageEnums.Vietnamese)
-            {
                 var placeList = placeQuery.ToList();
                 search = search.StripDiacritics();
                 var placeListRs = placeList.Where(pl => (pl.Place.City != null && pl.Place.City.Name.ToLower().StripDiacritics().Contains(search))
@@ -578,34 +579,52 @@ namespace GotoDN.Web.Controllers
             }
             else
             {
-                placeQuery = placeQuery.Where(pl => (pl.Place.City != null && pl.Place.City.Name.ToLower().Contains(search))
-                || (pl.Place.District != null && pl.Place.District.Name.ToLower().Contains(search))
-                || (pl.Place.Address != null && pl.Place.Address.ToLower().Contains(search))
-                || (pl.Title != null && pl.Title.ToLower().Contains(search))
-                || (pl.Place.Category != null && pl.Place.Category.CategoryLanguages.Any(cl => cl.Language == language && cl.Title.ToLower().Contains(search)))
-                || (pl.Place.HTService != null && pl.Place.HTService.HTServiceLanguages.Any(sl => sl.Language == language && sl.Title.ToLower().Contains(search)))
-                );
-                placeResult = placeQuery
-                .OrderByDescending(p => p.Place.IsHomeSlider)
-                .ThenByDescending(p => p.Place.IsCategorySlider)
-                .ThenByDescending(p => p.Place.CreatedDate)
-                .Skip(currentId * itemsPerIndex).Take(itemsPerIndex)
-                .ToList()
-                .Select(p => new AppSearchPlaceModel
-                {
-                    Id = p.Place.Id,
-                    Title = p.Title ?? string.Empty,
-                    IsCategorySlider = p.Place.IsCategorySlider,
-                    IsHomeSlider = p.Place.IsHomeSlider,
-                    City = p.Place.City != null ? p.Place.City.Name : string.Empty,
-                    District = p.Place.District != null ? p.Place.District.Name : string.Empty,
-                    Address = p.Place.Address,
-                    CoverImage = Mappers.Mapper.ToModel(p.Image),
-                    Phone = p.Place.Phone,
-                })
-                .ToList();
+                var place = this.HTRepository.PlaceRepository.GetAll();
+                var placeLanguage = this.HTRepository.PlaceLanguageRepository.GetAll();
+                var category = this.HTRepository.CategoryRepository.GetAll();
+                var categoryLanguage = this.HTRepository.CategoryLanguageRepository.GetAll();
+                var service = this.HTRepository.HTServiceRepository.GetAll();
+                var serviceLanguage = this.HTRepository.HTServiceLanguageRepository.GetAll();
+                var image = this.HTRepository.ImageRepository.GetAll();
+                var cities = this.HTRepository.CityRepository.GetAll();
+                var district = this.HTRepository.DistrictRepository.GetAll();
+
+                placeResult = (from pl in placeLanguage
+                            join pimg in image on pl.ImageId equals pimg.Id into pimgs
+                            from pimg in pimgs.DefaultIfEmpty()
+                            join p in place on pl.PlaceId equals p.Id
+                            join ci in cities on p.CityId equals ci.Id into cis
+                            from ci in cis.DefaultIfEmpty()
+                            join dis in district on p.DistrictId equals dis.Id into diss
+                            from dis in diss.DefaultIfEmpty()
+                            join c in category on p.CategoryId equals c.Id
+                            join cl in categoryLanguage on c.Id equals cl.CategoryId
+                            join s in service on p.HTServiceId equals s.Id into ss
+                            from s in ss.DefaultIfEmpty()
+                            where p.CityId == CurrentCityId && pl.Language == language &&
+                                     cl.Language == language && s.HTServiceLanguages.Any(sl => sl.Language == language) &&
+                                     ((ci != null && ci.Name.ToLower().Contains(search)) ||
+                                     (dis != null && dis.Name.ToLower().Contains(search)) ||
+                                     (p.Address != null && p.Address.ToLower().Contains(search)) ||
+                                     (pl.Title != null && pl.Title.ToLower().Contains(search)) ||
+                                     (cl.Title != null && cl.Title.ToLower().Contains(search)) ||
+                                     (s != null && s.HTServiceLanguages.Any(sl => sl.Title != null && sl.Title.ToLower().Contains(search)))
+                                     )
+                            orderby c.IsEvent descending, p.IsHomeSlider descending, p.IsCategorySlider descending, p.Id descending
+                            select new AppSearchPlaceModel
+                            {
+                                Id = p.Id,
+                                Title = pl.Title ?? string.Empty,
+                                City = ci != null ? ci.Name : string.Empty,
+                                District = dis != null ? dis.Name : string.Empty,
+                                Address = p.Address,
+                                CoverImage = Mappers.Mapper.ToModel(pimg),
+                                Phone = p.Phone,
+                            })
+                            .Skip(currentId * itemsPerIndex).Take(itemsPerIndex)
+                            .ToList();
             }
-            
+
             return placeResult;
         }
 
@@ -621,7 +640,7 @@ namespace GotoDN.Web.Controllers
             foreach (var idStr in favoriteIds)
             {
                 var placeId = 0;
-                if(int.TryParse(idStr,out placeId))
+                if (int.TryParse(idStr, out placeId))
                 {
                     ids.Add(placeId);
                 }
@@ -944,69 +963,151 @@ namespace GotoDN.Web.Controllers
 
         [HttpGet, Route("app-get-place-by-id")]
         [AllowAnonymous]
-        public PlaceModel AppGetPlaceById(int id)
+        public AppPlaceModel AppGetPlaceById(int id)
         {
             var currentLang = this.CurrentLanguage;
             var currentCity = this.CurrentCityId;
 
-            var entity = this.HTRepository.PlaceRepository.GetAll()
-                .Include(x => x.City).Include(x => x.District).FirstOrDefault(x => x.Id == id);
-            if (entity == null) return null;
-            var model = AutoMapper.Mapper.Map<Place, PlaceModel>(entity);
+            var place = this.HTRepository.PlaceRepository.GetAll();
+            var placeLanguage = this.HTRepository.PlaceLanguageRepository.GetAll();
+            var image = this.HTRepository.ImageRepository.GetAll();
+            var city = this.HTRepository.CityRepository.GetAll();
+            var district = this.HTRepository.DistrictRepository.GetAll();
 
-            var lang = this.HTRepository.PlaceLanguageRepository.GetAll()
-                .Include(x => x.Image).Include(x => x.Icon).Include("PlaceImages.Image")
-                .Include("PlaceMoreInfo.Icon")
-                .FirstOrDefault(x => x.Language == currentLang && x.PlaceId == id);
-            if (lang != null)
-            {
-                //load images for language
-                if(lang.PlaceImages == null || lang.PlaceImages.Count == 0)
-                {
-                    var moreLang = this.HTRepository.PlaceLanguageRepository.GetAll()
-                                .Include("PlaceImages.Image")
-                                .FirstOrDefault(x => x.PlaceId == id && x.Language == LanguageEnums.English);
-                    if (moreLang != null )
-                    {
-                        lang.PlaceImages = moreLang.PlaceImages;
-                    }
-                }
-                if (lang.PlaceMoreInfo != null)
-                {
-                    lang.PlaceMoreInfo = lang.PlaceMoreInfo.OrderBy(t => t.Order).ToList();
-                }
-                model.PlaceLanguages.Add(AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(lang));
-            }
-            return model;
+            var rs = (from p in place
+                      join ci in city on p.CityId equals ci.Id into cis
+                      from ci in cis.DefaultIfEmpty()
+                      join dis in district on p.DistrictId equals dis.Id into diss
+                      from dis in diss.DefaultIfEmpty()
+                      join pl in placeLanguage on p.Id equals pl.PlaceId
+                      join pimg in image on pl.ImageId equals pimg.Id into pimgs
+                      from pimg in pimgs.DefaultIfEmpty()
+                      where p.Id == id && pl.Language == currentLang
+                      select new AppPlaceModel
+                      {
+                          Id = p.Id,
+                          ImageUrl = GetUrl(pimg),
+                          Title = pl.Title,
+                          Description = pl.Description,
+                          Star = p.Rating,
+                          Address = p.Address,
+                          Phone = p.Phone,
+                          Website = p.Website,
+                          OpenTime = p.OpenTime,
+                          CloseTime = p.CloseTime,
+                          City = ci != null ? ci.Name : string.Empty,
+                          District = dis != null ? dis.Name : string.Empty
+                      }).FirstOrDefault();
+
+
+
+            return rs;
+        }
+
+        [HttpGet, Route("app-get-place-images-by-id")]
+        [AllowAnonymous]
+        public List<AppPlaceImageModel> AppGetPlaceImagesById(int id)
+        {
+            var currentLang = this.CurrentLanguage;
+            var currentCity = this.CurrentCityId;
+            var placeLanguage = this.HTRepository.PlaceLanguageRepository.GetAll();
+            var placeLanguageImage = this.HTRepository.PlaceImageRepository.GetAll();
+            var image = this.HTRepository.ImageRepository.GetAll();
+            var result = new List<AppPlaceImageModel>();
+
+            result = (from pl in placeLanguage
+                      join pli in placeLanguageImage on pl.Id equals pli.PlaceLangId
+                      join img in image on pli.ImageId equals img.Id
+                      where pl.PlaceId == id && pl.Language == LanguageEnums.English
+                      select new AppPlaceImageModel()
+                      {
+                          Id = pli.Id,
+                          ImageUrl = GetUrl(img)
+                      }).ToList();
+
+            return result;
+        }
+
+        [HttpGet, Route("app-get-place-info-by-id")]
+        [AllowAnonymous]
+        public List<PlaceMoreInfoModel> AppGetPlaceInfoById(int id)
+        {
+            var currentLang = this.CurrentLanguage;
+            var currentCity = this.CurrentCityId;
+
+            var placeMoreInfo = this.HTRepository.PlaceMoreInfoRepository.GetAll();
+            var image = this.HTRepository.ImageRepository.GetAll();
+            var result = new List<PlaceMoreInfoModel>();
+
+            result = (from pm in placeMoreInfo
+                      join img in image on pm.IconId equals img.Id into imgs
+                      from img in imgs.DefaultIfEmpty()
+                      where pm.PlaceLanguage.PlaceId == id && pm.PlaceLanguage.Language == currentLang
+                      orderby pm.Order
+                      select new PlaceMoreInfoModel()
+                      {
+                          IconId = pm.IconId,
+                          Icon = AutoMapper.Mapper.Map<Image, ImageModel>(img),
+                          Id = pm.Id,
+                          IsHalf = pm.IsHalf,
+                          Name = pm.Name,
+                          Order = pm.Order,
+                          PlaceLangId = pm.PlaceLangId,
+                          Value = pm.Value,
+                      }).ToList();
+
+            return result;
         }
 
         [HttpGet, Route("get-nearby-place-by-id")]
         [AllowAnonymous]
-        public List<PlaceLanguageModel> GetNearByPlaceById(int id)
+        public List<AppPlaceModel> GetNearByPlaceById(int id)
         {
             var currentLang = this.CurrentLanguage;
             var currentCityId = this.CurrentCityId;
 
-            var result = new List<PlaceLanguageModel>();
+            var place = this.HTRepository.PlaceRepository.GetAll();
+            var placeLanguage = this.HTRepository.PlaceLanguageRepository.GetAll();
+            var image = this.HTRepository.ImageRepository.GetAll();
+            var city = this.HTRepository.CityRepository.GetAll();
+            var district = this.HTRepository.DistrictRepository.GetAll();
 
-            var entity = this.HTRepository.PlaceRepository.GetAll()
-                .Include(x => x.City).Include(x => x.District).FirstOrDefault(x => x.Id == id);
-            if (entity == null) return result;
+            var result = new List<AppPlaceModel>();
 
-            var nearBy = this.HTRepository.PlaceLanguageRepository.GetAll()
-                .Include(x => x.Place).Include(x => x.Image)
-                .Where(x => x.Language == currentLang &&
-                        x.Place.CityId.HasValue && entity.CityId.HasValue && x.Place.CityId == entity.CityId && x.Place.Id != id)
-                .OrderByDescending(x => x.Place.DistrictId == entity.DistrictId).ThenByDescending(x => x.Place.CategoryId == entity.CategoryId)
-                .ThenByDescending(x => x.Place.HTServiceId == entity.HTServiceId).ThenByDescending(x => x.CreatedDate).Take(5).ToList();
+            var currentPlace = (from p in place
+                                where p.Id == id
+                                select p).FirstOrDefault();
 
-            result = nearBy.Select(n => AutoMapper.Mapper.Map<PlaceLanguage, PlaceLanguageModel>(n)).ToList();
+            if (currentPlace == null) return result;
 
-            foreach (var item in result)
-            {
-                item.Place = AutoMapper.Mapper.Map<Place, PlaceModel>(nearBy.FirstOrDefault(x => x.PlaceId == item.PlaceId).Place);
-            }
-            
+            result = (from p in place
+                      join ci in city on p.CityId equals ci.Id into cis
+                      from ci in cis.DefaultIfEmpty()
+                      join dis in district on p.DistrictId equals dis.Id into diss
+                      from dis in diss.DefaultIfEmpty()
+                      join pl in placeLanguage on p.Id equals pl.PlaceId
+                      join pimg in image on pl.ImageId equals pimg.Id into pimgs
+                      from pimg in pimgs.DefaultIfEmpty()
+                      where pl.Language == currentLang && p.Id != id &&
+                               p.CityId == currentCityId
+                      orderby p.DistrictId == currentPlace.DistrictId descending,
+                               p.HTServiceId == currentPlace.HTServiceId descending,
+                               p.CategoryId == currentPlace.CategoryId descending,
+                               p.Id descending
+                      select new AppPlaceModel
+                      {
+                          Id = p.Id,
+                          ImageUrl = GetUrl(pimg),
+                          Title = pl.Title,
+                          Phone = p.Phone,
+                          Description = pl.Description,
+                          Address = p.Address,
+                          OpenTime = p.OpenTime,
+                          CloseTime = p.CloseTime,
+                          City = ci != null ? ci.Name : string.Empty,
+                          District = dis != null ? dis.Name : string.Empty,
+                      }).Take(5).ToList();
+
             return result;
         }
     }

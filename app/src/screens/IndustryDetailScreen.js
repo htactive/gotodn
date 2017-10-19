@@ -9,7 +9,7 @@ import {DetailImage} from '../components/detail/DetailImage';
 import {DetailNearPlace} from '../components/detail/DetailNearPlace';
 import {DNPageRoute} from '../NavigationHelper';
 import {DetailFactory} from '../components/detail/DetailFactory';
-import {IndustryData, AppIcon, MapHelper} from '../common/constain';
+import {AppIcon, MapHelper} from '../common/constain';
 import { NavigationActions } from 'react-navigation';
 import {navigationStore, navigateAction, navigateToRouteAction} from '../stores/NavigationStore';
 import Communications from 'react-native-communications';
@@ -23,22 +23,12 @@ export class IndustryDetailScreen extends React.Component {
   };
 
   componentWillMount() {
-    navigationStore.subscribe(() => {
-      let navigationState = navigationStore.getState();
-      if(navigationState.routeName) {
-        const navigateAction = NavigationActions.navigate({
-          routeName: navigationState.routeName,
-          params: navigationState.params
-        });
-        this.props.navigation.dispatch(navigateAction);
-      }
-    });
   }
 
   componentDidMount() {
     const {params} = this.props.navigation.state;
     let itemId = (params && params.itemId) || 0;
-    let data = IndustryData.filter(t => t.id == itemId);
+    let data = [];
     this.setState({
       dataDetail: data.length > 0 ? data[0] : null
     });

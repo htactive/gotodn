@@ -81,7 +81,7 @@ namespace GotoDN.Web.Models
         public int Id { get; set; }
         public int PlaceLangId { get; set; }
         public int? ImageId { get; set; }
-        
+
         public ImageModel Image { get; set; }
     }
 
@@ -142,5 +142,36 @@ namespace GotoDN.Web.Models
         public string District { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
+    }
+
+    public class AppServicePlaceModel
+    {
+        public int Id { get; set; }
+        public string ImageUrl { get; set; }
+        public float? Star { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class AppPlaceModel
+    {
+        public int Id { get; set; }
+        public string ImageUrl { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public float? Star { get; set; }
+        public string Address { get; set; }
+        public string Phone { get; set; }
+        public string Website { get; set; }
+        public DateTime? OpenTime { get; set; }
+        public DateTime? CloseTime { get; set; }
+        public string City { get; set; }
+        public string District { get; set; }
+    }
+
+    public class AppPlaceImageModel
+    {
+        public int Id { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

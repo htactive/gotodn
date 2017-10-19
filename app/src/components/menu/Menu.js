@@ -7,14 +7,12 @@ import {MenuContent} from './MenuContent';
 import {MenuHeader} from './MenuHeader';
 import {MenuType, viewportHeight, viewportWidth, Helper} from '../../common/constain';
 import {MenuSearch} from './MenuSearch';
-import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
 import {appStore, appSaveCity} from '../../stores/AppStore';
 import {commonStore, toggleSearchBar, CommonStoreActions} from '../../stores/CommonStore';
 import {NavigationActions} from 'react-navigation';
 import {AdmobInterstitials} from '../../components/common/AdmobInterstitials';
-import {LStrings} from '../../common/LocalizedStrings';
 
 const drawerStyles = {
   drawer: {
@@ -98,6 +96,40 @@ export class Menu extends React.Component {
           showSearchBar: false,
           searchValue: ''
         });
+      }
+    });
+    navigationStore.subscribe(() => {
+
+      let navigationState = navigationStore.getState();
+      if (navigationState.routeName) {
+        const navigateAction = NavigationActions.navigate({
+          routeName: navigationState.routeName,
+          params: navigationState.params
+        });
+        let existRoute = this.navigation.state.routes.filter(r => r.routeName == navigationState.routeName);
+        if(existRoute && existRoute.length > 0) {
+          let existActions = this.navigation.state.routes
+            .filter(r => r.routeName != navigationState.routeName)
+            .map((r) => {
+            return NavigationActions.navigate({
+                    routeName: r.routeName,
+                    params: r.params
+                  });
+          });
+          existActions.push(
+            NavigationActions.navigate({
+              routeName: navigationState.routeName,
+              params: navigationState.params
+            })
+          );
+          const resetAction = NavigationActions.reset({
+            index: this.navigation.state.index,
+            actions: existActions
+          });
+          this.navigation.dispatch(resetAction);
+        } else {
+          this.navigation.dispatch(navigateAction);
+        }
       }
     });
   }
@@ -245,13 +277,15 @@ export class Menu extends React.Component {
   }
 
   logoClicked() {
-    let routeName = 'HomeScreen';
-    const actionToDispatch = NavigationActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({routeName})]
-    });
+    if(this.navigation.state.routes && this.navigation.state.routes.length > 1) {
+      let routeName = 'HomeScreen';
+      const actionToDispatch = NavigationActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({routeName})]
+      });
 
-    this.navigation.dispatch(actionToDispatch);
+      this.navigation.dispatch(actionToDispatch);
+    }
   }
 
   goBack() {

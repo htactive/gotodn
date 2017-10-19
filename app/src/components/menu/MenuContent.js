@@ -18,12 +18,10 @@ import {GDNServiceInstance} from '../../services/GDNService';
 export class MenuContent extends React.Component {
   state = {selectedLang: 3, showPicker: false};
 
-  componentWillMount() {
-    appStore.subscribe(() => {
-      let appState = appStore.getState();
-      this.setState({
-        selectedLang: appState.language
-      });
+  async componentWillMount() {
+    let langValue = await AsyncStorage.getItem(Helper.LanguageKey);
+    this.setState({
+      selectedLang: parseInt(langValue)
     });
   }
 

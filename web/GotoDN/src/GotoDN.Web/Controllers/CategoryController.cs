@@ -47,21 +47,28 @@ namespace GotoDN.Web.Controllers
 
         [HttpGet, Route("app-menu-get-all")]
         [AllowAnonymous]
-        public List<CategoryModel> AppMenuGetAll()
+        public List<CategoryMenuModel> AppMenuGetAll()
         {
-            var city = this.CurrentCityId;
-
-            var entities = this.HTRepository.CategoryRepository.GetAll()
+            var currentCity = this.CurrentCityId;
+            var currentLang = this.CurrentLanguage;
+            var result = new List<CategoryMenuModel>();
+            result = this.HTRepository.CategoryRepository.GetAll()
                 .Include("CategoryLanguages.Image")
                 .Include("CategoryLanguages.Icon")
                 .Include(c => c.HTServices)
                 .Include(c => c.Places)
-                .Where(c => c.Places.Any(p => p.CityId == city))
-                .OrderBy(t => t.Order).ToList();
-
-            var models = entities.Select(x => AutoMapper.Mapper.Map<Category, CategoryModel>(x)).ToList();
-
-            return models;
+                .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang) && c.Places.Any(p => p.CityId == currentCity))
+                .OrderBy(c => c.Order).ToList()
+                .Select(c => new CategoryMenuModel()
+                {
+                    Id = c.Id,
+                    Name = c.CategoryLanguages.Where(z => z.Language == currentLang).Select(cl => cl.Title).FirstOrDefault(),
+                    IconUrl = GetUrl(c.CategoryLanguages.Select(cl => cl.Icon).FirstOrDefault()),
+                    IsNoService = c.Places.All(p => p.HTServiceId != null) && c.HTServices.Count > 0 ? false : true,                  
+                })
+                .ToList();
+            
+            return result;
         }
 
         [HttpPost, Route("create-category")]
@@ -154,7 +161,7 @@ namespace GotoDN.Web.Controllers
                 entity = new Category();
             };
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
-            entity.IsEvent = model.IsEvent;
+            entity.IsEvent = model.IsEvent ?? false;
             entity.IsGovernment = model.IsGovernment;
             if (entity.CategoryLanguages == null || entity.CategoryLanguages.Count == 0)
             {
@@ -299,28 +306,35 @@ namespace GotoDN.Web.Controllers
             var today = DateTimeHelper.GetDateTimeNow();
             var currentId = index ?? 0;
             var itemsPerIndex = 20;
-            var eventPlaces = this.HTRepository.PlaceRepository.GetAll()
-                .Where(x => x.CityId == currentCityId && (
-                (x.Category != null && x.Category.IsEvent.HasValue && x.Category.IsEvent.Value
-                && x.EndDate >= today.Date) ||
-                (x.IsHomeSlider.HasValue && x.IsHomeSlider.Value)) &&
-                x.PlaceLanguages.Any(p => p.Language == currentLanguage))
-                .Include("PlaceLanguages.Image").Include(p => p.Category).ToList();
 
-            if (eventPlaces == null) return null;
-            result = eventPlaces.Select(x =>
-                new SliderModel()
-                {
-                    Id = x.Id,
-                    SubTitle = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Description,
-                    Title = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Title,
-                    Url = x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Image != null ?
-                        GetUrl(x.PlaceLanguages.Where(z => z.Language == currentLanguage).FirstOrDefault().Image) : Common.DefaultPhoto.ImageUrl,
-                    CreateDate = x.CreatedDate,
-                    IsEvent = x.Category != null ? x.Category.IsEvent : null,
-                    StartDate = x.StartDate,
-                    IsHomeSlider = x.IsHomeSlider,
-                }).ToList().OrderByDescending(t => t.IsEvent).ThenBy(t => t.StartDate).ThenByDescending(t => t.IsHomeSlider).ThenByDescending(t => t.CreateDate).Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
+            var place = this.HTRepository.PlaceRepository.GetAll();
+            var placeLanguage = this.HTRepository.PlaceLanguageRepository.GetAll();
+            var image = this.HTRepository.ImageRepository.GetAll();
+            var category = this.HTRepository.CategoryRepository.GetAll();
+
+            result = (from p in place
+                      join pl in placeLanguage on p.Id equals pl.PlaceId
+                      join img in image on pl.ImageId equals img.Id into imgs
+                      from img in imgs.DefaultIfEmpty()
+                      join c in category on p.CategoryId equals c.Id
+                      where p.CityId == currentCityId && pl.Language == currentLanguage &&
+                           ((c.IsEvent.HasValue && c.IsEvent.Value && p.EndDate >= today) ||
+                           (p.IsHomeSlider.HasValue && p.IsHomeSlider.Value))
+                      orderby c.IsEvent descending, p.StartDate, p.IsHomeSlider descending, p.Id descending
+                      select new SliderModel()
+                      {
+                          Id = p.Id,
+                          SubTitle = pl.Description,
+                          Title = pl.Title,
+                          Url = img != null ? GetUrl(img) : Common.DefaultPhoto.ImageUrl,
+                          CreateDate = p.CreatedDate,
+                          IsEvent = c.IsEvent,
+                          StartDate = p.StartDate,
+                          IsHomeSlider = p.IsHomeSlider
+                      })
+                        .Skip(currentId * itemsPerIndex)
+                        .Take(itemsPerIndex)
+                        .ToList();
 
             return result;
         }
@@ -338,34 +352,36 @@ namespace GotoDN.Web.Controllers
                 .Include("CategoryLanguages.Image")
                 .Include("CategoryLanguages.Icon")
                 .Include("HTServices.HTServiceLanguages.Image")
-                .Include("HTServices.Places")
-                .Include("Places")
+                .Include(c => c.Places)
                 .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang) && c.Places.Any(p => p.CityId == currentCity))
                 .ToList();
 
             result = category.Select(x =>
-                new MenuListModel()
+            {
+                var cl = x.CategoryLanguages.FirstOrDefault(t => t.Language == currentLang);
+                return new MenuListModel()
                 {
                     Id = x.Id,
                     Order = x.Order,
-                    Name = x.CategoryLanguages.FirstOrDefault(z => z.Language == currentLang).Title,
-                    Image = x.CategoryLanguages.FirstOrDefault(z => z.Language == LanguageEnums.English).Image != null ?
-                            GetUrl(x.CategoryLanguages.FirstOrDefault(z => z.Language == LanguageEnums.English).Image) : null,
-                    Icon = x.CategoryLanguages.FirstOrDefault(z => z.Language == LanguageEnums.English).Icon != null ?
-                            GetUrl(x.CategoryLanguages.FirstOrDefault(z => z.Language == LanguageEnums.English).Icon) : null,
-                    Items = x.Places != null && x.Places.All(p => p.HTServiceId != null) ? (x.HTServices.Count > 0 ?
-                        x.HTServices.Where(s => s.Places.Any(p => p.CityId == currentCity)).Select(y => new MenuItemModel()
+                    Name = cl.Title,
+                    Image = GetUrl(cl.Image),
+                    Icon = GetUrl(cl.Icon),
+                    Items = x.Places.All(p => p.HTServiceId != null) ? (x.HTServices.Count > 0 ?
+                        x.HTServices.Where(s => s.HTServiceLanguages.Any(z => z.Language == currentLang))
+                        .Select(y =>
                         {
-                            Id = y.Id,
-                            Title = y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang) != null ?
-                                    y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Title : "",
-                            Url = y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang) != null &&
-                                    y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Image != null ?
-                                    GetUrl(y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Image) : null
+                            var sl = y.HTServiceLanguages.FirstOrDefault(t => t.Language == currentLang);
+                            return new MenuItemModel()
+                            {
+                                Id = y.Id,
+                                Title = sl.Title,
+                                Url = GetUrl(sl.Image)
+                            };
                         }).ToList()
                       : null) : null
-                }).ToList();
-            
+                };
+            }).ToList();
+
             result = result.OrderBy(x => x.Order).ToList();
             return result;
         }
@@ -433,7 +449,7 @@ namespace GotoDN.Web.Controllers
             var entity = this.HTRepository.CategoryLanguageRepository.GetAll()
                 .FirstOrDefault(x => x.CategoryId == Id && x.Language == currentLang);
             if (entity == null) return string.Empty;
-            return entity.Title ?? string.Empty;           
+            return entity.Title ?? string.Empty;
         }
 
         [HttpGet, Route("get-category-no-service-by-id")]
@@ -447,7 +463,7 @@ namespace GotoDN.Web.Controllers
             var category = this.HTRepository.CategoryRepository.GetAll()
                 .Include("Places.PlaceLanguages.Image")
                 .Include(c => c.CategoryLanguages)
-                .Where(x => x.Places.Any(p => p.PlaceLanguages.Any(l => l.Language == currentLang)) 
+                .Where(x => x.Places.Any(p => p.PlaceLanguages.Any(l => l.Language == currentLang))
                 && x.Places.Any(p => p.HTServiceId == null || p.HTServiceId == 0) && x.Id == id).FirstOrDefault();
             if (category == null) return null;
             if (category.Places != null)

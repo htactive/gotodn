@@ -1,9 +1,9 @@
 import React from 'react';
-import {ScrollView, View, TouchableHighlight, Switch, Text}  from 'react-native';
+import {ScrollView, View, TouchableHighlight, Switch, Text, AsyncStorage}  from 'react-native';
 import {MenuListItem} from './MenuListItem';
 import {style} from '../../styles/style';
 import {Icon}  from 'native-base';
-import {MenuListData, AppIcon} from '../../common/constain';
+import {AppIcon, LanguageEnums, Helper} from '../../common/constain';
 import {GDNServiceInstance} from '../../services/GDNService';
 import {appStore} from '../../stores/AppStore';
 import {LStrings} from '../../common/LocalizedStrings';

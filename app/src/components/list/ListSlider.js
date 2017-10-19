@@ -2,7 +2,7 @@ import React from 'react';
 import {TouchableOpacity, Image, ScrollView, View, Text, PanResponder, Dimensions} from 'react-native';
 import {Icon, Card, CardItem, Spinner} from 'native-base';
 import {style, StyleBase} from '../../styles/style';
-import {SlideData, viewportWidth, AppIcon, viewportHeight, Helper} from '../../common/constain';
+import {viewportWidth, AppIcon, viewportHeight, Helper} from '../../common/constain';
 import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';

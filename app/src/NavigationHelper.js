@@ -6,7 +6,7 @@ import {HomeScreen} from './screens/HomeScreen';
 import {ListScreen} from './screens/ListScreen';
 import {DetailScreen} from './screens/DetailScreen';
 import {Menu} from './components/menu/Menu'
-import {MenuType, MenuListData} from './common/constain';
+import {MenuType} from './common/constain';
 import {IndustryListScreen} from './screens/IndustryListScreen';
 import {IndustryDetailScreen} from './screens/IndustryDetailScreen';
 import {ReactMapDirection} from './components/map/ReactMapDirection';
@@ -69,12 +69,6 @@ commonStore.subscribe(() => {
   }
 });
 
-appStore.subscribe(async () => {
-  let numOfScreens = await GDNServiceInstance.getNumOfScreen();
-  await AsyncStorage.setItem(Helper.AdsTimes, numOfScreens + '');
-  transitionTime = 0;
-});
-
 let confirmTimeout;
 let transitionTime = 0;
 export const DNNavigatorOptions = {
@@ -86,6 +80,7 @@ export const DNNavigatorOptions = {
 
       //Show Interstitial Ads
       if(transProps.scene.route.routeName != 'SplashScreen') {
+        Menu.instance.setNavigation(transProps.navigation);
         transitionTime++;
         (async () => {
           let adsTime = await AsyncStorage.getItem(Helper.AdsTimes);

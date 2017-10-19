@@ -1,15 +1,19 @@
 import * as React from 'react';
+import {AsyncStorage} from 'react-native';
+import {Helper} from '../common/constain';
 import {appStore} from '../stores/AppStore';
 
 export class ServiceBase {
 
   async  executeFetch(url, notJson) {
     try {
-      let appState = appStore.getState();
+      let language = await AsyncStorage.getItem(Helper.LanguageKey);
+      let city = await AsyncStorage.getItem(Helper.CityKey);
+
       let result = await fetch(url, {
         headers: {
-          'lang': appState.language,
-          'city': appState.city,
+          'lang': language,
+          'city': city,
         },
         method: 'GET',
         /**
@@ -33,14 +37,15 @@ export class ServiceBase {
 
   async executeFetchPost(url, data) {
     try {
-      let appState = appStore.getState();
+      let language = await AsyncStorage.getItem(Helper.LanguageKey);
+      let city = await AsyncStorage.getItem(Helper.CityKey);
       let result = await await fetch(url,
         {
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'lang': appState.language,
-            'city': appState.city,
+            'lang': language,
+            'city': city,
           },
           method: 'POST',
           credentials: 'include',

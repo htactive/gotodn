@@ -1,5 +1,6 @@
+import {AsyncStorage} from 'react-native';
 import {ServiceBase} from './ServiceBase';
-import {timeout, MenuListData} from '../common/DummyData';
+import {timeout} from '../common/DummyData';
 import {Helper, LanguageEnums} from '../common/constain';
 import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
@@ -11,7 +12,7 @@ class GDNService extends ServiceBase {
     if (result && result.length > 0) {
       let slider = [];
       for (let i = 0; i < result.length / 2; i++) {
-        if(i * 2 + 1 < result.length) {
+        if (i * 2 + 1 < result.length) {
           slider.push({
             id: i,
             data: [
@@ -75,7 +76,7 @@ class GDNService extends ServiceBase {
   }
 
   async getListSlider(serviceId, index) {
-    let url = this.host + "service/get-list-slider?serviceId="+ serviceId+ "&index=" + index;
+    let url = this.host + "service/get-list-slider?serviceId=" + serviceId + "&index=" + index;
     let result = await super.executeFetch(url);
     if (result && result.length > 0) {
       let slider = [];
@@ -99,18 +100,14 @@ class GDNService extends ServiceBase {
 
     if (result && result.length > 0) {
       let data = [];
-      let currentLanguage = appStore.getState().language;
       for (let i = 0; i < result.length; i++) {
-        let enLang = result[i].PlaceLanguages.filter(t => t.Language == currentLanguage)[0];
-        if(enLang) {
-          data.push({
-            id: result[i] ? result[i].Id : 0,
-            heroImage: enLang.Image ? enLang.Image.Url : Helper.ImageUrl,
-            star: result[i].Rating || 0,
-            title: enLang.Title,
-            description: enLang.Description,
-          });
-        }
+        data.push({
+          id: result[i] ? result[i].Id : 0,
+          heroImage: result[i].ImageUrl || Helper.ImageUrl,
+          star: result[i].Star || 0,
+          title: result[i].Title || '',
+          description: result[i].Description || '',
+        });
       }
       return data;
     }
@@ -121,63 +118,79 @@ class GDNService extends ServiceBase {
     let url = this.host + "place/app-get-place-by-id?id=" + Id;
     let result = await super.executeFetch(url);
     if (result) {
-      let currentLanguage = appStore.getState().language;
-      let lang = result.PlaceLanguages.filter(l => l.Language == currentLanguage)[0];
       let data = {};
-      if(lang) {
-        data.id = result.Id;
-        data.heroImage = lang.Image ? lang.Image.Url : Helper.ImageUrl;
-        data.title = lang.Title || null;
-        data.description = lang.Description || null;
-        data.star = result.Rating;
-        data.address = result.Address;
-        data.phone = result.Phone;
-        data.website = result.Website;
-        data.open = result.OpenTime;
-        data.close = result.CloseTime;
-        data.city = result.City ? result.City.Name : "";
-        data.district = result.District ? result.District.Name : "";
-        data.images = lang.PlaceImages ? lang.PlaceImages.map(x => {
-            return {
-              id: x.Id,
-              url: x.Image.Url,
-            };
-          }) : null;
-        data.moreinfo = [];
-        if (lang.PlaceMoreInfo) {
-          for (let i = 0; i < lang.PlaceMoreInfo.length; i++) {
-            let placeInfo = lang.PlaceMoreInfo[i];
-            let info = {};
-            if (placeInfo.IsHalf) {
-              info.isMulti = true;
-              if (i < lang.PlaceMoreInfo.length - 1 && lang.PlaceMoreInfo[i + 1].IsHalf) {
-                let placeInfo1 = lang.PlaceMoreInfo[i + 1];
-                info.dataInfo = [{
-                  infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
-                  infoText: placeInfo.Name + ' : ' + placeInfo.Value,
-                }, {
-                  infoIcon: placeInfo1.Icon ? placeInfo1.Icon.Url : null,
-                  infoText: placeInfo1.Name + ' : ' + placeInfo1.Value,
-                }];
-                i++;
-              } else {
-                info.dataInfo = [{
-                  infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
-                  infoText: placeInfo.Name + ' : ' + placeInfo.Value,
-                }, null];
-              }
-            } else {
-              info = {
-                infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
-                infoText: placeInfo.Name + ' : ' + placeInfo.Value,
-              }
-            }
-            data.moreinfo.push(info);
-          }
-        }
-      }
+      data.id = result.Id;
+      data.heroImage = result.ImageUrl || Helper.ImageUrl;
+      data.title = result.Title || null;
+      data.description = result.Description || null;
+      data.star = result.Star || 0;
+      data.address = result.Address;
+      data.phone = result.Phone;
+      data.website = result.Website;
+      data.open = result.OpenTime;
+      data.close = result.CloseTime;
+      data.city = result.City;
+      data.district = result.District;
+      data.images = [];
+      data.moreinfo = [];
       return data;
     }
+    return null;
+  }
+
+  async getPlaceImagesById(Id: number) {
+    let url = this.host + "place/app-get-place-images-by-id?id=" + Id;
+    let result = await super.executeFetch(url);
+    if (result) {
+      let data = [];
+      data = result.map(x => {
+        return {
+          id: x.Id,
+          url: x.ImageUrl,
+        };
+      });
+      return data;
+    }
+    return null;
+  }
+
+  async getPlaceInfoById(Id: number) {
+    let url = this.host + "place/app-get-place-info-by-id?id=" + Id;
+    let result = await super.executeFetch(url);
+    if (result) {
+      let moreInfo = [];
+      for (let i = 0; i < result.length; i++) {
+        let placeInfo = result[i];
+        let info = {};
+        if (placeInfo.IsHalf) {
+          info.isMulti = true;
+          if (i < result.length - 1 && result[i + 1].IsHalf) {
+            let placeInfo1 = result[i + 1];
+            info.dataInfo = [{
+              infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
+              infoText: placeInfo.Name + ' : ' + placeInfo.Value,
+            }, {
+              infoIcon: placeInfo1.Icon ? placeInfo1.Icon.Url : null,
+              infoText: placeInfo1.Name + ' : ' + placeInfo1.Value,
+            }];
+            i++;
+          } else {
+            info.dataInfo = [{
+              infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
+              infoText: placeInfo.Name + ' : ' + placeInfo.Value,
+            }, null];
+          }
+        } else {
+          info = {
+            infoIcon: placeInfo.Icon ? placeInfo.Icon.Url : null,
+            infoText: placeInfo.Name + ' : ' + placeInfo.Value,
+          }
+        }
+        moreInfo.push(info);
+      }
+      return moreInfo;
+    }
+
     return null;
   }
 
@@ -187,15 +200,12 @@ class GDNService extends ServiceBase {
     let result = await super.executeFetch(url);
     if (result) {
       let rs = [];
-      let currentLanguage = appStore.getState().language;
       rs = result.map(t => {
-        let enLanguage = t.CategoryLanguages.filter(l => l.Language == currentLanguage)[0];
-        let cateIcon = t.CategoryLanguages.filter(l => l.Language == LanguageEnums.English)[0];
         return {
           id: t.Id,
-          categoryName: enLanguage ? enLanguage.Title : '',
-          categoryIcon: cateIcon.Icon ? cateIcon.Icon.Url : null,
-          isNoService: (t.Places && t.Places.filter(p => p.HTServiceId == null).length > 0) || (!t.HTServices || t.HTServices.length == 0),
+          categoryName: t.Name || '',
+          categoryIcon: t.IconUrl || null,
+          isNoService: t.IsNoService,
         }
       });
       return rs;
@@ -231,7 +241,7 @@ class GDNService extends ServiceBase {
           id: t.Id,
           heroImage: t.CoverImage ? t.CoverImage.Url : Helper.ImageUrl,
           title: t.Title || "",
-          address: t.Address || "" + ', ' + t.District || "" + ', ' + t.City || "",
+          address: Helper.getAndress(t.Address, t.District),
           phone: t.Phone || "",
         }
       });
@@ -245,16 +255,16 @@ class GDNService extends ServiceBase {
     if (result && result.length > 0) {
       let data = [];
       for (let i = 0; i < result.length; i++) {
-        if(result[i]) {
+        if (result[i]) {
           data.push({
-            id: result[i].PlaceId || 0,
-            heroImage: result[i].Image ? result[i].Image.Url : Helper.ImageUrl,
+            id: result[i].Id || 0,
+            heroImage: result[i].ImageUrl || Helper.ImageUrl,
             title: result[i].Title || "",
             description: result[i].Description || "",
-            open: result[i].Place.OpenTime,
-            close: result[i].Place.CloseTime,
-            address: Helper.getAndress(result[i].Place.Address, result[i].Place.District ? result[i].Place.District.Name : ''),
-            phone: result[i] && result[i].Place.Phone
+            open: result[i].OpenTime,
+            close: result[i].CloseTime,
+            address: Helper.getAndress(result[i].Address, result[i].District),
+            phone: result[i].Phone
           });
         }
       }
@@ -286,12 +296,12 @@ class GDNService extends ServiceBase {
   }
 
   async getCagegoryNoServiceById(id, index) {
-    let url = this.host + "category/get-category-no-service-by-id?id=" + id+ "&index=" + index;
+    let url = this.host + "category/get-category-no-service-by-id?id=" + id + "&index=" + index;
     let result = await super.executeFetch(url);
     if (result) {
       let objectData = {};
       let data = [];
-      let currentLanguage = appStore.getState().language;
+      let currentLanguage = await AsyncStorage.getItem(Helper.LanguageKey);
       let d = result.Places.filter((p) => {
         let enPlace = p.PlaceLanguages.filter(l => l.Language == currentLanguage)[0];
         return !!enPlace
@@ -308,7 +318,7 @@ class GDNService extends ServiceBase {
         }
       });
 
-      let cateLang = result.CategoryLanguages.filter(l => l.Language == currentLanguage )[0];
+      let cateLang = result.CategoryLanguages.filter(l => l.Language == currentLanguage)[0];
 
       objectData.id = result.Id;
       objectData.categoryName = cateLang ? cateLang.Title : '';
@@ -332,8 +342,8 @@ class GDNService extends ServiceBase {
 
   async getNumOfScreen() {
     let url = this.host + "configuration/get-configuration";
-    let result =  await super.executeFetch(url);
-    if(result) {
+    let result = await super.executeFetch(url);
+    if (result) {
       return result.NumOfScreenShowAd;
     }
     return 5;

@@ -34,7 +34,7 @@ namespace GotoDN
                 sourceImage.Save(outStream, JPEGCodecInfo, parameters);
             }
             Stream returnStream = new MemoryStream();
-            returnStream = ScaleImageStream(outStream, 1280, 720);
+            returnStream = ScaleImageStream(outStream, 960, 640);
             return returnStream;
         }
         public static Stream ScaleIcon(Stream iconStream, int maxWidth, int maxHeight)

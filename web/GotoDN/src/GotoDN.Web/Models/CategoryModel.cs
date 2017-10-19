@@ -36,4 +36,12 @@ namespace GotoDN.Web.Models
         public ImageModel Image { get; set; }
         public ImageModel Icon { get; set; }
     }
+
+    public class CategoryMenuModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string IconUrl { get; set; }
+        public bool IsNoService { get; set; }
+    }
 }

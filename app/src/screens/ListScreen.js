@@ -21,20 +21,9 @@ export class ListScreen extends React.Component {
   unSubscribeCommon;
 
   componentWillMount() {
-    navigationStore.subscribe(() => {
-      let navigationState = navigationStore.getState();
-      if (navigationState.routeName) {
-        const navigateAction = NavigationActions.navigate({
-          routeName: navigationState.routeName,
-          params: navigationState.params
-        });
-        this.props.navigation.dispatch(navigateAction);
-      }
-    });
     this.unSubscribe = appStore.subscribe(() => {
       this.loadData();
     });
-
   }
 
   componentDidMount() {

@@ -13,19 +13,14 @@ import {changeAppLanguage} from '../common/LocalizedStrings';
 
 export class SplashScreen extends React.Component {
 
-  goNextDelay;
-  //handleNetInterval;
-
-  async componentWillMount() {
+  componentWillMount() {
 
     this.setState({
       hasConnection: false,
     });
-
-    this.initData();
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.handleNetInfo();
   }
 
@@ -37,48 +32,42 @@ export class SplashScreen extends React.Component {
 
     let langValue = await AsyncStorage.getItem(Helper.LanguageKey);
 
-    let cityValue = await AsyncStorage.getItem(Helper.CityKey);
+    if(!langValue) {
+      await AsyncStorage.setItem(Helper.LanguageKey, LanguageEnums.English + '');
+    }
 
-    let currentLang =langValue ? parseInt(langValue) : LanguageEnums.English;
-
-    appStore.dispatch(appSaveLanguage(currentLang));
+    let currentLang = langValue ? parseInt(langValue) : LanguageEnums.English;
 
     changeAppLanguage(currentLang);
 
-    let selectedCityId = 0;
-    let result = await GDNServiceInstance.getAllCity();
-    if(result) {
-      let selectedCity = result.filter(t => Helper.stripDiacritics(t.Name).toLowerCase() == 'da nang' || Helper.stripDiacritics(t.Name).toLowerCase() == 'danang')[0];
-      selectedCityId = selectedCity ? selectedCity.Id : (result[0] ? result[0].Id : 0);
-    }
-    if(cityValue)
-      selectedCityId = cityValue;
-
-    appStore.dispatch(appSaveCity(selectedCityId));
   }
 
   handleNetInfo() {
-    NetInfo.addEventListener(
-      'change',
-      (value) => {
-        if (value == 'WIFI' || value == 'wifi' || value == 'MOBILE' || value == 'cell' || value == 'VPN') {
-          NetInfo.removeEventListener(
-            'change'
-          );
-          this.setState({hasConnection: true})
-          this.goNextDelay = setTimeout(() => {
-            this.goNext();
-          }, 1000);
-        } else {
-          this.setState({hasConnection: false})
-        }
+    NetInfo.isConnected.fetch().then(isConnected => {
+      if (isConnected) {
+        this.setState({hasConnection: true});
+        this.goNext();
+      } else {
+        this.setState({hasConnection: false});
+        NetInfo.addEventListener(
+          'change',
+          (value) => {
+            if (value == 'WIFI' || value == 'wifi' || value == 'MOBILE' || value == 'cell' || value == 'VPN') {
+              this.setState({hasConnection: true});
+              this.goNext();
+            } else {
+              this.setState({hasConnection: false})
+            }
+          }
+        );
       }
-    );
-
+    });
   }
 
   componentWillUnmount() {
-    // clearInterval(this.handleNetInterval);
+    NetInfo.removeEventListener(
+      'change'
+    );
   }
 
   _navigateTo = (routeName, params) => {
@@ -96,7 +85,7 @@ export class SplashScreen extends React.Component {
         <Col style={{justifyContent:'center', alignItems: 'center', backgroundColor: '#039be5'}}>
           <View style={style.splashContainer}>
             <Image style={style.imageContainer}
-                   source={AppIcon.AppLogo}
+                   source={AppIcon.AppLogoBig}
             />
           </View>
           <View style={{position: 'absolute', top: 10, left: viewportWidth/2 -45,
@@ -117,6 +106,7 @@ export class SplashScreen extends React.Component {
   }
 
   async goNext() {
+    await this.initData();
     let menuListData = await GDNServiceInstance.getHomeMenuList();
     let sliderData = await GDNServiceInstance.getHomeSlider(0);
     let params = {

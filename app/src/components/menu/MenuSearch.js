@@ -2,7 +2,7 @@ import React from 'react';
 import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity, Image, Dimensions, Keyboard} from 'react-native';
 import {Title, Icon, Picker, Drawer, Input, Item} from 'native-base';
 import {StyleBase, style} from '../../styles/style';
-import {MenuType, viewportHeight, MenuListItemData, Helper, viewportWidth, AppIcon} from '../../common/constain';
+import {MenuType, viewportHeight, Helper, viewportWidth, AppIcon} from '../../common/constain';
 import {GDNServiceInstance} from '../../services/GDNService';
 import styles from '../../styles/slider-css';
 import {Spinner}  from 'native-base';

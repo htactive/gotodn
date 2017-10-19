@@ -27,21 +27,11 @@ export class HomeScreen extends React.Component {
   unSubscribe;
 
   componentWillMount() {
-    navigationStore.subscribe(() => {
-      let navigationState = navigationStore.getState();
-      if (navigationState.routeName) {
-        const navigateAction = NavigationActions.navigate({
-          routeName: navigationState.routeName,
-          params: navigationState.params
-        });
-        this.props.navigation.dispatch(navigateAction);
-      }
-    });
+
     this.unSubscribe = appStore.subscribe(() => {
       this.onFresh();
     });
     this.setState({showSlider: true});
-    Menu.instance.setNavigation(this.props.navigation);
   }
 
   componentDidMount() {

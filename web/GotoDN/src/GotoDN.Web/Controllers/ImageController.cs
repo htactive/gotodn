@@ -68,7 +68,7 @@ namespace GotoDN.Web.Controllers
             var stream = file.OpenReadStream();
             var fileKey = string.Format("coms/img/coms_{0}.jpg", Guid.NewGuid().ToString());
             Stream compressStream = new MemoryStream();
-            compressStream = ImageHelper.CompressImage(stream, 80);
+            compressStream = ImageHelper.CompressImage(stream, 60);
             var image = await this.CreateNewImage(compressStream, fileKey);
             return Mappers.Mapper.ToModel(image);
         }
@@ -86,7 +86,7 @@ namespace GotoDN.Web.Controllers
                 var stream = file.OpenReadStream();
                 var fileKey = string.Format("coms/img/coms_{0}.jpg", Guid.NewGuid().ToString());
                 Stream compressStream = new MemoryStream();
-                compressStream = ImageHelper.CompressImage(stream, 80);
+                compressStream = ImageHelper.CompressImage(stream, 60);
                 var image = await this.CreateNewImage(compressStream, fileKey);
                 imageModels.Add(Mappers.Mapper.ToModel(image));
             }
@@ -101,7 +101,7 @@ namespace GotoDN.Web.Controllers
             var stream = file.OpenReadStream();
             var fileKey = string.Format("coms/img/coms_{0}.png", Guid.NewGuid().ToString());
             Stream compressStream = new MemoryStream();
-            compressStream = ImageHelper.ScaleIcon(stream, 256, 256);
+            compressStream = ImageHelper.ScaleIcon(stream, 64, 64);
             var image = await this.CreateNewImage(compressStream, fileKey);
             return Mappers.Mapper.ToModel(image);
         }

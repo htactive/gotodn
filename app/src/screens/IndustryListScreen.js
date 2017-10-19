@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View, Image, ScrollView, TouchableOpacity, Dimensions, RefreshControl} from 'react-native';
 import {Icon, Spinner, Item, Input} from 'native-base';
 import {style, StyleBase} from "../styles/style";
-import {IndustryData, viewportWidth, viewportHeight, MenuListData, Helper} from '../common/constain';
+import {viewportWidth, viewportHeight, Helper} from '../common/constain';
 import {DNPageRoute} from '../NavigationHelper';
 import {DetailScreen} from '../screens/DetailScreen';
 import {IndustryDetailScreen} from './IndustryDetailScreen';
@@ -32,16 +32,6 @@ export class IndustryListScreen extends React.Component {
   unSubscribe;
   unSubscribeCommon;
   componentWillMount() {
-    navigationStore.subscribe(() => {
-      let navigationState = navigationStore.getState();
-      if(navigationState.routeName) {
-        const navigateAction = NavigationActions.navigate({
-          routeName: navigationState.routeName,
-          params: navigationState.params
-        });
-        this.props.navigation.dispatch(navigateAction);
-      }
-    });
     this.unSubscribe = appStore.subscribe(() => {
       this.onFresh();
     });

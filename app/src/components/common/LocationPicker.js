@@ -1,6 +1,6 @@
 import React from 'react';
 import {Icon, Picker} from 'native-base';
-import {View, PickerIOS, Platform, Text, TouchableOpacity} from 'react-native';
+import {View, PickerIOS, Platform, Text, TouchableOpacity, AsyncStorage} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {StyleBase} from '../../styles/style';
 import {CityDropdown} from '../common/CityDropdown';
@@ -36,12 +36,6 @@ export class LocationPicker extends React.Component {
     this.setState({
       selectedCity: 1
     });
-    // appStore.subscribe(() => {
-    //   let appState = appStore.getState();
-    //   this.setState({
-    //     selectedCity: appState.city
-    //   });
-    // });
   }
 
   componentDidMount() {
@@ -51,10 +45,16 @@ export class LocationPicker extends React.Component {
   async getData() {
     let result = await GDNServiceInstance.getAllCity();
     if(result) {
-      let appState = appStore.getState();
+      let cityValue = await AsyncStorage.getItem(Helper.CityKey);
+      let selectedCityId = 0;
+
+      if(cityValue) {
+        selectedCityId = cityValue;
+      }
+
       this.setState({
         cities: result,
-        selectedCity: appState.city
+        selectedCity: selectedCityId
       });
     }
     else {
