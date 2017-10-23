@@ -7,6 +7,10 @@ import {Helper} from '../../common/constain';
 import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
+import {
+  LazyloadImage,
+  LazyloadView
+} from 'react-native-lazyload';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 const largeImgHeight = Math.round(viewportHeight / 3);
@@ -123,20 +127,22 @@ export class ListItemDetail extends React.Component {
                     <View style={style.imageContainer}>
                       <View
                         style={{flex: (index % 2 === 0) ? largeImgHeight/largeItemHeight : smallImgHeight/smallItemHeight}}>
-                        <Image
+                        <LazyloadImage
+                          host="lazyload-listscreen"
                           source={{uri: data.heroImage || Helper.ImageUrl}}
                           style={[style.menuItemImage, {height: (index % 2 === 0) ? largeImgHeight : smallImgHeight}]}
                         >
                           {data.star > 0 && this.renderStart(data.star)}
-                        </Image>
+                        </LazyloadImage>
                       </View>
-                      <View
+                      <LazyloadView
+                        host="lazyload-listscreen"
                         style={{flex: (index % 2 === 0) ? textHeight/largeItemHeight : textHeight/smallItemHeight}}>
                         <View style={style.menuItemTextContain}>
                           <Text style={style.menuItemTitle} numberOfLines={1}>{ data.title }</Text>
                           <Text style={style.menuItemSubTitle} numberOfLines={4}>{ data.description }</Text>
                         </View>
-                      </View>
+                      </LazyloadView>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -154,20 +160,22 @@ export class ListItemDetail extends React.Component {
                       <View style={style.imageContainer}>
                         <View
                           style={{flex: (index % 2 !== 0) ? largeImgHeight/largeItemHeight : smallImgHeight/smallItemHeight}}>
-                          <Image
+                          <LazyloadImage
+                            host="lazyload-listscreen"
                             source={{uri: data.heroImage || Helper.ImageUrl}}
                             style={[style.menuItemImage, {height: (index % 2 !== 0) ? largeImgHeight : smallImgHeight}]}
                           >
                             {data.star > 0 && this.renderStart(data.star)}
-                          </Image>
+                          </LazyloadImage>
                         </View>
-                        <View
+                        <LazyloadView
+                          host="lazyload-listscreen"
                           style={{flex: (index % 2 !== 0) ? textHeight/largeItemHeight : textHeight/smallItemHeight}}>
                           <View style={style.menuItemTextContain}>
                             <Text style={style.menuItemTitle} numberOfLines={1}>{ data.title }</Text>
                             <Text style={style.menuItemSubTitle} numberOfLines={4}>{ data.description }</Text>
                           </View>
-                        </View>
+                        </LazyloadView>
                       </View>
                     </TouchableOpacity>
                   </View>

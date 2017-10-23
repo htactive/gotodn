@@ -208,8 +208,10 @@ export class Helper {
   static AdsTimes = 'AdsTimes';
   static CurrentCategoryId = 'CurrentCategoryId';
   static SeparateKey = '||';
-  static AdUnitId_Banner = __DEV__ ? 'ca-app-pub-3940256099942544/6300978111' : 'ca-app-pub-8440343014846849/2335511010';
-  static AdUnitId_FullScreen = __DEV__ ? 'ca-app-pub-3940256099942544/1033173712' : 'ca-app-pub-8440343014846849/3812244218';
+  static AdUnitId_Banner = __DEV__ ? 'ca-app-pub-3940256099942544/6300978111' :
+    (platform === 'android' ? 'ca-app-pub-4384889362974012/7130137607' : 'ca-app-pub-4384889362974012/4723466116');
+  static AdUnitId_FullScreen = __DEV__ ? 'ca-app-pub-3940256099942544/1033173712' :
+    (platform === 'android' ? 'ca-app-pub-4384889362974012/8798442495' : 'ca-app-pub-4384889362974012/3042595074');
 
   static getAndress() {
     if(arguments.length == 0) return "";

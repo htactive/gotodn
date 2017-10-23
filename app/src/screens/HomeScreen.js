@@ -3,7 +3,7 @@ import {ToastAndroid, ScrollView, RefreshControl} from 'react-native';
 import {Text} from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {HomeMenuList} from '../components/home/HomeMenuList';
-import {viewportHeight} from '../common/constain';
+import {viewportHeight, Guid} from '../common/constain';
 import HomeSlider from '../components/home/HomeSlider';
 import {NavigationActions} from 'react-navigation';
 import {navigationStore, navigateAction} from '../stores/NavigationStore';
@@ -12,6 +12,9 @@ import {commonStore,reloadData} from '../stores/CommonStore';
 import {GDNServiceInstance} from '../services/GDNService';
 import {Menu} from '../components/menu/Menu';
 import {LStrings} from '../common/LocalizedStrings';
+import {
+  LazyloadScrollView
+} from 'react-native-lazyload';
 
 export class HomeScreen extends React.Component {
 
@@ -78,7 +81,8 @@ export class HomeScreen extends React.Component {
 
   render() {
     return (
-      <ScrollView
+      <LazyloadScrollView
+        name={`lazyload-home-screen`}
         refreshControl={
           <RefreshControl
             refreshing={this.state.refreshing}
@@ -94,10 +98,10 @@ export class HomeScreen extends React.Component {
               />
             </Row> : <Row><Text></Text></Row> }
           <Row style={!this.state.showSlider ? {minHeight: viewportHeight} : {}}>
-            <HomeMenuList dataSource={this.state.menuListData}/>
+            <HomeMenuList dataSource={this.state.menuListData} />
           </Row>
         </Grid>
-      </ScrollView>
+      </LazyloadScrollView>
     )
   }
 

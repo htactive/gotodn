@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +15,12 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authentication;
 using HTActive.Core;
 using GotoDN.Web.Models;
-using System.Reflection;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using System.Linq;
 
 namespace GotoDN.Web
 {
@@ -51,7 +53,7 @@ namespace GotoDN.Web
             {
                 options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
             });
-
+            
             services.AddScoped<IAuthorizationHandler, HTAuthorizationHandler>();
             services.Configure<ConfigurationHelper>(Configuration);
             services.AddScoped(opt =>
@@ -93,12 +95,17 @@ namespace GotoDN.Web
                 {
                     if (!string.IsNullOrEmpty(entity.S3FileKey))
                     {
-                        model.Url = string.Format("https://s3-ap-southeast-1.amazonaws.com/dfwresource/{0}", entity.S3FileKey);
+                        var url = RequestHelper.BaseImageURL;
+                        model.Url = string.Format($"{url}/{"{0}"}", entity.S3FileKey);
                     }
                 });
             });
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            var baseUrl = $"{Configuration["RootPath"]}/gotodn-images";
+            if (string.IsNullOrEmpty(RequestHelper.BaseImageURL) || baseUrl != RequestHelper.BaseImageURL)
+                RequestHelper.BaseImageURL = baseUrl;
 
             app.UseApplicationInsightsRequestTelemetry();
 
@@ -116,6 +123,13 @@ namespace GotoDN.Web
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
+
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), @"GDNImages")),
+                RequestPath = new PathString("/gotodn-images")
+            });
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions()
             {

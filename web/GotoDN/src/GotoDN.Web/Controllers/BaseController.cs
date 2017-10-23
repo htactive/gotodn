@@ -16,6 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using GotoDN.Web.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace GotoDN.Web.Controllers
 {
@@ -166,11 +168,36 @@ namespace GotoDN.Web.Controllers
 
         protected async Task<Image> CreateNewImage(System.IO.Stream stream, string fileKey)
         {
-            await this.UploadImageStreamToAWSS3(fileKey, stream);
+            await this.UploadImageStreamToLocalMachine(fileKey, stream);
             var image = new Image() { Id = 0, S3FileKey = fileKey };
             this.HTRepository.ImageRepository.Save(image);
             this.HTRepository.Commit();
             return image;
+        }
+
+        private async Task UploadImageStreamToLocalMachine(string s3FileKey, System.IO.Stream stream)
+        {
+            try
+            {
+                var root = ((IHostingEnvironment)this.HttpContext.RequestServices.GetService(typeof(IHostingEnvironment))).ContentRootPath;
+                var filePath = Path.Combine(root, "GDNImages", s3FileKey);
+                var folder = Path.GetDirectoryName(filePath);
+                CreateFolder(folder);
+                using (var fStream = new FileStream(filePath, FileMode.Create))
+                {
+                    stream.Position = 0;
+                    await stream.CopyToAsync(fStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void CreateFolder(string path)
+        {
+            Directory.CreateDirectory(path);
         }
 
         protected string BuildTemplate(string template, Dictionary<string, string> tokens)
@@ -187,7 +214,8 @@ namespace GotoDN.Web.Controllers
         {
             if (entity == null) return null;
             if (!string.IsNullOrEmpty(entity.Url)) return entity.Url;
-            return string.Format("https://s3-ap-southeast-1.amazonaws.com/dfwresource/{0}", entity.S3FileKey);
+            var baseUrl = RequestHelper.BaseImageURL;
+            return string.Format($"{baseUrl}/{"{0}"}", entity.S3FileKey);
         }
     }
 }

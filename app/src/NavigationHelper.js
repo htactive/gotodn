@@ -208,3 +208,27 @@ function propName(prop, value) {
 }
 
 export const DNNavigator = StackNavigator(DNNavigatorConfig, DNNavigatorOptions);
+
+const prevGetStateForActionDNNavigator = DNNavigator.router.getStateForAction;
+DNNavigator.router.getStateForAction = (action, state) => {
+
+  if (state && action.type === 'ReplaceCurrentScreen') {
+    const routes = state.routes.filter(r => r.routeName != action.routeName);
+    routes.push(action);
+    return {
+      ...state,
+      routes,
+      index: routes.length - 1,
+    };
+  }
+  if (state && action.type === 'GoHome') {
+    const routes = state.routes.slice();
+    routes.push(action);
+    return {
+      ...state,
+      routes,
+      index: routes.length - 1,
+    };
+  }
+  return prevGetStateForActionDNNavigator(action, state);
+};

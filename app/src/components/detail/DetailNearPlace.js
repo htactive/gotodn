@@ -5,6 +5,10 @@ import {style} from '../../styles/style';
 import {viewportWidth, AppIcon, Helper} from '../../common/constain';
 import {LStrings} from '../../common/LocalizedStrings';
 import moment from 'moment';
+import {
+  LazyloadView,
+  LazyloadImage
+} from 'react-native-lazyload';
 
 export class DetailNearPlace extends React.Component {
 
@@ -19,10 +23,10 @@ export class DetailNearPlace extends React.Component {
           <TouchableOpacity key={index} style={[style.detailInfoItem]}
                             onPress={() => this.goPlace(d.id)}>
             <View style={{width: (viewportWidth - 30) / 5, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-              <Image style={{resizeMode: 'cover', width: (viewportWidth - 30) / 5, height: (viewportWidth - 30) / 5}}
+              <LazyloadImage host="lazyload-detailscreen" style={{resizeMode: 'cover', width: (viewportWidth - 30) / 5, height: (viewportWidth - 30) / 5}}
                      source={{uri: d.heroImage || Helper.ImageUrl}}/>
             </View>
-            <View style={{flex: 1, paddingLeft: 10}}>
+            <LazyloadView host="lazyload-detailscreen" style={{flex: 1, paddingLeft: 10}}>
               <View style={{flex: 3, justifyContent:'flex-start'}}>
                 <Text numberOfLines={1} style={style.detailNearByTitle}>{d.title}</Text>
               </View>
@@ -54,7 +58,7 @@ export class DetailNearPlace extends React.Component {
                   </View>
                 </View>
               </View>
-            </View>
+            </LazyloadView>
           </TouchableOpacity>
         )}
       </View>

@@ -46,7 +46,6 @@ export class AdmobBanner extends React.Component {
     this.setState({
       adReady: false,
     });
-    console.log(error);
   }
 }
 

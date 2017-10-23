@@ -4,7 +4,7 @@ import {timeout} from '../common/DummyData';
 import {Helper, LanguageEnums} from '../common/constain';
 import {appStore} from '../stores/AppStore';
 class GDNService extends ServiceBase {
-  host = "http://gdn.htactive.com/";
+  host = "http://54.251.134.252/";
 
   async getHomeSlider(index) {
     let url = this.host + "category/get-category-slider?index=" + index;

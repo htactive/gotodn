@@ -5,7 +5,7 @@ import {StyleBase} from '../../styles/style';
 import {MenuContent} from './MenuContent';
 
 import {MenuHeader} from './MenuHeader';
-import {MenuType, viewportHeight, viewportWidth, Helper} from '../../common/constain';
+import {MenuType, viewportHeight, viewportWidth, Helper, Guid} from '../../common/constain';
 import {MenuSearch} from './MenuSearch';
 import {DetailScreen} from '../../screens/DetailScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
@@ -77,6 +77,7 @@ export class Menu extends React.Component {
     enableMenu: false,
     showSearchBar: false,
     searchValue: '',
+    searchStatus: false,
     menuType: MenuType.HomeScreen,
     title: '',
     hasConnection: true,
@@ -108,25 +109,14 @@ export class Menu extends React.Component {
         });
         let existRoute = this.navigation.state.routes.filter(r => r.routeName == navigationState.routeName);
         if(existRoute && existRoute.length > 0) {
-          let existActions = this.navigation.state.routes
-            .filter(r => r.routeName != navigationState.routeName)
-            .map((r) => {
-            return NavigationActions.navigate({
-                    routeName: r.routeName,
-                    params: r.params
-                  });
+
+          this.navigation.dispatch({
+            key: navigationState.routeName + Guid(),
+            type: 'ReplaceCurrentScreen',
+            routeName: navigationState.routeName,
+            params: navigationState.params,
           });
-          existActions.push(
-            NavigationActions.navigate({
-              routeName: navigationState.routeName,
-              params: navigationState.params
-            })
-          );
-          const resetAction = NavigationActions.reset({
-            index: this.navigation.state.index,
-            actions: existActions
-          });
-          this.navigation.dispatch(resetAction);
+
         } else {
           this.navigation.dispatch(navigateAction);
         }
@@ -201,6 +191,7 @@ export class Menu extends React.Component {
                 onSearchChanged={(text) => this.setState({
                   searchValue: text,
                 })}
+                searchStatus={this.state.searchStatus}
                 showSearchBar={this.state.showSearchBar}
                 type={this.state.menuType}
                 menuTitle={this.state.title}
@@ -236,6 +227,7 @@ export class Menu extends React.Component {
                 minHeight: viewportHeight * .9
               }}>
                 <MenuSearch search={this.state.searchValue}
+                            changeSearchStatus={(status) => this.setState({searchStatus: status})}
                             onSearchSelected={(data) => this.searchSelect(data)}
                 />
               </View>
@@ -279,12 +271,12 @@ export class Menu extends React.Component {
   logoClicked() {
     if(this.navigation.state.routes && this.navigation.state.routes.length > 1) {
       let routeName = 'HomeScreen';
-      const actionToDispatch = NavigationActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({routeName})]
+      this.navigation.dispatch({
+        key: routeName + Guid(),
+        type: 'GoHome',
+        routeName: routeName,
+        params: null,
       });
-
-      this.navigation.dispatch(actionToDispatch);
     }
   }
 

@@ -530,7 +530,7 @@ namespace GotoDN.Web.Controllers
             var language = this.CurrentLanguage;
             var city = this.CurrentCityId;
             var currentId = index ?? 0;
-            var itemsPerIndex = 30;
+            var itemsPerIndex = 20;
 
             if (string.IsNullOrEmpty(search) || search.Trim().Length < 3) return null;
 

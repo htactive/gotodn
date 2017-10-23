@@ -31,7 +31,6 @@ export class ServiceBase {
       return null;
     }
     catch (e) {
-      console.log(e);
     }
   }
 
@@ -58,7 +57,6 @@ export class ServiceBase {
       return null;
     }
     catch (e) {
-      console.log(e);
     }
   }
 }

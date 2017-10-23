@@ -3,13 +3,16 @@ import {View, Image, TouchableOpacity, Text, Linking} from 'react-native';
 import {Icon} from 'native-base';
 import {style} from '../../styles/style';
 import {Helper} from '../../common/constain';
+import {
+  LazyloadView
+} from 'react-native-lazyload';
 
 export class DetailInfo extends React.Component {
 
 
   render() {
     return (
-      <View style={style.detailInfoContainer}>
+      <LazyloadView host="lazyload-detailscreen" style={style.detailInfoContainer}>
         {this.props.detailInfo && this.props.detailInfo.map((d, index) =>
           d.isMulti ? (
               <View key={index} style={style.detailInfoItem}>
@@ -55,7 +58,7 @@ export class DetailInfo extends React.Component {
               </View>
             )
         )}
-      </View>
+      </LazyloadView>
     )
   }
 

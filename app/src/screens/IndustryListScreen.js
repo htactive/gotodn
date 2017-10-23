@@ -12,6 +12,11 @@ import {GDNServiceInstance} from '../services/GDNService';
 import {appStore} from '../stores/AppStore';
 import {Menu} from '../components/menu/Menu';
 import {LStrings} from '../common/LocalizedStrings';
+import {
+  LazyloadScrollView,
+  LazyloadView,
+  LazyloadImage
+} from 'react-native-lazyload';
 
 const imgHeight = Math.round((viewportWidth - 30) / 2);
 const textHeight = Math.round(viewportHeight / 3.3);
@@ -136,7 +141,8 @@ export class IndustryListScreen extends React.Component {
               </Item>
             </View>
             <View style={{flex:9}}>
-              <ScrollView
+              <LazyloadScrollView
+                name="lazyload-listindustry"
                 refreshControl={
               <RefreshControl
             refreshing={this.state.refreshing}
@@ -158,18 +164,20 @@ export class IndustryListScreen extends React.Component {
                           <View style={style.imageContainer}>
                             <View
                               style={{flex: imgHeight/itemHeight}}>
-                              <Image
+                              <LazyloadImage
+                                host="lazyload-listindustry"
                                 source={{uri: data.heroImage || Helper.ImageUrl}}
                                 style={[style.menuItemImage, {height: imgHeight}]}
                               />
                             </View>
-                            <View
+                            <LazyloadView
+                              host="lazyload-listindustry"
                               style={{flex: textHeight/itemHeight, backgroundColor: 'rgba(0,0,0,0)'}}>
                               <View style={style.menuItemTextContain}>
                                 <Text style={style.industryItemTitle} numberOfLines={1}>{ data.title }</Text>
                                 <Text style={style.industryItemSubTitle} numberOfLines={6}>{ data.description }</Text>
                               </View>
-                            </View>
+                            </LazyloadView>
                           </View>
                         </TouchableOpacity>
                       </View>
@@ -187,18 +195,20 @@ export class IndustryListScreen extends React.Component {
                             <View style={style.imageContainer}>
                               <View
                                 style={{flex: imgHeight/itemHeight}}>
-                                <Image
+                                <LazyloadImage
+                                  host="lazyload-listindustry"
                                   source={{uri: data.heroImage || Helper.ImageUrl}}
                                   style={[style.menuItemImage, {height: imgHeight}]}
                                 />
                               </View>
-                              <View
+                              <LazyloadView
+                                host="lazyload-listindustry"
                                 style={{flex: textHeight/itemHeight, backgroundColor: 'rgba(0,0,0,0)'}}>
                                 <View style={style.menuItemTextContain}>
                                   <Text style={style.industryItemTitle} numberOfLines={1}>{ data.title }</Text>
                                   <Text style={style.industryItemSubTitle} numberOfLines={6}>{ data.description }</Text>
                                 </View>
-                              </View>
+                              </LazyloadView>
                             </View>
                           </TouchableOpacity>
                         </View>
@@ -209,7 +219,7 @@ export class IndustryListScreen extends React.Component {
                   <View style={[style.loadingMore]}>
                     <Spinner color={StyleBase.header_color}/>
                   </View> : null}
-              </ScrollView>
+              </LazyloadScrollView>
             </View>
           </View>
         )
@@ -239,7 +249,7 @@ export class IndustryListScreen extends React.Component {
       if (this.loadMoreTimeout)
         clearTimeout(this.loadMoreTimeout);
       let windowHeight = Dimensions.get('window').height * .9,
-        height = itemHeight ? (itemHeight * 15 * (this.state.currentIndex + 1)) : 0;
+        height = itemHeight ? (itemHeight * 10 * (this.state.currentIndex + 1)) : 0;
       offset = e.nativeEvent.contentOffset.y;
       if (height > 0 && windowHeight + offset >= height * .7) {
         this.loadMoreTimeout = setTimeout(() => {
@@ -254,7 +264,6 @@ export class IndustryListScreen extends React.Component {
             this.setState({
               loadingMore: false,
             });
-            debugger;
             let oldData = this.savedData ? this.savedData.slice() : [];
             if (result && result.data) {
               let newData = oldData.concat(result.data);

@@ -2,10 +2,14 @@ import React from 'react';
 import {TouchableOpacity, Image, ScrollView, View, Text, PanResponder, Dimensions} from 'react-native';
 import {Icon, Card, CardItem, Spinner} from 'native-base';
 import {style, StyleBase} from '../../styles/style';
-import {viewportWidth, AppIcon, viewportHeight, Helper} from '../../common/constain';
+import {viewportWidth, AppIcon, viewportHeight, Helper, Guid} from '../../common/constain';
 import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
+import {
+  LazyloadScrollView,
+  LazyloadImage
+} from 'react-native-lazyload';
 
 export class ListSlider extends React.Component {
   state = {
@@ -14,6 +18,7 @@ export class ListSlider extends React.Component {
     isLoaded: false,
   };
 
+  guid = Guid();
   sliderWidth;
   sliderScroll;
 
@@ -70,11 +75,13 @@ export class ListSlider extends React.Component {
   }
 
   render() {
+
     return (
       this.state.isLoaded ?
         (<View style={[style.size1]}>
           <View style={{flex: 85}}>
-            <ScrollView horizontal
+            <LazyloadScrollView horizontal
+                                name={`lazyload-listslider-${this.guid}`}
                         showsHorizontalScrollIndicator={false}
                         scrollEventThrottle={50}
                         onScroll={(event) => this.handleScroll(event)}
@@ -87,7 +94,8 @@ export class ListSlider extends React.Component {
                                     style={{paddingRight: index < this.state.slider.length - 1 ? 5 : 0}}>
                     <Card elevation={10}>
                       <CardItem cardBody>
-                        <Image
+                        <LazyloadImage
+                          host={`lazyload-listslider-${this.guid}`}
                           source={{uri: slide.image || Helper.ImageUrl}}
                           style={[style.imageListSlider]}
                         >
@@ -97,7 +105,7 @@ export class ListSlider extends React.Component {
                               <Text style={[style.titleListSlider]} numberOfLines={1}>{ slide.title }</Text>
                             </View>
                           </View>
-                        </Image>
+                        </LazyloadImage>
                       </CardItem>
                     </Card>
                   </TouchableOpacity>
@@ -107,7 +115,7 @@ export class ListSlider extends React.Component {
                     </View> : null}
                 </View>)}
               </View>
-            </ScrollView>
+            </LazyloadScrollView>
           </View>
           <View style={{
           flex: 7,
@@ -164,7 +172,7 @@ export class ListSlider extends React.Component {
       let sliderSpaceW = viewportWidth * .6 - 10;
       let sliderW = ((this.sliderWidth - sliderSpaceW) / this.state.slider.length);
       let windowWidth = Dimensions.get('window').width,
-        width = sliderW * 20 * (this.props.currentIndex + 1),
+        width = sliderW * 10 * (this.props.currentIndex + 1),
         offset = e.nativeEvent.contentOffset.x;
       if (width > 0 && windowWidth + offset >= width * .7) {
         let nextId = this.props.currentIndex + 1;

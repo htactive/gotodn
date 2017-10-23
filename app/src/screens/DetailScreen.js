@@ -24,6 +24,10 @@ import {LStrings} from '../common/LocalizedStrings';
 import Share, {ShareSheet, Button} from 'react-native-share';
 import {AdmobBanner} from '../components/common/AdmobBanner';
 import * as FBSDK from 'react-native-fbsdk';
+import {
+  LazyloadScrollView,
+  LazyloadView
+} from 'react-native-lazyload';
 
 const {
   ShareDialog,
@@ -159,7 +163,7 @@ export class DetailScreen extends React.Component {
       !!data.id? (
           <Grid>
             <Col>
-              <ScrollView ref={(scrollV) => this.detailScroll = scrollV}>
+              <LazyloadScrollView name="lazyload-detailscreen" ref={(scrollV) => this.detailScroll = scrollV}>
                 <Row size={1}>
                   <DetailBanner
                     isFavorite={this.state.isFavorite}
@@ -168,7 +172,7 @@ export class DetailScreen extends React.Component {
                     onFavoriteClicked={() => this.likeDetail(data.id)}/>
                 </Row>
                 <Row size={2} style={style.detailContent}>
-                  <View style={{width: viewportWidth - 30}}>
+                  <View style={{flex: 1}}>
                     {data.images && data.images.length > 0 ? <DetailImage images={data.images}/> : null}
                     <DetailText title={data.title || LStrings.NoTitle}
                                 description={data.description || LStrings.NoDescription}/>
@@ -178,7 +182,7 @@ export class DetailScreen extends React.Component {
                           <Spinner color={StyleBase.header_color}/>
                         </View>
                       }
-                      <View style={style.detailOverlay}>
+                      <LazyloadView host="lazyload-detailscreen" style={style.detailOverlay}>
                         <DetailMapTextItem leftText={fullAddress} leftIcon={AppIcon.Location}
                                            rightText={LStrings.Direction} rightIcon={AppIcon.Direction}
                                            onMapItemClicked={() =>
@@ -198,7 +202,7 @@ export class DetailScreen extends React.Component {
                                            onMapItemClicked={() => {
                                          }}
                         />
-                      </View>
+                      </LazyloadView>
                     </View>
                     <DetailInfo detailInfo={data.moreinfo}/>
                     {
@@ -210,7 +214,7 @@ export class DetailScreen extends React.Component {
                     <View style={{flex: 1, width: viewportWidth, height: 60}}/>
                   </View>
                 </Row>
-              </ScrollView>
+              </LazyloadScrollView>
               <AdmobBanner bannerSize="fullBanner" />
               <ShareSheet visible={this.state.visible} onCancel={this.onCancel.bind(this)}>
                 <Button iconSrc={{ uri: TWITTER_ICON }}

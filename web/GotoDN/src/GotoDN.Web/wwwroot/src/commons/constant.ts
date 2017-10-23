@@ -3,17 +3,17 @@ import * as moment from 'moment';
 export const virtualPath = "";
 
 export const AdminRoutePath = {
-  Index: `${virtualPath}/`,
-  Login: `${virtualPath}/login`,
-  Error403Page: `${virtualPath}/access-denied`,
-  Dashboard: `${virtualPath}/dashboard`,
-  UserManagement: `${virtualPath}/users`,
-  CategoryManagement: `${virtualPath}/categories`,
-  ServiceManagement: `${virtualPath}/services`,
-  PlaceManagement: `${virtualPath}/places`,
-  CityManagement: `${virtualPath}/cities`,
-  DistrictManagement: `${virtualPath}/provinces`,
-  ConfigurationManagement: `${virtualPath}/configuration`,
+  Index: `${virtualPath}/admin`,
+  Login: `${virtualPath}/admin/login`,
+  Error403Page: `${virtualPath}/admin/access-denied`,
+  Dashboard: `${virtualPath}/admin/dashboard`,
+  UserManagement: `${virtualPath}/admin/users`,
+  CategoryManagement: `${virtualPath}/admin/categories`,
+  ServiceManagement: `${virtualPath}/admin/services`,
+  PlaceManagement: `${virtualPath}/admin/places`,
+  CityManagement: `${virtualPath}/admin/cities`,
+  DistrictManagement: `${virtualPath}/admin/provinces`,
+  ConfigurationManagement: `${virtualPath}/admin/configuration`,
 };
 
 export const SearchRoutePath = {

@@ -72,3 +72,4 @@ app/ios/gotoDN.xcodeproj/project.pbxproj
 **/.vs
 *.dg
 **/*.lock.json
+/web/GotoDN/src/GotoDN.Web/GDNImages

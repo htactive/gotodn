@@ -12,6 +12,9 @@ import {appStore} from '../../stores/AppStore';
 import {LStrings} from '../../common/LocalizedStrings';
 import {StyleBase, style} from '../../styles/style';
 import {commonStore,reloadData} from '../../stores/CommonStore';
+import {
+  LazyloadScrollView
+} from 'react-native-lazyload';
 
 export class ListDetail extends React.Component {
   state = {
@@ -87,7 +90,8 @@ export class ListDetail extends React.Component {
   render() {
 
     return (
-      <ScrollView
+      <LazyloadScrollView
+        name="lazyload-listscreen"
         refreshControl={
               <RefreshControl
             refreshing={this.state.refreshing}
@@ -114,7 +118,7 @@ export class ListDetail extends React.Component {
               </View> : null}
           </Row>
         </Grid>
-      </ScrollView>
+      </LazyloadScrollView>
     );
   }
 
@@ -131,9 +135,9 @@ export class ListDetail extends React.Component {
       if (this.loadMoreTimeout)
         clearTimeout(this.loadMoreTimeout);
       let windowHeight = Dimensions.get('window').height * this.state.showSlider ? .5 : .9,
-        height = this.itemHeight ? (this.itemHeight * 15 * (this.state.currentIndex + 1)) : 0;
+        height = this.itemHeight ? (this.itemHeight * 10 * (this.state.currentIndex + 1)) : 0;
       offset = e.nativeEvent.contentOffset.y;
-      if (height > 0 && windowHeight + offset >= height * .6) {
+      if (height > 0 && windowHeight + offset >= height * .7) {
         this.loadMoreTimeout = setTimeout(() => {
           this.setState({
             loadingMore: true,

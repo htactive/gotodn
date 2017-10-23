@@ -293,7 +293,7 @@ namespace GotoDN.Web.Controllers
             var result = new List<SliderModel>();
             var today = DateTimeHelper.GetDateTimeNow();
             var currentId = index ?? 0;
-            var itemsPerIndex = 20;
+            var itemsPerIndex = 10;
 
             var place = this.HTRepository.PlaceRepository.GetAll();
             var placeLanguage = this.HTRepository.PlaceLanguageRepository.GetAll();
@@ -329,7 +329,7 @@ namespace GotoDN.Web.Controllers
             var currentLanguage = this.CurrentLanguage;
             var currentCityId = this.CurrentCityId;
             var currentId = index ?? 0;
-            var itemsPerIndex = 30;
+            var itemsPerIndex = 20;
 
             var place = this.HTRepository.PlaceRepository.GetAll();
             var placeLanguage = this.HTRepository.PlaceLanguageRepository.GetAll();

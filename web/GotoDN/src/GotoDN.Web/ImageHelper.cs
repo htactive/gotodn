@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -82,5 +83,10 @@ namespace GotoDN
 
             return returnStream;
         }
+    }
+
+    public static class RequestHelper
+    {
+        public static string BaseImageURL { get; set; }
     }
 }

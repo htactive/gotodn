@@ -272,7 +272,7 @@ export const style = StyleSheet.create({
     alignItems: 'center',
   },
   detailContent: {
-    padding: 15,
+    padding: 10,
     backgroundColor: '#fff',
   },
   detailOverlay: {
@@ -294,7 +294,7 @@ export const style = StyleSheet.create({
   },
   detailMap: {
     height: viewportHeight / 1.8,
-    width: viewportWidth - 30,
+    flex: 1,
     marginTop: 30,
   },
   detailContentTitle: {

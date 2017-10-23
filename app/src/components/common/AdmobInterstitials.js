@@ -26,8 +26,8 @@ export class AdmobInterstitials extends React.Component {
   }
 
   showInterstitial() {
-    AdMobInterstitial.requestAd((error) => error ? console.log(error) :
-      AdMobInterstitial.showAd((error) => error && console.log(error))
+    AdMobInterstitial.requestAd((error) => error ? {} :
+      AdMobInterstitial.showAd((error) => error && {})
     );
   }
 

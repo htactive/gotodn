@@ -59,12 +59,14 @@ export class MenuSearch extends React.Component {
       this.setState({
         data: null
       });
-      if(nextProps.search && nextProps.search.trim() != '' && nextProps.search.trim().length >= 2)
+      if(nextProps.search && nextProps.search.trim() != '' && nextProps.search.trim().length >= 3)
         this.filterData(nextProps.search);
     }
   }
 
   async filterData(search) {
+    if(this.props.changeSearchStatus)
+      this.props.changeSearchStatus(true);
     let result = await GDNServiceInstance.searchAllPlace(search, 0);
 
     if (result) {
@@ -73,6 +75,8 @@ export class MenuSearch extends React.Component {
         currentIndex: 0,
       });
     }
+    if(this.props.changeSearchStatus)
+      this.props.changeSearchStatus(false);
   }
 
   render() {
@@ -122,7 +126,7 @@ export class MenuSearch extends React.Component {
                   </View>
                 </View>
               </TouchableOpacity>
-            ) : this.props.search && this.props.search.trim() != '' && this.props.search.trim().length >= 2 ? <View style={[styles.container, style.centralizedContent, {backgroundColor: 'rgba(255,255,255,0)'}]}>
+            ) : this.props.search && this.props.search.trim() != '' && this.props.search.trim().length >= 3 ? <View style={[styles.container, style.centralizedContent, {backgroundColor: 'rgba(255,255,255,0)'}]}>
               <Spinner color={StyleBase.header_color}/>
             </View> : null}
           {this.state.data && this.state.loadingMore ?
@@ -142,7 +146,7 @@ export class MenuSearch extends React.Component {
       if (this.loadMoreTimeout)
         clearTimeout(this.loadMoreTimeout);
       let windowHeight = Dimensions.get('window').height * .9,
-        height = this.itemHeight ? (this.itemHeight * 30 * (this.state.currentIndex + 1)) : 0;
+        height = this.itemHeight ? (this.itemHeight * 20 * (this.state.currentIndex + 1)) : 0;
         offset = e.nativeEvent.contentOffset.y;
       if (height > 0 && windowHeight + offset >= height*.6) {
         this.loadMoreTimeout = setTimeout(() => {

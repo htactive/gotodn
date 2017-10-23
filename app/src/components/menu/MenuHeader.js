@@ -82,6 +82,7 @@ export class MenuHeader extends React.Component {
             <Input value={this.state.searchBarValue}
                    autoFocus
                    placeholder={LStrings.Search}
+                   returnKeyType="done"
                    placeholderTextColor='#8e8e93'
                    style={{color: '#263238', height: 35,
                              fontFamily: StyleBase.sp_regular,
@@ -209,10 +210,20 @@ export class MenuHeader extends React.Component {
 
   handleChanged(text) {
     this.setState({searchBarValue: text});
+    if(this.props.searchStatus) return;
     if (this.searchTimeout)
       clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => {
       this.props.onSearchChanged && this.props.onSearchChanged(text);
     }, 500);
+  }
+
+  handleSubmit(text) {
+    if(this.props.searchStatus) return;
+    if (this.searchTimeout)
+      clearTimeout(this.searchTimeout);
+    this.searchTimeout = setTimeout(() => {
+      this.props.onSearchChanged && this.props.onSearchChanged(text);
+    }, 100);
   }
 }

@@ -5,6 +5,7 @@ import {style} from '../../styles/style';
 import {AutoText} from '../../components/common/AutoText';
 import {viewportHeight} from '../../common/constain';
 
+
 export class DetailMapTextItem extends React.Component {
   render() {
     return (

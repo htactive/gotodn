@@ -459,7 +459,7 @@ namespace GotoDN.Web.Controllers
             var currentLang = this.CurrentLanguage;
             var currentCity = this.CurrentCityId;
             var currentId = index ?? 0;
-            var itemsPerIndex = 30;
+            var itemsPerIndex = 20;
             var category = this.HTRepository.CategoryRepository.GetAll()
                 .Include("Places.PlaceLanguages.Image")
                 .Include(c => c.CategoryLanguages)
