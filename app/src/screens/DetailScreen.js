@@ -116,17 +116,14 @@ export class DetailScreen extends React.Component {
   shareLinkWithShareDialog() {
     ShareDialog.canShow(this.state.fbSshareContent).then(
       (canShow) => {
-        debugger;
         if (canShow) {
           return ShareDialog.show(this.state.fbSshareContent);
         }
       }
     ).then(
       (result) => {
-        debugger;
       },
       (error) => {
-        debugger;
       }
     );
   }
