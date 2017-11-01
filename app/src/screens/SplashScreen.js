@@ -106,6 +106,9 @@ export class SplashScreen extends React.Component {
   }
 
   async goNext() {
+    NetInfo.removeEventListener(
+      'change'
+    );
     await this.initData();
     let menuListData = await GDNServiceInstance.getHomeMenuList();
     let sliderData = await GDNServiceInstance.getHomeSlider(0);

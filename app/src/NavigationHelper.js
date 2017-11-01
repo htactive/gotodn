@@ -222,12 +222,11 @@ DNNavigator.router.getStateForAction = (action, state) => {
     };
   }
   if (state && action.type === 'GoHome') {
-    const routes = state.routes.slice();
-    routes.push(action);
+    const routes = state.routes.filter(r => r.routeName == action.routeName);
     return {
       ...state,
       routes,
-      index: routes.length - 1,
+      index: 0,
     };
   }
   return prevGetStateForActionDNNavigator(action, state);

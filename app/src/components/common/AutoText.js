@@ -66,14 +66,14 @@ export class AutoText extends React.Component {
     this.state.limitLine ?
       <Text ref={component => this._text = component}
             onLayout={this._onLayout}
-            style={[this.props.style, {fontSize: this.state.size}]}
+            style={[this.props.style, {fontSize: this.state.size, textAlign: 'left'}]}
             numberOfLines={this.props.numberOfLines}
       >
         {this.props.children}
       </Text> :
       <Text ref={component => this._text = component}
             onLayout={this._onLayout}
-            style={[this.props.style, {fontSize: this.state.size}]}
+            style={[this.props.style, {fontSize: this.state.size, textAlign: 'left'}]}
       >
         {this.props.children}
       </Text>

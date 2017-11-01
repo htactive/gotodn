@@ -135,22 +135,15 @@ export class Menu extends React.Component {
   handleNetInfo() {
     if (!this.isHandle) {
       this.isHandle = true;
-      NetInfo.addEventListener(
-        'change',
-        (value) => {
-          if (value == 'WIFI' || value == 'wifi' || value == 'MOBILE' || value == 'cell' || value == 'VPN') {
-            NetInfo.removeEventListener(
-              'change'
-            );
-            this.setState({hasConnection: true})
-            setTimeout(() => {
-              this.setState({showConnectText: false})
-            }, 1000)
+      setInterval(() => {
+        NetInfo.isConnected.fetch().then(isConnected => {
+          if (isConnected) {
+            this.setState({hasConnection: true, showConnectText: false})
           } else {
             this.setState({hasConnection: false, showConnectText: true})
           }
-        }
-      );
+        });
+      },5000);
     }
   }
 

@@ -11,11 +11,12 @@ import {
   LazyloadImage,
   LazyloadView
 } from 'react-native-lazyload';
+import {LStrings} from '../../common/LocalizedStrings';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 const largeImgHeight = Math.round(viewportHeight / 3);
 const smallImgHeight = Math.round(viewportHeight / 5);
-const textHeight = Math.round(viewportHeight / 6);
+const textHeight = Math.round(viewportHeight / 6.5);
 const largeItemHeight = largeImgHeight + textHeight;
 const smallItemHeight = smallImgHeight + textHeight;
 
@@ -139,8 +140,8 @@ export class ListItemDetail extends React.Component {
                         host="lazyload-listscreen"
                         style={{flex: (index % 2 === 0) ? textHeight/largeItemHeight : textHeight/smallItemHeight}}>
                         <View style={style.menuItemTextContain}>
-                          <Text style={style.menuItemTitle} numberOfLines={1}>{ data.title }</Text>
-                          <Text style={style.menuItemSubTitle} numberOfLines={4}>{ data.description }</Text>
+                          <Text style={style.menuItemTitle} numberOfLines={1}>{ data.title || LStrings.NoTitle }</Text>
+                          <Text style={[style.menuItemSubTitle, !data.description ? {lineHeight: 40} : null]} numberOfLines={4}>{ data.description || LStrings.NoDescription }</Text>
                         </View>
                       </LazyloadView>
                     </View>
@@ -172,8 +173,8 @@ export class ListItemDetail extends React.Component {
                           host="lazyload-listscreen"
                           style={{flex: (index % 2 !== 0) ? textHeight/largeItemHeight : textHeight/smallItemHeight}}>
                           <View style={style.menuItemTextContain}>
-                            <Text style={style.menuItemTitle} numberOfLines={1}>{ data.title }</Text>
-                            <Text style={style.menuItemSubTitle} numberOfLines={4}>{ data.description }</Text>
+                            <Text style={style.menuItemTitle} numberOfLines={1}>{ data.title || LStrings.NoTitle }</Text>
+                            <Text style={[style.menuItemSubTitle, !data.description ? {lineHeight: 40} : null]} numberOfLines={4}>{ data.description || LStrings.NoDescription }</Text>
                           </View>
                         </LazyloadView>
                       </View>

@@ -174,8 +174,8 @@ export class IndustryListScreen extends React.Component {
                               host="lazyload-listindustry"
                               style={{flex: textHeight/itemHeight, backgroundColor: 'rgba(0,0,0,0)'}}>
                               <View style={style.menuItemTextContain}>
-                                <Text style={style.industryItemTitle} numberOfLines={1}>{ data.title }</Text>
-                                <Text style={style.industryItemSubTitle} numberOfLines={6}>{ data.description }</Text>
+                                <Text style={style.industryItemTitle} numberOfLines={1}>{ data.title || LStrings.NoTitle }</Text>
+                                <Text style={[style.industryItemSubTitle, !data.description ? {lineHeight: 40} : null]} numberOfLines={6}>{ data.description || LStrings.NoDescription }</Text>
                               </View>
                             </LazyloadView>
                           </View>
@@ -205,8 +205,8 @@ export class IndustryListScreen extends React.Component {
                                 host="lazyload-listindustry"
                                 style={{flex: textHeight/itemHeight, backgroundColor: 'rgba(0,0,0,0)'}}>
                                 <View style={style.menuItemTextContain}>
-                                  <Text style={style.industryItemTitle} numberOfLines={1}>{ data.title }</Text>
-                                  <Text style={style.industryItemSubTitle} numberOfLines={6}>{ data.description }</Text>
+                                  <Text style={style.industryItemTitle} numberOfLines={1}>{ data.title || LStrings.NoTitle }</Text>
+                                  <Text style={[style.industryItemSubTitle, !data.description ? {lineHeight: 40} : null]} numberOfLines={6}>{ data.description || LStrings.NoDescription }</Text>
                                 </View>
                               </LazyloadView>
                             </View>
