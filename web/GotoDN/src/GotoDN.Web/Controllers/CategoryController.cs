@@ -352,7 +352,8 @@ namespace GotoDN.Web.Controllers
                 .Include("CategoryLanguages.Image")
                 .Include("CategoryLanguages.Icon")
                 .Include("HTServices.HTServiceLanguages.Image")
-                .Include(c => c.Places)
+                .Include("HTServices.Places")
+                .Include("Places")
                 .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang) && c.Places.Any(p => p.CityId == currentCity))
                 .ToList();
 
@@ -367,7 +368,7 @@ namespace GotoDN.Web.Controllers
                     Image = GetUrl(cl.Image),
                     Icon = GetUrl(cl.Icon),
                     Items = x.Places.All(p => p.HTServiceId != null) ? (x.HTServices.Count > 0 ?
-                        x.HTServices.Where(s => s.HTServiceLanguages.Any(z => z.Language == currentLang))
+                        x.HTServices.Where(s => s.HTServiceLanguages.Any(z => z.Language == currentLang) && s.Places.Any(p => p.CityId == currentCity))
                         .Select(y =>
                         {
                             var sl = y.HTServiceLanguages.FirstOrDefault(t => t.Language == currentLang);
