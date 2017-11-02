@@ -18,8 +18,8 @@ import {
   LazyloadImage
 } from 'react-native-lazyload';
 
-const imgHeight = Math.round((viewportWidth - 30) / 2);
-const textHeight = Math.round(viewportHeight / 3.3);
+const imgHeight = Math.round((viewportWidth - 10) / 2);
+const textHeight = Math.round(viewportHeight / 5) + 10;
 const itemHeight = imgHeight + textHeight;
 
 export class IndustryListScreen extends React.Component {
@@ -172,7 +172,7 @@ export class IndustryListScreen extends React.Component {
                             </View>
                             <LazyloadView
                               host="lazyload-listindustry"
-                              style={{flex: textHeight/itemHeight, backgroundColor: 'rgba(0,0,0,0)'}}>
+                              style={{flex: textHeight/itemHeight}}>
                               <View style={style.menuItemTextContain}>
                                 <Text style={style.industryItemTitle} numberOfLines={1}>{ data.title || LStrings.NoTitle }</Text>
                                 <Text style={[style.industryItemSubTitle, !data.description ? {lineHeight: 40} : null]} numberOfLines={6}>{ data.description || LStrings.NoDescription }</Text>

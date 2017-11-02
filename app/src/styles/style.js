@@ -462,14 +462,15 @@ export const style = StyleSheet.create({
   },
   industryItemTitle: {
     color: '#263238',
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: StyleBase.sp_semibold,
-    paddingVertical: 14,
+
   },
   industryItemSubTitle: {
     color: '#263238',
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: StyleBase.sp_regular,
+    paddingTop: 5,
   },
   iconImgXl: {
     resizeMode: 'contain',
