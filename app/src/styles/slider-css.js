@@ -68,7 +68,7 @@ export default StyleSheet.create({
 
   },
   textInner: {
-    height: slideHeight/4,
+    height: 56,
   },
   textInnerList: {
     height: slideHeight/3.5,
@@ -77,7 +77,7 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     paddingHorizontal: 5,
-    paddingVertical: 5,
+    paddingVertical: 2,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   textListContain: {
@@ -125,6 +125,7 @@ export default StyleSheet.create({
     color: colors.white,
     fontSize: 14,
     fontFamily: StyleBase.sp_semibold,
+    lineHeight: 18,
   },
   titleList: {
     color: '#263238',
@@ -143,6 +144,7 @@ export default StyleSheet.create({
     color: colors.white,
     fontSize: 12,
     fontFamily: StyleBase.sp_light,
+    lineHeight: 16,
   },
   subtitleList: {
     color: '#263238',

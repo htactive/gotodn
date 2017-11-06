@@ -14,6 +14,7 @@ interface thisState {
   InValidMessage?: string,
   ImagePreviewOpen?: boolean,
   ImagePreviewIndex?: number,
+  IsShowMore?: boolean,
 }
 
 interface thisProps {
@@ -30,6 +31,7 @@ export class MultiImageUploadComponent extends React.Component<thisProps, thisSt
     InValidFileSize: false,
     InValidMessage: '',
     ImagePreviewOpen: false,
+    IsShowMore: false,
   };
 
   componentWillMount() {
@@ -60,8 +62,48 @@ export class MultiImageUploadComponent extends React.Component<thisProps, thisSt
         Id: 0
       }, {
         Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
+      }, {
+        Id: 0
       },];
-    for (let i = 0; i < (props.ImageSetValue.length < 10 ? props.ImageSetValue.length : 10); i++) {
+    for (let i = 0; i < (props.ImageSetValue.length < 30 ? props.ImageSetValue.length : 30); i++) {
       images[i].Url = props.ImageSetValue[i].Image ? props.ImageSetValue[i].Image.Url : '';
       images[i].Id = props.ImageSetValue[i].ImageId;
     }
@@ -103,10 +145,15 @@ export class MultiImageUploadComponent extends React.Component<thisProps, thisSt
 
     const SortableList = (items: any) => {
       return (
-        <div className="image-upload-container">
+        <div className="image-upload-container" style={this.state.IsShowMore ? {height: '680px', overflow: 'hidden'} : {height: '230px', overflow: 'hidden'}}>
           {items.items.map((value, index) => (
             <SortableItem key={`item-${index}`} value={value} />
           ))}
+          <div className={'image-upload-bottom'}>
+            <button className={'btn btn-link'} style={{paddingTop: 3}} onClick={() => this.setState({IsShowMore: !this.state.IsShowMore})} >
+              {this.state.IsShowMore ? 'Thu gọn' : 'Xem thêm'}
+            </button>
+          </div>
         </div>
       );
     };
@@ -168,10 +215,10 @@ export class MultiImageUploadComponent extends React.Component<thisProps, thisSt
       if (images) {
         let validImgs = true;
         let imageNum = this.state.upload_images.filter(i => i.Url && i.Url != '').length;
-        if(imageNum + images.length > 10) {
+        if(imageNum + images.length > 30) {
           this.setState({
             InValidFileType: true,
-            InValidMessage: 'Chỉ được upload tối đa 10 hình ảnh.'
+            InValidMessage: 'Chỉ được upload tối đa 30 hình ảnh.'
           });
           validImgs = false;
           return;

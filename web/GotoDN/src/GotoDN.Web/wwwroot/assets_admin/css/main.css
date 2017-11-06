@@ -3650,3 +3650,15 @@ div.gallery-upload .dropzone .dz-message:after {
     display: none;
   }
 }
+
+.image-upload-bottom {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  height: 2em;
+  bottom: 0;
+  background-color: #ddd;
+  opacity: 0.9;
+  z-index: 1;
+  text-align: center
+}

@@ -26,7 +26,7 @@ export default class HomeSliderItem extends React.Component {
                 >
                   <View style={styles.textInner}>
                     <View style={styles.textContain}>
-                      <Text style={[styles.title]} numberOfLines={1}>{ d.title }</Text>
+                      <Text style={[styles.title]} numberOfLines={2}>{ d.title }</Text>
                       <Text style={[styles.subtitle]} numberOfLines={1}>{ d.subtitle }</Text>
                     </View>
                   </View>

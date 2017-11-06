@@ -18,7 +18,7 @@ import {
   LazyloadImage
 } from 'react-native-lazyload';
 
-const imgHeight = Math.round((viewportWidth - 10) / 2);
+const imgHeight = Math.round(viewportHeight / 3);
 const textHeight = Math.round(viewportHeight / 5) + 10;
 const itemHeight = imgHeight + textHeight;
 
@@ -157,13 +157,12 @@ export class IndustryListScreen extends React.Component {
                       <View key={index} style={{alignSelf: 'stretch'}}>
                         <TouchableOpacity
                           activeOpacity={0.7}
-                          style={[style.menuItemDetail, {height: itemHeight}]}
+                          style={[style.menuItemDetail]}
                           onPress={() => {this.goToDetailIndustry(data.id)}}
                           key={index}
                         >
                           <View style={style.imageContainer}>
-                            <View
-                              style={{flex: imgHeight/itemHeight}}>
+                            <View>
                               <LazyloadImage
                                 host="lazyload-listindustry"
                                 source={{uri: data.heroImage || Helper.ImageUrl}}
@@ -172,10 +171,10 @@ export class IndustryListScreen extends React.Component {
                             </View>
                             <LazyloadView
                               host="lazyload-listindustry"
-                              style={{flex: textHeight/itemHeight}}>
+                              style={{flex: 1, backgroundColor: 'rgba(0,0,0,0)'}}>
                               <View style={style.menuItemTextContain}>
-                                <Text style={style.industryItemTitle} numberOfLines={1}>{ data.title || LStrings.NoTitle }</Text>
-                                <Text style={[style.industryItemSubTitle, !data.description ? {lineHeight: 40} : null]} numberOfLines={6}>{ data.description || LStrings.NoDescription }</Text>
+                                <Text style={style.industryItemTitle} numberOfLines={2}>{ data.title || LStrings.NoTitle }</Text>
+                                <Text style={[style.industryItemSubTitle, !data.description ? {lineHeight: 20} : null]} numberOfLines={4}>{ data.description || LStrings.NoDescription }</Text>
                               </View>
                             </LazyloadView>
                           </View>
@@ -188,13 +187,12 @@ export class IndustryListScreen extends React.Component {
                         <View key={index} style={{alignSelf: 'stretch'}}>
                           <TouchableOpacity
                             activeOpacity={0.7}
-                            style={[style.menuItemDetail, {height: itemHeight}]}
+                            style={[style.menuItemDetail]}
                             onPress={() => {this.goToDetailIndustry(data.id)}}
                             key={index}
                           >
                             <View style={style.imageContainer}>
-                              <View
-                                style={{flex: imgHeight/itemHeight}}>
+                              <View>
                                 <LazyloadImage
                                   host="lazyload-listindustry"
                                   source={{uri: data.heroImage || Helper.ImageUrl}}
@@ -203,10 +201,10 @@ export class IndustryListScreen extends React.Component {
                               </View>
                               <LazyloadView
                                 host="lazyload-listindustry"
-                                style={{flex: textHeight/itemHeight, backgroundColor: 'rgba(0,0,0,0)'}}>
+                                style={{flex: 1, backgroundColor: 'rgba(0,0,0,0)'}}>
                                 <View style={style.menuItemTextContain}>
                                   <Text style={style.industryItemTitle} numberOfLines={1}>{ data.title || LStrings.NoTitle }</Text>
-                                  <Text style={[style.industryItemSubTitle, !data.description ? {lineHeight: 40} : null]} numberOfLines={6}>{ data.description || LStrings.NoDescription }</Text>
+                                  <Text style={[style.industryItemSubTitle, !data.description ? {lineHeight: 20} : null]} numberOfLines={4}>{ data.description || LStrings.NoDescription }</Text>
                                 </View>
                               </LazyloadView>
                             </View>

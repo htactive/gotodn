@@ -100,10 +100,8 @@ export class ListSlider extends React.Component {
                           style={[style.imageListSlider]}
                         >
                           {slide.star && slide.star > 0 && this.renderStart(slide.star)}
-                          <View style={style.textInnerListSlider}>
-                            <View style={style.textListSlider}>
-                              <Text style={[style.titleListSlider]} numberOfLines={1}>{ slide.title }</Text>
-                            </View>
+                          <View style={style.textListSlider}>
+                            <Text style={[style.titleListSlider]} numberOfLines={2}>{ slide.title }</Text>
                           </View>
                         </LazyloadImage>
                       </CardItem>
@@ -155,7 +153,7 @@ export class ListSlider extends React.Component {
   handleScroll(event) {
     let index = 0;
     if (this.state.slider && this.state.slider.length > 0) {
-      let sliderSpaceW = viewportWidth * .6 - 10;
+      let sliderSpaceW = viewportWidth - 10;
       let sliderW = ((this.sliderWidth - sliderSpaceW) / this.state.slider.length);
       index = Math.floor((event.nativeEvent.contentOffset.x + 10) / sliderW);
       this.handleLazyLoad(event);

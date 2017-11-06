@@ -159,10 +159,11 @@ export const style = StyleSheet.create({
     height: 35,
   },
   textListSlider: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 10,
-    paddingBottom: 3,
+    height: 40,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    paddingHorizontal: 5,
+    paddingVertical: 2,
     backgroundColor: 'rgba(255, 255, 255, .8)',
   },
   titleListSlider: {
@@ -196,7 +197,7 @@ export const style = StyleSheet.create({
     alignSelf: 'stretch',
   },
   menuItemDetail: {
-    paddingBottom: 10,
+    paddingBottom: 15,
     alignSelf: 'stretch',
   },
   menuItemImage: {
@@ -207,11 +208,14 @@ export const style = StyleSheet.create({
     color: '#263238',
     fontSize: 14,
     fontFamily: StyleBase.sp_semibold,
+    lineHeight: 20,
+    paddingVertical: 5,
   },
   menuItemSubTitle: {
     color: '#263238',
     fontSize: 12,
     fontFamily: StyleBase.sp_regular,
+    lineHeight: 16,
   },
   menuItemTextContain: {
     flex: 1,
@@ -219,7 +223,6 @@ export const style = StyleSheet.create({
     alignItems: 'flex-start',
     paddingHorizontal: 3,
     opacity: 0.8,
-    paddingTop: 10,
   },
   menuItemImageInner: {
     flex: 7,
@@ -464,13 +467,15 @@ export const style = StyleSheet.create({
     color: '#263238',
     fontSize: 14,
     fontFamily: StyleBase.sp_semibold,
+    lineHeight: 18,
+    paddingVertical: 5,
 
   },
   industryItemSubTitle: {
     color: '#263238',
     fontSize: 12,
     fontFamily: StyleBase.sp_regular,
-    paddingTop: 5,
+    lineHeight: 16,
   },
   iconImgXl: {
     resizeMode: 'contain',

@@ -121,13 +121,12 @@ export class ListItemDetail extends React.Component {
                 <View key={index} style={{alignSelf: 'stretch'}}>
                   <TouchableOpacity
                     activeOpacity={0.7}
-                    style={[style.menuItemDetail, {height: (index % 2 === 0) ? largeItemHeight : smallItemHeight}]}
+                    style={[style.menuItemDetail]}
                     onPress={() => {this.goToDetail(data.id)}}
                     key={index}
                   >
                     <View style={style.imageContainer}>
-                      <View
-                        style={{flex: (index % 2 === 0) ? largeImgHeight/largeItemHeight : smallImgHeight/smallItemHeight}}>
+                      <View>
                         <LazyloadImage
                           host="lazyload-listscreen"
                           source={{uri: data.heroImage || Helper.ImageUrl}}
@@ -138,10 +137,10 @@ export class ListItemDetail extends React.Component {
                       </View>
                       <LazyloadView
                         host="lazyload-listscreen"
-                        style={{flex: (index % 2 === 0) ? textHeight/largeItemHeight : textHeight/smallItemHeight}}>
+                        style={{flex: 1}}>
                         <View style={style.menuItemTextContain}>
                           <Text style={style.menuItemTitle} numberOfLines={1}>{ data.title || LStrings.NoTitle }</Text>
-                          <Text style={[style.menuItemSubTitle, !data.description ? {lineHeight: 40} : null]} numberOfLines={4}>{ data.description || LStrings.NoDescription }</Text>
+                          <Text style={[style.menuItemSubTitle, !data.description ? {lineHeight: 24} : null]} numberOfLines={4}>{ data.description || LStrings.NoDescription }</Text>
                         </View>
                       </LazyloadView>
                     </View>
@@ -154,13 +153,12 @@ export class ListItemDetail extends React.Component {
                   <View key={index} style={{alignSelf: 'stretch'}}>
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      style={[style.menuItemDetail, {height: (index % 2 !== 0) ? largeItemHeight : smallItemHeight}]}
+                      style={[style.menuItemDetail]}
                       onPress={() => {this.goToDetail(data.id)}}
                       key={index}
                     >
                       <View style={style.imageContainer}>
-                        <View
-                          style={{flex: (index % 2 !== 0) ? largeImgHeight/largeItemHeight : smallImgHeight/smallItemHeight}}>
+                        <View>
                           <LazyloadImage
                             host="lazyload-listscreen"
                             source={{uri: data.heroImage || Helper.ImageUrl}}
@@ -171,10 +169,10 @@ export class ListItemDetail extends React.Component {
                         </View>
                         <LazyloadView
                           host="lazyload-listscreen"
-                          style={{flex: (index % 2 !== 0) ? textHeight/largeItemHeight : textHeight/smallItemHeight}}>
+                          style={{flex: 1}}>
                           <View style={style.menuItemTextContain}>
-                            <Text style={style.menuItemTitle} numberOfLines={1}>{ data.title || LStrings.NoTitle }</Text>
-                            <Text style={[style.menuItemSubTitle, !data.description ? {lineHeight: 40} : null]} numberOfLines={4}>{ data.description || LStrings.NoDescription }</Text>
+                            <Text style={style.menuItemTitle} numberOfLines={2}>{ data.title || LStrings.NoTitle }</Text>
+                            <Text style={[style.menuItemSubTitle, !data.description ? {lineHeight: 24} : null]} numberOfLines={4}>{ data.description || LStrings.NoDescription }</Text>
                           </View>
                         </LazyloadView>
                       </View>

@@ -164,7 +164,7 @@ namespace GotoDN.Web.Controllers
                     ImageId = p.Image != null ? p.Image.Id : (int?)null,
                     IconId = p.Icon != null ? p.Icon.Id : (int?)null,
                     Description = p.Description,
-                    PlaceImages = p.PlaceImages != null ? p.PlaceImages.Take(10).Select(t => new PlaceImage
+                    PlaceImages = p.PlaceImages != null ? p.PlaceImages.Take(30).Select(t => new PlaceImage
                     {
                         ImageId = t.ImageId,
                         PlaceLangId = p.Id,
@@ -194,7 +194,7 @@ namespace GotoDN.Web.Controllers
                         item.Description = en.Description;
                         if (item.PlaceImages == null) item.PlaceImages = new List<PlaceImage>();
                         item.PlaceImages.Clear();
-                        item.PlaceImages.AddRange(en.PlaceImages.Take(10).Select(t => new PlaceImage
+                        item.PlaceImages.AddRange(en.PlaceImages.Take(30).Select(t => new PlaceImage
                         {
                             ImageId = t.ImageId,
                             PlaceLangId = en.Id,
@@ -858,7 +858,7 @@ namespace GotoDN.Web.Controllers
                 var imgs = importPlace.PlaceImages.Select(img => new Image
                 {
                     Url = img
-                }).Take(10).ToList();
+                }).Take(30).ToList();
                 this.HTRepository.ImageRepository.Save(imgs);
 
                 var placeImgs = placeLanguage.PlaceImages;
