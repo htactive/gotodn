@@ -6,6 +6,7 @@ export interface CategoryModel {
   UpdatedDate?: Date,
   IsEvent?: boolean,
   IsGovernment?: boolean,
+  ShowInAllCity?: boolean,
   Order?: number,
   CategoryLanguages?: CategoryLanguageModel[],
   HTServices?: HTServiceModel[]

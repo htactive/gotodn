@@ -57,7 +57,8 @@ namespace GotoDN.Web.Controllers
                 .Include("CategoryLanguages.Icon")
                 .Include(c => c.HTServices)
                 .Include(c => c.Places)
-                .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang) && c.Places.Any(p => p.CityId == currentCity))
+                .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang) 
+                        && c.Places.Any(p => p.CityId == currentCity || (p.Category != null && p.Category.ShowInAllCity.HasValue && p.Category.ShowInAllCity.Value)))
                 .OrderBy(c => c.Order).ToList()
                 .Select(c => new CategoryMenuModel()
                 {
@@ -163,6 +164,7 @@ namespace GotoDN.Web.Controllers
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             entity.IsEvent = model.IsEvent ?? false;
             entity.IsGovernment = model.IsGovernment;
+            entity.ShowInAllCity = model.ShowInAllCity;
             if (entity.CategoryLanguages == null || entity.CategoryLanguages.Count == 0)
             {
                 entity.CategoryLanguages = model.CategoryLanguages.Select(c => new CategoryLanguage
@@ -317,7 +319,8 @@ namespace GotoDN.Web.Controllers
                       join img in image on pl.ImageId equals img.Id into imgs
                       from img in imgs.DefaultIfEmpty()
                       join c in category on p.CategoryId equals c.Id
-                      where p.CityId == currentCityId && pl.Language == currentLanguage &&
+                      where (p.CityId == currentCityId || (c.ShowInAllCity.HasValue && c.ShowInAllCity.Value)) 
+                            && pl.Language == currentLanguage &&
                            ((c.IsEvent.HasValue && c.IsEvent.Value && p.EndDate >= today) ||
                            (p.IsHomeSlider.HasValue && p.IsHomeSlider.Value))
                       orderby c.IsEvent descending, p.StartDate, p.IsHomeSlider descending, p.Id descending
@@ -354,7 +357,8 @@ namespace GotoDN.Web.Controllers
                 .Include("HTServices.HTServiceLanguages.Image")
                 .Include("HTServices.Places")
                 .Include("Places")
-                .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang) && c.Places.Any(p => p.CityId == currentCity))
+                .Where(c => c.CategoryLanguages.Any(z => z.Language == currentLang) && 
+                        c.Places.Any(p => p.CityId == currentCity || (p.Category != null && p.Category.ShowInAllCity.HasValue && p.Category.ShowInAllCity.Value)))
                 .ToList();
 
             result = category.Select(x =>
@@ -368,7 +372,7 @@ namespace GotoDN.Web.Controllers
                     Image = GetUrl(cl.Image),
                     Icon = GetUrl(cl.Icon),
                     Items = x.Places.All(p => p.HTServiceId != null) ? (x.HTServices.Count > 0 ?
-                        x.HTServices.Where(s => s.HTServiceLanguages.Any(z => z.Language == currentLang) && s.Places.Any(p => p.CityId == currentCity))
+                        x.HTServices.Where(s => s.HTServiceLanguages.Any(z => z.Language == currentLang) && s.Places.Any(p => (p.CityId == currentCity || (p.Category != null && p.Category.ShowInAllCity.HasValue && p.Category.ShowInAllCity.Value))))
                         .Select(y =>
                         {
                             var sl = y.HTServiceLanguages.FirstOrDefault(t => t.Language == currentLang);
@@ -429,7 +433,8 @@ namespace GotoDN.Web.Controllers
             result.Id = CategoryEntity.CategoryId.Value;
             result.Icon = CategoryEntity.Icon != null ? GetUrl(CategoryEntity.Icon) : "";
             result.Name = CategoryEntity.Title;
-            result.Items = CategoryEntity.Category.HTServices.Where(s => s.Places.Any(p => p.CityId == city)).Select(y => new MenuItemModel()
+            result.Items = CategoryEntity.Category.HTServices.Where(s => (s.Places.Any(p => p.CityId == city) ||
+                                    (s.Category != null && s.Category.ShowInAllCity.HasValue && s.Category.ShowInAllCity.Value))).Select(y => new MenuItemModel()
             {
                 Id = y.Id,
                 Title = y.HTServiceLanguages.FirstOrDefault(z => z.Language == currentLang).Title,
@@ -469,7 +474,8 @@ namespace GotoDN.Web.Controllers
             if (category == null) return null;
             if (category.Places != null)
             {
-                category.Places = category.Places.Where(p => p.CityId == currentCity && p.HTServiceId == null).OrderByDescending(p => p.CreatedDate)
+                category.Places = category.Places.Where(p => (p.CityId == currentCity || (p.Category != null && p.Category.ShowInAllCity.HasValue && p.Category.ShowInAllCity.Value)) 
+                                    && p.HTServiceId == null).OrderByDescending(p => p.CreatedDate)
                                     .Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
             }
             return AutoMapper.Mapper.Map<CategoryModel>(category);

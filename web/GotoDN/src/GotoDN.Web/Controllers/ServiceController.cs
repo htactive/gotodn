@@ -303,7 +303,8 @@ namespace GotoDN.Web.Controllers
                       join pl in placeLanguage on p.Id equals pl.PlaceId
                       join img in image on pl.ImageId equals img.Id into imgs
                       from img in imgs.DefaultIfEmpty()
-                      where pl.Language == currentLanguage && p.CityId == CurrentCityId &&
+                      where pl.Language == currentLanguage && 
+                            (p.CityId == CurrentCityId || (p.Category != null && p.Category.ShowInAllCity.HasValue && p.Category.ShowInAllCity.Value)) &&
                              p.HTServiceId == serviceId && p.IsCategorySlider == true
                       orderby p.Id descending
                       select new SliderModel()
@@ -341,7 +342,8 @@ namespace GotoDN.Web.Controllers
                      join pl in placeLanguage on p.Id equals pl.PlaceId
                      join img in image on pl.ImageId equals img.Id into imgs
                      from img in imgs.DefaultIfEmpty()
-                     where p.CityId == currentCityId && pl.Language == currentLanguage &&
+                     where (p.CityId == currentCityId || (p.Category != null && p.Category.ShowInAllCity.HasValue && p.Category.ShowInAllCity.Value)) && 
+                            pl.Language == currentLanguage &&
                             p.HTServiceId == serviceId
                      orderby p.Id descending
                      select new AppServicePlaceModel()

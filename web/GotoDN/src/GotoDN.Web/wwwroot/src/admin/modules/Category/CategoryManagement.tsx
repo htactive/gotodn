@@ -208,6 +208,10 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                     this.state.SelectedCategory.IsGovernment = check;
                                     this.forceUpdate();
                                   }}
+                                  ChangeShowInAllCity={(check: boolean) => {
+                                    this.state.SelectedCategory.ShowInAllCity = check;
+                                    this.forceUpdate();
+                                  }}
                   />
                 </div>
               </div>

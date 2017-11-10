@@ -14,6 +14,7 @@ namespace GotoDN.Web.Models
         public int? Priority { get; set; }
         public bool? IsEvent { get; set; }
         public bool? IsGovernment { get; set; }
+        public bool? ShowInAllCity { get; set; }
         public int? Order { get; set; }
         public List<CategoryLanguageModel> CategoryLanguages { get; set; }
         public List<PlaceModel> Places { get; set; }

@@ -68,7 +68,7 @@ export default StyleSheet.create({
 
   },
   textInner: {
-    height: 56,
+    height: 58,
   },
   textInnerList: {
     height: slideHeight/3.5,

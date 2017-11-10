@@ -14,6 +14,7 @@ namespace GotoDN.Entities
         public DateTime? UpdatedDate { get; set; }
         public bool? IsEvent { get; set; }
         public bool? IsGovernment { get; set; }
+        public bool? ShowInAllCity { get; set; }
         public List<CategoryLanguage> CategoryLanguages { get; set; }
         public List<Place> Places { get; set; }
         public List<HTService> HTServices { get; set; }
