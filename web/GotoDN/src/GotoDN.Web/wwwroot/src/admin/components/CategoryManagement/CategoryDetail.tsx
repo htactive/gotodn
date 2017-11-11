@@ -20,7 +20,6 @@ interface thisProps {
   DeleteCategoryLanguage: (Id: number) => void,
   ChangeEvent: (check: boolean) => void,
   ChangeGovernment: (check: boolean) => void,
-  ChangeShowInAllCity: (check: boolean) => void,
   OnTranslateAll?: (model: CategoryModel) => void,
   cancelCategory: () => void,
 }
@@ -165,20 +164,6 @@ class CategoryDetail extends React.Component<thisProps, {}> {
                          name="checkbox-toggle"
                          onChange={(e) => this.props.ChangeGovernment(e.target.checked)}
                          checked={this.props.SelectedCategory.IsGovernment || false}
-                  />
-                  <span className="button-radio"/>
-                </label>
-              </div>
-            </div>
-            <div className="toggle-custom col-lg-12 p0">
-              <label htmlFor="checkbox-toggle" style={{paddingTop: '2px', fontWeight: 'normal'}}
-                     className="col-lg-3 control-label">Hiển thị trên tất cả thành phố? &nbsp;&nbsp;</label>
-              <div className="col-lg-9">
-                <label className="toggle " data-on="YES" data-off="NO">
-                  <input type="checkbox" id="checkbox-toggle"
-                         name="checkbox-toggle"
-                         onChange={(e) => this.props.ChangeShowInAllCity(e.target.checked)}
-                         checked={this.props.SelectedCategory.ShowInAllCity || false}
                   />
                   <span className="button-radio"/>
                 </label>

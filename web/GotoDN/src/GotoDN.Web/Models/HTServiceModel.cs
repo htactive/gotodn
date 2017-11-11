@@ -11,7 +11,7 @@ namespace GotoDN.Web.Models
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int? CategoryId { get; set; }
-
+        public bool ShowInAllCity { get; set; }
         public CategoryModel Category { get; set; }
         public List<HTServiceLanguageModel> HTServiceLanguages { get; set; }
         public List<PlaceModel> Places { get; set; }

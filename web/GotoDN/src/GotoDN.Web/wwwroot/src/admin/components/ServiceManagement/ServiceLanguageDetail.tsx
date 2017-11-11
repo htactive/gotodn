@@ -103,7 +103,7 @@ class ServiceLanguageDetail extends React.Component<thisProps, thisState> {
     });
 
     if (dialogResult == MessageBoxResult.Yes) {
-      let serviceModel: HTServiceModel = {Id: 0, HTServiceLanguages: []};
+      let serviceModel: HTServiceModel = {Id: 0, HTServiceLanguages: [], ShowInAllCity: false};
 
       serviceModel.HTServiceLanguages.push(this.props.HTServiceLanguage, this.props.EnHTServiceLanguage);
       let translatedServiceLang = await HTServiceInstance.TranslateService(serviceModel);

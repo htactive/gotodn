@@ -14,7 +14,7 @@ namespace GotoDN.Entities
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int? CategoryId { get; set; }
-
+        public bool ShowInAllCity { get; set; }
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
         public List<HTServiceLanguage> HTServiceLanguages { get; set; }

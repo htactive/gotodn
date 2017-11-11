@@ -411,6 +411,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                      Districts={this.state.Districts || []}
                      ClickSlectCity={(Id) => {
                        this.state.SelectedPlace.CityId = Id;
+                       this.state.SelectedPlace.DistrictId = null;
                        this.setState({Districts: this.state.DistrictsBackup.filter(x => x.CityId == Id)});
                      }}
                      ClickSlectDistrict={(Id) => {

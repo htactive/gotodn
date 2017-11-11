@@ -129,6 +129,7 @@ namespace GotoDN.Web.Controllers
             };
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             entity.CategoryId = model.CategoryId;
+            entity.ShowInAllCity = model.ShowInAllCity;
 
             if (entity.HTServiceLanguages == null || entity.HTServiceLanguages.Count == 0)
             {
@@ -304,7 +305,7 @@ namespace GotoDN.Web.Controllers
                       join img in image on pl.ImageId equals img.Id into imgs
                       from img in imgs.DefaultIfEmpty()
                       where pl.Language == currentLanguage && 
-                            (p.CityId == CurrentCityId || (p.Category != null && p.Category.ShowInAllCity.HasValue && p.Category.ShowInAllCity.Value)) &&
+                            (p.CityId == CurrentCityId || (p.HTService != null && p.HTService.ShowInAllCity)) &&
                              p.HTServiceId == serviceId && p.IsCategorySlider == true
                       orderby p.Id descending
                       select new SliderModel()
@@ -342,7 +343,7 @@ namespace GotoDN.Web.Controllers
                      join pl in placeLanguage on p.Id equals pl.PlaceId
                      join img in image on pl.ImageId equals img.Id into imgs
                      from img in imgs.DefaultIfEmpty()
-                     where (p.CityId == currentCityId || (p.Category != null && p.Category.ShowInAllCity.HasValue && p.Category.ShowInAllCity.Value)) && 
+                     where (p.CityId == currentCityId || (p.HTService != null && p.HTService.ShowInAllCity)) && 
                             pl.Language == currentLanguage &&
                             p.HTServiceId == serviceId
                      orderby p.Id descending

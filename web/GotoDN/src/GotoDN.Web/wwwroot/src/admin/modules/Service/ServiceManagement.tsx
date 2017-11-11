@@ -218,6 +218,10 @@ class HTServiceManagement extends React.Component<{}, thisState> {
                                    }}
                                    SaveHTService={() => this.updateHTService()}
                                    DeleteHTService={(Id: number) => this.deleteHTService(Id)}
+                                   ChangeShowInAllCity={(check: boolean) => {
+                                     this.state.SelectedHTService.ShowInAllCity = check;
+                                     this.forceUpdate();
+                                   }}
                                    AddHTServiceLanguage={(lang: LanguageEnums) => this.addHTServiceLanguage(lang)}
                                    DeleteHTServiceLanguage={(Id: number) => this.deleteHTServiceLanguage(Id)}
                                    Categories={this.state.Categories || []}

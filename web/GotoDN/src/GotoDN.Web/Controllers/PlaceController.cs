@@ -547,7 +547,7 @@ namespace GotoDN.Web.Controllers
                 .Include("Place.City")
                 .Include("Place.District")
                 .Where(pl => pl.Language == language && pl.Place != null && (pl.Place.CityId == city || 
-                            (pl.Place.Category != null && pl.Place.Category.ShowInAllCity.HasValue && pl.Place.Category.ShowInAllCity.Value)));
+                            (pl.Place.HTService != null && pl.Place.HTService.ShowInAllCity)));
 
                 var placeList = placeQuery.ToList();
                 search = search.StripDiacritics();
@@ -602,7 +602,7 @@ namespace GotoDN.Web.Controllers
                             join cl in categoryLanguage on c.Id equals cl.CategoryId
                             join s in service on p.HTServiceId equals s.Id into ss
                             from s in ss.DefaultIfEmpty()
-                            where (p.CityId == CurrentCityId || (p.Category != null && p.Category.ShowInAllCity.HasValue && pl.Place.Category.ShowInAllCity.Value)) 
+                            where (p.CityId == CurrentCityId || (pl.Place.HTService != null && pl.Place.HTService.ShowInAllCity)) 
                                     && pl.Language == language &&
                                      cl.Language == language && s.HTServiceLanguages.Any(sl => sl.Language == language) &&
                                      ((ci != null && ci.Name.ToLower().Contains(search)) ||
