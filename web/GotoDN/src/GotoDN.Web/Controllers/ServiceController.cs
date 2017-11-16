@@ -333,30 +333,51 @@ namespace GotoDN.Web.Controllers
             var currentId = index ?? 0;
             var itemsPerIndex = 20;
 
+            var service = this.HTRepository.HTServiceRepository.GetAll().FirstOrDefault(s => s.Id == serviceId);
+
             var place = this.HTRepository.PlaceRepository.GetAll();
             var placeLanguage = this.HTRepository.PlaceLanguageRepository.GetAll();
             var image = this.HTRepository.ImageRepository.GetAll();
 
             var result = new List<AppServicePlaceModel>();
-
-            result = (from p in place
-                     join pl in placeLanguage on p.Id equals pl.PlaceId
-                     join img in image on pl.ImageId equals img.Id into imgs
-                     from img in imgs.DefaultIfEmpty()
-                     where (p.CityId == currentCityId || (p.HTService != null && p.HTService.ShowInAllCity)) && 
-                            pl.Language == currentLanguage &&
-                            p.HTServiceId == serviceId
-                     orderby p.Id descending
-                     select new AppServicePlaceModel()
-                     {
-                         Id = p.Id,
-                         ImageUrl = GetUrl(img),
-                         Star = p.Rating,
-                         Title = pl.Title,
-                         Description = pl.Description,
-                     })
-                     .Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
-
+            if (service != null && service.ShowInAllCity)
+            {
+                result = (from p in place
+                          join pl in placeLanguage on p.Id equals pl.PlaceId
+                          join img in image on pl.ImageId equals img.Id into imgs
+                          from img in imgs.DefaultIfEmpty()
+                          where pl.Language == currentLanguage &&
+                                 p.HTServiceId == serviceId
+                          orderby p.CityId == currentCityId descending, p.CityId, p.Id descending
+                          select new AppServicePlaceModel()
+                          {
+                              Id = p.Id,
+                              ImageUrl = GetUrl(img),
+                              Star = p.Rating,
+                              Title = pl.Title,
+                              Description = pl.Description,
+                          })
+                         .Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
+            } else
+            {
+                result = (from p in place
+                          join pl in placeLanguage on p.Id equals pl.PlaceId
+                          join img in image on pl.ImageId equals img.Id into imgs
+                          from img in imgs.DefaultIfEmpty()
+                          where p.CityId == currentCityId  &&
+                                 pl.Language == currentLanguage &&
+                                 p.HTServiceId == serviceId
+                          orderby p.Id descending
+                          select new AppServicePlaceModel()
+                          {
+                              Id = p.Id,
+                              ImageUrl = GetUrl(img),
+                              Star = p.Rating,
+                              Title = pl.Title,
+                              Description = pl.Description,
+                          })
+                         .Skip(currentId * itemsPerIndex).Take(itemsPerIndex).ToList();
+            }
             return result;
         }
     }

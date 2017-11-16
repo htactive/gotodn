@@ -29,8 +29,8 @@ namespace GotoDN.Entities
         public DateTime? CloseTime { get; set; }
         public string Website { get; set; }
 
-        public int? Latitude { get; set; }
-        public int? Longitude { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
         public int? HTServiceId { get; set; }
         public int? CategoryId { get; set; }
 

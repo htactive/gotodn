@@ -121,6 +121,10 @@
       {
         "name": "DeleteLanguage",
         "claim": "Place_W"
+      },
+      {
+        "name": "CalPlaceCoordinate",
+        "claim": "Place_W"
       }
     ]
   },

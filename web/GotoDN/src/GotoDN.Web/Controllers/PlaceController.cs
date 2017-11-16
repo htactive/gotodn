@@ -13,12 +13,16 @@ using GotoDN.Common;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.IO;
+using System.Net;
 
 namespace GotoDN.Web.Controllers
 {
     [Route("place")]
     public class PlaceController : BaseController
     {
+        const string GGKEY = "AIzaSyCywwRaPWRhT1xRYsOk-Dw4PfC2uvbsaKQ";
+        const string GGURL = @"https://maps.googleapis.com/maps/api/";
+
         public PlaceController(HTRepository repository) : base(repository)
         {
         }
@@ -136,6 +140,11 @@ namespace GotoDN.Web.Controllers
                 entity = new Place();
             }
 
+            var city = model.CityId.HasValue ? this.HTRepository.CityRepository.GetAll().FirstOrDefault(c => c.Id == model.CityId) : null;
+            var district = model.DistrictId.HasValue ? this.HTRepository.DistrictRepository.GetAll().FirstOrDefault(c => c.Id == model.DistrictId) : null;
+            var fullAddress = GetFullAddress(model.Address, district != null ? district.Name : "", city != null ? city.Name : "");
+            var location = GetLocationFromAddress(fullAddress).Result;
+
             entity.UpdatedDate = DateTimeHelper.GetDateTimeNow();
             entity.Address = model.Address;
             entity.CityId = model.CityId;
@@ -145,8 +154,8 @@ namespace GotoDN.Web.Controllers
             entity.IsCategorySlider = model.IsCategorySlider;
             entity.IsHomeSlider = model.IsHomeSlider;
             entity.IsDistrictGovernment = model.IsDistrictGovernment;
-            entity.Latitude = model.Latitude;
-            entity.Longitude = model.Longitude;
+            entity.Latitude = location != null ? location.Lat : (decimal?)null;
+            entity.Longitude = location != null ? location.Lng : (decimal?)null;
             entity.OpenTime = model.OpenTime;
             entity.Phone = model.Phone;
             entity.Fax = model.Fax;
@@ -1082,35 +1091,136 @@ namespace GotoDN.Web.Controllers
 
             if (currentPlace == null) return result;
 
-            result = (from p in place
-                      join ci in city on p.CityId equals ci.Id into cis
-                      from ci in cis.DefaultIfEmpty()
-                      join dis in district on p.DistrictId equals dis.Id into diss
-                      from dis in diss.DefaultIfEmpty()
-                      join pl in placeLanguage on p.Id equals pl.PlaceId
-                      join pimg in image on pl.ImageId equals pimg.Id into pimgs
-                      from pimg in pimgs.DefaultIfEmpty()
-                      where pl.Language == currentLang && p.Id != id &&
-                               p.CityId == currentCityId
-                      orderby p.DistrictId == currentPlace.DistrictId descending,
-                               p.HTServiceId == currentPlace.HTServiceId descending,
-                               p.CategoryId == currentPlace.CategoryId descending,
-                               p.Id descending
-                      select new AppPlaceModel
-                      {
-                          Id = p.Id,
-                          ImageUrl = GetUrl(pimg),
-                          Title = pl.Title,
-                          Phone = p.Phone,
-                          Description = pl.Description,
-                          Address = p.Address,
-                          OpenTime = p.OpenTime,
-                          CloseTime = p.CloseTime,
-                          City = ci != null ? ci.Name : string.Empty,
-                          District = dis != null ? dis.Name : string.Empty,
-                      }).Take(5).ToList();
-
+            var placesInCity = (from p in place
+                                join ci in city on p.CityId equals ci.Id into cis
+                                from ci in cis.DefaultIfEmpty()
+                                join dis in district on p.DistrictId equals dis.Id into diss
+                                from dis in diss.DefaultIfEmpty()
+                                join pl in placeLanguage on p.Id equals pl.PlaceId
+                                join pimg in image on pl.ImageId equals pimg.Id into pimgs
+                                from pimg in pimgs.DefaultIfEmpty()
+                                where p.CityId == currentCityId && p.Id != currentPlace.Id && pl.Language == currentLang
+                                        && p.Latitude.HasValue && p.Longitude.HasValue
+                                        && currentPlace.Latitude.HasValue && currentPlace.Longitude.HasValue
+                                select new AppPlaceModel
+                                {
+                                    Id = p.Id,
+                                    ImageUrl = GetUrl(pimg),
+                                    Title = pl.Title,
+                                    Phone = p.Phone,
+                                    Description = pl.Description,
+                                    Address = p.Address,
+                                    OpenTime = p.OpenTime,
+                                    CloseTime = p.CloseTime,
+                                    City = ci != null ? ci.Name : string.Empty,
+                                    District = dis != null ? dis.Name : string.Empty,
+                                    Latitude = p.Latitude,
+                                    Longitude = p.Longitude
+                                }).ToList();
+            if (placesInCity != null && placesInCity.Count > 0) {
+                result = placesInCity.OrderBy(p => GetDistance(p.Latitude.Value, p.Longitude.Value, currentPlace.Latitude.Value, currentPlace.Longitude.Value)).Take(5).ToList();
+            }
+            
             return result;
         }
+
+        [HttpGet, Route("cal-place-coordinate")]
+        [HTAuthorize]
+        public void CalPlaceCoordinate()
+        {
+            var place = this.HTRepository.PlaceRepository.GetAll().OrderByDescending(p => p.Id).Take(200).ToList();
+            foreach (var p in place)
+            {
+                var city = p.CityId.HasValue ? this.HTRepository.CityRepository.GetAll().FirstOrDefault(c => c.Id == p.CityId) : null;
+                var district = p.DistrictId.HasValue ? this.HTRepository.DistrictRepository.GetAll().FirstOrDefault(c => c.Id == p.DistrictId) : null;
+                var fullAddress = GetFullAddress(p.Address, district != null ? district.Name : "", city != null ? city.Name : "");
+                var location = GetLocationFromAddress(fullAddress).Result;
+                if(location != null && (!p.Latitude.HasValue || !p.Longitude.HasValue))
+                {
+                    p.Latitude = location.Lat;
+                    p.Longitude = location.Lng;
+                    this.HTRepository.PlaceRepository.Save(p);
+                }
+            }
+            this.HTRepository.Commit();
+        }
+
+        private string GetFullAddress(string address, string district, string city)
+        {
+            var fullAddress = "";
+            if (string.IsNullOrEmpty(address) && string.IsNullOrEmpty(district) && string.IsNullOrEmpty(city)) return fullAddress;
+            if (!string.IsNullOrEmpty(address))
+                fullAddress += address;
+            if (!string.IsNullOrEmpty(district))
+                fullAddress += ", " + district;
+            if (!string.IsNullOrEmpty(city))
+                fullAddress += ", " + city;
+            return fullAddress;
+        }
+
+        private async Task<Location> GetLocationFromAddress(string address)
+        {
+            try
+            {
+                string requestUrl = string.Format(@"{0}geocode/json?address={1}&key={2}", GGURL, address, GGKEY);
+                WebRequest request = WebRequest.Create(requestUrl);
+
+                WebResponse response = await request.GetResponseAsync();
+
+                Stream data = response.GetResponseStream();
+
+                StreamReader reader = new StreamReader(data);
+
+                string responseFromServer = reader.ReadToEnd();
+
+                JObject responseJson = JObject.Parse(responseFromServer);
+
+                Location loc = new Location();
+
+                if (responseJson["status"] != null && responseJson["status"].ToString() == "OK")
+                {
+                    string lat = responseJson["results"][0]["geometry"]["location"]["lat"].ToString();
+                    string lng = responseJson["results"][0]["geometry"]["location"]["lng"].ToString();
+
+                    decimal latd, lngd;
+                    decimal.TryParse(lat, out latd);
+                    decimal.TryParse(lng, out lngd);
+                    loc.Lat = latd;
+                    loc.Lng = lngd;
+                    return loc;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+
+                return null;
+            }
+        }
+
+        public double GetDistance(decimal lat1, decimal lng1, decimal lat2, decimal lng2)
+        {
+            var R = 6371; // Radius of the earth in km
+            var dLat = DegToRad((double)(lat2 - lat1));  // deg2rad below
+            var dLon = DegToRad((double)(lng2 - lng1));
+            var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                    Math.Cos(DegToRad((double)lat1)) * Math.Cos(DegToRad((double)lat2)) *
+                    Math.Sin(dLon / 2) * Math.Sin(dLon / 2)
+                    ;
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            var d = R * c; // Distance in km
+            return d;
+        }
+
+        public double DegToRad(double deg)
+        {
+            return deg * (Math.PI / 180);
+        }
+    }
+
+    class Location
+    {
+        public decimal Lat { get; set; }
+        public decimal Lng { get; set; }
     }
 }
