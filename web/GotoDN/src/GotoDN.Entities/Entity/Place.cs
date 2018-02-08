@@ -16,6 +16,7 @@ namespace GotoDN.Entities
         public DateTime? UpdatedDate { get; set; }
         public bool? IsCategorySlider { get; set; }
         public bool? IsHomeSlider { get; set; }
+        public bool? IsDistrictGovernment { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public float? Rating { get; set; }
@@ -23,12 +24,13 @@ namespace GotoDN.Entities
         public int? DistrictId { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
+        public string Fax { get; set; }
         public DateTime? OpenTime { get; set; }
         public DateTime? CloseTime { get; set; }
         public string Website { get; set; }
 
-        public int? Latitude { get; set; }
-        public int? Longitude { get; set; }
+        public decimal? Latitude { get; set; }
+        public decimal? Longitude { get; set; }
         public int? HTServiceId { get; set; }
         public int? CategoryId { get; set; }
 

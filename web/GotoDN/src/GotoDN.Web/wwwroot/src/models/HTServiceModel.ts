@@ -7,6 +7,7 @@ export interface HTServiceModel {
   UpdatedDate?: Date,
   Priority?: number,
   CategoryId?: number,
+  ShowInAllCity: boolean,
   Category?: CategoryModel,
   HTServiceLanguages?: HTServiceLanguageModel[]
 }

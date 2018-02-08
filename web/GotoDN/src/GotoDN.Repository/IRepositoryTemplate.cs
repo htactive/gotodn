@@ -66,4 +66,16 @@ namespace GotoDN.Repository
     public partial interface IDistrictRepository : IBaseRepository<District>
     {
     }
+
+    public partial interface IPlaceImageRepository : IBaseRepository<PlaceImage>
+    {
+    }
+
+    public partial interface IPlaceMoreInfoRepository : IBaseRepository<PlaceMoreInfo>
+    {
+    }
+
+    public partial interface IGDNConfigurationRepository : IBaseRepository<GDNConfiguration>
+    {
+    }
 }

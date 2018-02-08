@@ -3,6 +3,7 @@ import {TouchableOpacity, Image, ScrollView, View} from 'react-native';
 import {Icon} from 'native-base';
 import {style} from '../../styles/style';
 import {ImageViewerModal} from '../common/ImageViewerModal'
+import {Helper} from '../../common/constain';
 
 export class DetailImage extends React.Component {
   state = {
@@ -17,7 +18,7 @@ export class DetailImage extends React.Component {
           {this.props.images && this.props.images.map((img, index) =>
             <TouchableOpacity key={index} activeOpacity={.8} onPress={() => this.showImage(index)}
                               style={{paddingRight: index < this.props.images.length ? 10 : 0}}>
-              <Image style={style.detailImageItem} source={{uri: img.url}}/>
+              <Image style={style.detailImageItem} source={{uri: img.url || Helper.ImageUrl}}/>
             </TouchableOpacity>
           )}
         </View>

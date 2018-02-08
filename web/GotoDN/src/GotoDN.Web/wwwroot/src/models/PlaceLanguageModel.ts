@@ -14,4 +14,24 @@ export interface PlaceLanguageModel {
   Image?: ImageModel,
   Icon?: ImageModel,
   CategoryId?: number,
+  PlaceImages?: PlaceImageModel[],
+  PlaceMoreInfo?: PlaceMoreInfoModel[],
+}
+
+export interface PlaceMoreInfoModel {
+  Id: number,
+  PlaceLangId?: number,
+  Name?: string,
+  Value?: string,
+  IconId?: number,
+  IsHalf?: boolean,
+  Icon?: ImageModel
+}
+
+export interface PlaceImageModel {
+  Id: number,
+  PlaceLangId?: number,
+  ImageId?: number,
+  Order?: number,
+  Image?: ImageModel
 }

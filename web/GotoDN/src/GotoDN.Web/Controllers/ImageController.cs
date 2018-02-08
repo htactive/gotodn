@@ -10,6 +10,7 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +20,19 @@ namespace GotoDN.Web.Controllers
     [Route("image")]
     public class ImageController : BaseController
     {
+        private static ImageCodecInfo jpegCodecInfo = null;
+        private static ImageCodecInfo JPEGCodecInfo
+        {
+            get
+            {
+                if (jpegCodecInfo == null)
+                {
+                    jpegCodecInfo = ImageCodecInfo.GetImageEncoders().ToList().Find(delegate (ImageCodecInfo codec) { return codec.FormatID == ImageFormat.Jpeg.Guid; });
+                }
+                return jpegCodecInfo;
+            }
+        }
+         
         public ImageController(HTRepository repository) : base(repository) { }
 
         [Route("upload-new-on-home-image"), HttpPost]
@@ -54,9 +68,29 @@ namespace GotoDN.Web.Controllers
             var stream = file.OpenReadStream();
             var fileKey = string.Format("coms/img/coms_{0}.jpg", Guid.NewGuid().ToString());
             Stream compressStream = new MemoryStream();
-            compressStream = ImageHelper.CompressImage(stream, 80);
+            compressStream = ImageHelper.CompressImage(stream, 60);
             var image = await this.CreateNewImage(compressStream, fileKey);
             return Mappers.Mapper.ToModel(image);
+        }
+
+        [Route("upload-multi-image"), HttpPost]
+        [AllowAnonymous]
+        public async Task<List<ImageModel>> UploadMultiImage()
+        {
+            var imageModels = new List<ImageModel>();
+            var files = Request.Form.Files;
+            if (files == null || files.Count == 0) return null;
+            for (int i = 0; i < files.Count; i++)
+            {
+                var file = files[i];
+                var stream = file.OpenReadStream();
+                var fileKey = string.Format("coms/img/coms_{0}.jpg", Guid.NewGuid().ToString());
+                Stream compressStream = new MemoryStream();
+                compressStream = ImageHelper.CompressImage(stream, 60);
+                var image = await this.CreateNewImage(compressStream, fileKey);
+                imageModels.Add(Mappers.Mapper.ToModel(image));
+            }
+            return imageModels;
         }
 
         [Route("upload-new-icon"), HttpPost]
@@ -67,7 +101,7 @@ namespace GotoDN.Web.Controllers
             var stream = file.OpenReadStream();
             var fileKey = string.Format("coms/img/coms_{0}.png", Guid.NewGuid().ToString());
             Stream compressStream = new MemoryStream();
-            compressStream = ImageHelper.ScaleIcon(stream, 256, 256);
+            compressStream = ImageHelper.ScaleIcon(stream, 64, 64);
             var image = await this.CreateNewImage(compressStream, fileKey);
             return Mappers.Mapper.ToModel(image);
         }
@@ -80,10 +114,10 @@ namespace GotoDN.Web.Controllers
             var stream = file.OpenReadStream();
             var package = new ExcelPackage(stream);
             var importedPlaces = new List<ImportPlaceModel>();
-            var cateEntities = this.HTRepository.CategoryLanguageRepository.GetAll();
-            var serviceEntities = this.HTRepository.HTServiceLanguageRepository.GetAll();
-            var cityEntities = this.HTRepository.CityRepository.GetAll();
-            var dicstrictEntities = this.HTRepository.DistrictRepository.GetAll().Include(t => t.City);
+            var cateEntities = this.HTRepository.CategoryLanguageRepository.GetAll().ToList();
+            var serviceEntities = this.HTRepository.HTServiceLanguageRepository.GetAll().ToList();
+            var cityEntities = this.HTRepository.CityRepository.GetAll().ToList();
+            var dicstrictEntities = this.HTRepository.DistrictRepository.GetAll().Include(t => t.City).ToList();
             try
             {
                 for (int i = 0; i < package.Workbook.Worksheets.Count; i++)
@@ -103,12 +137,12 @@ namespace GotoDN.Web.Controllers
                             iPlace.PlaceName = workSheet.Cells[r, c++].Value.ToString();
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            var cate = workSheet.Cells[r, c++].Value.ToString();
+                            var cate = workSheet.Cells[r, c++].Value.ToStringNullSafe();
 
                             var currentCate = cateEntities
-                                .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English) 
+                                .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English)
                                                         && l.Title.ToLower().Equals(cate.ToLower()));
-                            
+
                             if (currentCate != null)
                             {
                                 iPlace.Category = currentCate.Title;
@@ -121,79 +155,86 @@ namespace GotoDN.Web.Controllers
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            var serv = workSheet.Cells[r, c++].Value.ToString();
-                            var currentService = serviceEntities
-                                .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English) 
-                                                        && l.Title.ToLower() == serv.ToLower());
-                            if (currentService != null)
+                            var serv = workSheet.Cells[r, c].Value != null ? workSheet.Cells[r, c].Value.ToString() : "";
+                            if(serv.Trim().ToLower() == "" || serv.Trim().ToLower() == "none")
                             {
-                                iPlace.Service = currentService.Title;
-                            }
-                            else
+                                iPlace.Service = "";
+                            } else
                             {
-                                iPlace.Service = serv;
-                                iPlace.ServiceNotExist = true;
+                                var currentService = serviceEntities
+                                    .FirstOrDefault(l => (l.Language == ExcelHelper.GetLangEnums(currentLang) || l.Language == LanguageEnums.English)
+                                                            && l.Title.ToLower() == serv.ToLower());
+                                if (currentService != null)
+                                {
+                                    iPlace.Service = currentService.Title;
+                                }
+                                else
+                                {
+                                    iPlace.Service = serv;
+                                    iPlace.ServiceNotExist = true;
+                                }
                             }
+                            c++;
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.Description = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.Description = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.CoverImage = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.CoverImage = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.IsHomeSlider = workSheet.Cells[r, c++].Value.ToString() == "Yes";
+                            iPlace.IsHomeSlider = workSheet.Cells[r, c++].Value.ToStringNullSafe() == "Yes";
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.IsCategorySlider = workSheet.Cells[r, c++].Value.ToString() == "Yes";
+                            iPlace.IsCategorySlider = workSheet.Cells[r, c++].Value.ToStringNullSafe() == "Yes";
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.City = workSheet.Cells[r, c].Value.ToString();
+                            iPlace.City = workSheet.Cells[r, c].Value.ToStringNullSafe();
                             if (!cityEntities.Any(t => t.Name.ToLower() == workSheet.Cells[r, c].Value.ToString().Trim().ToLower()))
                                 iPlace.CityNotExist = true;
                             c++;
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.District = workSheet.Cells[r, c].Value.ToString();
+                            iPlace.District = workSheet.Cells[r, c].Value.ToStringNullSafe();
                             if (!(dicstrictEntities.Any(t => t.Name.ToLower() == workSheet.Cells[r, c].Value.ToString().Trim().ToLower() && t.City.Name.ToLower() == iPlace.City.ToLower())))
                                 iPlace.DistrictNotExist = true;
                             c++;
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.Address = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.Address = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.Phone = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.Phone = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.Fax = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.Fax = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.OpenTime = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.OpenTime = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.CloseTime = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.CloseTime = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
-                            iPlace.Website = workSheet.Cells[r, c++].Value.ToString();
+                            iPlace.Website = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                         }
                         if (c <= workSheet.Dimension.End.Column)
                         {
                             try
                             {
-                                var additionalInfoValue = workSheet.Cells[r, c++].Value.ToString();
+                                var additionalInfoValue = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                                 iPlace.AdditionalInfo = additionalInfoValue.Split('\n').Select(t => new KeyValuePair<string, string>(t.Trim().Split(':').ToList()[0].Trim(), t.Trim().Split(':').ToList()[1].Trim())).ToList();
                             }
                             catch
@@ -206,7 +247,7 @@ namespace GotoDN.Web.Controllers
                         {
                             try
                             {
-                                var imagesValue = workSheet.Cells[r, c++].Value.ToString();
+                                var imagesValue = workSheet.Cells[r, c++].Value.ToStringNullSafe();
                                 iPlace.PlaceImages = imagesValue.Split('\n').Select(t => t.Trim()).ToList();
                             }
                             catch
@@ -228,10 +269,34 @@ namespace GotoDN.Web.Controllers
             placeGroup = importedPlaces.GroupBy(t => t.Language).Select(t => new ImportPlaceGroupModel
             {
                 Language = t.Key,
-                ImportPlaces = t.ToList(),
+                ImportPlaces = t.AsQueryable().OrderByDescending(a => (a.PlaceInValid || a.PlaceImageError)).ToList()
             }).ToList();
 
             return placeGroup;
+        }
+
+        [Route("conver-url-to-base64"), HttpGet]
+        [AllowAnonymous]
+        public async Task<string> ConvertUrlToBase64(string url)
+        {
+            System.Net.WebRequest request = System.Net.WebRequest.Create(url);
+            System.Net.WebResponse response = await request.GetResponseAsync();
+            System.IO.Stream responseStream = response.GetResponseStream();
+            using (System.Drawing.Bitmap bitmap2 = new System.Drawing.Bitmap(responseStream))
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    EncoderParameters parameters = new EncoderParameters(1);
+
+                    parameters.Param[0] = new EncoderParameter(Encoder.Quality, 100);
+                    bitmap2.Save(m, JPEGCodecInfo, parameters);
+                    byte[] imageBytes = m.ToArray();
+
+                    // Convert byte[] to Base64 String
+                    string base64String = Convert.ToBase64String(imageBytes);
+                    return base64String;
+                }
+            }
         }
     }
 }

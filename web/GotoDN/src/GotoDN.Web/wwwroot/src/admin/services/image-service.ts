@@ -9,6 +9,11 @@ class ImageService extends AdminServiceBase {
     return await super.executeFetchPostImage(url, image);
   }
 
+  public async uploadMultiImage(images): Promise<ImageModel[]> {
+    let url = `${virtualPath}/Image/upload-multi-image`;
+    return await super.executeFetchPostImages(url, images);
+  }
+
   public async uploadNewIcon(icon): Promise<ImageModel> {
     let url = `${virtualPath}/Image/upload-new-icon`;
     return await super.executeFetchPostImage(url, icon);
@@ -16,7 +21,7 @@ class ImageService extends AdminServiceBase {
 
   public async uploadExcelHL(excel): Promise<ImportPlaceGroupModel[]> {
     let url = `${virtualPath}/Image/import-excel-high-level`;
-    return await super.executeFetchPostImage(url, excel);
+    return await super.executeFetchPostImage(url, excel, false);
   }
 }
 

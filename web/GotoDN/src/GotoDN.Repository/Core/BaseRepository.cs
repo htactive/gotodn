@@ -94,8 +94,8 @@ namespace HTActive.Core
         public void Save(IEnumerable<T> model)
         {
             var addNews = model.Where(x => GetKeyId(x) == 0).ToList();
-            DoAddRange(addNews);
             var updates = model.Where(x => GetKeyId(x) != 0).ToList();
+            DoAddRange(addNews);
             foreach (var item in updates)
             {
                 DoUpdate(item);

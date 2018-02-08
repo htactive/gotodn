@@ -26,9 +26,19 @@ class PlaceService extends AdminServiceBase {
     return await super.executeFetchPost(url, Id);
   }
 
+  async DeletePlaces(Ids: number[]): Promise<boolean> {
+    let url = `${virtualPath}/place/delete-places`;
+    return await super.executeFetchPost(url, Ids);
+  }
+
   async AddLanguage(model: PlaceLanguageModel): Promise<PlaceLanguageModel> {
     let url = `${virtualPath}/place/add-language`;
     return await super.executeFetchPost(url, model);
+  }
+
+  async AddAllLanguage(Id: number): Promise<PlaceModel> {
+    let url = `${virtualPath}/place/add-all-language`;
+    return await super.executeFetchPost(url, Id);
   }
 
   async DeleteLanguage(Id: number): Promise<boolean> {
@@ -39,6 +49,11 @@ class PlaceService extends AdminServiceBase {
   async Filter(request: GetGridRequestModel): Promise<GetGridResponseModel> {
     let url = `${virtualPath}/place/filter`;
     return await super.executeFetchPost(url, request);
+  }
+
+  async GetPlace(id: number): Promise<PlaceModel> {
+    let url = `${virtualPath}/place/get-place-by-id?id=` + id;
+    return await super.executeFetch(url);
   }
 
   async SaveImportedPlace(request: ImportPlaceGroupModel[]): Promise<boolean> {

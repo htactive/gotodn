@@ -12,7 +12,6 @@ namespace GotoDN.Web.Controllers
         public StaticController(HTRepository repository) : base(repository)
         {
         }
-        [Route("{*url}")]
         public IActionResult Admin()
         {
             return View();

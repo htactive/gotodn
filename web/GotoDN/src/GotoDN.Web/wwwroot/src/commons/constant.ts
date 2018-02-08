@@ -3,16 +3,17 @@ import * as moment from 'moment';
 export const virtualPath = "";
 
 export const AdminRoutePath = {
-  Index: `${virtualPath}/`,
-  Login: `${virtualPath}/login`,
-  Error403Page: `${virtualPath}/access-denied`,
-  Dashboard: `${virtualPath}/dashboard`,
-  UserManagement: `${virtualPath}/users`,
-  CategoryManagement: `${virtualPath}/categories`,
-  ServiceManagement: `${virtualPath}/services`,
-  PlaceManagement: `${virtualPath}/places`,
-  CityManagement: `${virtualPath}/cities`,
-  DistrictManagement: `${virtualPath}/provinces`,
+  Index: `${virtualPath}/admin`,
+  Login: `${virtualPath}/admin/login`,
+  Error403Page: `${virtualPath}/admin/access-denied`,
+  Dashboard: `${virtualPath}/admin/dashboard`,
+  UserManagement: `${virtualPath}/admin/users`,
+  CategoryManagement: `${virtualPath}/admin/categories`,
+  ServiceManagement: `${virtualPath}/admin/services`,
+  PlaceManagement: `${virtualPath}/admin/places`,
+  CityManagement: `${virtualPath}/admin/cities`,
+  DistrictManagement: `${virtualPath}/admin/provinces`,
+  ConfigurationManagement: `${virtualPath}/admin/configuration`,
 };
 
 export const SearchRoutePath = {
@@ -162,7 +163,7 @@ export class TimeHelper {
 
   static convertToDay(time: Date): string {
     var d = moment(time, "YYYY-MM-DD HH:mm:ss");
-    var result = d.format("DD-MM-YYYY");
+    var result = d.format("MM-DD-YYYY");
     return result;
   }
 }
@@ -215,7 +216,8 @@ export enum LanguageEnums{
   Chinese = 3,
   Japanese = 4,
   Korean = 5,
-  France = 6
+  France = 6,
+  All = 7,
 }
 
 export const Languages: { Language: LanguageEnums, Title: string }[] = [

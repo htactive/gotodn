@@ -1,57 +1,79 @@
 import React from 'react';
-import {StyleSheet, Image, View, TouchableOpacity, NetInfo, Text} from 'react-native';
+import {StyleSheet, Image, View, TouchableOpacity, NetInfo, Text, AsyncStorage} from 'react-native';
 import {DNPageRoute, resetAction} from '../NavigationHelper';
 import {HomeScreen} from './HomeScreen';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {Menu} from '../components/menu/Menu'
-import {AppIcon, viewportWidth} from '../common/constain';
+import {AppIcon, viewportWidth, LanguageEnums, Helper} from '../common/constain';
 import {NavigationActions} from 'react-navigation';
 import {StyleBase} from '../styles/style';
+import {GDNServiceInstance} from '../services/GDNService';
+import {appStore, appSaveLanguage, appSaveCity} from '../stores/AppStore';
+import {changeAppLanguage} from '../common/LocalizedStrings';
 
 export class SplashScreen extends React.Component {
-
-  goNextDelay;
-  handleNetInterval;
 
   componentWillMount() {
 
     this.setState({
       hasConnection: false,
     });
-
-    Menu.instance.setNavigation(this.props.navigation);
-    Menu.instance.disableMenu();
   }
 
   componentDidMount() {
     this.handleNetInfo();
-    // this.handleNetInterval = setInterval(() => {
-    //   this.handleNetInfo()
-    // }, 1000)
+  }
+
+  async initData() {
+    let numOfScreens = await GDNServiceInstance.getNumOfScreen();
+    await AsyncStorage.setItem(Helper.AdsTimes, numOfScreens + '');
+
+    await AsyncStorage.setItem(Helper.CategoryKey, '');
+
+    let langValue = await AsyncStorage.getItem(Helper.LanguageKey);
+
+    if(!langValue) {
+      await AsyncStorage.setItem(Helper.LanguageKey, LanguageEnums.English + '');
+    }
+
+    let currentLang = langValue ? parseInt(langValue) : LanguageEnums.English;
+
+    changeAppLanguage(currentLang);
+
   }
 
   handleNetInfo() {
-    NetInfo.isConnected.fetch().then(
-      isConnected => {
-        if(true) {
-          clearInterval(this.handleNetInterval);
-          this.goNextDelay = setTimeout(() => {
-            this.goNext();
-          }, 1000);
-        }
-        this.setState({hasConnection: isConnected});
+    NetInfo.isConnected.fetch().then(isConnected => {
+      if (isConnected) {
+        this.setState({hasConnection: true});
+        this.goNext();
+      } else {
+        this.setState({hasConnection: false});
+        NetInfo.addEventListener(
+          'change',
+          (value) => {
+            if (value == 'WIFI' || value == 'wifi' || value == 'MOBILE' || value == 'cell' || value == 'VPN') {
+              this.setState({hasConnection: true});
+              this.goNext();
+            } else {
+              this.setState({hasConnection: false})
+            }
+          }
+        );
       }
-    );
+    });
   }
 
   componentWillUnmount() {
-    clearInterval(this.handleNetInterval);
+    NetInfo.removeEventListener(
+      'change'
+    );
   }
 
-  _navigateTo = (routeName) => {
+  _navigateTo = (routeName, params) => {
     const actionToDispatch = NavigationActions.reset({
       index: 0,
-      actions: [NavigationActions.navigate({routeName})]
+      actions: [NavigationActions.navigate({routeName, params})]
     });
 
     this.props.navigation.dispatch(actionToDispatch)
@@ -63,7 +85,7 @@ export class SplashScreen extends React.Component {
         <Col style={{justifyContent:'center', alignItems: 'center', backgroundColor: '#039be5'}}>
           <View style={style.splashContainer}>
             <Image style={style.imageContainer}
-                   source={AppIcon.AppLogo}
+                   source={AppIcon.AppLogoBig}
             />
           </View>
           <View style={{position: 'absolute', top: 10, left: viewportWidth/2 -45,
@@ -74,7 +96,7 @@ export class SplashScreen extends React.Component {
             {flexDirection: 'row', alignItems:'center', justifyContent: 'center'}
           }>
               <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 13, color:'#039be5'}}>
-                {this.state.hasConnection ? 'Đã Kết Nối' : 'Chờ Mạng...'}
+                {this.state.hasConnection ? 'Loading...' : 'Connecting...'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -83,8 +105,18 @@ export class SplashScreen extends React.Component {
     )
   }
 
-  goNext() {
-    this._navigateTo('HomeScreen');
+  async goNext() {
+    NetInfo.removeEventListener(
+      'change'
+    );
+    await this.initData();
+    let menuListData = await GDNServiceInstance.getHomeMenuList();
+    let sliderData = await GDNServiceInstance.getHomeSlider(0);
+    let params = {
+      homeList: menuListData,
+      homeSlider: sliderData
+    };
+    this._navigateTo('HomeScreen', params);
   }
 
 }

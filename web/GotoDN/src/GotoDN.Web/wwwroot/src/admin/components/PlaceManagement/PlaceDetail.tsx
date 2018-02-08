@@ -25,7 +25,7 @@ interface thisProps {
   SavePlace: (model: PlaceModel) => void,
   DeletePlace: (Id: number) => void,
   AddPlaceLanguage: (lang: LanguageEnums) => void,
-  DeletePlaceLanguage: (Id: number) => void,
+  DeletePlaceLanguage: (x: PlaceLanguageModel) => void,
   Categories: CategoryModel[],
   HTServices: HTServiceModel[],
   ClickSlectCategory: (Id) => void,
@@ -36,6 +36,7 @@ interface thisProps {
   ClickSlectDistrict: (Id) => void,
   onStartDateChange: (e) => void,
   onEndDateChange: (e) => void,
+  onGovernmentChanged: (value: boolean) => void,
   isShow: boolean,
   clickGoBack: () => void,
 }
@@ -68,6 +69,59 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
     }
   }
 
+  private getImageFormStructure(): DynamicFormModel[] {
+    let allForms: DynamicFormModel[] = [];
+    {
+      let inforForm: DynamicFormModel = {
+        Icon: 'fa fa-info',
+        Priority: 1,
+        Title: '',
+        BlankPanel: true,
+        DynamicFields: []
+      };
+
+
+      let f_Image: DynamicFieldModel = {
+        Priority: 3,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Ảnh đại diện',
+          FieldName: 'Image',
+          PlaceHolder: '',
+          FieldData: {
+            CssClass: 'dn-image-place',
+            Type: 'Image',
+          },
+          Type: FieldStructureTypeEnums.SingleImage,
+          ValidateRules: []
+        }
+      };
+
+      let f_MultiImage: DynamicFieldModel = {
+        Priority: 4,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Ảnh địa điểm',
+          FieldName: 'PlaceImages',
+          PlaceHolder: '',
+          FieldData: {
+            CssClass: 'dn-m-image-place',
+            Type: 'Image',
+          },
+          Type: FieldStructureTypeEnums.C_ImagesUpload,
+          ValidateRules: []
+        }
+      };
+
+      inforForm.DynamicFields.push(f_Image);
+      inforForm.DynamicFields.push(f_MultiImage);
+      allForms.push(inforForm);
+    }
+    return allForms;
+  }
+
   private getFormStructure(): DynamicFormModel[] {
     let allForms: DynamicFormModel[] = [];
     {
@@ -83,7 +137,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
-          Name: 'Xuất hiện trên Slider Category',
+          Name: 'Hiển thị trên Slider Thư mục',
           FieldName: 'IsCategorySlider',
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.Toggle,
@@ -96,7 +150,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
-          Name: 'Xuất hiện trên Slider Trang chủ',
+          Name: 'Hiển thị trên Slider Trang chủ',
           FieldName: 'IsHomeSlider',
           PlaceHolder: '',
           Type: FieldStructureTypeEnums.Toggle,
@@ -112,18 +166,11 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
           Name: 'Đánh giá',
           FieldName: 'Rating',
           PlaceHolder: '',
-          Type: FieldStructureTypeEnums.Number,
-          ValidateRules: [{
-            Type: ValidateRuleTypeEnums.MinValue,
-            InValidMessage: 'Không được nhỏ hơn 0',
-            RuleData: '0'
-          },
-            {
-              Type: ValidateRuleTypeEnums.MaxValue,
-              InValidMessage: 'Không được lớn hơn 5',
-              RuleData: '5'
-            }
-          ]
+          Type: FieldStructureTypeEnums.Rating,
+          ValidateRules: [],
+          FieldData: {
+            Color:'#1a1a1a',
+          }
         }
       };
 
@@ -179,6 +226,53 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
         }
       };
 
+      let Fax: DynamicFieldModel = {
+        Priority: 1,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Fax',
+          FieldName: 'Fax',
+          PlaceHolder: '',
+          Type: FieldStructureTypeEnums.TextBox,
+          ValidateRules: []
+        }
+      };
+
+      let OpenTime: DynamicFieldModel = {
+        Priority: 1,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Thời gian mở cửa',
+          FieldName: 'OpenTime',
+          PlaceHolder: 'HH:mm',
+          Type: FieldStructureTypeEnums.MaskTextBox,
+          ValidateRules: [],
+          FieldData: {
+            Mask:'11:11',
+            Format:'HH:mm',
+          }
+        }
+      };
+
+      let CloseTime: DynamicFieldModel = {
+        Priority: 1,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Thời gian đóng cửa',
+          FieldName: 'CloseTime',
+          PlaceHolder: 'HH:mm',
+          Type: FieldStructureTypeEnums.MaskTextBox,
+          ValidateRules: [],
+          FieldData: {
+            Mask:'11:11',
+            Format:'HH:mm',
+          }
+        }
+      };
+
       let Website: DynamicFieldModel = {
         Priority: 1,
         LabelClass: 'col-lg-3',
@@ -193,7 +287,10 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
       };
 
       inforForm.DynamicFields.push(Phone);
+      inforForm.DynamicFields.push(Fax);
       inforForm.DynamicFields.push(Address);
+      inforForm.DynamicFields.push(OpenTime);
+      inforForm.DynamicFields.push(CloseTime);
       inforForm.DynamicFields.push(Rating);
       inforForm.DynamicFields.push(Website);
       inforForm.DynamicFields.push(IsCategorySlider);
@@ -211,6 +308,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
       {Language: LanguageEnums.Chinese, Title: 'Tiếng Trung'},
       {Language: LanguageEnums.Japanese, Title: 'Tiếng Nhật'},
       {Language: LanguageEnums.Korean, Title: 'Tiếng Hàn'},
+      {Language: LanguageEnums.All, Title: 'Tất cả'},
     ];
 
     let Categories: ReactSelectModel[] = [];
@@ -250,6 +348,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
     }
     let selectCategory = this.props.Categories.filter(x => x.Id == (this.props.SelectedPlace ? this.props.SelectedPlace.CategoryId : 0))[0];
     let IsEvent = selectCategory ? selectCategory.IsEvent : false;
+    let isDistrictGovernment = selectCategory ? selectCategory.IsGovernment : false;
     let firstLang = this.props.SelectedPlace && this.props.SelectedPlace.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
 
     let enPlaceLanguage: PlaceLanguageModel = {Id: 0};
@@ -294,7 +393,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                           />
                         </div>
                         <div className="form-group col-sm-6 p0">
-                          <div className="btn-group dropdown col-sm-2 p0" style={{marginLeft: 5}}>
+                          <div className="btn-group dropdown p0" style={{marginLeft: 5}}>
                             <button className="btn btn-warning"
                                     onClick={() => {
                                       this.translateAllLanguage()
@@ -302,7 +401,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                             </button>
                           </div>
                           {this.props.SelectedPlace.PlaceLanguages && this.props.SelectedPlace.PlaceLanguages.length < 6 ?
-                            <div className="btn-group dropdown col-sm-2 p0" style={{marginLeft: 10}}>
+                            <div className="btn-group dropdown p0 ml10" style={{marginLeft: 10}}>
                               <button type="button" className="btn btn-success dropdown-toggle"
                                       data-toggle="dropdown" aria-expanded="false">
                                 Thêm ngôn ngữ
@@ -319,10 +418,12 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                                 )}
                               </ul>
                             </div> : null }
-                          <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
-                                  onClick={() => this.deletePlace()}><i
-                            className="fa fa-trash-o"/> Xóa
-                          </button>
+                          {this.props.SelectedPlace.Id != 0 ?
+                            <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
+                                    onClick={() => this.deletePlace()}><i
+                              className="fa fa-trash-o"/> Xóa
+                            </button> : null}
+
                           <button className="btn btn-primary pull-right"
                                   onClick={() => this.savePlace()}><i
                             className="fa fa-save"/> Lưu
@@ -334,8 +435,8 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                       </div>
                       <hr/>
                       {
-                        this.props.SelectedPlace.PlaceLanguages.map(x =>
-                          <li key={x.Id}
+                        this.props.SelectedPlace.PlaceLanguages.map((x, index) =>
+                          <li key={index}
                               className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
                             <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
                               {languages.filter(r => r.Language == x.Language)[0].Title}
@@ -343,7 +444,7 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                               &nbsp;
                               {x.Language == LanguageEnums.English ?
                                 null : <span onClick={() => this.props.DeletePlaceLanguage
-                                && this.props.DeletePlaceLanguage(x.Id)}
+                                && this.props.DeletePlaceLanguage(x)}
                                 >
                             <i className="fa fa-remove"/>
                           </span>}
@@ -353,9 +454,9 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                     </ul>
                     <div className="tab-content">
                       {
-                        this.props.SelectedPlace.PlaceLanguages.map(x => {
+                        this.props.SelectedPlace.PlaceLanguages.map((x, index) => {
                           return <PlaceLanguageDetail
-                            key={x.Id}
+                            key={index}
                             IsSelected={x.Language == this.props.SelectedLanguage}
                             PlaceLanguage={x}
                             EnPlaceLanguage={enPlaceLanguage}
@@ -369,6 +470,16 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                   <hr/>
                   <div className="form-horizontal">
                     <fieldset>
+                      <div className="form-group col-sm-12 p0">
+                        <DynamicPanelComponent
+                          FormStructure={this.getImageFormStructure()}
+                          onFieldValueChange={(obj) => {
+                            this.props.OnPlaceLanguageChange(obj)
+                          }}
+                          Object={this.props.SelectedPlace.PlaceLanguages
+                            .filter(x => x.Language == LanguageEnums.English)[0] || {}}
+                        />
+                      </div>
                       <div className="form-group col-sm-12 p0">
                         <label className="col-sm-3 control-label">Tỉnh thành</label>
                         <div className="col-sm-9">
@@ -406,6 +517,31 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                       this.props.SelectedPlace['__#isInvalid#__'] = isInvalid
                     }}
                   />
+                  {isDistrictGovernment ? <div className="form-horizontal">
+                      <fieldset>
+                        <div className="toggle-custom col-lg-12 p0">
+                          <label htmlFor="checkbox-toggle" style={{paddingTop: '2px', fontWeight: 'normal'}}
+                                 className="col-lg-3 control-label">Trực thuộc Thành phố/Quận?</label>
+                          <div className="col-lg-9">
+                            <div className="radio-custom radio-inline" style={{marginTop: 3}}>
+                              <input type="radio" name="government"
+                                     onChange={() => this.props.onGovernmentChanged(false)}
+                                     checked={!this.props.SelectedPlace.IsDistrictGovernment}
+                                     id="city" />
+                                <label htmlFor="city">Thành phố</label>
+                            </div>
+                            <div className="radio-custom radio-inline" style={{marginTop: 3}}>
+                              <input type="radio" name="government"
+                                     onChange={() => this.props.onGovernmentChanged(true)}
+                                     checked={this.props.SelectedPlace.IsDistrictGovernment}
+                                     id="district" />
+                              <label htmlFor="district">Quận</label>
+                            </div>
+
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div> : null}
                   {IsEvent ? <div className="form-horizontal">
                       <fieldset>
                         <div className="form-group col-sm-12 p0">
@@ -436,6 +572,18 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
                         </div>
                       </fieldset>
                     </div> : null}
+                  <div className="form-group">
+
+                    {this.props.SelectedPlace.Id != 0 ?
+                      <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
+                              onClick={() => this.deletePlace()}><i
+                        className="fa fa-trash-o"/> Xóa
+                      </button> : null}
+                    <button className="btn btn-primary pull-right"
+                            onClick={() => this.savePlace()}><i
+                      className="fa fa-save"/> Lưu
+                    </button>
+                  </div>
                 </div> :
                 null
               }
@@ -469,7 +617,6 @@ class PlaceDetail extends React.Component<thisProps, thisState> {
       return;
     }
     // if is valid, do submit here
-    console.log('congratulation! your form is valid, do submit now ' + this.props.SelectedPlace);
     this.props.SavePlace && this.props.SavePlace(this.props.SelectedPlace);
     this.close();
   }

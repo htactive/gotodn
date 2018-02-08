@@ -82,6 +82,10 @@
         "claim": "Category_W"
       },
       {
+        "name": "AddAllLanguage",
+        "claim": "Category_W"
+      },
+      {
         "name": "DeleteLanguage",
         "claim": "Category_W"
       }
@@ -99,6 +103,10 @@
         "claim": "Place_W"
       },
       {
+        "name": "DeletePlaces",
+        "claim": "Place_W"
+      },
+      {
         "name": "UpdatePlace",
         "claim": "Place_W"
       },
@@ -107,7 +115,15 @@
         "claim": "Place_W"
       },
       {
+        "name": "AddAllLanguage",
+        "claim": "Place_W"
+      },
+      {
         "name": "DeleteLanguage",
+        "claim": "Place_W"
+      },
+      {
+        "name": "CalPlaceCoordinate",
         "claim": "Place_W"
       }
     ]
@@ -132,8 +148,21 @@
         "claim": "Service_W"
       },
       {
+        "name": "AddAllLanguage",
+        "claim": "Service_W"
+      },
+      {
         "name": "DeleteLanguage",
         "claim": "Service_W"
+      }
+    ]
+  },
+  {
+    "controller": "GDNConfiguration",
+    "actions": [
+      {
+        "name": "SaveConfiguration",
+        "claim": "GDNConfig_W"
       }
     ]
   }

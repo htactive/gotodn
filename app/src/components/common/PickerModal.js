@@ -114,6 +114,7 @@ export class PickerModal extends React.Component {
     this.setState({
       selectedItem: d,
     });
+    this.closeModal()
     if (this.props.onDataSelected)
       this.props.onDataSelected(d);
   }

@@ -32,15 +32,11 @@ class CategoryManagement extends React.Component<{}, thisState> {
   private async createCategory() {
     let result = await CategoryServiceInstance.CreateCategory();
     if (result) {
-      window['notice_create_success']();
-      if (this.state.Categories) {
-        this.state.Categories.push(result);
-        this.setState({
-          SelectedCategory: result,
-          SelectedLanguage: result.CategoryLanguages ? result.CategoryLanguages[0].Language : LanguageEnums.English,
-        });
-        this.forceUpdate();
-      }
+      this.setState({
+        SelectedCategory: result,
+        SelectedLanguage: result.CategoryLanguages ? result.CategoryLanguages[0].Language : LanguageEnums.English,
+      });
+      this.forceUpdate();
     }
     else {
       window['notice_error']();
@@ -48,8 +44,22 @@ class CategoryManagement extends React.Component<{}, thisState> {
   }
 
   private async updateCategory(model: CategoryModel) {
+    let eng = model.CategoryLanguages.filter(x => x.Language == LanguageEnums.English)[0];
+    let icon = eng.Icon;
+    let img = eng.Image;
+    model.CategoryLanguages.map( x => {
+      if(x && x.Language != LanguageEnums.English)
+      {
+        x.Icon = icon;
+        x.Image = img;
+      }
+    });
     let result = await CategoryServiceInstance.UpdateCategory(model);
     if (result) {
+      this.setState({
+        SelectedCategory: result,
+        Categories: await CategoryServiceInstance.GetAll()
+      });
       window['notice']('success-notice', 'Thành công', 'Đã lưu dữ liệu thành công.', 'fa fa-check-circle-o');
     }
   }
@@ -68,8 +78,45 @@ class CategoryManagement extends React.Component<{}, thisState> {
         window['notice_delete_success']();
         this.setState({
           Categories: this.state.Categories.filter(x => x.Id != Id),
-          SelectedCategory: null,
-          SelectedLanguage: null
+        });
+        if(!this.state.SelectedCategory || this.state.SelectedCategory.Id == Id) {
+          this.setState({
+            SelectedCategory: null,
+            SelectedLanguage: null
+          });
+        }
+      }
+      else {
+        window['notice']('error-notice', 'Lỗi', 'Không thể xóa được bản ghi vì bản ghi được sử dụng trong hệ thống, bạn chỉ có thể xóa được bản ghi nếu nó không được sử dụng trong hệ thống.', 'glyphicon glyphicon-remove');
+      }
+    }
+  }
+
+  private async addCategoryLanguage(lang: LanguageEnums) {
+    if(lang == LanguageEnums.All) {
+      let result = await CategoryServiceInstance.AddAllLanguage(this.state.SelectedCategory.Id);
+      if (result) {
+        window['notice_create_success']();
+        this.setState({SelectedCategory: result});
+      }
+      else {
+        window['notice_error']();
+      }
+    }
+    else {
+      let categoryLanguage: CategoryLanguageModel = {
+        Id: 0,
+        Title: "",
+        CategoryId: this.state.SelectedCategory.Id,
+        Language: lang,
+      };
+
+      let result = await CategoryServiceInstance.AddLanguage(categoryLanguage);
+      if (result) {
+        window['notice_create_success']();
+        this.state.SelectedCategory.CategoryLanguages.push(result);
+        this.setState({
+          SelectedLanguage: lang,
         });
       }
       else {
@@ -78,28 +125,7 @@ class CategoryManagement extends React.Component<{}, thisState> {
     }
   }
 
-  private async addCategoryLanguage(lang: LanguageEnums) {
-    let categoryLanguage: CategoryLanguageModel = {
-      Id: 0,
-      Title: "",
-      CategoryId: this.state.SelectedCategory.Id,
-      Language: lang,
-    };
-
-    let result = await CategoryServiceInstance.AddLanguage(categoryLanguage);
-    if (result) {
-      window['notice_create_success']();
-      this.state.SelectedCategory.CategoryLanguages.push(result);
-      this.setState({
-        SelectedLanguage: lang,
-      });
-    }
-    else {
-      window['notice_error']();
-    }
-  }
-
-  private async deleteCategoryLanguage(Id: number) {
+  private async deleteCategoryLanguage(Id: number) {debugger;
     if (await SweetAlerts.show({
         type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
@@ -144,6 +170,10 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                   SelectedCategory: model,
                                   SelectedLanguage: LanguageEnums.English,
                                 })}
+                                OnChangeOrder={(models) => this.setState({
+                                  Categories: models
+                                })}
+                                DeleteCategory={(Id: number) => this.deleteCategory(Id)}
                                 CreateCategory={() => this.createCategory()}
                   />
                   <CategoryDetail SelectedCategory={this.state.SelectedCategory}
@@ -151,6 +181,12 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                   ChangeSelectedLanguage={(language) => this.setState({
                                     SelectedLanguage: language
                                   })}
+                                  cancelCategory={() => {
+                                     this.setState({
+                                        SelectedLanguage: LanguageEnums.English,
+                                        SelectedCategory: null,
+                                     })
+                                   }}
                                   OnCategoryLanguageChange={(obj: CategoryLanguageModel) => {
                                     for (let i = 0; i < this.state.SelectedCategory.CategoryLanguages.length; i++) {
                                       if (this.state.SelectedCategory.CategoryLanguages[i].Language == obj.Language) {
@@ -166,6 +202,10 @@ class CategoryManagement extends React.Component<{}, thisState> {
                                   DeleteCategoryLanguage={(Id: number) => this.deleteCategoryLanguage(Id)}
                                   ChangeEvent={(check: boolean) => {
                                     this.state.SelectedCategory.IsEvent = check;
+                                    this.forceUpdate();
+                                  }}
+                                  ChangeGovernment={(check: boolean) => {
+                                    this.state.SelectedCategory.IsGovernment = check;
                                     this.forceUpdate();
                                   }}
                   />

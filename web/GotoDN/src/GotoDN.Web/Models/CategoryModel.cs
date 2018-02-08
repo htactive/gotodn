@@ -13,6 +13,8 @@ namespace GotoDN.Web.Models
         public DateTime? UpdatedDate { get; set; }
         public int? Priority { get; set; }
         public bool? IsEvent { get; set; }
+        public bool? IsGovernment { get; set; }
+        public int? Order { get; set; }
         public List<CategoryLanguageModel> CategoryLanguages { get; set; }
         public List<PlaceModel> Places { get; set; }
         public List<HTServiceModel> HTServices { get; set; }
@@ -33,5 +35,13 @@ namespace GotoDN.Web.Models
         public CategoryModel Category { get; set; }
         public ImageModel Image { get; set; }
         public ImageModel Icon { get; set; }
+    }
+
+    public class CategoryMenuModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string IconUrl { get; set; }
+        public bool IsNoService { get; set; }
     }
 }

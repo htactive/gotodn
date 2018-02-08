@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FieldValueModel} from '../../../models/field-value-model';
+import {FieldValueModel, ImageSetValueModel} from '../../../models/field-value-model';
 import ReactElement = React.ReactElement;
 import {DynamicFieldModel} from "../../../models/dynamic-field-model";
 import {FieldStructureTypeEnums, SelectInitValueModel} from "../../../models/field-structure-model";
@@ -7,6 +7,14 @@ import {ToggleComponent} from "./ToggleComponent";
 import {SingleImageUploadComponent} from "./SingleImageUploadComponent";
 import {RichTextEditorComponent} from "./RichTextEditorComponent";
 import {DateRangePicker} from "../../../commons/date-range-picker";
+import {MultiImageUploadComponent} from "./MultiImageUploadComponent";
+import {PlaceImageModel, PlaceMoreInfoModel} from "../../../models/PlaceLanguageModel";
+
+import MaskedInput from 'react-maskedinput';
+import Rating = require('react-rating');
+import moment = require("moment");
+import {MoreInfoComponent} from "./MoreInfoComponent";
+
 interface thisProps {
   Field: DynamicFieldModel,
   onFieldValueChange: (fv: FieldValueModel) => void,
@@ -35,6 +43,64 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
                    fv.Value = e.target['value'];
                    this.props.onFieldValueChange(fv);
                  }}
+          />
+          {isInvalid ?
+            <span className="help-block">{this.props.FieldValue.ValidateResult.InvalidMessage}</span> : null}
+        </div>
+      </div>
+    );
+  }
+
+  renderMaskTextBoxField(): JSX.Element {
+    let isInvalid = this.props.FieldValue.ValidateResult && this.props.FieldValue.ValidateResult.IsInvalid;
+    let fieldData = this.props.Field.FieldStructure.FieldData;
+    let vl = fieldData.Format ? (moment(this.props.FieldValue.Value).isValid() ?
+        moment(this.props.FieldValue.Value).format(fieldData.Format) :
+        (this.props.FieldValue.Value || "")) : this.props.FieldValue.Value || "";
+    return (
+      <div className={`form-group col-lg-12${isInvalid ? ' has-error' : ''} p0`}>
+        <label
+          className={`${this.props.Field.LabelClass ? this.props.Field.LabelClass : 'col-lg-2 col-md-3'} control-label`}>
+          {this.props.Field.FieldStructure.Name}
+        </label>
+        <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
+          <MaskedInput className="form-control"
+                       placeholder={this.props.Field.FieldStructure.PlaceHolder}
+                       value={vl}
+                       mask={fieldData.Mask}
+                       onChange={(e) => {
+                         let fv = {...this.props.FieldValue};
+                         fv.Value = e.target['value'];
+                         this.props.onFieldValueChange(fv);
+                       }}
+          />
+          {isInvalid ?
+            <span className="help-block">{this.props.FieldValue.ValidateResult.InvalidMessage}</span> : null}
+        </div>
+      </div>
+    );
+  }
+
+  renderRating(): JSX.Element {
+    let isInvalid = this.props.FieldValue.ValidateResult && this.props.FieldValue.ValidateResult.IsInvalid;
+    let fieldData = this.props.Field.FieldStructure.FieldData;
+    return (
+      <div className={`form-group col-lg-12${isInvalid ? ' has-error' : ''} p0`}>
+        <label
+          className={`${this.props.Field.LabelClass ? this.props.Field.LabelClass : 'col-lg-2 col-md-3'} control-label`}>
+          {this.props.Field.FieldStructure.Name}
+        </label>
+        <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
+          <Rating
+            empty="fa fa-star-o fa-2x"
+            full="fa fa-star fa-2x"
+            initialRate={this.props.FieldValue.Value || 0}
+            style={fieldData && fieldData.Color ? {color: fieldData.Color} : {}}
+            onChange={(rate) => {
+              let fv = {...this.props.FieldValue};
+              fv.Value = rate;
+              this.props.onFieldValueChange(fv);
+            }}
           />
           {isInvalid ?
             <span className="help-block">{this.props.FieldValue.ValidateResult.InvalidMessage}</span> : null}
@@ -116,7 +182,6 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
                         this.props.onFieldValueChange(fv);
                       }}
             />
-
           {isInvalid ?
             <span className="help-block">{this.props.FieldValue.ValidateResult.InvalidMessage}</span> : null}
         </div>
@@ -218,7 +283,6 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
 
               <option key={vindex} value={v.Value}>{v.Text}</option>
             ))}
-
           </select>
           {isInvalid ?
             <span className="help-block">{this.props.FieldValue.ValidateResult.InvalidMessage}</span> : null}
@@ -236,7 +300,6 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
         <div className={`${this.props.Field.InputClass ? this.props.Field.InputClass : 'col-lg-10 col-md-9'}`}>
           <label className="form-control-static">{this.props.FieldValue.Value}</label>
         </div>
-
         <DateRangePicker Date={null}
                          onDateChanged={(v) => {
                            let fv = {...this.props.FieldValue};
@@ -258,7 +321,12 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
     if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.TextBox) {
       return this.renderTextBoxField();
     }
-
+    if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.MaskTextBox) {
+      return this.renderMaskTextBoxField();
+    }
+    if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.Rating) {
+      return this.renderRating();
+    }
     if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.Number) {
       return this.renderNumberField();
     }
@@ -316,8 +384,35 @@ export class DynamicFieldComponent extends React.Component<thisProps, thisState>
                                       }
       />
     }
+    if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.C_ImagesUpload) {
+      let irv: ImageSetValueModel = {images: []};
+      if (this.props.FieldValue && this.props.FieldValue.ValueString) {
+        irv = JSON.parse(this.props.FieldValue.ValueString);
+      }
+      return <MultiImageUploadComponent Field={this.props.Field} ImageSetValue={this.props.FieldValue.Value}
+                                        onImageSetChanged={(irv: PlaceImageModel[]) => this.onImageSetChanged(irv)}
+      />;
+    }
 
+    if (this.props.Field.FieldStructure.Type == FieldStructureTypeEnums.C_MoreInfo) {
+      return <MoreInfoComponent Field={this.props.Field} Info={this.props.FieldValue.Value}
+                                onInfoChanged={(info: PlaceMoreInfoModel[]) => this.onInfoChanged(info)}
+      />;
+    }
 
     return this.renderTextBoxField();
+  }
+
+  private onImageSetChanged(irv: PlaceImageModel[]) {
+    let fv: FieldValueModel = {...this.props.FieldValue};
+    fv.Value = irv;
+    fv.ValueNumber = 0;
+    this.props.onFieldValueChange(fv);
+  }
+
+  private onInfoChanged(info: PlaceMoreInfoModel[]) {
+    let fv: FieldValueModel = {...this.props.FieldValue};
+    fv.Value = info;
+    this.props.onFieldValueChange(fv);
   }
 }

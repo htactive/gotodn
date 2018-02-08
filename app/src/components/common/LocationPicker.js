@@ -1,29 +1,31 @@
 import React from 'react';
 import {Icon, Picker} from 'native-base';
-import {View, PickerIOS, Platform, Text, TouchableOpacity} from 'react-native';
+import {View, PickerIOS, Platform, Text, TouchableOpacity, AsyncStorage} from 'react-native';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {StyleBase} from '../../styles/style';
 import {CityDropdown} from '../common/CityDropdown';
-import {viewportWidth, viewportHeight} from '../../common/constain';
+import {GDNServiceInstance} from '../../services/GDNService';
+import {appStore} from '../../stores/AppStore';
+import {Helper} from '../../common/constain';
 
 const platform = Platform.OS;
 
 const CITIES = [
   {
     Id: 1,
-    Name: 'Đà Nẵng',
+    Name: 'Da Nang',
   },
   {
     Id: 2,
-    Name: 'Hà Nội',
+    Name: 'Ha Noi',
   },
   {
     Id: 3,
-    Name: 'Hồ Chí Minh',
+    Name: 'Ho Chi Minh',
   },
   {
     Id: 4,
-    Name: 'Huế',
+    Name: 'Hue',
   }
 ];
 
@@ -37,9 +39,30 @@ export class LocationPicker extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({
-      cities: CITIES
-    });
+    this.getData();
+  }
+
+  async getData() {
+    let result = await GDNServiceInstance.getAllCity();
+    if(result) {
+      let cityValue = await AsyncStorage.getItem(Helper.CityKey);
+      let selectedCityId = 0;
+
+      if(cityValue) {
+        selectedCityId = cityValue;
+      }
+
+      this.setState({
+        cities: result,
+        selectedCity: selectedCityId
+      });
+    }
+    else {
+      this.setState({
+        cities: [],
+        selectedCity: 0
+      });
+    }
   }
 
   render() {
@@ -47,7 +70,7 @@ export class LocationPicker extends React.Component {
     return (
       <Row>
         <Col size={3} style={{justifyContent:'center',alignItems:'flex-start'}}>
-          <Text numberOfLines={1} style={{color:'#fff', fontFamily: StyleBase.sp_italic, fontSize: 15, paddingRight:5}}>ĐI ĐẾN</Text>
+          <Text numberOfLines={1} style={{color:'#fff', fontFamily: StyleBase.sp_italic, fontSize: 15, paddingRight:5}}>GOTO</Text>
         </Col>
         <Col size={7} style={{justifyContent:'center',alignItems:'flex-start'}}>
           <TouchableOpacity style={{flexDirection: 'row',justifyContent:'center',alignItems:'center'}}
@@ -60,7 +83,7 @@ export class LocationPicker extends React.Component {
                        onCloseModal={() => { this.setState({showPicker: false}) }}
                        selectedItem={city}
                        dataSource={this.state.cities}
-                       onDataSelected={(d) => this.setState({selectedCity: d.Id, showPicker: false})}
+                       onDataSelected={(d) => this.cityChanged(d.Id)}
           />
         </Col>
       </Row>
@@ -69,7 +92,8 @@ export class LocationPicker extends React.Component {
 
   cityChanged(city) {
     this.setState({
-      selectedCity: city
+      selectedCity: city,
+      showPicker: false
     });
     if (this.props.onCityChanged)
       this.props.onCityChanged(city);

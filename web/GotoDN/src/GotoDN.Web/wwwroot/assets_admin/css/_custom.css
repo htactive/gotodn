@@ -49,6 +49,10 @@ a {
   float: left;
 }
 
+.image-upload-container.dn-icon-info {
+  width: auto;
+}
+
 .image-upload-element {
   float: left;
   width: 20%;
@@ -77,11 +81,24 @@ a {
   border: 0;
 }
 
-.dn-image .image-upload-element .image-preview {
+.dn-icon-info .image-upload-element {
+  float: left;
+  width: 36px;
+  padding: 0;
+  border: 0;
+}
+
+.dn-image .image-upload-element .image-preview,
+.dn-image-place .image-upload-element .image-preview
+{
   height: 180px;
 }
 .dn-icon .image-upload-element .image-preview {
   height: 64px;
+}
+
+.dn-icon-info .image-upload-element .image-preview {
+  height: 36px;
 }
 
 .image-upload-container.single.small .image-upload-element {
@@ -93,7 +110,7 @@ a {
 }
 
 .image-upload-element .image-preview {
-  cursor: move;
+  cursor: pointer;
 }
 
 .image-upload-container.single .image-upload-element .image-preview {
@@ -114,6 +131,12 @@ a {
   height: 20px;
   border-radius: 50%;
   text-align: center;
+}
+
+.dn-icon-info .image-upload-element .image-preview .remove-image {
+  width: 12px;
+  height: 12px;
+  font-size: 9px;
 }
 
 .image-upload-element .image-preview {
@@ -495,19 +518,22 @@ div.toggle-custom.disabled label.toggle input[type="radio"]:checked + .button-ra
   z-index: 9;
 }
 
-.place-body .react-bs-container-body::-webkit-scrollbar-track
+.place-body .react-bs-container-body::-webkit-scrollbar-track,
+.import-place .react-bs-container-body::-webkit-scrollbar-track
 {
   -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.1);
   background-color: #F5F5F5;
 }
 
-.place-body .react-bs-container-body::-webkit-scrollbar
+.place-body .react-bs-container-body::-webkit-scrollbar,
+.import-place .react-bs-container-body::-webkit-scrollbar-track
 {
   height: 10px;
   background-color: #F5F5F5;
 }
 
-.place-body .react-bs-container-body::-webkit-scrollbar-thumb
+.place-body .react-bs-container-body::-webkit-scrollbar-thumb,
+.import-place .react-bs-container-body::-webkit-scrollbar-track
 {
   background-color: #c1c1c1;
 }
@@ -559,6 +585,17 @@ div.toggle-custom.disabled label.toggle input[type="radio"]:checked + .button-ra
   overflow: hidden;
 }
 
+.cut-line-2 {
+  height: 40px;
+  margin: 0 auto;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  display: -webkit-box;
+}
+
 .cut-line-3 {
   height: 60px;
   margin: 0 auto;
@@ -574,4 +611,23 @@ div.toggle-custom.disabled label.toggle input[type="radio"]:checked + .button-ra
   .modal-lg {
     width: 1150px;
   }
+}
+
+.custom-modal {
+  width: 95%;
+}
+
+.list-group-item.sub-item {
+  padding-left: 30px;
+}
+
+.list-group-item.category-title {
+  background-color: #eee;
+  padding: 5px 10px;
+  min-height: 32px;
+}
+
+.list-group-item.category-title:hover,
+.list-group-item.category-title:focus{
+  background-color: #eee;
 }

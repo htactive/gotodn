@@ -15,6 +15,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using GotoDN.Web.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace GotoDN.Web.Controllers
 {
@@ -30,7 +33,7 @@ namespace GotoDN.Web.Controllers
         }
 
         protected ConfigurationHelper Configuration { get; set; }
-        
+
         protected static readonly string _awsAccessKey = "AKIAIYL5LVNRMSEDJJMA";
 
         protected static readonly string _awsSecretKey = "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";
@@ -44,6 +47,36 @@ namespace GotoDN.Web.Controllers
         }
 
         private UserModel currentUser;
+
+        protected LanguageEnums CurrentLanguage
+        {
+            get
+            {
+                var header = this.HttpContext.Request.Headers;
+                string lang = header["lang"];
+                int currentLang = (int)LanguageEnums.English;
+                if (!string.IsNullOrEmpty(lang))
+                {
+                    int.TryParse(lang, out currentLang);
+                }
+                return (LanguageEnums)currentLang;
+            }
+        }
+
+        protected int CurrentCityId
+        {
+            get
+            {
+                var header = this.HttpContext.Request.Headers;
+                string city = header["city"];
+                int currentCity = 0;
+                if (!string.IsNullOrEmpty(city))
+                {
+                    int.TryParse(city, out currentCity);
+                }
+                return currentCity;
+            }
+        }
 
         protected UserModel CurrentUser
         {
@@ -103,7 +136,7 @@ namespace GotoDN.Web.Controllers
                 return currentUser;
             }
         }
-        
+
         private async Task UploadImageStreamToAWSS3(string s3FileKey, System.IO.Stream stream)
         {
 
@@ -135,11 +168,36 @@ namespace GotoDN.Web.Controllers
 
         protected async Task<Image> CreateNewImage(System.IO.Stream stream, string fileKey)
         {
-            await this.UploadImageStreamToAWSS3(fileKey, stream);
+            await this.UploadImageStreamToLocalMachine(fileKey, stream);
             var image = new Image() { Id = 0, S3FileKey = fileKey };
             this.HTRepository.ImageRepository.Save(image);
             this.HTRepository.Commit();
             return image;
+        }
+
+        private async Task UploadImageStreamToLocalMachine(string s3FileKey, System.IO.Stream stream)
+        {
+            try
+            {
+                var root = ((IHostingEnvironment)this.HttpContext.RequestServices.GetService(typeof(IHostingEnvironment))).ContentRootPath;
+                var filePath = Path.Combine(root, "GDNImages", s3FileKey);
+                var folder = Path.GetDirectoryName(filePath);
+                CreateFolder(folder);
+                using (var fStream = new FileStream(filePath, FileMode.Create))
+                {
+                    stream.Position = 0;
+                    await stream.CopyToAsync(fStream);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private void CreateFolder(string path)
+        {
+            Directory.CreateDirectory(path);
         }
 
         protected string BuildTemplate(string template, Dictionary<string, string> tokens)
@@ -150,6 +208,14 @@ namespace GotoDN.Web.Controllers
                 template = template.Replace(token.Key, token.Value);
             }
             return template;
+        }
+
+        protected string GetUrl(Image entity)
+        {
+            if (entity == null) return null;
+            if (!string.IsNullOrEmpty(entity.Url)) return entity.Url;
+            var baseUrl = RequestHelper.BaseImageURL;
+            return string.Format($"{baseUrl}/{"{0}"}", entity.S3FileKey);
         }
     }
 }

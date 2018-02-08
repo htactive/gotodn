@@ -5,6 +5,10 @@ import CategoryLanguageDetail from "./CategoryLanguageDetail";
 import {CategoryLanguageModel} from "../../../models/CategoryLanguageModel";
 import {CategoryServiceInstance} from "../../services/CategoryService";
 import {MessageBox, MessageBoxType, MessageBoxButtons, MessageBoxResult} from "../../../commons/message-box";
+import {DynamicFormModel} from "../../../models/dynamic-form-model";
+import {DynamicFieldModel} from "../../../models/dynamic-field-model";
+import {FieldStructureTypeEnums} from "../../../models/field-structure-model";
+import {DynamicPanelComponent} from "../DynamicForm/DynamicPanelComponent";
 interface thisProps {
   SelectedCategory: CategoryModel,
   SelectedLanguage: LanguageEnums,
@@ -15,19 +19,72 @@ interface thisProps {
   AddCategoryLanguage: (lang: LanguageEnums) => void,
   DeleteCategoryLanguage: (Id: number) => void,
   ChangeEvent: (check: boolean) => void,
+  ChangeGovernment: (check: boolean) => void,
   OnTranslateAll?: (model: CategoryModel) => void,
+  cancelCategory: () => void,
 }
 
 class CategoryDetail extends React.Component<thisProps, {}> {
+  private getFormStructure(): DynamicFormModel[] {
+    let allForms: DynamicFormModel[] = [];
+    {
+      let inforForm: DynamicFormModel = {
+        Icon: 'fa fa-info',
+        Priority: 1,
+        Title: '',
+        BlankPanel: true,
+        DynamicFields: []
+      };
 
+      let f_Image: DynamicFieldModel = {
+        Priority: 2,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Ảnh đại diện',
+          FieldName: 'Image',
+          PlaceHolder: '',
+          FieldData: {
+            CssClass: 'dn-image',
+            Type: 'Image',
+          },
+          Type: FieldStructureTypeEnums.SingleImage,
+          ValidateRules: [
+          ]
+        }
+      };
+
+      let f_Icon: DynamicFieldModel = {
+        Priority: 3,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Icon',
+          FieldName: 'Icon',
+          PlaceHolder: '',
+          FieldData: {
+            CssClass: 'dn-icon',
+            Type: 'Icon',
+          },
+          Type: FieldStructureTypeEnums.SingleImage,
+          ValidateRules: []
+        }
+      };
+      inforForm.DynamicFields.push(f_Image);
+      inforForm.DynamicFields.push(f_Icon);
+      allForms.push(inforForm);
+    }
+    return allForms;
+  }
   render() {
-    let languages: { Language: LanguageEnums, Title: string }[] = [
+    let languages: {Language: LanguageEnums, Title: string}[] = [
       {Language: LanguageEnums.English, Title: 'Tiếng Anh'},
       {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
       {Language: LanguageEnums.France, Title: 'Tiếng Pháp'},
       {Language: LanguageEnums.Chinese, Title: 'Tiếng Trung'},
       {Language: LanguageEnums.Japanese, Title: 'Tiếng Nhật'},
       {Language: LanguageEnums.Korean, Title: 'Tiếng Hàn'},
+      {Language: LanguageEnums.All, Title: 'Tất cả'},
     ];
 
     let enCategoryLanguage: CategoryLanguageModel = {Id: 0};
@@ -42,8 +99,8 @@ class CategoryDetail extends React.Component<thisProps, {}> {
             <div className="tabs mb20">
               <ul className="nav nav-tabs">
                 {
-                  this.props.SelectedCategory.CategoryLanguages.map(x =>
-                    <li key={x.Id}
+                  this.props.SelectedCategory.CategoryLanguages.map((x, index) =>
+                    <li key={index}
                         className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
                       <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
                         {languages.filter(r => r.Language == x.Language)[0].Title}
@@ -61,9 +118,9 @@ class CategoryDetail extends React.Component<thisProps, {}> {
               </ul>
               <div className="tab-content">
                 {
-                  this.props.SelectedCategory.CategoryLanguages.map(x => {
+                  this.props.SelectedCategory.CategoryLanguages.map((x, index) => {
                     return <CategoryLanguageDetail
-                      key={x.Id}
+                      key={index}
                       IsSelected={x.Language == this.props.SelectedLanguage}
                       CategoryLanguage={x}
                       EnCategoryLanguage={enCategoryLanguage}
@@ -75,8 +132,18 @@ class CategoryDetail extends React.Component<thisProps, {}> {
               </div>
             </div>
             <div className="toggle-custom col-lg-12 p0">
+              <DynamicPanelComponent
+                FormStructure={this.getFormStructure()}
+                onFieldValueChange={(obj) => {
+                  this.props.OnCategoryLanguageChange(obj)
+                }}
+                Object={this.props.SelectedCategory.CategoryLanguages
+                  .filter(x => x.Language == LanguageEnums.English)[0] || {}}
+              />
+            </div>
+            <div className="toggle-custom col-lg-12 p0">
               <label htmlFor="checkbox-toggle" style={{paddingTop: '2px', fontWeight: 'normal'}}
-                     className="col-lg-3 control-label">Là category sự kiện? &nbsp;&nbsp;</label>
+                     className="col-lg-3 control-label">Là danh mục Sự Kiện? &nbsp;&nbsp;</label>
               <div className="col-lg-9">
                 <label className="toggle " data-on="YES" data-off="NO">
                   <input type="checkbox" id="checkbox-toggle"
@@ -88,12 +155,32 @@ class CategoryDetail extends React.Component<thisProps, {}> {
                 </label>
               </div>
             </div>
+            <div className="toggle-custom col-lg-12 p0">
+              <label htmlFor="checkbox-toggle" style={{paddingTop: '2px', fontWeight: 'normal'}}
+                     className="col-lg-3 control-label">Là danh mục Chính Quyền? &nbsp;&nbsp;</label>
+              <div className="col-lg-9">
+                <label className="toggle " data-on="YES" data-off="NO">
+                  <input type="checkbox" id="checkbox-toggle"
+                         name="checkbox-toggle"
+                         onChange={(e) => this.props.ChangeGovernment(e.target.checked)}
+                         checked={this.props.SelectedCategory.IsGovernment || false}
+                  />
+                  <span className="button-radio"/>
+                </label>
+              </div>
+            </div>
             <hr className="col-lg-12 p0" style={{marginTop: 0}}/>
             <div className="form-group">
-              <button className="btn btn-danger pull-right"
-                      onClick={() => this.deleteCategory()}><i
-                className="fa fa-trash-o"/> Xóa
-              </button>
+              {this.props.SelectedCategory.Id != 0 ?
+                <button className="btn btn-danger pull-right"
+                        onClick={() => this.deleteCategory()}><i
+                  className="fa fa-trash-o"/> Xóa
+                </button> :
+                <button className="btn btn-default pull-right"
+                        onClick={() => this.cancelHTService()}><i
+                  className="fa fa-trash-o"/> Hủy
+                </button>
+              }
               <button className="btn btn-primary pull-right mr10 ml10"
                       onClick={() => this.saveCategory()}>Lưu
               </button>
@@ -158,7 +245,6 @@ class CategoryDetail extends React.Component<thisProps, {}> {
       return;
     }
     // if is valid, do submit here
-    console.log('congratulation! your form is valid, do submit now ' + this.props.SelectedCategory);
     this.props.SaveCategory && this.props.SaveCategory(this.props.SelectedCategory);
   }
 
@@ -181,6 +267,10 @@ class CategoryDetail extends React.Component<thisProps, {}> {
       }
     }
 
+  }
+
+  private cancelHTService() {
+    this.props.cancelCategory && this.props.cancelCategory();
   }
 }
 

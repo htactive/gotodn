@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {Card, CardItem, Body} from 'native-base';
 import styles from '../../styles/slider-css';
+import {Helper} from '../../common/constain';
 
 export default class TopSliderItem extends React.Component {
 
@@ -21,7 +22,7 @@ export default class TopSliderItem extends React.Component {
             <View style={styles.imageContainer}>
               <View style={styles.imageInner}>
                 <Image
-                  source={{uri: image}}
+                  source={{uri: image || Helper.ImageUrl}}
                   style={[styles.image,{justifyContent:'flex-end'}]}
                 >
                   <View style={styles.textInnerList}>

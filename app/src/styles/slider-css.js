@@ -1,5 +1,6 @@
 import {StyleSheet, Dimensions, Platform} from 'react-native';
 import {StyleBase} from './style';
+import {viewportHeight, viewportWidth} from '../common/constain';
 
 const platform = Platform.OS;
 
@@ -12,15 +13,13 @@ export const colors = {
   background2: 'hsl(230, 30%, 45%)'
 };
 
-const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
-
 export function wp(percentage) {
   const value = (percentage * viewportWidth) / 100;
   return Math.round(value);
 }
 
 const slideHeight = viewportHeight * 0.3;
-const slideWidth = wp(75);
+const slideWidth = wp(85);
 const itemHorizontalMargin = wp(1);
 
 export const sliderWidth = viewportWidth;
@@ -69,7 +68,7 @@ export default StyleSheet.create({
 
   },
   textInner: {
-    height: slideHeight/4,
+    height: 40,
   },
   textInnerList: {
     height: slideHeight/3.5,
@@ -78,7 +77,7 @@ export default StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     paddingHorizontal: 5,
-    paddingVertical: 5,
+    paddingVertical: 2,
     backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
   textListContain: {
@@ -126,6 +125,7 @@ export default StyleSheet.create({
     color: colors.white,
     fontSize: 14,
     fontFamily: StyleBase.sp_semibold,
+    lineHeight: 18,
   },
   titleList: {
     color: '#263238',
@@ -144,6 +144,7 @@ export default StyleSheet.create({
     color: colors.white,
     fontSize: 12,
     fontFamily: StyleBase.sp_light,
+    lineHeight: 16,
   },
   subtitleList: {
     color: '#263238',

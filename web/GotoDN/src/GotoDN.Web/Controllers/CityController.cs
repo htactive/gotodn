@@ -27,7 +27,7 @@ namespace GotoDN.Web.Controllers
             var entities = this.HTRepository.CityRepository.GetAll()
                 .Take(1000).ToList();
 
-            var models = entities.Select(x => AutoMapper.Mapper.Map<City, CityModel>(x)).ToList();
+            var models = entities.Select(x => AutoMapper.Mapper.Map<City, CityModel>(x)).OrderBy(t => t.Name).ToList();
 
             return models;
         }
@@ -101,8 +101,12 @@ namespace GotoDN.Web.Controllers
         public bool DeleteCity([FromBody]int Id)
         {
             var entity = this.HTRepository.CityRepository.GetAll()
+                .Include(ct => ct.Districts)
+                .Include(ct => ct.Places)
                 .FirstOrDefault(x => x.Id == Id);
-            if (entity == null) return false;
+            if (entity == null || 
+                (entity.Districts != null && entity.Districts.Count > 0) || 
+                (entity.Places != null && entity.Places.Count > 0)) return false;
             this.HTRepository.CityRepository.Delete(entity);
             this.HTRepository.Commit();
             return true;
@@ -116,16 +120,16 @@ namespace GotoDN.Web.Controllers
             var entity = this.HTRepository.CityRepository.GetAll()
                 .Include(x => x.Districts)
                 .FirstOrDefault(x => x.Id == model.Id);
-            if (entity == null) return false;
+            if (entity == null) entity = new City();
             entity.Name = model.Name;
-            foreach (var item in entity.Districts)
-            {
-                var en = model.Districts.FirstOrDefault(x => x.Id == item.Id);
-                if (en != null)
-                {
-                    item.Name = en.Name;
-                }
-            }
+            //foreach (var item in entity.Districts)
+            //{
+            //    var en = model.Districts.FirstOrDefault(x => x.Id == item.Id);
+            //    if (en != null)
+            //    {
+            //        item.Name = en.Name;
+            //    }
+            //}
 
             this.HTRepository.CityRepository.Save(entity);
             this.HTRepository.Commit();
@@ -138,8 +142,9 @@ namespace GotoDN.Web.Controllers
         public bool DeleteDistrict([FromBody]int Id)
         {
             var entity = this.HTRepository.DistrictRepository.GetAll()
+                .Include(d => d.Places)
                 .FirstOrDefault(x => x.Id == Id);
-            if (entity == null) return false;
+            if (entity == null || (entity.Places != null && entity.Places.Count > 0)) return false;
 
             this.HTRepository.DistrictRepository.Delete(entity);
             this.HTRepository.Commit();

@@ -26,10 +26,15 @@ class CityModal extends React.Component<thisProps, thisState> {
 
   close() {
     this.setState({isShow: false});
+    this.props.SelectedCity['__#validated#__'] = false;
   }
 
   show() {
     this.setState({isShow: true});
+    if(this.props.SelectedCity) {
+      if(this.props.SelectedCity.Id != 0)
+        this.props.SelectedCity['__#validated#__'] = true;
+    }
   }
 
   private getFormStructure(): DynamicFormModel[] {
@@ -71,7 +76,7 @@ class CityModal extends React.Component<thisProps, thisState> {
   }
 
   render() {
-    if(!this.props.SelectedCity) return null;
+    if (!this.props.SelectedCity) return null;
     return (
       <Modal show={this.state.isShow} onHide={() => this.close()}
              aria-labelledby="contained-modal-title-lg">
@@ -84,7 +89,9 @@ class CityModal extends React.Component<thisProps, thisState> {
               <div className="form-group col-sm-12">
                 <DynamicPanelComponent
                   FormStructure={this.getFormStructure()}
-                  onFieldValueChange={(obj: CityModel) => this.props.OnChange(obj)}
+                  onFieldValueChange={(obj: CityModel) => {
+                    this.props.OnChange(obj);
+                  }}
                   Object={this.props.SelectedCity}
                   onValidationChange={(isInvalid) => {
                     this.props.SelectedCity['__#isInvalid#__'] = isInvalid
@@ -97,12 +104,10 @@ class CityModal extends React.Component<thisProps, thisState> {
             <button className="btn btn-danger pull-right" style={{marginLeft: 5}}
                     onClick={() => this.deleteCity()}><i className="fa fa-trash-o"/> Xóa
             </button>
-
             <button className="btn btn-primary pull-right"
                     onClick={() => this.saveCity()}><i
               className="fa fa-save"/> Lưu
             </button>
-
           </div>
         </Modal.Body>
       </Modal>
@@ -110,7 +115,7 @@ class CityModal extends React.Component<thisProps, thisState> {
   }
 
   private saveCity() {
-    this.props.SelectedCity['__#validated#__'] = true;
+
     if (this.props.SelectedCity['__#isInvalid#__']) {
       return;
     }

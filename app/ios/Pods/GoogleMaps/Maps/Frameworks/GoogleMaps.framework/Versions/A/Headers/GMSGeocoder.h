@@ -10,29 +10,26 @@
 
 #import <CoreLocation/CoreLocation.h>
 
+#if __has_feature(modules)
+@import GoogleMapsBase;
+#else
+#import <GoogleMapsBase/GoogleMapsBase.h>
+#endif
 #import <GoogleMaps/GMSAddress.h>
 
-NS_ASSUME_NONNULL_BEGIN
+GMS_ASSUME_NONNULL_BEGIN
 
 @class GMSReverseGeocodeResponse;
 
-/**
- * GMSGeocoder error codes, embedded in NSError.
- *
- * @related GMSGeocoder
- */
+/** GMSGeocoder error codes, embedded in NSError. */
 typedef NS_ENUM(NSInteger, GMSGeocoderErrorCode) {
   kGMSGeocoderErrorInvalidCoordinate = 1,
   kGMSGeocoderErrorInternal,
 };
 
-/**
- * Handler that reports a reverse geocoding response, or error.
- *
- * @related GMSGeocoder
- */
-typedef void (^GMSReverseGeocodeCallback)(GMSReverseGeocodeResponse *_Nullable,
-                                          NSError *_Nullable);
+/** Handler that reports a reverse geocoding response, or error. */
+typedef void (^GMSReverseGeocodeCallback)(GMSReverseGeocodeResponse *GMS_NULLABLE_PTR,
+                                          NSError *GMS_NULLABLE_PTR);
 
 /**
  * Exposes a service for reverse geocoding. This maps Earth coordinates (latitude and longitude) to
@@ -59,11 +56,11 @@ typedef void (^GMSReverseGeocodeCallback)(GMSReverseGeocodeResponse *_Nullable,
 @interface GMSReverseGeocodeResponse : NSObject<NSCopying>
 
 /** Returns the first result, or nil if no results were available. */
-- (nullable GMSAddress *)firstResult;
+- (GMSAddress *GMS_NULLABLE_PTR)firstResult;
 
 /** Returns an array of all the results (contains GMSAddress), including the first result. */
-- (nullable NSArray<GMSAddress *> *)results;
+- (GMS_NSArrayOf(GMSAddress *) * GMS_NULLABLE_PTR)results;
 
 @end
 
-NS_ASSUME_NONNULL_END
+GMS_ASSUME_NONNULL_END

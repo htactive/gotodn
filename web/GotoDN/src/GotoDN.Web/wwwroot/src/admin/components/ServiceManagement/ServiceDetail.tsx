@@ -7,6 +7,10 @@ import {ComboBox, ReactSelectModel} from "../ComboBox/ComboBox";
 import {CategoryModel} from "../../../models/CategoryModel";
 import {MessageBox, MessageBoxType, MessageBoxButtons, MessageBoxResult} from "../../../commons/message-box";
 import {HTServiceInstance} from "../../services/HTService";
+import {DynamicFormModel} from "../../../models/dynamic-form-model";
+import {DynamicFieldModel} from "../../../models/dynamic-field-model";
+import {FieldStructureTypeEnums} from "../../../models/field-structure-model";
+import {DynamicPanelComponent} from "../DynamicForm/DynamicPanelComponent";
 interface thisProps {
   SelectedHTService: HTServiceModel,
   SelectedLanguage: LanguageEnums,
@@ -16,12 +20,63 @@ interface thisProps {
   DeleteHTService: (Id: number) => void,
   AddHTServiceLanguage: (lang: LanguageEnums) => void,
   DeleteHTServiceLanguage: (Id: number) => void,
+  ChangeShowInAllCity: (check: boolean) => void,
   Categories: CategoryModel[],
   ClickSlectCategory: (Id) => void,
+  cancelService: () => void,
 }
 
 class HTServiceDetail extends React.Component<thisProps, {}> {
+  private getFormStructure(): DynamicFormModel[] {
+    let allForms: DynamicFormModel[] = [];
+    {
+      let inforForm: DynamicFormModel = {
+        Icon: 'fa fa-info',
+        Priority: 1,
+        Title: '',
+        BlankPanel: true,
+        DynamicFields: []
+      };
 
+      let f_Image: DynamicFieldModel = {
+        Priority: 2,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Image',
+          FieldName: 'Image',
+          PlaceHolder: '',
+          FieldData: {
+            CssClass: 'dn-image',
+            Type: 'Image',
+          },
+          Type: FieldStructureTypeEnums.SingleImage,
+          ValidateRules: []
+        }
+      };
+
+      let f_Icon: DynamicFieldModel = {
+        Priority: 3,
+        LabelClass: 'col-lg-3',
+        InputClass: 'col-lg-9',
+        FieldStructure: {
+          Name: 'Icon',
+          FieldName: 'Icon',
+          PlaceHolder: '',
+          FieldData: {
+            CssClass: 'dn-icon',
+            Type: 'Icon',
+          },
+          Type: FieldStructureTypeEnums.SingleImage,
+          ValidateRules: []
+        }
+      };
+      inforForm.DynamicFields.push(f_Image);
+      inforForm.DynamicFields.push(f_Icon);
+      allForms.push(inforForm);
+    }
+    return allForms;
+  }
   render() {
     let languages: { Language: LanguageEnums, Title: string }[] = [
       {Language: LanguageEnums.Vietnamese, Title: 'Tiếng Việt'},
@@ -30,6 +85,7 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
       {Language: LanguageEnums.Chinese, Title: 'Tiếng Trung'},
       {Language: LanguageEnums.Japanese, Title: 'Tiếng Nhật'},
       {Language: LanguageEnums.Korean, Title: 'Tiếng Hàn'},
+      {Language: LanguageEnums.All, Title: 'Tất cả'},
     ];
     let Categories: ReactSelectModel[] = [];
     if (this.props.Categories && this.props.Categories.length > 0) {
@@ -52,8 +108,8 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
             <div className="tabs mb20">
               <ul className="nav nav-tabs">
                 {
-                  this.props.SelectedHTService.HTServiceLanguages.map(x =>
-                    <li key={x.Id}
+                  this.props.SelectedHTService.HTServiceLanguages.map((x, index) =>
+                    <li key={index}
                         className={(this.props.SelectedLanguage || LanguageEnums.English) == x.Language ? 'active' : ''}>
                       <a onClick={() => this.props.ChangeSelectedLanguage(x.Language)}>
                         {languages.filter(r => r.Language == x.Language)[0].Title}
@@ -72,9 +128,9 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
               </ul>
               <div className="tab-content">
                 {
-                  this.props.SelectedHTService.HTServiceLanguages.map(x => {
+                  this.props.SelectedHTService.HTServiceLanguages.map((x, index) => {
                     return <ServiceLanguageDetail
-                      key={x.Id}
+                      key={index}
                       IsSelected={x.Language == this.props.SelectedLanguage}
                       HTServiceLanguage={x}
                       EnHTServiceLanguage={enHTServiceLanguage}
@@ -86,22 +142,53 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
               </div>
             </div>
             <div className="toggle-custom col-lg-12 p0">
+              <DynamicPanelComponent
+                FormStructure={this.getFormStructure()}
+                onFieldValueChange={(obj) => {
+                  this.props.OnHTServiceLanguageChange(obj)
+                }}
+                Object={this.props.SelectedHTService.HTServiceLanguages
+                  .filter(x => x.Language == LanguageEnums.English)[0] || {}}
+              />
+            </div>
+            <div className="toggle-custom col-lg-12 p0">
               <div style={{paddingTop: '5px', fontWeight: 'normal'}} className="col-lg-3 control-label">Danh mục</div>
               <div className="col-lg-6">
                 <ComboBox
-                  placeHolder="Chọn service..."
+                  placeHolder="Chọn danh mục..."
                   options={Categories}
                   value={this.props.SelectedHTService.CategoryId}
                   onChange={(Id) => this.props.ClickSlectCategory(Id)}
                 />
               </div>
             </div>
+            <div className="toggle-custom col-lg-12 p0">
+              <label htmlFor="checkbox-toggle" style={{paddingTop: '2px', fontWeight: 'normal'}}
+                     className="col-lg-3 control-label">Hiển thị trên tất cả thành phố? &nbsp;&nbsp;</label>
+              <div className="col-lg-9">
+                <label className="toggle " data-on="YES" data-off="NO">
+                  <input type="checkbox" id="checkbox-toggle"
+                         name="checkbox-toggle"
+                         onChange={(e) => this.props.ChangeShowInAllCity(e.target.checked)}
+                         checked={this.props.SelectedHTService.ShowInAllCity}
+                  />
+                  <span className="button-radio"/>
+                </label>
+              </div>
+            </div>
             <hr className="col-lg-12 p0"/>
             <div className="form-group">
-              <button className="btn btn-danger pull-right"
-                      onClick={() => this.deleteHTService()}><i
-                className="fa fa-trash-o"/> Xóa
-              </button>
+              {this.props.SelectedHTService.Id != 0 ?
+                <button className="btn btn-danger pull-right"
+                        onClick={() => this.deleteHTService()}><i
+                  className="fa fa-trash-o"/> Xóa
+                </button> :
+                <button className="btn btn-default pull-right"
+                        onClick={() => this.cancelHTService()}><i
+                  className="fa fa-trash-o"/> Hủy
+                </button>
+              }
+
               <button className="btn btn-primary pull-right mr10 ml10"
                       onClick={() => this.saveHTService()}>Lưu
               </button>
@@ -187,6 +274,10 @@ class HTServiceDetail extends React.Component<thisProps, {}> {
         });
       }
     }
+  }
+
+  private cancelHTService() {
+    this.props.cancelService && this.props.cancelService();
   }
 }
 

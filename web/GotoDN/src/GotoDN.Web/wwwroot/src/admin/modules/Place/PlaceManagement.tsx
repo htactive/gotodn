@@ -2,7 +2,7 @@ import * as React from 'react';
 import {PlaceServiceInstance} from "../../services/PlaceService";
 import PlaceDetail from "../../components/PlaceManagement/PlaceDetail";
 import {PlaceModel} from "../../../models/PlaceModel";
-import {LanguageEnums, TimeHelper, AdminRoutePath} from "../../../commons/constant";
+import {LanguageEnums, TimeHelper, AdminRoutePath, Languages} from "../../../commons/constant";
 import {PlaceLanguageModel} from "../../../models/PlaceLanguageModel";
 import {CategoryModel} from "../../../models/CategoryModel";
 import {HTServiceModel} from "../../../models/HTServiceModel";
@@ -17,6 +17,7 @@ import {Link, browserHistory} from 'react-router';
 import {ImageServiceInstance} from "../../services/image-service";
 import {PlaceImportPreview} from "../../components/PlaceManagement/PlaceImportPreview";
 import {ImportPlaceGroupModel} from "../../../models/ImportPlaceModel";
+import {UIBlocker} from "../../../commons/ui-blocker";
 
 interface thisState {
   GridFilter?: GetGridRequestModel,
@@ -33,6 +34,7 @@ interface thisState {
   InvalidImportFileType?: boolean,
   ShowImportPreview?: boolean
   ImportData?: ImportPlaceGroupModel[],
+  SelectedRowIds?: number[],
 }
 class PlaceManagement extends React.Component<{}, thisState> {
   btnImageFileInput;
@@ -47,6 +49,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
     },
     ShowImportPreview: false,
     ImportData: [],
+    SelectedRowIds: [],
   };
 
   setState(state: thisState) {
@@ -83,13 +86,14 @@ class PlaceManagement extends React.Component<{}, thisState> {
     })();
   }
 
-  componentWillReceiveProps(props) {
+  async componentWillReceiveProps(props) {
     if (!props.params['id']) {
       this.setState({showDetail: false});
       return
     }
     if (!this.state.GridData) return;
-    let data = this.state.GridData.DataSource.filter(x => x.Id == props.params['id'])[0];
+    // let data = this.state.GridData.DataSource.filter(x => x.Id == props.params['id'])[0];
+    let data = await PlaceServiceInstance.GetPlace(props.params['id']);
     this.setState({
       SelectedPlace: data,
       SelectedLanguage: LanguageEnums.English,
@@ -112,31 +116,24 @@ class PlaceManagement extends React.Component<{}, thisState> {
   }
 
   private async createPlace() {
-    let result = await PlaceServiceInstance.CreatePlace();
-    if (result) {
-      window['notice_create_success']();
-      let filter = this.state.GridFilter;
-      if (filter) {
-        filter.CurrentPage = 1;
-        filter.IsAsc = false;
-        filter.SortExpression = "Id";
-      }
-      this.getData(filter);
-      this.setState({
-        SelectedPlace: result,
-        SelectedLanguage: result.PlaceLanguages ? result.PlaceLanguages[0].Language : LanguageEnums.English,
-      })
-    }
-    else {
-      window['notice_error']();
-    }
+    browserHistory.push(AdminRoutePath.PlaceManagement + '/0');
   }
 
   private async updatePlace(model: PlaceModel) {
+    let eng = model.PlaceLanguages.filter(x => x.Language == LanguageEnums.English)[0];
+    let icon = eng.Icon;
+    let img = eng.Image;
+    model.PlaceLanguages.map(x => {
+      if (x && x.Language != LanguageEnums.English) {
+        x.Icon = icon;
+        x.Image = img;
+      }
+    });
     let result = await PlaceServiceInstance.UpdatePlace(model);
     if (result) {
       window['notice_save_success']();
       this.getData(this.state.GridFilter);
+      browserHistory.push(AdminRoutePath.PlaceManagement);
     }
     else {
       window['notice_error']();
@@ -178,27 +175,60 @@ class PlaceManagement extends React.Component<{}, thisState> {
   }
 
   private async addPlaceLanguage(lang: LanguageEnums) {
-    let PlaceLanguage: PlaceLanguageModel = {
-      Id: 0,
-      Title: "",
-      PlaceId: this.state.SelectedPlace.Id,
-      Language: lang,
-    };
-
-    let result = await PlaceServiceInstance.AddLanguage(PlaceLanguage);
-    if (result) {
-      window['notice_create_success']();
-      this.state.SelectedPlace.PlaceLanguages.push(result);
-      this.setState({
-        SelectedLanguage: lang,
-      });
+    if (lang == LanguageEnums.All) {
+      if (this.state.SelectedPlace && this.state.SelectedPlace.Id == 0) {
+        let remainingLangs = Languages.map(l => l.Language).filter(l => this.state.SelectedPlace.PlaceLanguages.map(pl => pl.Language).indexOf(l) === -1);
+        let placeLangs = this.state.SelectedPlace.PlaceLanguages ? this.state.SelectedPlace.PlaceLanguages.slice() : [];
+        for (let i = 0; i < remainingLangs.length; i++) {
+          let placeLang: PlaceLanguageModel = {
+            Id: 0,
+            Language: remainingLangs[i],
+            Title: 'New Place',
+          };
+          placeLangs.push(placeLang);
+        }
+        this.state.SelectedPlace.PlaceLanguages = placeLangs;
+        this.forceUpdate();
+      } else {
+        let result = await PlaceServiceInstance.AddAllLanguage(this.state.SelectedPlace.Id);
+        if (result) {
+          window['notice_create_success']();
+          this.setState({SelectedPlace: result});
+        }
+        else {
+          window['notice_error']();
+        }
+      }
     }
     else {
-      window['notice_error']();
+      let PlaceLanguage: PlaceLanguageModel = {
+        Id: 0,
+        Title: "New Place",
+        PlaceId: this.state.SelectedPlace.Id,
+        Language: lang,
+      };
+      if (this.state.SelectedPlace && this.state.SelectedPlace.Id == 0) {
+        this.state.SelectedPlace.PlaceLanguages.push(PlaceLanguage);
+        this.setState({
+          SelectedLanguage: lang,
+        });
+      } else {
+        let result = await PlaceServiceInstance.AddLanguage(PlaceLanguage);
+        if (result) {
+          window['notice_create_success']();
+          this.state.SelectedPlace.PlaceLanguages.push(result);
+          this.setState({
+            SelectedLanguage: lang,
+          });
+        }
+        else {
+          window['notice_error']();
+        }
+      }
     }
   }
 
-  private async deletePlaceLanguage(Id: number) {
+  private async deletePlaceLanguage(pl: PlaceLanguageModel) {
     if (await SweetAlerts.show({
         type: SweetAlertTypeEnums.Warning,
         title: 'Xác nhận xóa',
@@ -207,22 +237,30 @@ class PlaceManagement extends React.Component<{}, thisState> {
         confirmButtonText: 'Đồng ý xóa',
         closeOnConfirm: true
       }) == SweetAlertResultEnums.Confirm) {
-      let result = await PlaceServiceInstance.DeleteLanguage(Id);
-      if (result) {
-        window['notice_delete_success']();
+      if (this.state.SelectedPlace && this.state.SelectedPlace.Id == 0) {
         this.state.SelectedPlace.PlaceLanguages = this.state.SelectedPlace.PlaceLanguages
-          .filter(x => x.Id != Id);
+          .filter(x => x.Language != pl.Language);
         this.setState({SelectedLanguage: LanguageEnums.English});
         this.forceUpdate();
-      }
-      else {
-        window['notice_error']();
+      } else {
+        let result = await PlaceServiceInstance.DeleteLanguage(pl.Id);
+        if (result) {
+          window['notice_delete_success']();
+          this.state.SelectedPlace.PlaceLanguages = this.state.SelectedPlace.PlaceLanguages
+            .filter(x => x.Id != pl.Id);
+          this.setState({SelectedLanguage: LanguageEnums.English});
+          this.forceUpdate();
+        }
+        else {
+          window['notice_error']();
+        }
       }
     }
   }
 
   private ClickSlectCategory(Id: any) {
     this.state.SelectedPlace.CategoryId = Id;
+    this.state.SelectedPlace.HTServiceId = null;
     this.setState({HTServices: this.state.HTServicesBackup.filter(x => x.CategoryId == Id)});
   }
 
@@ -247,16 +285,21 @@ class PlaceManagement extends React.Component<{}, thisState> {
               <div className="panel panel-default plain toggle panelMove">
                 <div className="panel-body place-body">
                   <div className="table-toolbar">
-                    <button className="btn btn-primary" type="button"
+                    <button className={`btn btn-danger`} type="button"
+                            disabled={this.state.SelectedRowIds.length == 0}
+                            onClick={() => this.deletePlaces()}>
+                      <i className="fa fa-trash"/>&nbsp;Xóa
+                    </button>
+                    <button className="btn btn-primary mr10 ml10" type="button"
                             onClick={() => this.createPlace()}>
                       <i className="fa fa-plus"/> Thêm địa điểm - Sự kiện
                     </button>
-                    <button className="btn btn-success mr10 ml10" type="button"
+                    <button className="btn btn-success mr10 " type="button"
                             onClick={() => this.importExcelHL()}>
                       <i className="fa fa-upload"/> Nhập từ Excel
                     </button>
                     <a className="btn btn-success mr10" href="place/download-template-high-level"
-                            >
+                    >
                       <i className="fa fa-download"/> Download Template
                     </a>
                   </div>
@@ -270,6 +313,8 @@ class PlaceManagement extends React.Component<{}, thisState> {
                               trClassName={() => {
                                 return ""
                               }}
+                              allowSelect
+                              onRowSelected={(rows) => this.rowSelected(rows)}
                               defaultSortName={"Id"}
                               defaultSortOrder={false}
                               onFilterRequest={
@@ -296,16 +341,28 @@ class PlaceManagement extends React.Component<{}, thisState> {
                                        filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindDistrictData(data)} dataSort={true}>
                       Quận huyện</TableHeaderColumn>
-                    <TableHeaderColumn width="100" dataField="Highlight" dataAlign="center"
+                    <TableHeaderColumn width="120" dataField="HomeHighlight" dataAlign="center"
                                        filterFormatted formatExtraData={highlightSelecter}
                                        filter={{type: 'SelectFilter', options: highlightSelecter}}
-                                       dataFormat={(r, data) => this.bindHighlightData(data)} dataSort={true}>
-                      Nổi bật</TableHeaderColumn>
-                    <TableHeaderColumn width="200" dataField="StartDate" dataAlign="center"
+                                       dataFormat={(r, data) => this.bindHighlightData(data.IsHomeSlider)}
+                                       dataSort={true}>
+                      Nổi bật trang chủ</TableHeaderColumn>
+                    <TableHeaderColumn width="120" dataField="CategoryHighlight" dataAlign="center"
+                                       filterFormatted formatExtraData={highlightSelecter}
+                                       filter={{type: 'SelectFilter', options: highlightSelecter}}
+                                       dataFormat={(r, data) => this.bindHighlightData(data.IsCategorySlider)}
+                                       dataSort={true}>
+                      Nổi bật thư mục</TableHeaderColumn>
+                    <TableHeaderColumn width="120" dataField="IsEvent" dataAlign="center"
+                                       filterFormatted formatExtraData={highlightSelecter}
+                                       filter={{type: 'SelectFilter', options: highlightSelecter}}
+                                       dataFormat={(r, data) => this.bindHighlightData(data.IsEvent)} dataSort={true}>
+                      Sự kiện</TableHeaderColumn>
+                    <TableHeaderColumn width="220" dataField="StartDate" dataAlign="center"
                                        filter={{type: 'DateFilter'}}
                                        dataFormat={(r, data) => this.bindStartDateData(data)} dataSort={true}>
                       Ngày bắt đầu</TableHeaderColumn>
-                    <TableHeaderColumn width="200" dataField="EndDate" dataAlign="center"
+                    <TableHeaderColumn width="220" dataField="EndDate" dataAlign="center"
                                        filter={{type: 'DateFilter'}}
                                        dataFormat={(r, data) => this.bindEndDateData(data)} dataSort={true}>
                       Ngày kết thúc</TableHeaderColumn>
@@ -313,6 +370,9 @@ class PlaceManagement extends React.Component<{}, thisState> {
                                        filter={{type: 'TextFilter'}}
                                        dataFormat={(r, data) => this.bindRankingData(data)} dataSort={true}>
                       Đánh giá</TableHeaderColumn>
+                    <TableHeaderColumn width="80" dataField="Action" dataAlign="center"
+                                       dataFormat={(r, data) => this.bindActionData(data)} dataSort={ false }>
+                      Thao tác</TableHeaderColumn>
                   </ReactTable>
                 </div>
               </div>
@@ -336,7 +396,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                      SavePlace={(model) => this.updatePlace(model)}
                      DeletePlace={(Id: number) => this.deletePlace(Id)}
                      AddPlaceLanguage={(lang: LanguageEnums) => this.addPlaceLanguage(lang)}
-                     DeletePlaceLanguage={(Id: number) => this.deletePlaceLanguage(Id)}
+                     DeletePlaceLanguage={(pl: PlaceLanguageModel) => this.deletePlaceLanguage(pl)}
                      Categories={this.state.Categories || []}
                      HTServices={this.state.HTServices || []}
                      ClickSlectCategory={(Id) => this.ClickSlectCategory(Id)}
@@ -351,6 +411,7 @@ class PlaceManagement extends React.Component<{}, thisState> {
                      Districts={this.state.Districts || []}
                      ClickSlectCity={(Id) => {
                        this.state.SelectedPlace.CityId = Id;
+                       this.state.SelectedPlace.DistrictId = null;
                        this.setState({Districts: this.state.DistrictsBackup.filter(x => x.CityId == Id)});
                      }}
                      ClickSlectDistrict={(Id) => {
@@ -363,6 +424,10 @@ class PlaceManagement extends React.Component<{}, thisState> {
                      }}
                      onStartDateChange={(e) => {
                        this.state.SelectedPlace.StartDate = e;
+                       this.forceUpdate();
+                     }}
+                     onGovernmentChanged={(value: boolean) => {
+                       this.state.SelectedPlace.IsDistrictGovernment = value;
                        this.forceUpdate();
                      }}
                      isShow={this.state.showDetail}
@@ -382,43 +447,40 @@ class PlaceManagement extends React.Component<{}, thisState> {
     );
   }
 
-  private bindNameData(data: PlaceModel) {
-    let firstLanguage = data.PlaceLanguages.sort((a, b) => a.Language - b.Language)[0];
+  private bindNameData(data: any) {
+
     return <Link className="btn btn-link"
-                 to={`${AdminRoutePath.PlaceManagement}/${data.Id}`}>
-      {(firstLanguage ? firstLanguage.Title : '') || ("Place's Name")}</Link>;
+                 to={`${AdminRoutePath.PlaceManagement}/${data.Id}`}>{data.Title}</Link>;
   }
 
-  private bindCategoryData(data: PlaceModel) {
-    if (data.Category && data.Category.CategoryLanguages) {
-      let firstLanguage = data.Category.CategoryLanguages.sort((a, b) => a.Language - b.Language)[0];
-      return <span>{(firstLanguage ? firstLanguage.Title : '') || ('')}</span>;
+  private bindCategoryData(data: any) {
+    if (data.CategoryName) {
+      return <span>{data.CategoryName}</span>;
     }
     return <span></span>;
   }
 
-  private bindServiceData(data: PlaceModel) {
-    if (data.HTService && data.HTService.HTServiceLanguages) {
-      let firstLanguage = data.HTService.HTServiceLanguages.sort((a, b) => a.Language - b.Language)[0];
-      return <span>{(firstLanguage ? firstLanguage.Title : '') || ('')}</span>;
+  private bindServiceData(data: any) {
+    if (data.ServiceName) {
+      return <span>{data.ServiceName}</span>;
     }
     return <span></span>;
   }
 
-  private bindCityData(data: PlaceModel) {
-    return <span>{data.City ? data.City.Name : ''}</span>;
+  private bindCityData(data: any) {
+    return <span>{data.City}</span>;
   }
 
-  private bindDistrictData(data: PlaceModel) {
-    return <span>{data.District ? data.District.Name : ''}</span>;
+  private bindDistrictData(data: any) {
+    return <span>{data.District}</span>;
   }
 
-  private bindHighlightData(data: PlaceModel) {
+  private bindHighlightData(data?: boolean) {
     return <div className="toggle-custom">
-      <label className="toggle" data-on="Có" data-off="Ko">
+      <label className="toggle" data-on="Yes" data-off="No">
         <input type="checkbox" id="checkbox-toggle"
                name="checkbox-toggle"
-               checked={data.IsCategorySlider || data.IsHomeSlider || false}
+               checked={data || false}
                disabled={true}
         />
         <span className="button-checkbox"/>
@@ -426,20 +488,20 @@ class PlaceManagement extends React.Component<{}, thisState> {
     </div>;
   }
 
-  private bindStartDateData(data: PlaceModel) {
+  private bindStartDateData(data: any) {
     return <span>{data.StartDate ? TimeHelper.convertToDay(data.StartDate) : ""}</span>;
   }
 
-  private bindEndDateData(data: PlaceModel) {
+  private bindEndDateData(data: any) {
     return <span>{data.EndDate ? TimeHelper.convertToDay(data.EndDate) : ""}</span>;
   }
 
-  private bindRankingData(data: PlaceModel) {
+  private bindRankingData(data: any) {
     return <span>{data.Rating || ''}</span>;
   }
 
   private importExcelHL() {
-    if(this.btnImageFileInput) {
+    if (this.btnImageFileInput) {
       this.btnImageFileInput.value = null;
       this.btnImageFileInput.click();
     }
@@ -454,7 +516,9 @@ class PlaceManagement extends React.Component<{}, thisState> {
           window['notice']('error-notice', 'Lỗi', 'Sai định dạng file Excel (.xlsx).', 'fa fa-exclamation-circle');
           return;
         }
+        UIBlocker.instance.block();
         let uploadResult = await ImageServiceInstance.uploadExcelHL(excelFile);
+        UIBlocker.instance.unblock();
         if (uploadResult) {
           this.setState({
             ImportData: uploadResult,
@@ -470,6 +534,53 @@ class PlaceManagement extends React.Component<{}, thisState> {
 
   private async handleImportData() {
     await this.getData(this.state.GridFilter);
+  }
+
+  private bindActionData(data: any) {
+    return (<div className="table--actions-container">
+      <button className="btn btn-danger" onClick={() => this.deletePlace(data.Id)}>
+        <i className="fa fa-trash" aria-hidden="true">Xóa</i>
+      </button>
+    </div>);
+  }
+
+  private rowSelected(rows: any) {
+    this.setState({SelectedRowIds: rows});
+  }
+
+  private async deletePlaces() {
+    if (await SweetAlerts.show({
+        type: SweetAlertTypeEnums.Warning,
+        title: 'Xác nhận xóa',
+        text: 'Bạn có chắc muốn xóa nhiều Địa Điểm?',
+        showCancelButton: true,
+        confirmButtonText: 'Đồng ý xóa',
+        closeOnConfirm: true
+      }) == SweetAlertResultEnums.Confirm) {
+      let result = await PlaceServiceInstance.DeletePlaces(this.state.SelectedRowIds);
+      if (result) {
+        window['notice_delete_success']();
+        let filter = this.state.GridFilter;
+        if (filter) {
+          filter.CurrentPage = this.state.GridData
+          && this.state.GridData.DataSource
+          && this.state.GridData.DataSource.length <= 1
+            ? Math.max(filter.CurrentPage - 1, 1) : filter.CurrentPage
+          ;
+        }
+        this.getData(filter);
+
+        this.setState({
+          SelectedPlace: null,
+          SelectedLanguage: null,
+          SelectedRowIds: [],
+        });
+        browserHistory.push(AdminRoutePath.PlaceManagement);
+      }
+      else {
+        window['notice_error']();
+      }
+    }
   }
 }
 

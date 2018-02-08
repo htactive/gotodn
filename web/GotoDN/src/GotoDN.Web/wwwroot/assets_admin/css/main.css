@@ -1338,7 +1338,7 @@ body.fixed-right-sidebar:not(.fixed-header) #right-sidebar.rstop {
   position: relative;
 }
 .page-sidebar .side-nav .nav > li ul.sub.show li a {
-  background-color: #1c2128;
+  background-color: #262d37;
   position: relative;
 }
 .page-sidebar .side-nav .nav > li ul.sub.show li a.expand:after {
@@ -3649,4 +3649,16 @@ div.gallery-upload .dropzone .dz-message:after {
   #footer {
     display: none;
   }
+}
+
+.image-upload-bottom {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  height: 2em;
+  bottom: 0;
+  background-color: #ddd;
+  opacity: 0.9;
+  z-index: 1;
+  text-align: center
 }

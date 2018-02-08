@@ -8,7 +8,7 @@ import {Spinner}  from 'native-base';
 import {viewportWidth, AppIcon, platform} from '../../common/constain';
 import {style, StyleBase} from '../../styles/style';
 
-const slideWidth = wp(75);
+const slideWidth = wp(85);
 const itemWidth = slideWidth + wp(1);
 
 export default class HomeSlider extends React.Component {
@@ -26,6 +26,14 @@ export default class HomeSlider extends React.Component {
       this.setState({
         sliders: nextProps.dataSource,
       });
+      if(nextProps.currentIndex == 0 && !nextProps.loadingMore) {
+        if(this.carousel && this.carousel.currentIndex != 0) {
+          this.carousel.snapToItem(0);
+        }
+        this.setState({
+          slideIndex: 0
+        });
+      }
     }
   }
 
@@ -34,7 +42,7 @@ export default class HomeSlider extends React.Component {
   }
 
   render() {
-    let sW = viewportWidth, iW = itemWidth, sScale = .9, sOpacity = 0.6;
+    let sW = viewportWidth, iW = itemWidth, sScale = .95, sOpacity = 0.7;
     let sliders = this.state.sliders;
     return (
       sliders ? (
@@ -49,17 +57,22 @@ export default class HomeSlider extends React.Component {
                 inactiveSlideOpacity={sOpacity}
                 enableMomentum={platform === 'ios'}
                 scrollEndDragDebounceValue={1}
-                carouselHorizontalPadding={0}
+                containerCustomStyle={styles.slider}
+                contentContainerCustomStyle={styles.sliderContainer}
                 showsHorizontalScrollIndicator={false}
                 removeClippedSubviews={false}
-                onSnapToItem={(index) => this.setState({slideIndex: index})}
+                onSnapToItem={(index) => this.sliderChanged(index) }
               >
                 {sliders.map((slider, index) =>
                   <HomeSliderItem
                     key={index}
                     {...slider}
                   />
-                )}
+                ).concat(<View key={sliders.length + 1} style={style.homeSlider}>
+                  {this.props.loadingMore ? <View>
+                      <Spinner color={StyleBase.header_color}/>
+                    </View> : null}
+                </View>)}
               </Carousel>
             </View>
             <View style={styles.dotContainer}>
@@ -78,6 +91,17 @@ export default class HomeSlider extends React.Component {
           </View>
         )
     )
+  }
+
+  sliderChanged(index) {
+    this.setState({slideIndex: index});
+    if((index + 1) == (10 * (this.props.currentIndex + 1))) {
+      if (!this.props.loadingMore) {
+        let nextId = this.props.currentIndex + 1;
+        if(this.props.onLoadMore)
+          this.props.onLoadMore(nextId);
+      }
+    }
   }
 }
 

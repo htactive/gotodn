@@ -38,23 +38,25 @@ class CityManagement extends React.Component<{}, thisState> {
   }
 
   private async createCity() {
-    let result = await CityServiceInstance.CreateCity();
-    if (result) {
-      window['notice_create_success']();
-      let filter = this.state.GridFilter;
-      if (filter) {
-        filter.CurrentPage = 1;
-        filter.IsAsc = false;
-        filter.SortExpression = "Id";
-      }
-      this.getData(filter);
-      this.setState({
-        SelectedCity: result,
-      })
-    }
-    else {
-      window['notice_error']();
-    }
+    this.setState({SelectedCity: {Id: 0, Name: '',}});
+    this.cityModal.show();
+    // let result = await CityServiceInstance.CreateCity();
+    // if (result) {
+    //   window['notice_create_success']();
+    //   let filter = this.state.GridFilter;
+    //   if (filter) {
+    //     filter.CurrentPage = 1;
+    //     filter.IsAsc = false;
+    //     filter.SortExpression = "Id";
+    //   }
+    //   this.getData(filter);
+    //   this.setState({
+    //     SelectedCity: result,
+    //   })
+    // }
+    // else {
+    //   window['notice_error']();
+    // }
   }
 
   private async updateCity(model: CityModel) {
@@ -95,7 +97,7 @@ class CityManagement extends React.Component<{}, thisState> {
         });
       }
       else {
-        window['notice_error']();
+        window['notice']('error-notice', 'Lỗi', 'Không thể xóa được bản ghi vì bản ghi được sử dụng trong hệ thống, bạn chỉ có thể xóa được bản ghi nếu nó không được sử dụng trong hệ thống.', 'glyphicon glyphicon-remove');
       }
     }
   }
@@ -153,6 +155,9 @@ class CityManagement extends React.Component<{}, thisState> {
                     <TableHeaderColumn width="200" dataField="District" dataAlign="center"
                                        dataFormat={(r, data) => this.bindDistrictData(data)} dataSort={ false }>
                       Quận huyện trực thuộc</TableHeaderColumn>
+                    <TableHeaderColumn width="80" dataField="Action" dataAlign="center"
+                                       dataFormat={(r, data) => this.bindActionData(data)} dataSort={ false }>
+                      Thao tác</TableHeaderColumn>
                   </ReactTable>
 
                 </div>
@@ -180,6 +185,14 @@ class CityManagement extends React.Component<{}, thisState> {
   private bindDistrictData(data: CityModel) {
     let districts = data && data.Districts && data.Districts.map(x => x.Name);
     return <span>{districts.toString()}</span>;
+  }
+
+  private bindActionData(data: any) {
+    return (<div className="table--actions-container">
+      <button className="btn btn-danger" onClick={() => this.deleteCity(data.Id)}>
+        <i className="fa fa-trash" aria-hidden="true">Xóa</i>
+      </button>
+    </div>);
   }
 }
 

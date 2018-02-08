@@ -6,6 +6,12 @@ import {style} from "../../styles/style";
 import {ListScreen} from '../../screens/ListScreen'
 import {IndustryListScreen} from '../../screens/IndustryListScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
+import {Helper} from '../../common/constain';
+import {AutoText} from '../../components/common/AutoText';
+import {
+  LazyloadView,
+  LazyloadImage
+} from 'react-native-lazyload';
 
 const {width: viewportWidth, height: viewportHeight} = Dimensions.get('window');
 const menuItemHeight = Math.round(viewportHeight / 6);
@@ -38,10 +44,10 @@ export class HomeMenuList extends React.Component {
       let data = menuListData[i];
       if (leftHeight <= rightHeight) {
         dataLeft.push(data);
-        leftHeight += menuItemHeaderHeight + (data.services.length) * menuItemHeight;
+        leftHeight += menuItemHeaderHeight + (data.services ? data.services.length : 50) * menuItemHeight;
       } else {
         dataRight.push(data);
-        rightHeight += menuItemHeaderHeight + (data.services.length) * menuItemHeight;
+        rightHeight += menuItemHeaderHeight + (data.services ? data.services.length : 50) * menuItemHeight;
       }
     }
 
@@ -65,28 +71,28 @@ export class HomeMenuList extends React.Component {
                 <View key={index} style={{alignSelf: 'stretch'}}>
                   <TouchableOpacity
                     activeOpacity={0.7}
-                    onPress={() => {this.goToList(data.id, 0, data.isIndustry)}}
+                    onPress={() => {this.goToList(data.id, 0, data.isNoService, data.categoryName)}}
                     style={style.menuItemHeader}
                   >
-                    <Image style={[style.iconImgXs, {tintColor: '#12a1e7', marginBottom: 10, flex:2}]}
-                           source={{uri: data.categoryIcon || '?'}}/>
-                    <Text numberOfLines={1}
-                          style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17, flex:8 }}>{data.categoryName}</Text>
+                    <LazyloadImage host={`lazyload-home-screen`} style={[style.iconImgXs, {tintColor: '#12a1e7', marginBottom: 10, marginRight: 5}]}
+                           source={{uri: data.categoryIcon || Helper.IconUrl}}/>
+                    <AutoText height={viewportHeight / 25} numberOfLines={1}
+                          style={{alignSelf: 'center', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17, flex:8 }}>{data.categoryName}</AutoText>
                   </TouchableOpacity>
                   {data.services && data.services.map((service, sIndex) =>
                     <TouchableOpacity
                       activeOpacity={0.7}
                       style={style.menuItem}
-                      onPress={() => {this.goToList(data.id, sIndex, data.isIndustry)}}
+                      onPress={() => {this.goToList(data.id, sIndex, data.isNoService, data.categoryName)}}
                       key={sIndex}
                     >
-                      <View style={style.imageContainer}>
+                      <LazyloadView host={`lazyload-home-screen`} style={style.imageContainer}>
                         <View style={style.imageInner}>
                           <Image
-                            source={{uri: service.heroImage}}
+                            source={{uri: service.heroImage || Helper.IconUrl}}
                             style={style.image}
                           >
-                            {data.isIndustry || (
+                            {data.isNoService || (
                               <View style={style.textInner}>
                                 <View style={style.textContain}>
                                   <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
@@ -95,7 +101,7 @@ export class HomeMenuList extends React.Component {
                             )}
                           </Image>
                         </View>
-                      </View>
+                      </LazyloadView>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -106,28 +112,28 @@ export class HomeMenuList extends React.Component {
                   <View key={index} style={{alignSelf: 'stretch'}}>
                     <TouchableOpacity
                       activeOpacity={0.7}
-                      onPress={() => {this.goToList(data.id, 0, data.isIndustry)}}
+                      onPress={() => {this.goToList(data.id, 0, data.isNoService, data.categoryName)}}
                       style={style.menuItemHeader}
                     >
-                      <Image style={[style.iconImgXs, {tintColor: '#12a1e7', flex:2}]}
-                             source={{uri: data.categoryIcon || '?'}}/>
-                      <Text numberOfLines={1}
-                            style={{alignSelf: 'flex-end', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17,flex: 8 }}>{data.categoryName}</Text>
+                      <LazyloadImage host={`lazyload-home-screen`} style={[style.iconImgXs, {tintColor: '#12a1e7', marginBottom: 10, marginRight: 5}]}
+                             source={{uri: data.categoryIcon || Helper.IconUrl}}/>
+                      <AutoText height={viewportHeight / 25} numberOfLines={1}
+                                style={{alignSelf: 'center', color: '#263238', fontFamily: StyleBase.sp_regular, fontSize: 17, flex:8 }}>{data.categoryName}</AutoText>
                     </TouchableOpacity>
                     {data.services && data.services.map((service, sIndex) =>
                       <TouchableOpacity
                         activeOpacity={0.7}
                         style={style.menuItem}
-                        onPress={() => {this.goToList(data.id, sIndex, data.isIndustry)}}
+                        onPress={() => {this.goToList(data.id, sIndex, data.isNoService, data.categoryName)}}
                         key={sIndex}
                       >
-                        <View style={style.imageContainer}>
+                        <LazyloadView  host={`lazyload-home-screen`} style={style.imageContainer}>
                           <View style={style.imageInner}>
                             <Image
-                              source={{uri: service.heroImage}}
+                              source={{uri: service.heroImage || Helper.IconUrl}}
                               style={style.image}
                             >
-                              {data.isIndustry || (
+                              {data.isNoService || (
                                 <View style={style.textInner}>
                                   <View style={style.textContain}>
                                     <Text style={style.title} numberOfLines={1}>{ service.title }</Text>
@@ -136,7 +142,7 @@ export class HomeMenuList extends React.Component {
                               )}
                             </Image>
                           </View>
-                        </View>
+                        </LazyloadView>
                       </TouchableOpacity>
                     )}
                   </View>
@@ -146,12 +152,12 @@ export class HomeMenuList extends React.Component {
         ))
   }
 
-  goToList(id, index, isIndustry) {
-    if (isIndustry)
-      navigationStore.dispatch(navigateToRouteAction('IndustryListScreen', {listId: id}));
+  goToList(id, index, isNoService, categoryName) {
+    if (isNoService)
+      navigationStore.dispatch(navigateToRouteAction('IndustryListScreen', {listId: id, categoryName: categoryName}));
 
     else
-      navigationStore.dispatch(navigateToRouteAction('ListScreen', {listId: id, initIndex: index}));
+      navigationStore.dispatch(navigateToRouteAction('ListScreen', {listId: id, initIndex: index, categoryName: categoryName}));
   }
 }
 

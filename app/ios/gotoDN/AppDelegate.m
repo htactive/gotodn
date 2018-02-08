@@ -11,17 +11,24 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
-
 @import GoogleMaps;
+@import GoogleMobileAds;
+
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+
 @implementation AppDelegate
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+  [FBSDKAppEvents activateApp];
+}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  [GMSServices provideAPIKey:@"AIzaSyARWHr6uJrC-cVnlByXNeiIm-UGBFPUgiQ"];
+  
   NSURL *jsCodeLocation;
-
+  [GMSServices provideAPIKey:@"AIzaSyARWHr6uJrC-cVnlByXNeiIm-UGBFPUgiQ"];
+  [GADMobileAds configureWithApplicationID:@"ca-app-pub-8440343014846849/2335511010"];
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index.ios" fallbackResource:nil];
-
+	
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"gotoDN"
                                                initialProperties:nil
@@ -33,7 +40,17 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  return YES;
+  //return YES;
+  return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                  didFinishLaunchingWithOptions:launchOptions];
 }
-
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+  return [[FBSDKApplicationDelegate sharedInstance] application:application
+                                                        openURL:url
+                                              sourceApplication:sourceApplication
+                                                     annotation:annotation];
+}
 @end

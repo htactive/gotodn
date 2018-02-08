@@ -102,7 +102,7 @@ class DistrictManagement extends React.Component<{}, thisState> {
         });
       }
       else {
-        window['notice_error']();
+        window['notice']('error-notice', 'Lỗi', 'Không thể xóa được bản ghi vì bản ghi được sử dụng trong hệ thống, bạn chỉ có thể xóa được bản ghi nếu nó không được sử dụng trong hệ thống.', 'glyphicon glyphicon-remove');
       }
     }
   }
@@ -160,6 +160,9 @@ class DistrictManagement extends React.Component<{}, thisState> {
                     <TableHeaderColumn width="200" dataField="City" dataAlign="center"
                                        dataFormat={(r, data) => this.bindDistrictData(data)} dataSort={true}>
                       Thuộc tỉnh thành</TableHeaderColumn>
+                    <TableHeaderColumn width="80" dataField="Action" dataAlign="center"
+                                       dataFormat={(r, data) => this.bindActionData(data)} dataSort={ false }>
+                      Thao tác</TableHeaderColumn>
                   </ReactTable>
                 </div>
               </div>
@@ -193,6 +196,14 @@ class DistrictManagement extends React.Component<{}, thisState> {
   private clickSelectCity(Id: number) {
     this.state.SelectedDistrict.CityId = Id;
     this.forceUpdate();
+  }
+
+  private bindActionData(data: any) {
+    return (<div className="table--actions-container">
+      <button className="btn btn-danger" onClick={() => this.deleteDistrict(data.Id)}>
+        <i className="fa fa-trash" aria-hidden="true">Xóa</i>
+      </button>
+    </div>);
   }
 }
 

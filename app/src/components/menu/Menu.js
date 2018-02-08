@@ -1,15 +1,18 @@
 import React from 'react';
-import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity} from 'react-native';
+import {View, ScrollView, TouchableHighlight, Text, Button, TouchableOpacity, NetInfo, AsyncStorage, Platform, BackHandler, ToastAndroid} from 'react-native';
 import {Title, Icon, Picker, Drawer, Input, Item} from 'native-base';
 import {StyleBase} from '../../styles/style';
 import {MenuContent} from './MenuContent';
 
 import {MenuHeader} from './MenuHeader';
-import {MenuType, viewportHeight, MenuListItemData} from '../../common/constain';
+import {MenuType, viewportHeight, viewportWidth, Helper, Guid} from '../../common/constain';
 import {MenuSearch} from './MenuSearch';
-import {DNPageRoute} from '../../NavigationHelper';
 import {DetailScreen} from '../../screens/DetailScreen';
 import {navigationStore, navigateToRouteAction} from '../../stores/NavigationStore';
+import {appStore, appSaveCity} from '../../stores/AppStore';
+import {commonStore, toggleSearchBar, CommonStoreActions} from '../../stores/CommonStore';
+import {NavigationActions} from 'react-navigation';
+import {AdmobInterstitials} from '../../components/common/AdmobInterstitials';
 
 const drawerStyles = {
   drawer: {
@@ -71,22 +74,77 @@ export class Menu extends React.Component {
     acceptPan: true,
     tapToClose: true,
     side: 'right',
-    enableMenu: true,
+    enableMenu: false,
     showSearchBar: false,
     searchValue: '',
+    searchStatus: false,
     menuType: MenuType.HomeScreen,
     title: '',
+    hasConnection: true,
+    showConnectText: false,
   };
 
   componentWillMount() {
     Menu.instance = this;
     this.drawer = {};
+    this.setState({
+      hasConnection: false,
+    });
+    commonStore.subscribe(() => {
+      let commonState = commonStore.getState();
+      if(commonState.type == CommonStoreActions.CloseSearchBar) {
+        this.setState({
+          showSearchBar: false,
+          searchValue: ''
+        });
+      }
+    });
+    navigationStore.subscribe(() => {
+
+      let navigationState = navigationStore.getState();
+      if (navigationState.routeName) {
+        const navigateAction = NavigationActions.navigate({
+          routeName: navigationState.routeName,
+          params: navigationState.params
+        });
+        let existRoute = this.navigation.state.routes.filter(r => r.routeName == navigationState.routeName);
+        if(existRoute && existRoute.length > 0) {
+
+          this.navigation.dispatch({
+            key: navigationState.routeName + Guid(),
+            type: 'ReplaceCurrentScreen',
+            routeName: navigationState.routeName,
+            params: navigationState.params,
+          });
+
+        } else {
+          this.navigation.dispatch(navigateAction);
+        }
+      }
+    });
   }
 
   componentDidMount() {
     this.setState({
       selectedCity: 1
     });
+  }
+
+  isHandle = false;
+
+  handleNetInfo() {
+    if (!this.isHandle) {
+      this.isHandle = true;
+      setInterval(() => {
+        NetInfo.isConnected.fetch().then(isConnected => {
+          if (isConnected) {
+            this.setState({hasConnection: true, showConnectText: false})
+          } else {
+            this.setState({hasConnection: false, showConnectText: true})
+          }
+        });
+      },5000);
+    }
   }
 
   render() {
@@ -126,10 +184,24 @@ export class Menu extends React.Component {
                 onSearchChanged={(text) => this.setState({
                   searchValue: text,
                 })}
+                searchStatus={this.state.searchStatus}
                 showSearchBar={this.state.showSearchBar}
                 type={this.state.menuType}
                 menuTitle={this.state.title}
               />
+              {this.state.showConnectText ?
+                <View style={{position: 'absolute', top: 5, left: viewportWidth*.125,
+        backgroundColor: 'rgba(255,255,255,1)',
+        flexDirection: 'row', alignItems:'center', justifyContent: 'center',
+        width: viewportWidth*.75, height: 45, borderRadius: 5, padding: 5 }}>
+                  <TouchableOpacity onPress={() => {}} style={
+            {flexDirection: 'row', alignItems:'center', justifyContent: 'center'}
+          }>
+                    <Text style={{fontFamily: StyleBase.sp_regular, fontSize: 13, color:'#039be5'}}>
+                      {this.state.hasConnection ? 'Connected' : 'No Connect'}
+                    </Text>
+                  </TouchableOpacity>
+                </View> : null}
             </View>
           ) }
           <View style={{flex:1, flexDirection: 'column', backgroundColor: '#fff', position:'relative'}}>
@@ -148,20 +220,25 @@ export class Menu extends React.Component {
                 minHeight: viewportHeight * .9
               }}>
                 <MenuSearch search={this.state.searchValue}
+                            changeSearchStatus={(status) => this.setState({searchStatus: status})}
                             onSearchSelected={(data) => this.searchSelect(data)}
                 />
               </View>
             )}
           </View>
         </View>
+        <AdmobInterstitials />
       </Drawer>
     )
   }
 
-  cityChanged(city) {
+  async cityChanged(city) {
     this.setState({
       selectedCity: city
     });
+    await AsyncStorage.setItem(Helper.CityKey, city + '');
+    appStore.dispatch(appSaveCity(city));
+
   }
 
   closeMenu() {
@@ -185,7 +262,15 @@ export class Menu extends React.Component {
   }
 
   logoClicked() {
-
+    if(this.navigation.state.routes && this.navigation.state.routes.length > 1) {
+      let routeName = 'HomeScreen';
+      this.navigation.dispatch({
+        key: routeName + Guid(),
+        type: 'GoHome',
+        routeName: routeName,
+        params: null,
+      });
+    }
   }
 
   goBack() {
@@ -193,13 +278,15 @@ export class Menu extends React.Component {
   }
 
   toggleSearchBar(toggle) {
+    commonStore.dispatch(toggleSearchBar(toggle));
     this.setState({
-      showSearchBar: toggle
+      showSearchBar: toggle,
+      searchValue: ''
     });
   }
 
   searchSelect(data) {
-    navigationStore.dispatch(navigateToRouteAction('DetailScreen',{itemId: data && data.id}));
+    navigationStore.dispatch(navigateToRouteAction('DetailScreen', {itemId: data && data.id}));
 
     this.toggleSearchBar(false);
   }

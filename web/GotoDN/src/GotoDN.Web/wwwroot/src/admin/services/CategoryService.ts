@@ -14,7 +14,7 @@ class CategoryService extends AdminServiceBase {
     return await super.executeFetchPost(url, null);
   }
 
-  async UpdateCategory(model: CategoryModel): Promise<boolean> {
+  async UpdateCategory(model: CategoryModel): Promise<CategoryModel> {
     let url = `${virtualPath}/category/update-category`;
     return await super.executeFetchPost(url, model);
   }
@@ -27,6 +27,11 @@ class CategoryService extends AdminServiceBase {
   async AddLanguage(model: CategoryLanguageModel): Promise<CategoryLanguageModel> {
     let url = `${virtualPath}/category/add-language`;
     return await super.executeFetchPost(url, model);
+  }
+
+  async AddAllLanguage(Id: number): Promise<CategoryModel> {
+    let url = `${virtualPath}/category/add-all-language`;
+    return await super.executeFetchPost(url, Id);
   }
 
   async DeleteLanguage(Id: number): Promise<boolean> {
@@ -42,6 +47,11 @@ class CategoryService extends AdminServiceBase {
   async TranslateAllCategory(model: CategoryModel): Promise<CategoryModel> {
     let url = `${virtualPath}/category/translate-all-category-language`;
     return await super.executeFetchPost(url, model);
+  }
+
+  async OrderCategory(cateIds: number[]): Promise<CategoryModel[]> {
+    let url = `${virtualPath}/category/order-category`;
+    return await super.executeFetchPost(url, cateIds);
   }
 }
 

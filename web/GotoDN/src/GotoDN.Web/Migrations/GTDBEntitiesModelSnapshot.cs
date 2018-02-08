@@ -25,6 +25,10 @@ namespace GotoDN.Web.Migrations
 
                     b.Property<bool?>("IsEvent");
 
+                    b.Property<bool?>("IsGovernment");
+
+                    b.Property<int?>("Order");
+
                     b.Property<DateTime?>("UpdatedDate");
 
                     b.HasKey("Id");
@@ -102,6 +106,18 @@ namespace GotoDN.Web.Migrations
                     b.ToTable("District");
                 });
 
+            modelBuilder.Entity("GotoDN.Entities.GDNConfiguration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("NumOfScreenShowAd");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GDNConfiguration");
+                });
+
             modelBuilder.Entity("GotoDN.Entities.HTService", b =>
                 {
                     b.Property<int>("Id")
@@ -110,6 +126,8 @@ namespace GotoDN.Web.Migrations
                     b.Property<int?>("CategoryId");
 
                     b.Property<DateTime?>("CreatedDate");
+
+                    b.Property<bool>("ShowInAllCity");
 
                     b.Property<DateTime?>("UpdatedDate");
 
@@ -183,15 +201,19 @@ namespace GotoDN.Web.Migrations
 
                     b.Property<DateTime?>("EndDate");
 
+                    b.Property<string>("Fax");
+
                     b.Property<int?>("HTServiceId");
 
                     b.Property<bool?>("IsCategorySlider");
 
+                    b.Property<bool?>("IsDistrictGovernment");
+
                     b.Property<bool?>("IsHomeSlider");
 
-                    b.Property<int?>("Latitude");
+                    b.Property<decimal?>("Latitude");
 
-                    b.Property<int?>("Longitude");
+                    b.Property<decimal?>("Longitude");
 
                     b.Property<DateTime?>("OpenTime");
 
@@ -278,6 +300,8 @@ namespace GotoDN.Web.Migrations
                     b.Property<bool?>("IsHalf");
 
                     b.Property<string>("Name");
+
+                    b.Property<int?>("Order");
 
                     b.Property<int>("PlaceLangId");
 

@@ -118,7 +118,7 @@ export const style = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#679ac3'
   },
-  containerHalf: {
+    containerHalf: {
     flex: 1,
     alignItems: 'flex-start',
     flexDirection: 'column',
@@ -144,23 +144,27 @@ export const style = StyleSheet.create({
   },
   image: {
     resizeMode: 'cover',
+    
     height: menuItemHeight
   },
   imageListSlider: {
     resizeMode: 'cover',
+     
     justifyContent: 'flex-end',
-    width: (viewportWidth - 30 ) / 3,
-    height: slideHeight - 2,
+    flex: 1,
+    width: viewportWidth / 2.5,
+    height: viewportHeight * 0.34 - 10,
   },
   textInnerListSlider: {
-    height: slideHeight / (Platform.OS === 'ios' ? 3 : 3.5),
+    height: 35,
   },
   textListSlider: {
-    flex: 1,
+    height: 40,
     justifyContent: 'flex-start',
+    alignItems: 'flex-start',
     paddingHorizontal: 5,
-    paddingVertical: 5,
-    backgroundColor: '#fff',
+    paddingVertical: 2,
+    backgroundColor: 'rgba(255, 255, 255, .8)',
   },
   titleListSlider: {
     color: '#263238',
@@ -193,25 +197,29 @@ export const style = StyleSheet.create({
     alignSelf: 'stretch',
   },
   menuItemDetail: {
-    paddingBottom: 10,
+    paddingBottom: 15,
     alignSelf: 'stretch',
   },
   menuItemImage: {
     resizeMode: 'cover',
+     
   },
   menuItemTitle: {
     color: '#263238',
     fontSize: 14,
     fontFamily: StyleBase.sp_semibold,
+    lineHeight: 20,
+    paddingVertical: 5,
   },
   menuItemSubTitle: {
     color: '#263238',
     fontSize: 12,
     fontFamily: StyleBase.sp_regular,
+    lineHeight: 16,
   },
   menuItemTextContain: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'flex-start',
     paddingHorizontal: 3,
     opacity: 0.8,
@@ -231,8 +239,18 @@ export const style = StyleSheet.create({
     paddingRight: 5,
     backgroundColor: 'rgba(0, 0, 0, 0)'
   },
+  sliderItemStar: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
+    paddingBottom: 5,
+    paddingRight: 5,
+    backgroundColor: 'rgba(0, 0, 0, 0)'
+  },
   detailImage: {
     resizeMode: 'cover',
+     
     height: Math.round(viewportHeight / 3.3),
   },
   detailImageActionInner: {
@@ -257,7 +275,7 @@ export const style = StyleSheet.create({
     alignItems: 'center',
   },
   detailContent: {
-    padding: 15,
+    padding: 10,
     backgroundColor: '#fff',
   },
   detailOverlay: {
@@ -279,7 +297,7 @@ export const style = StyleSheet.create({
   },
   detailMap: {
     height: viewportHeight / 1.8,
-    width: viewportWidth - 30,
+    flex: 1,
     marginTop: 30,
   },
   detailContentTitle: {
@@ -304,8 +322,7 @@ export const style = StyleSheet.create({
 
   detailInfoItem: {
     flexDirection: 'row',
-    paddingVertical: 15,
-    paddingLeft: 10,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#a6a6a6',
   },
@@ -328,21 +345,31 @@ export const style = StyleSheet.create({
     paddingVertical: 20,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    borderBottomWidth: 1,
-    borderBottomColor: '#a6a6a6',
   },
   listSliderContainer: {
     flexDirection: 'row',
     marginHorizontal: 5,
     justifyContent: 'center',
     alignItems: 'flex-start',
+    flex:1,
+  },
+  homeSlider: {
+    width: viewportWidth * .3 - 10,
+    flex:1 ,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height:  viewportHeight * 0.33,
   },
   listSlider: {
-    width: (viewportWidth - 35 ) / 3
+    width: viewportWidth * .6 - 10,
+    flex:1 ,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height:  viewportHeight * 0.34 - 10,
   },
   listSliderTitle: {
     color: '#039be5',
-    fontSize: 16,
+    fontSize: 18,
     fontFamily: StyleBase.sp_light,
   },
   slideContainer: {
@@ -350,6 +377,7 @@ export const style = StyleSheet.create({
   },
   detailImageItem: {
     resizeMode: 'cover',
+     
     width: (viewportWidth - 50) / 3,
     height: (viewportWidth - 50) / 3,
     borderRadius: 5,
@@ -417,8 +445,11 @@ export const style = StyleSheet.create({
   },
   menuTitleText: {
     fontFamily: StyleBase.sp_regular,
-    fontSize: 18,
-    color: '#fff'
+    fontSize: 15,
+    color: '#fff',
+    width: viewportWidth/2,
+    paddingBottom:3,
+    textAlign: 'center',
   },
   menuSearchTitle: {
     color: '#263238',
@@ -434,53 +465,74 @@ export const style = StyleSheet.create({
   },
   industryItemTitle: {
     color: '#263238',
-    fontSize: 18,
+    fontSize: 14,
     fontFamily: StyleBase.sp_semibold,
+    lineHeight: 18,
+    paddingVertical: 5,
+
   },
   industryItemSubTitle: {
     color: '#263238',
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: StyleBase.sp_regular,
+    lineHeight: 16,
   },
   iconImgXl: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 45,
     height: 45,
+     
   },
   iconImgLg: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 40,
     height: 40,
+     
   },
   iconImg: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 35,
     height: 35,
+     
   },
   iconImgSm: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 30,
     height: 30,
+     
   },
   iconImgXs: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 25,
     height: 25,
+     
   },
   iconImgXxs: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 20,
     height: 20,
+     
   },
   iconImgSmall: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
     width: 15,
     height: 15,
+     
   },
   iconImgTini: {
-    resizeMode: 'cover',
-    width: 10,
-    height: 10,
+    resizeMode: 'contain',
+    width: 7,
+    height: 7,
+     
+  },
+  loadingMore: {
+    position: 'absolute',
+    left: 0,
+    bottom: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,.3)',
+    width: viewportWidth
   }
 });
 

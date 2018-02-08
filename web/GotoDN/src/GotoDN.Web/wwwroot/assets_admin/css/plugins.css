@@ -3855,6 +3855,7 @@ body.waitMe_container {
   padding: 0;
   margin: 0;
   word-wrap: break-word;
+  padding-left: 50px;
 }
 #gritter-notice-wrapper .gritter-item-wrapper .gritter-item .gritter-close {
   position: absolute;
@@ -3898,6 +3899,7 @@ body.waitMe_container {
   font-weight: bold;
   padding: 0;
   display: block;
+  padding-left: 50px;
 }
 #gritter-notice-wrapper .gritter-item-wrapper.success-notice .gritter-item {
   color: #0a776c;

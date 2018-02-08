@@ -15,6 +15,7 @@ namespace GotoDN.Entities
         public string Value { get; set; }
         public int? IconId { get; set; }
         public bool? IsHalf { get; set; }
+        public int? Order { get; set; }
 
         public int PlaceLangId { get; set; }
 

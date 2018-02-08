@@ -9,7 +9,15 @@ namespace GotoDN.Common
     {
         public static DateTime GetDateTimeNow()
         {
-            return DateTime.UtcNow;
+            return TimeZoneInfo.ConvertTime(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time"));
+        }
+
+        public static DateTime? SafeParse(string dateValue)
+        {
+            DateTime parseDate;
+            if (DateTime.TryParse(dateValue, out parseDate))
+                return parseDate;
+            return null;
         }
     }
 }

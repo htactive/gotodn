@@ -79,11 +79,6 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
             InValidMessage: 'Trường này là bắt buộc'
           },
             {
-              Type: ValidateRuleTypeEnums.MinLength,
-              InValidMessage: 'Yêu cầu ít nhất 3 ký tự',
-              RuleData: '3'
-            },
-            {
               Type: ValidateRuleTypeEnums.MaxLength,
               InValidMessage: 'Không được vượt quá 50 ký tự',
               RuleData: '50'
@@ -105,49 +100,25 @@ class PlaceLanguageDetail extends React.Component<thisProps, thisState> {
         }
       };
 
-      let f_Image: DynamicFieldModel = {
-        Priority: 3,
+      let f_MoreInfo: DynamicFieldModel = {
+        Priority: 5,
         LabelClass: 'col-lg-3',
         InputClass: 'col-lg-9',
         FieldStructure: {
-          Name: 'Image',
-          FieldName: 'Image',
-          PlaceHolder: '',
-          FieldData: {
-            CssClass: 'dn-image-place',
-            Type: 'Image',
-          },
-          Type: FieldStructureTypeEnums.SingleImage,
-          ValidateRules: []
-        }
-      };
-
-      let f_Icon: DynamicFieldModel = {
-        Priority: 4,
-        LabelClass: 'col-lg-3',
-        InputClass: 'col-lg-9',
-        FieldStructure: {
-          Name: 'Icon',
-          FieldName: 'Icon',
+          Name: 'Thông tin thêm',
+          FieldName: 'PlaceMoreInfo',
           PlaceHolder: '',
           FieldData: {},
-          Type: FieldStructureTypeEnums.SingleImage,
+          Type: FieldStructureTypeEnums.C_MoreInfo,
           ValidateRules: []
         }
       };
       inforForm.DynamicFields.push(f_Title);
       inforForm.DynamicFields.push(f_Description);
-      inforForm.DynamicFields.push(f_Image);
+      inforForm.DynamicFields.push(f_MoreInfo);
       allForms.push(inforForm);
     }
     return allForms;
-  }
-
-  private savePlace() {
-    if (this.editingForm.isFormValid()) {
-
-    }
-    this.forceUpdate();
   }
 
   private async translateCategory() {
